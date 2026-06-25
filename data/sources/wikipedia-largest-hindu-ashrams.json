@@ -1,0 +1,40 @@
+{
+  "source": "https://en.wikipedia.org/wiki/List_of_largest_Hindu_ashrams",
+  "ashrams": [
+    {
+      "rank": 1,
+      "name": "The Art of Living International Center",
+      "area_m2": 1011714,
+      "place": "Bangalore",
+      "country": "India"
+    },
+    {
+      "rank": 2,
+      "name": "Adiyogi Shiva (Isha Foundation)",
+      "area_m2": 607020,
+      "place": "Velliangiri Mountains",
+      "country": "India"
+    },
+    {
+      "rank": 3,
+      "name": "Mata Amritanandamayi Math",
+      "area_m2": 404686,
+      "place": "Kollam",
+      "country": "India"
+    },
+    {
+      "rank": 4,
+      "name": "Osho International Meditation Resort",
+      "area_m2": 161874,
+      "place": "Pune",
+      "country": "India"
+    },
+    {
+      "rank": 5,
+      "name": "Sri Aurobindo Ashram",
+      "area_m2": 38080,
+      "place": "Pondicherry",
+      "country": "India"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "source": "http://www.buddhanet.info/wbd/",
+  "description": "Searchable World Buddhist Directory by country, province, and tradition (Theravada, Mahayana, Vajrayana, Non-sectarian).",
+  "regions": {
+    "1": "North America",
+    "2": "Central America",
+    "3": "South America",
+    "4": "Africa/Middle East",
+    "5": "Europe",
+    "7": "Asia",
+    "8": "Oceania"
+  },
+  "search_url": "http://www.buddhanet.info/wbd/search.php",
+  "note": "Individual center listings require search or region browse; not bulk-exportable from landing page."
+}

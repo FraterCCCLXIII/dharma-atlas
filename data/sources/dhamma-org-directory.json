@@ -1,0 +1,1570 @@
+{
+  "source": "https://www.dhamma.org/en-US/locations/directory",
+  "count": 391,
+  "centers": [
+    {
+      "location": "Ethiopia, Addis Ababa, Haya Hulet area",
+      "name": "Vipassana Ethiopia"
+    },
+    {
+      "location": "Kenya, , Nairobi",
+      "name": "Kenya Vipassana Meditation Courses"
+    },
+    {
+      "location": "Madagascar, , Antsirab\u00e9",
+      "name": "Vipassana Madagascar"
+    },
+    {
+      "location": "Mauritius, , Mauritius",
+      "name": "Vipassana Meditation in Mauritius"
+    },
+    {
+      "location": "Morocco, , Marrakech",
+      "name": "Vipassana Meditation in Morocco"
+    },
+    {
+      "location": "Mozambique, , Mozambique",
+      "name": "Vipassana Meditiation in Mozambique"
+    },
+    {
+      "location": "Namibia, , Namibia",
+      "name": "Vipassana Meditation in Namibia"
+    },
+    {
+      "location": "Reunion, Reunion, Ile de la R\u00e9union",
+      "name": "Reunion Island Vipassana Meditation"
+    },
+    {
+      "location": "Senegal, , Senegal",
+      "name": "Vipassana Meditation in Senegal"
+    },
+    {
+      "location": "South Africa, Western Cape, Worcester",
+      "name": "Dhamma Pat\u0101k\u0101"
+    },
+    {
+      "location": "Tunisia, , Tunisia",
+      "name": "Vipassana Meditation in Tunisia"
+    },
+    {
+      "location": "Uganda, , Uganda",
+      "name": "Vipassana Meditation in Uganda"
+    },
+    {
+      "location": "Argentina",
+      "name": "Vipassana Meditation in Argentina"
+    },
+    {
+      "location": "Buenos Aires, Brandsen",
+      "name": "Dhamma Sukhad\u0101"
+    },
+    {
+      "location": "C\u00f3rdoba, Capilla del Monte",
+      "name": "Dhamma Viriya"
+    },
+    {
+      "location": "Mendoza",
+      "name": "Vipassana Argentina - Mendoza"
+    },
+    {
+      "location": "Bolivia",
+      "name": "Vipassana Meditation in Bolivia"
+    },
+    {
+      "location": "Brazil",
+      "name": "Vipassana in Brazil"
+    },
+    {
+      "location": "Engenheiro Paulo de Frontin, Rio de Janeiro",
+      "name": "Dhamma Santi"
+    },
+    {
+      "location": "Goi\u00e1s, Piren\u00f3polis",
+      "name": "Dhamma Uyy\u0101na"
+    },
+    {
+      "location": "Minas Gerais",
+      "name": "Vipassana Brasil - Minas Gerais"
+    },
+    {
+      "location": "Nordeste",
+      "name": "Vipassana Brasil - Nordeste"
+    },
+    {
+      "location": "Paran\u00e1",
+      "name": "Vipassana Brasil - Parana"
+    },
+    {
+      "location": "Santa Catarina, Florian\u00f3polis",
+      "name": "Santa Catarina - Vipassana Brasil - Santa Catarina"
+    },
+    {
+      "location": "Santana de Parna\u00edba, S\u00e3o Paulo",
+      "name": "Dhamma Sara\u1e47a"
+    },
+    {
+      "location": "Chile",
+      "name": "Vipassana Chile"
+    },
+    {
+      "location": "Regi\u00f3n Metropolitana de Santiago, Melipilla",
+      "name": "Dhamma Pasanna"
+    },
+    {
+      "location": "Antioquia, Medell\u00edn / San Antonio de Pereira (Rionegro) / Cali / Pereira",
+      "name": "Dhamma Gutti"
+    },
+    {
+      "location": "Bogota",
+      "name": "Vipassana Colombia - Bogot\u00e1"
+    },
+    {
+      "location": "Colombia",
+      "name": "All Colombia Courses"
+    },
+    {
+      "location": "Cundinamarca, San Antonio del Tequendama",
+      "name": "Dhamma Nandanavana"
+    },
+    {
+      "location": "Cartago",
+      "name": "Dhamma Ariya"
+    },
+    {
+      "location": "La Habana",
+      "name": "Vipassana Cuba"
+    },
+    {
+      "location": "Cura\u00e7ao",
+      "name": "Cura\u00e7ao Vipassana"
+    },
+    {
+      "location": "Cabarete",
+      "name": "Vipassana Dominican Republic"
+    },
+    {
+      "location": "Cuenca",
+      "name": "Vipassana Ecuador - Cuenca"
+    },
+    {
+      "location": "Ecuador",
+      "name": "Vipassana Meditation in Ecuador"
+    },
+    {
+      "location": "Quito",
+      "name": "Vipassana Ecuador - Quito"
+    },
+    {
+      "location": "El Salvador",
+      "name": "Vipassana El Salvador"
+    },
+    {
+      "location": "Guatemala",
+      "name": "Vipassana Guatemala"
+    },
+    {
+      "location": "Port-au-Prince",
+      "name": "Vipassana Haiti"
+    },
+    {
+      "location": "Honduras",
+      "name": "Vipassana Honduras"
+    },
+    {
+      "location": "Mexico",
+      "name": "All Mexico Courses"
+    },
+    {
+      "location": "Monterrey",
+      "name": "M\u00e9xico Vipassana - Monterrey"
+    },
+    {
+      "location": "Morelos",
+      "name": "Vipassana Meditation - Morelos, Mexico"
+    },
+    {
+      "location": "M\u00e9xico, San Bartolo Amanalco",
+      "name": "Dhamma Makaranda"
+    },
+    {
+      "location": "Oaxaca",
+      "name": "M\u00e9xico Vipassana - Oaxaca"
+    },
+    {
+      "location": "Queretaro",
+      "name": "Vipassana in Bajio, Mexico"
+    },
+    {
+      "location": "Veracruz",
+      "name": "Vipassana M\u00e9xico - Veracruz"
+    },
+    {
+      "location": "Nicaragua",
+      "name": "Vipassana Nicaragua"
+    },
+    {
+      "location": "Panama",
+      "name": "Vipassana Panam\u00e1"
+    },
+    {
+      "location": "Asuncion",
+      "name": "Vipassana Paraguay"
+    },
+    {
+      "location": "Cusco",
+      "name": "Vipassana Per\u00fa - Cusco"
+    },
+    {
+      "location": "Lima",
+      "name": "Dhamma Suriya"
+    },
+    {
+      "location": "Peru",
+      "name": "Vipassana Meditation in Peru"
+    },
+    {
+      "location": "Puerto Rico",
+      "name": "Vipassana Puerto Rico"
+    },
+    {
+      "location": "Paramaribo",
+      "name": "Suriname"
+    },
+    {
+      "location": "Uruguay",
+      "name": "Vipassana Uruguay"
+    },
+    {
+      "location": "Aragua, Cerca de Victoria",
+      "name": "Dhamma Ve\u1e47uvana"
+    },
+    {
+      "location": "Occidente",
+      "name": "Vipassana Venezuela - Occidente"
+    },
+    {
+      "location": "Venezuela",
+      "name": "Vipassana Meditation in Venezuela"
+    },
+    {
+      "location": "Alberta, Youngstown",
+      "name": "Dhamma Karu\u1e47\u0101"
+    },
+    {
+      "location": "Atlantic Canada",
+      "name": "Atlantic Canada Vipassana Meditation"
+    },
+    {
+      "location": "British Columbia, Chilliwack",
+      "name": "Po Lam Meditation Vihara"
+    },
+    {
+      "location": "British Columbia, Duncan",
+      "name": "Dhamma Modana"
+    },
+    {
+      "location": "British Columbia, Merritt",
+      "name": "Dhamma Surabhi"
+    },
+    {
+      "location": "Manitoba, Winnipeg",
+      "name": "Vipassana Meditation in Manitoba"
+    },
+    {
+      "location": "Ontario, Egbert",
+      "name": "Dhamma Tora\u1e47a"
+    },
+    {
+      "location": "Quebec, Montebello",
+      "name": "Dhamma Suttama"
+    },
+    {
+      "location": "California",
+      "name": "Dhamma Santosa"
+    },
+    {
+      "location": "California, Kelseyville",
+      "name": "Dhamma Ma\u1e47\u1e0da"
+    },
+    {
+      "location": "California, North Fork",
+      "name": "Dhamma Mah\u0101vana"
+    },
+    {
+      "location": "California, Twentynine Palms",
+      "name": "Dhamma Vaddhana"
+    },
+    {
+      "location": "Colorado, Elbert",
+      "name": "Dhamma Sela"
+    },
+    {
+      "location": "Delaware, Claymont",
+      "name": "Dhamma Pubbananda"
+    },
+    {
+      "location": "Georgia, Atlanta",
+      "name": "Atlanta Dhamma House"
+    },
+    {
+      "location": "Georgia, Jesup",
+      "name": "Dhamma Pat\u0101pa"
+    },
+    {
+      "location": "Hawaii, Waianae",
+      "name": "Hawaii Vipassana Association"
+    },
+    {
+      "location": "Idaho, Lava Hot Springs",
+      "name": "Dhamma Pasava"
+    },
+    {
+      "location": "Illinois, Pecatonica",
+      "name": "Dhamma Pak\u0101sa"
+    },
+    {
+      "location": "Massachusetts, Shelburne Falls",
+      "name": "Dhamma Dhar\u0101"
+    },
+    {
+      "location": "Michigan, Ann Arbor",
+      "name": "Michigan Vipassana Association"
+    },
+    {
+      "location": "Montana, Missoula",
+      "name": "Montana Vipassana Association"
+    },
+    {
+      "location": "New York, New York, NY",
+      "name": "New York Vipassana Association"
+    },
+    {
+      "location": "Ohio, Cleveland & Columbus",
+      "name": "Ohio Vipassana Association"
+    },
+    {
+      "location": "Texas, Kaufman",
+      "name": "Dhamma Sir\u012b"
+    },
+    {
+      "location": "Texas, New Ulm",
+      "name": "Dhamma Sukha"
+    },
+    {
+      "location": "Washington, Onalaska",
+      "name": "Dhamma Ku\u00f1ja"
+    },
+    {
+      "location": "Wisconsin, Menomonie",
+      "name": "Dhamma Visuddhi"
+    },
+    {
+      "location": "Uzbekistan",
+      "name": "Vipassana Association of Uzbekistan"
+    },
+    {
+      "location": "Tung Wan, Lantau Island",
+      "name": "Vipassana Hong Kong"
+    },
+    {
+      "location": "Chiba, Chiba-ken",
+      "name": "Dhamma \u0100dicca (Dhammadicca)"
+    },
+    {
+      "location": "Kyoto",
+      "name": "Dhamma Bh\u0101nu"
+    },
+    {
+      "location": "Ulaanbaatar",
+      "name": "Dhamma Mahana"
+    },
+    {
+      "location": "Ch\u01d2llabuk-do, Jinan-gun",
+      "name": "Dhamma Korea"
+    },
+    {
+      "location": "All Sites in Taiwan",
+      "name": "Vipassana in Taiwan"
+    },
+    {
+      "location": "Dhamma Vikasa",
+      "name": "Dhamma Vik\u0101sa"
+    },
+    {
+      "location": "Taichung",
+      "name": "Dhammodaya"
+    },
+    {
+      "location": "B\u0103td\u00e2mb\u00e2ng, Battambang",
+      "name": "Dhamma La\u1e6d\u1e6dhik\u0101"
+    },
+    {
+      "location": "K\u00e2mp\u00f3ng Cham, Kampong Cham",
+      "name": "Dhamma Kamboja"
+    },
+    {
+      "location": "Phnum P\u00e9nh, Phnom Penh",
+      "name": "Vipassana Cambodia"
+    },
+    {
+      "location": "Bali, Dhamma Geha",
+      "name": "Dhamma Geha"
+    },
+    {
+      "location": "Jawa Barat, Gadog-Puncak",
+      "name": "Vipassana Meditation in Java"
+    },
+    {
+      "location": "Vipassana Indonesia",
+      "name": "Vipassana Meditation in Indonesia"
+    },
+    {
+      "location": "Dhamma Malaya",
+      "name": "Malaysia Vipassana Meditation"
+    },
+    {
+      "location": "Kedah, Kuala Ketil",
+      "name": "Dhamma Sundara"
+    },
+    {
+      "location": "Ayeyarwady, Ayeyarwaddy Region",
+      "name": "Dhamma May\u016bradipa"
+    },
+    {
+      "location": "Ayeyarwady, Ma-U-Bin",
+      "name": "Dhamma Manorama"
+    },
+    {
+      "location": "Ayeyarwady, Myaungmya",
+      "name": "Dhamma Mitta Y\u0101na"
+    },
+    {
+      "location": "Bago, Indagaw",
+      "name": "Dhamma Nidhi"
+    },
+    {
+      "location": "Bago, Thayawaddi",
+      "name": "Dhamma Rakkhita"
+    },
+    {
+      "location": "Kachin, Nan Kway village",
+      "name": "Dhamma Sangam"
+    },
+    {
+      "location": "Kaytho, Myanmar",
+      "name": "Dhamma Cetiya Pa\u1e6d\u1e6dh\u0101ra"
+    },
+    {
+      "location": "Mandalay",
+      "name": "Dhamma Vimutti"
+    },
+    {
+      "location": "Mandalay, Mah\u00e3 Aung Myay Township",
+      "name": "Dhamma Ma\u1e47\u1e0dapa"
+    },
+    {
+      "location": "Mandalay, Mandalay Division",
+      "name": "Dhamma Ma\u1e47\u1e0dala"
+    },
+    {
+      "location": "Mandalay, Mogok",
+      "name": "Dhamma Ratana"
+    },
+    {
+      "location": "Mandalay, Mogok",
+      "name": "Dhamma Maku\u1e6da"
+    },
+    {
+      "location": "Mandalay, Yechan Oo village Pyin Oo Lwin",
+      "name": "Dhamma Mahim\u00e3r"
+    },
+    {
+      "location": "Mon, Than-Phyu-Za-Yet",
+      "name": "Dhamma Manohara"
+    },
+    {
+      "location": "Sagaing",
+      "name": "Dhamma Shwe"
+    },
+    {
+      "location": "Sagaing, Yin-Ma-Bin Township",
+      "name": "Dhamma \u00d1\u0101\u1e47adhaja"
+    },
+    {
+      "location": "Shan, Lashio",
+      "name": "Dhamma L\u0101bha"
+    },
+    {
+      "location": "Shan, Muse",
+      "name": "Dhamma Pabbata"
+    },
+    {
+      "location": "Shan, Taunggyi",
+      "name": "Dhamma Mah\u0101 Pabbata"
+    },
+    {
+      "location": "Yangon",
+      "name": "Dhamma Magga"
+    },
+    {
+      "location": "Yangon",
+      "name": "Dhamma Joti"
+    },
+    {
+      "location": "Yangon, Insein",
+      "name": "Dhamma Hita Sukha Geha"
+    },
+    {
+      "location": "zawti village Penwegone, Pegu Region",
+      "name": "Dhamma Mani"
+    },
+    {
+      "location": "Tiaong, Quezon Province",
+      "name": "Dhamma Phala"
+    },
+    {
+      "location": "Central Singapore, Singapore 368186",
+      "name": "Vipassana Meditation in Singapore"
+    },
+    {
+      "location": "Chantaburi",
+      "name": "Dhamma Canda Pabh\u0101"
+    },
+    {
+      "location": "Kanchanaburi",
+      "name": "Dhamma Ka\u00f1cana"
+    },
+    {
+      "location": "Khon Kaen",
+      "name": "Dhamma Suva\u1e47\u1e47a"
+    },
+    {
+      "location": "Krung Thep Maha Nakhon [Bangkok], Bangkok",
+      "name": "Dhamma Dh\u0101n\u012b"
+    },
+    {
+      "location": "Lamphun",
+      "name": "Dhamma S\u012bmanta"
+    },
+    {
+      "location": "Nakhon Sawan, Amphur Lat Yao",
+      "name": "Dhamma Sudh\u0101laya"
+    },
+    {
+      "location": "Nakhon Si Thammarat",
+      "name": "Dhamma Por\u0101\u1e47o"
+    },
+    {
+      "location": "Pathum Thani, Khlong Luang",
+      "name": "Dhamma Ra\u1e43sim\u0101"
+    },
+    {
+      "location": "Phetchaburi, Tha Yang",
+      "name": "Dhamma Pa\u1e6dhav\u012b"
+    },
+    {
+      "location": "Phitsanulok",
+      "name": "Dhamma \u0100bh\u0101"
+    },
+    {
+      "location": "Prachin Buri, Prachinburi",
+      "name": "Dhamma Kamala"
+    },
+    {
+      "location": "Ubon Ratchathani, Warin Chamrap",
+      "name": "Dhamma Bhuvana"
+    },
+    {
+      "location": "Udon Thani",
+      "name": "Dhamma Puneti"
+    },
+    {
+      "location": "Ho Chi Minh city, Th\u1ee7 \u0110\u1ee9c",
+      "name": "Vipassana Vi\u1ec7t Nam"
+    },
+    {
+      "location": "Tay Ninh, T\u00e2y Ninh",
+      "name": "Dhamma Bh\u0101sura"
+    },
+    {
+      "location": "Khagrachari, Kamalchari",
+      "name": "Bangladesh Vipassana Society"
+    },
+    {
+      "location": "Mudoi",
+      "name": "Dhamma Aruna"
+    },
+    {
+      "location": "Kamrup",
+      "name": "Dhamma Asama"
+    },
+    {
+      "location": "Bara Chakia, East Chapmaran 845412",
+      "name": "Dhamma Upavana"
+    },
+    {
+      "location": "BodhGaya",
+      "name": "Dhamma Bodhi"
+    },
+    {
+      "location": "Bodhgaya",
+      "name": "Dhamma Sambodhi"
+    },
+    {
+      "location": "Ladaura pakri, Kurhani, Muzaffarpur",
+      "name": "Dhamma Licchav\u012b"
+    },
+    {
+      "location": "Nalanda",
+      "name": "Vipassana Courses in Nalanda, Bihar"
+    },
+    {
+      "location": "Patna",
+      "name": "Dhamma P\u0101\u1e6daliputta"
+    },
+    {
+      "location": "Vaishali",
+      "name": "Dhamma Ves\u0101li"
+    },
+    {
+      "location": "Ambikapur (Sarguja)",
+      "name": "Dhamma Anchal"
+    },
+    {
+      "location": "Bilaspur",
+      "name": "Dhamma Garh"
+    },
+    {
+      "location": "Durg",
+      "name": "Dhamma Ketu"
+    },
+    {
+      "location": "Raipur",
+      "name": "Dhamma Kuti"
+    },
+    {
+      "location": "Goa - 403728",
+      "name": "Vipassana Goa"
+    },
+    {
+      "location": "Ahmedabad",
+      "name": "Dhamma P\u012b\u1e6dha"
+    },
+    {
+      "location": "Bharuch",
+      "name": "Dhamma Narmad\u0101"
+    },
+    {
+      "location": "Bhavnagar",
+      "name": "Dhamma Jal\u0101saya"
+    },
+    {
+      "location": "Dharmaj",
+      "name": "Vipassana Courses in Dharmaj, Gujarat"
+    },
+    {
+      "location": "Dist Navsari",
+      "name": "Dhamma Ambika"
+    },
+    {
+      "location": "Dist Tapi",
+      "name": "Dhammasongadh"
+    },
+    {
+      "location": "Junagadh",
+      "name": "Dhamma Junagadh"
+    },
+    {
+      "location": "Kutch",
+      "name": "Dhamma Avani"
+    },
+    {
+      "location": "Kutch",
+      "name": "Dhamma Rava"
+    },
+    {
+      "location": "Kutch",
+      "name": "Dhamma Sindhu"
+    },
+    {
+      "location": "Mehsana",
+      "name": "Dhamma Div\u0101kara"
+    },
+    {
+      "location": "Modasa",
+      "name": "Dhamma Aravalli"
+    },
+    {
+      "location": "Palitana",
+      "name": "Dhamma P\u0101li"
+    },
+    {
+      "location": "Rajkot",
+      "name": "Dhamma Ko\u1e6da"
+    },
+    {
+      "location": "Vadodara",
+      "name": "Dhamma Bhavana"
+    },
+    {
+      "location": "Vadodara",
+      "name": "Dhamma Va\u1e6da"
+    },
+    {
+      "location": "Delhi",
+      "name": "Dhamma Sota"
+    },
+    {
+      "location": "Kammaspur Village",
+      "name": "Dhamma Pa\u1e6d\u1e6dh\u0101na"
+    },
+    {
+      "location": "Karnal",
+      "name": "Dhamma K\u0101ru\u1e47ika"
+    },
+    {
+      "location": "Rohtak",
+      "name": "Dhamma Hitkari"
+    },
+    {
+      "location": "Dharamshala",
+      "name": "Dhamma Sikhara"
+    },
+    {
+      "location": "Ladakh",
+      "name": "Dhamma Laddha"
+    },
+    {
+      "location": "Bengaluru",
+      "name": "Dhamma Sukhalaya"
+    },
+    {
+      "location": "Bengaluru",
+      "name": "Dhamma Paphulla"
+    },
+    {
+      "location": "Davangere",
+      "name": "Dhamma Nagari"
+    },
+    {
+      "location": "Mysuru",
+      "name": "Dhamma Vana"
+    },
+    {
+      "location": "Udupi",
+      "name": "Dhamma Nad\u012b"
+    },
+    {
+      "location": "Cheriyanad near Chengannur",
+      "name": "Dhamma Ketana"
+    },
+    {
+      "location": "Thiruvananthapuram",
+      "name": "Dhamma Paduma"
+    },
+    {
+      "location": "Wayanad - 673 122",
+      "name": "Dhamma Parimala"
+    },
+    {
+      "location": "Balaghat",
+      "name": "Dhamma K\u0101nana"
+    },
+    {
+      "location": "Bhopal",
+      "name": "Dhamma P\u0101la (Dhammap\u0101la)"
+    },
+    {
+      "location": "Chhindwara",
+      "name": "Dhamma Chhavi"
+    },
+    {
+      "location": "Guna",
+      "name": "Dhamma Guna"
+    },
+    {
+      "location": "Indore",
+      "name": "Dhamma M\u0101lw\u0101"
+    },
+    {
+      "location": "Jabalpur",
+      "name": "Dhamma Bala"
+    },
+    {
+      "location": "Ratlam",
+      "name": "Dhamma Rata"
+    },
+    {
+      "location": "Sagar",
+      "name": "Vipassana Trust Sagar (M.P.)"
+    },
+    {
+      "location": "Ajaypur, Vidharbha",
+      "name": "Dhamma Ajaya"
+    },
+    {
+      "location": "Akola",
+      "name": "Dhamma An\u0101kula"
+    },
+    {
+      "location": "Amravati",
+      "name": "Dhamma Amravati"
+    },
+    {
+      "location": "Aurangabad",
+      "name": "Dhamma Ajant\u0101"
+    },
+    {
+      "location": "Bhandara",
+      "name": "Dhamma Bhan\u1e0d\u0101ra"
+    },
+    {
+      "location": "Bhusaval",
+      "name": "Dhamma Bh\u016bsana"
+    },
+    {
+      "location": "Buldana",
+      "name": "Dhamma Kiran"
+    },
+    {
+      "location": "Dapoli",
+      "name": "Dhamma Udaka (Dhammodaka)"
+    },
+    {
+      "location": "Dhule",
+      "name": "Dhamma Sarovara"
+    },
+    {
+      "location": "Dist. - Ratnagiri",
+      "name": "Dhamma Pades"
+    },
+    {
+      "location": "For Govt. School Teachers Only",
+      "name": "Mitra Upakram Vipassana"
+    },
+    {
+      "location": "Gorai Village, Borivali (West), Mumbai",
+      "name": "Dhamma Pattana"
+    },
+    {
+      "location": "Gorai Village, Borivali (West), Mumbai",
+      "name": "Global Vipassana Pagoda"
+    },
+    {
+      "location": "Goregaon (East), Mumbai",
+      "name": "Dhamma Kanheri"
+    },
+    {
+      "location": "Hivra, Wardha",
+      "name": "Dhamma Vasudh\u0101"
+    },
+    {
+      "location": "Igatpuri",
+      "name": "Dhamma Tapovana2"
+    },
+    {
+      "location": "Igatpuri",
+      "name": "Dhamma Tapovana"
+    },
+    {
+      "location": "Igatpuri",
+      "name": "Dhamma Giri"
+    },
+    {
+      "location": "Jalgaon",
+      "name": "Dhamma Jalgaon"
+    },
+    {
+      "location": "Kalyan",
+      "name": "Dhamma V\u0101hini"
+    },
+    {
+      "location": "Kamptee, Nagpur, Pin - 441001",
+      "name": "Dragon Palace Vipassana Meditation Centre"
+    },
+    {
+      "location": "Khadavli",
+      "name": "Dhamma Sarit\u0101"
+    },
+    {
+      "location": "Kolhapur",
+      "name": "Dhamma \u0100laya (Dhamm\u0101laya)"
+    },
+    {
+      "location": "Latur",
+      "name": "Dhamma \u1fb9v\u0101sa"
+    },
+    {
+      "location": "Mahad, 402301",
+      "name": "Mahad Vipassana"
+    },
+    {
+      "location": "Manju",
+      "name": "Dhamma Manjusha"
+    },
+    {
+      "location": "Manmad",
+      "name": "Dhamma Manamoda"
+    },
+    {
+      "location": "Nagpur",
+      "name": "Dhamma N\u0101ga"
+    },
+    {
+      "location": "Nagpur",
+      "name": "Dhamma Sugati"
+    },
+    {
+      "location": "Nanded",
+      "name": "Dhamma Niranjana"
+    },
+    {
+      "location": "Nashik",
+      "name": "Dhamma N\u0101sik\u0101"
+    },
+    {
+      "location": "New Mumbai",
+      "name": "Dhamma Vipula"
+    },
+    {
+      "location": "Oza Tola, Gondia",
+      "name": "Dhamma Gond"
+    },
+    {
+      "location": "Palghar",
+      "name": "Dhamma V\u0101\u1e6dik\u0101"
+    },
+    {
+      "location": "Parner, Ahmednagar",
+      "name": "Dhamma Pa\u1e6dh\u0101ra"
+    },
+    {
+      "location": "Pulas",
+      "name": "Dhamma Sindhudurg"
+    },
+    {
+      "location": "Pune",
+      "name": "Dhamma Pu\u1e47\u1e47a"
+    },
+    {
+      "location": "Pune Riverside",
+      "name": "Dhamma \u0100nanda (Dhamm\u0101nanda)"
+    },
+    {
+      "location": "Sangli",
+      "name": "Dhamma Sugandha"
+    },
+    {
+      "location": "Solapur",
+      "name": "Dhamma Siddhapuri"
+    },
+    {
+      "location": "Taluka Hingoli",
+      "name": "Dhamma Desa"
+    },
+    {
+      "location": "Virar Pincode :401303",
+      "name": "Vasai Virar Vipassana Samiti"
+    },
+    {
+      "location": "Yavatmal",
+      "name": "Dhamma Malla"
+    },
+    {
+      "location": "Kamalanagar",
+      "name": "Dhamma Pubbottara"
+    },
+    {
+      "location": "Bhubaneshwar",
+      "name": "Dhamma Bhubaneshwar"
+    },
+    {
+      "location": "Khariar Road",
+      "name": "Dhamma Utkal"
+    },
+    {
+      "location": "Hoshiarpur",
+      "name": "Dhamma Dhaja"
+    },
+    {
+      "location": "Chaksu",
+      "name": "Vipassana in Chaksu, Rajasthan"
+    },
+    {
+      "location": "Chaksu - Jaipur",
+      "name": "Dhamma Aranya"
+    },
+    {
+      "location": "Churu",
+      "name": "Dhamma Pubbaja"
+    },
+    {
+      "location": "Dhamma Thali, Jaipur",
+      "name": "Dhamma Thal\u012b"
+    },
+    {
+      "location": "Jamdoli - Jaipur",
+      "name": "Dhamma Nilaya"
+    },
+    {
+      "location": "Jodhpur",
+      "name": "Dhamma Marudhara"
+    },
+    {
+      "location": "Mt. Abu",
+      "name": "Dhamm\u0101cala"
+    },
+    {
+      "location": "Pushkar, Ajmer",
+      "name": "Dhamma Pushkar"
+    },
+    {
+      "location": "Sri Ganganagar",
+      "name": "Dhamma Madhuvana"
+    },
+    {
+      "location": "Changey Senti",
+      "name": "Dhamma Sikkim"
+    },
+    {
+      "location": "Gyanalakha, Upper Samdong",
+      "name": "Dhamma Sineru"
+    },
+    {
+      "location": "Chennai",
+      "name": "Dhamma Setu"
+    },
+    {
+      "location": "Coimbatore",
+      "name": "Coimbatore Vipassana Center"
+    },
+    {
+      "location": "Dindigul District",
+      "name": "Dhamma Madhur\u0101"
+    },
+    {
+      "location": "Kalampalayam Tirupur",
+      "name": "Dhamma Triveni"
+    },
+    {
+      "location": "Kanchipuram",
+      "name": "Dhamma Kanchi"
+    },
+    {
+      "location": "Non-Centres",
+      "name": "Non-centre Vipassana Courses in Tamil Nadu"
+    },
+    {
+      "location": "Tiruvannamalai",
+      "name": "Dhamma Arunachala"
+    },
+    {
+      "location": "Telugu Land",
+      "name": "Telugu Land Courses"
+    },
+    {
+      "location": "Ahobilam",
+      "name": "Dhamma Ahobilam"
+    },
+    {
+      "location": "Kumudavalli Village",
+      "name": "Dhamma \u0100r\u0101ma (Dhamm\u0101r\u0101ma)"
+    },
+    {
+      "location": "Pulivendula",
+      "name": "Dhamma Anurakkhi"
+    },
+    {
+      "location": "Vijayarai",
+      "name": "Dhamma Vijaya"
+    },
+    {
+      "location": "Badankurthy, Khanapur, Nirmal",
+      "name": "Dhamma B\u0101var\u012b"
+    },
+    {
+      "location": "Hyderabad - 500 070",
+      "name": "Dhamma Khetta"
+    },
+    {
+      "location": "Hyderabad - 500 070",
+      "name": "Dhamma Khetta"
+    },
+    {
+      "location": "Mahabubnagar",
+      "name": "Dhamma Teera"
+    },
+    {
+      "location": "Nagarjun Sagar",
+      "name": "Dhamma N\u0101g\u0101jjuna"
+    },
+    {
+      "location": "Nagarjun Sagar",
+      "name": "Dhamma N\u0101g\u0101jjuna2"
+    },
+    {
+      "location": "Nagarjuna Sagar",
+      "name": "Dhamma Tapo S\u0101gara"
+    },
+    {
+      "location": "Nizamabad",
+      "name": "Dhamma Nijjh\u0101na"
+    },
+    {
+      "location": "Sanga Reddy",
+      "name": "Dhamma Ko\u1e47da\u00f1\u00f1a2"
+    },
+    {
+      "location": "Sanga Reddy",
+      "name": "Dhamma Ko\u1e47da\u00f1\u00f1a"
+    },
+    {
+      "location": "Machmara",
+      "name": "Dhamma Puri"
+    },
+    {
+      "location": "Hastinapur",
+      "name": "Dhamma Sudha"
+    },
+    {
+      "location": "Kanpur",
+      "name": "Dhamma Kalyana"
+    },
+    {
+      "location": "Kushinagar",
+      "name": "Dhamma Kaya"
+    },
+    {
+      "location": "Lucknow",
+      "name": "Dhamma Lakkha\u1e47a"
+    },
+    {
+      "location": "Sarnath",
+      "name": "Dhamma Cakka"
+    },
+    {
+      "location": "Sravasti",
+      "name": "Dhamma Suvatthi"
+    },
+    {
+      "location": "Dehradun",
+      "name": "Dhamma Salila"
+    },
+    {
+      "location": "Kolkata",
+      "name": "Dhamma Ga\u1e45g\u0101"
+    },
+    {
+      "location": "Siliguri",
+      "name": "Dhammata\u1e6da"
+    },
+    {
+      "location": "Sonarpur",
+      "name": "Dhamma Banga"
+    },
+    {
+      "location": "Mehrshahr",
+      "name": "Dhamma Iran"
+    },
+    {
+      "location": "Bagmati, Kakani Village",
+      "name": "Dhamma Nibh\u0101"
+    },
+    {
+      "location": "Bagmati, Kathmandu",
+      "name": "Dhamma \u0100dh\u0101ra"
+    },
+    {
+      "location": "Bagmati, Lalitpur",
+      "name": "Dhamma \u0100saya"
+    },
+    {
+      "location": "Bheri, Ghorahi Up Nagar Palika",
+      "name": "Dhamma Par\u0101ga"
+    },
+    {
+      "location": "Biratnagar",
+      "name": "Dhamma Bir\u0101\u1e6da"
+    },
+    {
+      "location": "Birganj",
+      "name": "Dhamma Tar\u0101i"
+    },
+    {
+      "location": "Chitwan",
+      "name": "Dhamma Citavana"
+    },
+    {
+      "location": "Far Western, Bhimdatta Municipality",
+      "name": "Dhammay\u0101na"
+    },
+    {
+      "location": "Far Western, Katkuwa Surkhet",
+      "name": "Dhamma Surakhetta"
+    },
+    {
+      "location": "Kathmandu",
+      "name": "Dhamma Shringa"
+    },
+    {
+      "location": "Kirtipur",
+      "name": "Dhamma Kitti"
+    },
+    {
+      "location": "Lalitpur",
+      "name": "Dhamm\u0101g\u0101ra"
+    },
+    {
+      "location": "Lukla",
+      "name": "Dhamma Sagar"
+    },
+    {
+      "location": "Lumbini",
+      "name": "Dhamma Janan\u012b"
+    },
+    {
+      "location": "Lumbini, Ramgram",
+      "name": "Dhamma G\u0101ma"
+    },
+    {
+      "location": "Lumbini, Tansen",
+      "name": "Dhamma S\u012bsa"
+    },
+    {
+      "location": "Mechi, Gahirigaun, Phikkal, Illam District",
+      "name": "Dhamma Suriyo"
+    },
+    {
+      "location": "Pokhara",
+      "name": "Dhamma Pokhar\u0101"
+    },
+    {
+      "location": "Western, Banganga Municipality",
+      "name": "Dhamma Nandana"
+    },
+    {
+      "location": "Anur\u0101dhapura, Anuradhapura",
+      "name": "Dhamma Anur\u0101dha"
+    },
+    {
+      "location": "K\u014f\u1e37amba, Kosgama",
+      "name": "Dhamma Sobh\u0101"
+    },
+    {
+      "location": "Madhyama pa\u1e37\u0101ta, Kandy",
+      "name": "Dhamma K\u016b\u1e6da"
+    },
+    {
+      "location": "Negampaha",
+      "name": "Dhamma Dharani"
+    },
+    {
+      "location": "Thihagoda",
+      "name": "Dhamma Dakkhi\u1e47a"
+    },
+    {
+      "location": "Wellawaya",
+      "name": "Dhamma Ara\u1e47a"
+    },
+    {
+      "location": "Armenia",
+      "name": "Vipassana Meditation in Armenia"
+    },
+    {
+      "location": "Bahrain",
+      "name": "Vipassana Meditation in Bahrain"
+    },
+    {
+      "location": "Deganya Bet",
+      "name": "Dhamma Pamoda"
+    },
+    {
+      "location": "Al Balq\u0101', As-Salt",
+      "name": "Vipassana Meditation in Jordan"
+    },
+    {
+      "location": "Lebanon",
+      "name": "Vipassana Meditation in Lebanon"
+    },
+    {
+      "location": "Oman",
+      "name": "Vipassana Meditation in Sultanate of Oman"
+    },
+    {
+      "location": "Zababida",
+      "name": "Vipassana Meditation in Palestine"
+    },
+    {
+      "location": "India, , Farsi",
+      "name": "Worldwide Farsi courses"
+    },
+    {
+      "location": "Minsk",
+      "name": "Vipassana Meditation in Belarus"
+    },
+    {
+      "location": "Non-Center Troyan",
+      "name": "Vipassana Bulgaria"
+    },
+    {
+      "location": "Praha",
+      "name": "Vipassana Czech Republic and Slovakia"
+    },
+    {
+      "location": "Georgia",
+      "name": "Vipassana Georgia"
+    },
+    {
+      "location": "Salg\u00f3tarj\u00e1n",
+      "name": "Vipassana Meditation in Hungary"
+    },
+    {
+      "location": "Chi\u015fin\u0103u, Chisinau",
+      "name": "Vipassana Meditation Moldova"
+    },
+    {
+      "location": "Dziadowice",
+      "name": "Dhamma Pallava"
+    },
+    {
+      "location": "Kruty\u0144",
+      "name": "Vipassana Meditation in Poland"
+    },
+    {
+      "location": "Cluj-Napoca",
+      "name": "Funda\u021bia Vipassana Rom\u00e2nia"
+    },
+    {
+      "location": "Moskovskaja oblast', Moscow region",
+      "name": "Vipassana Meditation in Moscow Region"
+    },
+    {
+      "location": "Novosibirskaja oblast', Novosibirsk",
+      "name": "Novosibirsk Vipassana Courses"
+    },
+    {
+      "location": "Permskij kraj, Perm",
+      "name": "Vipassana Courses in Perm, Russia"
+    },
+    {
+      "location": "St. Petersburg",
+      "name": "St. Petersburg Non Centre Vipassana"
+    },
+    {
+      "location": "Yekaterinburg",
+      "name": "Yekaterinburg NonCenter Vipassana Courses"
+    },
+    {
+      "location": "Bratislava",
+      "name": "Vipassana Slovakia"
+    },
+    {
+      "location": "Ayd\u0131n, Izmir",
+      "name": "Vipassana Meditation in Turkey"
+    },
+    {
+      "location": "Kyiv",
+      "name": "Vipassana Meditation in Ukraine"
+    },
+    {
+      "location": "Copenhagen",
+      "name": "Denmark"
+    },
+    {
+      "location": "Tallinn",
+      "name": "Vipassana Meditation in Estonia"
+    },
+    {
+      "location": "Helsinki",
+      "name": "Finland"
+    },
+    {
+      "location": "Ireland",
+      "name": "Vipassana Meditation in Ireland"
+    },
+    {
+      "location": "Siguldas novads (Sigulda), Sigulda Municipality",
+      "name": "Dhamma La\u1e6d\u1e6dhi"
+    },
+    {
+      "location": "Varena district",
+      "name": "Dhamma L\u012b\u1e37h\u0101"
+    },
+    {
+      "location": "Gol",
+      "name": "Norway"
+    },
+    {
+      "location": "\u00d6sterg\u00f6tlands l\u00e4n [SE-05], \u00d6desh\u00f6g",
+      "name": "Dhamma Sobhana"
+    },
+    {
+      "location": "Herefordshire",
+      "name": "Dhamma Padh\u0101na"
+    },
+    {
+      "location": "Herefordshire",
+      "name": "Dhamma Dipa"
+    },
+    {
+      "location": "Herefordshire & Suffolk",
+      "name": "Vipassana Meditation UK"
+    },
+    {
+      "location": "Northern England",
+      "name": "North of England"
+    },
+    {
+      "location": "Scotland, Edinburgh",
+      "name": "Scotland Vipassana"
+    },
+    {
+      "location": "Suffolk, Stowmarket, Suffolk",
+      "name": "Dhamma Sukhak\u0101ri"
+    },
+    {
+      "location": "Zagreb",
+      "name": "Vipassana Croatia"
+    },
+    {
+      "location": "Crete",
+      "name": "Greek Vipassana Association"
+    },
+    {
+      "location": "Firenze, Lutirano",
+      "name": "Dhamma A\u1e6dala"
+    },
+    {
+      "location": "Macedonia",
+      "name": "Vipassana Meditation in Macedonia"
+    },
+    {
+      "location": "Faro, Rogil",
+      "name": "Associa\u00e7\u00e3o Vipassana Portugal"
+    },
+    {
+      "location": "Belgrade",
+      "name": "Vipassana Serbia"
+    },
+    {
+      "location": "Ljubljana",
+      "name": "Fundacija Vipassana"
+    },
+    {
+      "location": "Dhamma Neru, Santa Maria Palautordera - Barcelona",
+      "name": "Dhamma Neru"
+    },
+    {
+      "location": "Spain",
+      "name": "Vipassana in Spain"
+    },
+    {
+      "location": "\u00c1vila, Dhamma Sacca",
+      "name": "Dhamma Sacca"
+    },
+    {
+      "location": "Ober\u00f6sterreich, Dhamma Mudita",
+      "name": "Dhamma Mudita"
+    },
+    {
+      "location": "Dilsen-Stokkem",
+      "name": "Dhamma Pajjota"
+    },
+    {
+      "location": "France",
+      "name": "Vipassana Meditation France"
+    },
+    {
+      "location": "Haute-Garonne, Labroqu\u00e8re",
+      "name": "Dhamma S\u016briy\u0101r\u0101ma"
+    },
+    {
+      "location": "Paris",
+      "name": "Paris Area"
+    },
+    {
+      "location": "Seine-et-Marne, Beautheil-Saints",
+      "name": "Dhamma Nilaya"
+    },
+    {
+      "location": "Yonne, Champignelles",
+      "name": "Dhamma Mah\u012b"
+    },
+    {
+      "location": "Baden-W\u00fcrttemberg, Hohritt (Baden-W\u00fcrttemberg)",
+      "name": "Dhamma Sampatti"
+    },
+    {
+      "location": "Berg 112,Hausham,Bayern",
+      "name": "Southeast Vipassana Group"
+    },
+    {
+      "location": "Dhamma Dvara",
+      "name": "Dhamma Dv\u0101ra"
+    },
+    {
+      "location": "Koppelschleuse Jugend- und Kulturg\u00e4stehaus Helter Damm 1 49716 Meppen",
+      "name": "Northwest Vipassana Group"
+    },
+    {
+      "location": "Triebel & Hohritt",
+      "name": "Vipassana Meditation Germany"
+    },
+    {
+      "location": "Unterhub 1, Near Bad Wurzach",
+      "name": "Southwest Vipassana Group"
+    },
+    {
+      "location": "Flevoland, Almere",
+      "name": "Dhamma Ta\u1e37\u0101ka"
+    },
+    {
+      "location": "Mont Soleil",
+      "name": "Dhamma Sumeru"
+    },
+    {
+      "location": "New South Wales, Blackheath",
+      "name": "Dhamma Bhumi"
+    },
+    {
+      "location": "New South Wales, Lower Portland",
+      "name": "Dhamma P\u0101s\u0101da"
+    },
+    {
+      "location": "New South Wales, Northern Rivers Gold Coast",
+      "name": "Dhamma Passaddhi"
+    },
+    {
+      "location": "Northern Territory, Darwin",
+      "name": "Vipassana Meditation Northern Territory"
+    },
+    {
+      "location": "Queensland, Pomona",
+      "name": "Dhamma Rasmi"
+    },
+    {
+      "location": "Queensland, Pomona",
+      "name": "Dhamma Rasa"
+    },
+    {
+      "location": "South Australia, Clare",
+      "name": "Dhamma Ujjala"
+    },
+    {
+      "location": "Tasmania, Upper Dromedary",
+      "name": "Dhamma Pabh\u0101"
+    },
+    {
+      "location": "Victoria, Woori Yallock",
+      "name": "Dhamma Aloka"
+    },
+    {
+      "location": "Western Australia, Brookton",
+      "name": "Dhamma Pad\u012bpa"
+    },
+    {
+      "location": "Tahiti",
+      "name": "Vipassana Meditation in French Polynesia"
+    }
+  ]
+}

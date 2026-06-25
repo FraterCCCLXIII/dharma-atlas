@@ -1,0 +1,6278 @@
+{
+  "source": "https://www.google.com/maps/d/u/0/viewer?mid=1NrKT9tt74PDeKaq9aFQ4FQZjSrVU9j4",
+  "sourceName": "Buddhist Centers, Temples, and Monasteries in the US",
+  "sourceCredit": "Shambhala Publications",
+  "count": 627,
+  "places": [
+    {
+      "id": "7937cfc792bc",
+      "name": "Abhayagiri Buddhist Monastery",
+      "lat": 39.364948,
+      "lng": -123.232699,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "7153ec2900c5",
+      "name": "Alabama Buddhist Vihara meditation center",
+      "lat": 33.559424,
+      "lng": -86.265754,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "e4e96517d5ee",
+      "name": "Albuquerque Karma Thegsum Choling",
+      "lat": 35.14302,
+      "lng": -106.633805,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "54e272e28de2",
+      "name": "Albuquerque Zen Center",
+      "lat": 35.073388,
+      "lng": -106.620952,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "3a87c2bf4fb1",
+      "name": "American Buddhist Meditation temple",
+      "lat": 34.420786,
+      "lng": -119.805812,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "904d4eb06bf7",
+      "name": "Amitabha Buddhist Society",
+      "lat": 40.756201,
+      "lng": -73.82896,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "403be6b3a776",
+      "name": "Amitabha Buddhist Society of Oregon",
+      "lat": 45.491881,
+      "lng": -122.809445,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "53256afda8fc",
+      "name": "Amitabha Stupa and Peace Park",
+      "lat": 34.875499,
+      "lng": -111.808402,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "4cf6e018ef57",
+      "name": "An Bang Buddhist Temple",
+      "lat": 39.700044,
+      "lng": -105.057447,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "d2514b1edf7f",
+      "name": "An Lac Hanh Buddhist Temple",
+      "lat": 28.030319,
+      "lng": -82.41468,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "29feedc6a3ee",
+      "name": "An Lạc Temple",
+      "lat": 40.805058,
+      "lng": -96.722168,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "8b49ff44afb4",
+      "name": "An Quang Buddhist Temple",
+      "lat": 33.555472,
+      "lng": -86.778676,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "24cdc370bcac",
+      "name": "Ari Bhöd",
+      "lat": 34.144371,
+      "lng": -118.16144,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f2a4d8785c76",
+      "name": "Arizona Buddhist Temple",
+      "lat": 33.492579,
+      "lng": -112.149134,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "ca80fcf9107a",
+      "name": "Arizona International Buddhist Meditation Center INCORPORATION",
+      "lat": 33.406928,
+      "lng": -111.811064,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "ccce2473a596",
+      "name": "Aryaloka Buddhist Retreat Center",
+      "lat": 43.065693,
+      "lng": -70.961298,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "b7930430f078",
+      "name": "Atammayatarama Buddhist Monastery",
+      "lat": 47.767261,
+      "lng": -122.106911,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "358aef87bff8",
+      "name": "Ati Ling",
+      "lat": 38.516142,
+      "lng": -123.157869,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "9d518e07a3dd",
+      "name": "Atlanta Dhamma House",
+      "lat": 33.728821,
+      "lng": -83.960966,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "0c71df972f8e",
+      "name": "Awakening Valley Sangha",
+      "lat": 40.239731,
+      "lng": -111.642383,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "289d54b15435",
+      "name": "Ba La Mat Buddhist Center",
+      "lat": 25.550988,
+      "lng": -80.387508,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "0fb459c1f0fe",
+      "name": "Bao Chon Zen Temple",
+      "lat": 42.849357,
+      "lng": -71.890235,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "a6d41fefc3f8",
+      "name": "Barom Kagyu Choe Khor Ling",
+      "lat": 37.341924,
+      "lng": -121.761926,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c104e146605c",
+      "name": "Bat Nha Temple-Chùa Bát Nhã",
+      "lat": 34.56698,
+      "lng": -92.499768,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "577d9aea2cb0",
+      "name": "Berkeley Buddhist Temple",
+      "lat": 37.866088,
+      "lng": -122.266483,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "c296d6c18d36",
+      "name": "Bhodhiyana meditation center",
+      "lat": 36.154212,
+      "lng": -115.218623,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9807518a3249",
+      "name": "Billings Dharma Center",
+      "lat": 45.776212,
+      "lng": -108.535267,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "9c3b0d2c8be8",
+      "name": "Birmingham Shambhala Meditation Center",
+      "lat": 33.516818,
+      "lng": -86.775996,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "97285be03cc0",
+      "name": "Blue Cliff Monastery",
+      "lat": 41.636982,
+      "lng": -74.395056,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "43cebda28754",
+      "name": "Blue Lotus Buddhist Temple and Meditation Center",
+      "lat": 42.31311,
+      "lng": -88.447104,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "5d5307a27831",
+      "name": "Blue Lotus Meditation Center and Louisiana Buddhist Vihara",
+      "lat": 30.488805,
+      "lng": -91.10691,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "2649cfcfb285",
+      "name": "Blue Mountain Dharma",
+      "lat": 38.025777,
+      "lng": -78.467094,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "869fde0b037f",
+      "name": "Blue Mountain Zendo",
+      "lat": 40.670829,
+      "lng": -75.384668,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "6c94a6c50a7f",
+      "name": "Bo De Tam Monastery",
+      "lat": 26.650108,
+      "lng": -81.746197,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "2334098d1191",
+      "name": "Bo Hyun Sa Temple",
+      "lat": 26.029942,
+      "lng": -80.390906,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "600de1ea8128",
+      "name": "Bodhi Manda Zen Center",
+      "lat": 35.772808,
+      "lng": -106.689606,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "313f38aa5ab0",
+      "name": "Bodhi Path Buddhist Center",
+      "lat": 34.438675,
+      "lng": -119.747874,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "12ff4d1fdaa3",
+      "name": "Bodhi Path Natural Bridge Center",
+      "lat": 37.69085,
+      "lng": -79.513019,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b12b459eb556",
+      "name": "Bodhiheart Sangha Buddhist Meditation Center in Seattle",
+      "lat": 47.612074,
+      "lng": -122.32194,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "b01e4c0a65fb",
+      "name": "Boise Institute for Buddhist Studies",
+      "lat": 43.626291,
+      "lng": -116.206086,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "6d6fcc5f0751",
+      "name": "Boulder Morningstar Zen Center",
+      "lat": 40.050542,
+      "lng": -105.280208,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "2a378778c307",
+      "name": "Boulder Shambhala Center",
+      "lat": 40.019532,
+      "lng": -105.277988,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "9441b28b5232",
+      "name": "Boulder Zen Center",
+      "lat": 40.014938,
+      "lng": -105.266613,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "b57ab3983dad",
+      "name": "Bozeman Dharma Center",
+      "lat": 45.671836,
+      "lng": -111.089225,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "a53792cc3369",
+      "name": "Bread Loaf Mountain Zen Community",
+      "lat": 44.007744,
+      "lng": -73.161992,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "18e429c56ac4",
+      "name": "Buddha Blessed Temple",
+      "lat": 38.133012,
+      "lng": -85.79201,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "257c7942ecf5",
+      "name": "Buddha Gate Monastery",
+      "lat": 37.941548,
+      "lng": -122.09512,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "62dd5ded233b",
+      "name": "Buddha Heart Village",
+      "lat": 32.532583,
+      "lng": -85.465201,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "cfbd71358ccd",
+      "name": "Buddha Jewel Monastery 佛寶寺",
+      "lat": 47.75548,
+      "lng": -122.320704,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "ffef515deac1",
+      "name": "Buddha Mind Monastery",
+      "lat": 35.407686,
+      "lng": -97.316685,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "ee5723060ac0",
+      "name": "Buddha Raleigh Temple",
+      "lat": 35.749034,
+      "lng": -78.463795,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "84216124b3c7",
+      "name": "Buddhi Vihara",
+      "lat": 37.333826,
+      "lng": -121.951594,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "0a1cc1217420",
+      "name": "Buddhist Association of Colorado",
+      "lat": 39.660344,
+      "lng": -105.097269,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "2f465798f3ab",
+      "name": "Buddhist Center of New Mexico",
+      "lat": 35.079883,
+      "lng": -106.592509,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "79b9ffd0f4b3",
+      "name": "Buddhist Center of Steamboat Springs",
+      "lat": 40.487059,
+      "lng": -106.833226,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "957773186d8f",
+      "name": "Buddhist Church of Florin OLD WEBSITE",
+      "lat": 38.495028,
+      "lng": -121.399249,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "3b8b567a62b8",
+      "name": "Buddhist Church of Fowler",
+      "lat": 36.626408,
+      "lng": -119.680887,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "0b5812086fe4",
+      "name": "Buddhist Church of Lodi",
+      "lat": 38.134875,
+      "lng": -121.269554,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "3e7b95fbd461",
+      "name": "Buddhist Church of Marysville",
+      "lat": 39.136988,
+      "lng": -121.585333,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "1d9280275bf6",
+      "name": "Buddhist Church of Oakland",
+      "lat": 37.79841,
+      "lng": -122.267737,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "bc9c10884edf",
+      "name": "Buddhist Church of Parlier",
+      "lat": 36.609014,
+      "lng": -119.529486,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "83244f44b482",
+      "name": "Buddhist Church of Sacramento",
+      "lat": 38.564118,
+      "lng": -121.497837,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "70e46f0f7856",
+      "name": "Buddhist Church Of San Francisco",
+      "lat": 37.78865,
+      "lng": -122.426788,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "dcd6dffeba44",
+      "name": "Buddhist Church of Stockton",
+      "lat": 37.959656,
+      "lng": -121.33686,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "01f8d823e675",
+      "name": "Buddhist Church Santa Barbara",
+      "lat": 34.426283,
+      "lng": -119.681632,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "59a7d536d8f7",
+      "name": "Buddhist Faith Fellowship of Connecticut",
+      "lat": 41.558418,
+      "lng": -72.660195,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "2d938485a3d5",
+      "name": "Buddhist Institute of Universal Compassion",
+      "lat": 47.696763,
+      "lng": -117.398036,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "fa11ebd62514",
+      "name": "Buddhist Meditation Center - Wat Paknam Michigan",
+      "lat": 42.581589,
+      "lng": -83.024381,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "421543c9e44e",
+      "name": "Buddhist Peace Fellowship",
+      "lat": 37.816636,
+      "lng": -122.24934,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "a2dbba7492ac",
+      "name": "Buddhist Temple of Alameda",
+      "lat": 37.767814,
+      "lng": -122.241039,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "c53dcee36f78",
+      "name": "Buddhist Temple of Dallas",
+      "lat": 32.906728,
+      "lng": -96.760534,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "ddc79c6f3e83",
+      "name": "Buddhist Temple of Marin",
+      "lat": 37.896925,
+      "lng": -122.536956,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "02c41c0826bb",
+      "name": "Buddhist Temple of Salina",
+      "lat": 38.883209,
+      "lng": -97.659622,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "cee401550309",
+      "name": "Buddhist Temple of Salinas",
+      "lat": 36.679164,
+      "lng": -121.651473,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "d79f6e360d64",
+      "name": "Buddhist Temple of San Diego",
+      "lat": 32.711372,
+      "lng": -117.131439,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a8544a8bf8d8",
+      "name": "Burlington Buddhist Sangha",
+      "lat": 44.47508,
+      "lng": -73.219585,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "9c5193340523",
+      "name": "Burlington Shambhala Meditation Center",
+      "lat": 44.474696,
+      "lng": -73.210999,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "3296ec3410e6",
+      "name": "Burmese Theravada Buddhist Fellowship ဇေယျသုခဓမ္မရိပ်သာ",
+      "lat": 35.221039,
+      "lng": -101.756396,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c5bc22f5f6b6",
+      "name": "Buu Mon Buddhist Temple",
+      "lat": 29.889444,
+      "lng": -93.918889,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9f541548a6ab",
+      "name": "Buu-Quang Temple",
+      "lat": 37.601196,
+      "lng": -97.316622,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "c2bf77a817a6",
+      "name": "California Vipassana Center",
+      "lat": 37.219002,
+      "lng": -119.482147,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "53b5d560afdb",
+      "name": "Cambodian Buddhist Society",
+      "lat": 35.274933,
+      "lng": -80.764618,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "50509cd0c8fa",
+      "name": "Cambodian Buddhist Society of Wisconsin",
+      "lat": 42.954749,
+      "lng": -89.374561,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "b460ea1dde36",
+      "name": "Cambodian Cultural Center - Khmer Buddhist Temple",
+      "lat": 40.008749,
+      "lng": -105.002811,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "85364e0856c8",
+      "name": "Cambridge Zen Center (CZC)",
+      "lat": 42.364419,
+      "lng": -71.105988,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "652d0dcef3b2",
+      "name": "Cedar Rapids Zen Center",
+      "lat": 41.984864,
+      "lng": -91.647161,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "b66452ed6877",
+      "name": "Celestial Drum Tendai Buddhist Sangha",
+      "lat": 43.782999,
+      "lng": -74.275445,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "9c3632eedd64",
+      "name": "Center for Contemplative Research - Miyo Samten Ling Hermitage",
+      "lat": 37.970114,
+      "lng": -105.690198,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "88dd504616e0",
+      "name": "Chagdud Gonpa Amrita",
+      "lat": 47.778852,
+      "lng": -122.361583,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "214ecd8b70b9",
+      "name": "Chagdud Gonpa Rigdzin Ling",
+      "lat": 40.730718,
+      "lng": -123.065267,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "091bb0af6077",
+      "name": "Chagdud Gonpa-Padma Ling",
+      "lat": 47.649642,
+      "lng": -117.427151,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d2d848202666",
+      "name": "Chaiya Meditation Monastery 2 (C M M 2 ) \"Buddhist Society of Idaho\"",
+      "lat": 43.542901,
+      "lng": -116.530838,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "2905e1e0d31d",
+      "name": "Chaiya Meditation Monastery ဇေယျဓမ္မရိပ်သာ",
+      "lat": 36.044324,
+      "lng": -115.247486,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "d97074d1ed7c",
+      "name": "Chamma Ling",
+      "lat": 37.961025,
+      "lng": -105.666106,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d9d81c2cbb3d",
+      "name": "Chanh Phap",
+      "lat": 35.587907,
+      "lng": -97.476775,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "a1b1ec6be75f",
+      "name": "Chanmyay Satipatthana Vihara",
+      "lat": 39.807869,
+      "lng": -89.687366,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "d2640cf0bf2d",
+      "name": "Charleston Tibetan Society",
+      "lat": 32.794816,
+      "lng": -79.954598,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c4925bc9a09a",
+      "name": "Charlotte the Truth Buddhist Temple",
+      "lat": 35.186343,
+      "lng": -80.763672,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "893c4698c7a0",
+      "name": "Chenrezig Tibetan Buddhist Cultural Center of El Paso , TX",
+      "lat": 31.776736,
+      "lng": -106.470445,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8da772dab81f",
+      "name": "Chicago Karma Thegsum Choling (KTC)",
+      "lat": 41.852693,
+      "lng": -87.764306,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "4fd68ac81ba7",
+      "name": "Chua Huong Dam",
+      "lat": 27.687526,
+      "lng": -97.477897,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "0ff82b0869f4",
+      "name": "Chua Khanh Hy- Lotus Buddhist Temple",
+      "lat": 34.987654,
+      "lng": -78.955564,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "cb5710c129fc",
+      "name": "Chua Phat Hue Buddhist Temple",
+      "lat": 35.151478,
+      "lng": -80.700966,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "941db414898e",
+      "name": "Chua Phat Phap - Southwest Florida Buddhist Inc",
+      "lat": 27.827617,
+      "lng": -82.657433,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "303b81c9f568",
+      "name": "CHUA PHO HIEN - BUDDHIST TEMPLE",
+      "lat": 42.36949,
+      "lng": -89.038055,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "747e837316bd",
+      "name": "Chua Tam-Bao",
+      "lat": 36.133939,
+      "lng": -95.789577,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "a5a5243e12b3",
+      "name": "Chua Tay Thien",
+      "lat": 39.675256,
+      "lng": -105.08333,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "aa36527e737f",
+      "name": "Chua Tinh Do Buddhist Temple",
+      "lat": 30.14733,
+      "lng": -92.099896,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "ea658fbd909f",
+      "name": "Chuang Yen Monastery",
+      "lat": 41.485219,
+      "lng": -73.794078,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "89a0ac722e3d",
+      "name": "Chung Tai Zen Center of Sunnyvale",
+      "lat": 37.380423,
+      "lng": -122.013373,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "482ab9428759",
+      "name": "Chùa Bảo Quang - Bao Quang Temple",
+      "lat": 29.576639,
+      "lng": -98.392185,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "23dd1b7646a1",
+      "name": "Chùa Bồ Đề ( Trung tâm thực tập Chánh Niệm, Mindfulness Practice Center)",
+      "lat": 44.833854,
+      "lng": -93.186064,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "59617d5d3591",
+      "name": "Chùa Diệu Nhân Buddhist Monastery",
+      "lat": 28.378067,
+      "lng": -80.801714,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "b88dee2bedab",
+      "name": "Chùa Hương Vân",
+      "lat": 30.318148,
+      "lng": -84.247922,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "86269fab2c0a",
+      "name": "Chùa Hương Đạo",
+      "lat": 32.731885,
+      "lng": -97.253083,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "4b82127dc2e2",
+      "name": "Chùa Phước Hoà",
+      "lat": 26.680911,
+      "lng": -81.78347,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "b2c8468a6ad7",
+      "name": "Chùa Phước Long",
+      "lat": 41.348143,
+      "lng": -73.078595,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "a7921db39835",
+      "name": "Chùa Phật Sơn - Buddha Mountain Center",
+      "lat": 37.329094,
+      "lng": -79.951139,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "5753bac29887",
+      "name": "Chùa Phổ Quang",
+      "lat": 40.790695,
+      "lng": -111.925028,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "11669205ea1c",
+      "name": "Chùa Tịnh Quang",
+      "lat": 26.741191,
+      "lng": -81.829772,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "9b3b2761b45e",
+      "name": "Chùa Xá Lợi / Xa Loi Temple / Inner Peace Meditation Center",
+      "lat": 40.44953,
+      "lng": -75.964517,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "c005d573d26a",
+      "name": "Chùa Đạo Quang",
+      "lat": 32.949533,
+      "lng": -96.650241,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "ae2341ea49ff",
+      "name": "Clear Mountain Monastery",
+      "lat": 47.457511,
+      "lng": -121.761416,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "4585dc0e8123",
+      "name": "Cleveland Buddhist Temple",
+      "lat": 41.477092,
+      "lng": -81.52735,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "ff587c630ef9",
+      "name": "Cleveland Buddhist Vihara and Meditation Center",
+      "lat": 41.060804,
+      "lng": -81.581274,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "a0760d01d9e0",
+      "name": "Cleveland Shambhala Meditation Center",
+      "lat": 41.477352,
+      "lng": -81.81723,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "efda790f5c40",
+      "name": "Cold Mountain Zen Center",
+      "lat": 64.824921,
+      "lng": -147.870208,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "f9da27044ed5",
+      "name": "Colorado Forest Monastery",
+      "lat": 39.462446,
+      "lng": -104.664105,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "07cbd3ae77c7",
+      "name": "Columbia Zen Buddhist Priory",
+      "lat": 34.023106,
+      "lng": -81.093786,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "882cb3ad59e1",
+      "name": "Compassionate Dharma Cloud Monastery",
+      "lat": 39.562921,
+      "lng": -105.241618,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "6ab0600ed770",
+      "name": "Connecticut Meditation Center (Connecticut Buddhist Vihara)",
+      "lat": 41.753888,
+      "lng": -72.397357,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "f7129313c6e2",
+      "name": "Crestone Mountain Zen Center",
+      "lat": 37.948647,
+      "lng": -105.658725,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "d86133c7d312",
+      "name": "Dagom Geden Kunkyob Ling Buddhist Monastery",
+      "lat": 39.795706,
+      "lng": -86.155846,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "e23964cced4e",
+      "name": "Daiyuzenji Rinzai Zen Temple",
+      "lat": 41.949692,
+      "lng": -87.673365,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "1e660e00eece",
+      "name": "Dandelion Acres Buddhist Retreat Center",
+      "lat": 47.770648,
+      "lng": -94.5378,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "c48e8758be13",
+      "name": "Dao Trang Lien Thanh",
+      "lat": 31.45577,
+      "lng": -83.531734,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "cd9ad057717b",
+      "name": "Dawn Mountain",
+      "lat": 29.74791,
+      "lng": -95.459055,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "6ae78dc35e4d",
+      "name": "Deep Spring Temple",
+      "lat": 40.600218,
+      "lng": -80.174819,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "add1f0450793",
+      "name": "Deer Park Buddhist Center",
+      "lat": 42.962955,
+      "lng": -89.352386,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "4b5ac226de01",
+      "name": "Deer Park Monastery",
+      "lat": 33.186333,
+      "lng": -117.074327,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "535cd825df8a",
+      "name": "Denver Buddhist Temple",
+      "lat": 39.752289,
+      "lng": -104.99208,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "b59975e1286f",
+      "name": "Des Moines Zen Center",
+      "lat": 41.521737,
+      "lng": -93.634955,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "37d68d584458",
+      "name": "DFW Buddhist Vihara (Texas Buddhist Meditation Center)",
+      "lat": 32.592439,
+      "lng": -97.295969,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "24e9e07e9d64",
+      "name": "Dhamma Dhara--Vipassana Meditation Center",
+      "lat": 42.635067,
+      "lng": -72.668692,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "d582c8b91d54",
+      "name": "Dhamma Pakasa Vipassana Meditation Center",
+      "lat": 42.346524,
+      "lng": -89.235941,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "d248d3e24faa",
+      "name": "Dhamma Patapa Vipassana Meditation Center",
+      "lat": 31.46942,
+      "lng": -81.909543,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "eac4580a8df5",
+      "name": "Dhamma Pubbananda Vipassana Meditation Center",
+      "lat": 39.799557,
+      "lng": -75.468384,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "a34d5cfd2f3e",
+      "name": "Dhamma Siri Vipassana Meditation Center",
+      "lat": 32.490841,
+      "lng": -96.292427,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "e08dd86b53c7",
+      "name": "Dhamma Sukha Vipassana Meditation Center",
+      "lat": 29.936964,
+      "lng": -96.444777,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "dca9c8d192f2",
+      "name": "Dhamma Vaddhana Vipassana Meditation Center",
+      "lat": 34.132748,
+      "lng": -116.169617,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "b4a1f541709d",
+      "name": "Dhamma Visuddhi",
+      "lat": 44.884815,
+      "lng": -91.934974,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "cd61738003c6",
+      "name": "Dhammabucha Buddhist Temple Decoded",
+      "lat": 29.489979,
+      "lng": -98.628072,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "d5bcdb9beb8e",
+      "name": "Dhammakaya Meditation Center Kansas",
+      "lat": 37.662677,
+      "lng": -97.339023,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "ad2f74144a66",
+      "name": "Dharma Center of Oklahoma",
+      "lat": 35.512978,
+      "lng": -97.563193,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "630e7b78a10b",
+      "name": "Dharma Flower Buddhist Temple - Pháp Hoa Phật Tự",
+      "lat": 32.196814,
+      "lng": -110.954205,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "167fe6870198",
+      "name": "Dharma Vista Zen Center Temple",
+      "lat": 32.111134,
+      "lng": -111.256067,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "fe38c6801fe7",
+      "name": "Dharmata Foundation",
+      "lat": 37.925702,
+      "lng": -122.386415,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b228dc0f25ec",
+      "name": "Dharmata Maine ~ Topsham",
+      "lat": 43.926146,
+      "lng": -69.953572,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d308dd8fa207",
+      "name": "Diamond Way Buddhist Center Denver",
+      "lat": 39.712223,
+      "lng": -104.987233,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "27e86b2afcde",
+      "name": "Diamond Way Buddhist Center Los Angeles",
+      "lat": 34.206041,
+      "lng": -118.16168,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "a59bf120bc50",
+      "name": "Diamond Way Buddhist Center Madison",
+      "lat": 43.074783,
+      "lng": -89.381467,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "e61ee7c6a3e6",
+      "name": "Diamond Way Santa Fe",
+      "lat": 35.596808,
+      "lng": -105.921837,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c3b65f4159ca",
+      "name": "Do Ngak Kunphen Ling",
+      "lat": 41.331413,
+      "lng": -73.384414,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "3ef1cf45f7e3",
+      "name": "Dorje Ling Buddhist Center",
+      "lat": 33.882655,
+      "lng": -84.28492,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "152fa45e8682",
+      "name": "Dorje Ling Buddhist Center",
+      "lat": 45.545403,
+      "lng": -122.761073,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "837a9c53215c",
+      "name": "Dorje Ling Buddhist Center",
+      "lat": 40.70198,
+      "lng": -73.983033,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "baaddb7536bd",
+      "name": "Doylestown Community Zen",
+      "lat": 40.308063,
+      "lng": -75.131416,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "db0738052b52",
+      "name": "Drala Mountain Center",
+      "lat": 40.735364,
+      "lng": -105.541347,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "759074205a18",
+      "name": "Drepung Gomang Center For Engaging Compassion",
+      "lat": 38.264192,
+      "lng": -85.644195,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b8ec654b2f27",
+      "name": "Drepung Loseling Institute of Texas",
+      "lat": 29.637143,
+      "lng": -95.525756,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "bb927c4716f8",
+      "name": "Drepung Loseling Monastery",
+      "lat": 33.863793,
+      "lng": -84.316929,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c2df3e10417c",
+      "name": "Drikung Dharma Surya - Buddhist Temple",
+      "lat": 38.815726,
+      "lng": -77.322114,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "98f48710e608",
+      "name": "Drikung Dzogchen Center of Arizona",
+      "lat": 32.243417,
+      "lng": -110.955718,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c8f22ce0d862",
+      "name": "Drikung Meditation Center",
+      "lat": 42.589651,
+      "lng": -70.945438,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "2f4c397dda88",
+      "name": "Ecumenical Buddhist Society",
+      "lat": 34.748719,
+      "lng": -92.288313,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "4e38d58170eb",
+      "name": "Ekoji Buddhist Temple",
+      "lat": 38.77418,
+      "lng": -77.300891,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "fc3e78251b48",
+      "name": "Emaho Foundation for Tibetan Buddhist Studies",
+      "lat": 33.589641,
+      "lng": -112.045443,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "61023400e2d7",
+      "name": "Endless Mountain Zendo",
+      "lat": 41.180214,
+      "lng": -76.344566,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "2fee2cce50d1",
+      "name": "Enmanji Buddhist Temple",
+      "lat": 38.387194,
+      "lng": -122.81398,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "682c1d2b3eff",
+      "name": "FNCC - Florida Nature & Culture Center / Soka Gakkai International-USA",
+      "lat": 26.073235,
+      "lng": -80.41559,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "54ab9bed5f37",
+      "name": "Fo Guang Shan Buddhist Temple, North Carolina",
+      "lat": 35.747262,
+      "lng": -78.734329,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "bff643d3798d",
+      "name": "Fo Guang Shan Guang Ming Temple",
+      "lat": 28.481503,
+      "lng": -81.295054,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "50e017396fbf",
+      "name": "Fo Guang Shan Kansas Buddhist Center",
+      "lat": 38.942508,
+      "lng": -94.623537,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "de925ce934a9",
+      "name": "Fo Guang Shan Miami Temple",
+      "lat": 26.1954,
+      "lng": -80.275081,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "f7147352d875",
+      "name": "Fo Guang Shan SanBao Temple",
+      "lat": 37.791886,
+      "lng": -122.422223,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "da40d2789f6c",
+      "name": "Fo Guang Shan St. Louis Buddhist Center 聖路易佛光山",
+      "lat": 38.733302,
+      "lng": -90.428811,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "3c2330a94208",
+      "name": "Forest Dhamma Monastery",
+      "lat": 37.696013,
+      "lng": -79.638524,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "1302844ffa38",
+      "name": "Fresno Buddhist Church",
+      "lat": 36.846804,
+      "lng": -119.734644,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "87159c8f4c0a",
+      "name": "Furnace Mountain Zen Center",
+      "lat": 37.769532,
+      "lng": -83.842093,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "880adcb75e37",
+      "name": "Gaden Shartse Thubten Dhargye Ling",
+      "lat": 33.771567,
+      "lng": -118.151165,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "12bc77373180",
+      "name": "Garchen Buddhist Institute",
+      "lat": 34.782731,
+      "lng": -112.292248,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "1cba8c025e9e",
+      "name": "Garchen Mila Buddhist Center",
+      "lat": 41.659845,
+      "lng": -91.532656,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "a3fa9a91807c",
+      "name": "Garden of One Thousand Buddhas",
+      "lat": 47.191783,
+      "lng": -114.089748,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "35b6ff619a24",
+      "name": "Gardena Buddhist Church",
+      "lat": 33.88037,
+      "lng": -118.302306,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "97c1cbf5be55",
+      "name": "Giac Quang Buddhist Temple",
+      "lat": 35.421982,
+      "lng": -97.464414,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "0d2c23dd6431",
+      "name": "Giac Thanh Buddhist temple",
+      "lat": 34.831248,
+      "lng": -92.215033,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "c0dfb4ace03c",
+      "name": "Giác Hoa Temple",
+      "lat": 35.232116,
+      "lng": -101.817464,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "8d94333c1d37",
+      "name": "Grand Rapids Buddhist Temple",
+      "lat": 42.954575,
+      "lng": -85.667794,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "84f1aa85eaa7",
+      "name": "Grand Traverse Zen Community",
+      "lat": 44.783225,
+      "lng": -85.572953,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "770d2e4ff6cc",
+      "name": "Great Dharma Chan Monastery/Chung Tai Zen Center in Boulder",
+      "lat": 39.987624,
+      "lng": -105.201632,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "3d66dbee7e46",
+      "name": "Great Lakes Buddhist Vihara - Fonseka Community Center",
+      "lat": 42.419846,
+      "lng": -83.316254,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "3595e0f01526",
+      "name": "Great Mountain Zen Center",
+      "lat": 40.263665,
+      "lng": -105.072903,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "0dde7fe7074b",
+      "name": "Great Vow Zen Monastery",
+      "lat": 46.154109,
+      "lng": -123.152258,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "92a7427d3431",
+      "name": "Green Gulch Farm Zen Center",
+      "lat": 37.865964,
+      "lng": -122.563781,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "560fb8f60e0b",
+      "name": "Guadalupe Buddhist Church",
+      "lat": 34.971768,
+      "lng": -120.570428,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "38774684fd45",
+      "name": "Gyuto Wheel of Dharma Monastery",
+      "lat": 45.015206,
+      "lng": -93.243494,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f6e2374b84dd",
+      "name": "Hakubai Zen Center",
+      "lat": 40.009672,
+      "lng": -105.214259,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "a39f812d6029",
+      "name": "Heart of the Dharma and Compassion & Insight Center",
+      "lat": 43.588624,
+      "lng": -116.243993,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "90567fb0d34a",
+      "name": "Hoi Duc Temple",
+      "lat": 43.633127,
+      "lng": -70.268249,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "415add4c6717",
+      "name": "Honeyville Buddhist Temple",
+      "lat": 41.635058,
+      "lng": -112.112578,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "419921faff8c",
+      "name": "Honpa Hongwanji Hawaii Betsuin",
+      "lat": 21.316041,
+      "lng": -157.851975,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "8ae85e50e1c0",
+      "name": "Hsi Lai Temple",
+      "lat": 33.975688,
+      "lng": -117.967707,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "c11dbc4161dc",
+      "name": "Idaho-Oregon Buddhist Temple",
+      "lat": 44.02304,
+      "lng": -116.956592,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "e9cb252199b2",
+      "name": "Indiana Buddhist Center",
+      "lat": 39.782433,
+      "lng": -86.002394,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "abbf39384b14",
+      "name": "Insight Denver",
+      "lat": 39.738085,
+      "lng": -104.984036,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "b6b65f2c8b15",
+      "name": "Insight Meditation Community of Denver",
+      "lat": 39.743161,
+      "lng": -104.932366,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "133e2f824367",
+      "name": "Insight Meditation Society - Retreat Center",
+      "lat": 42.451075,
+      "lng": -72.124171,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "3d7cbff4add9",
+      "name": "Intermountain Vipassana Center",
+      "lat": 42.638333,
+      "lng": -112.003615,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "dd3eaa30dc1b",
+      "name": "International Buddha Dharma Society for Cosmic Law",
+      "lat": 42.746164,
+      "lng": -83.543304,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a91f32f5a38f",
+      "name": "international Insight Meditation Center",
+      "lat": 44.284112,
+      "lng": -121.288846,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "25e122a5a500",
+      "name": "Iowa City Zen Center",
+      "lat": 41.66655,
+      "lng": -91.520509,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "41de4813956d",
+      "name": "Ithaca Zen Center",
+      "lat": 42.348204,
+      "lng": -76.495025,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "9b8f0fc155d4",
+      "name": "Jangchub Choeling Buddhist Dharma Center",
+      "lat": 32.700892,
+      "lng": -97.280984,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "97dbe2f34330",
+      "name": "Jetavana Temple Forest Monastery",
+      "lat": 42.864602,
+      "lng": -71.840449,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "aea92d84aae3",
+      "name": "Jewel Heart Tibetan Buddhist Learning Center",
+      "lat": 42.231247,
+      "lng": -83.752419,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "981536a67926",
+      "name": "Jikoji Zen Center",
+      "lat": 37.272816,
+      "lng": -122.14661,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "57e14666b2a6",
+      "name": "Kagyu Changchub Chuling Tibetan Buddhist Center",
+      "lat": 45.553912,
+      "lng": -122.611456,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "7b0ae135d27d",
+      "name": "Kagyu Droden Kunchab",
+      "lat": 37.772868,
+      "lng": -122.449041,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "450a7d9ceccf",
+      "name": "Kagyu Sukha Chöling",
+      "lat": 42.200826,
+      "lng": -122.710029,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "e3725ab7fa44",
+      "name": "Kagyu Takten Puntsokling",
+      "lat": 38.350437,
+      "lng": -122.789435,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "72746f7d4786",
+      "name": "Kansas Meditation Center",
+      "lat": 37.638331,
+      "lng": -97.275028,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "0f7db419731d",
+      "name": "Karen Buddhist Monastery",
+      "lat": 35.224076,
+      "lng": -101.777502,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "d302ce562b13",
+      "name": "Karen Buddhist Temple",
+      "lat": 35.223797,
+      "lng": -101.859346,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1ed2aaee23db",
+      "name": "Karma Gyurmed Ling Buddhist Center",
+      "lat": 33.138722,
+      "lng": -107.251345,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "bb92bb28134c",
+      "name": "Karma Thegsum Choling",
+      "lat": 40.621707,
+      "lng": -79.152631,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f541dc3c8f48",
+      "name": "Karma Thegsum Choling",
+      "lat": 42.286717,
+      "lng": -83.755442,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8795da03c966",
+      "name": "Karma Thegsum Chöling Dallas - Tibetan Buddhist Meditation Center",
+      "lat": 32.824518,
+      "lng": -96.946323,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "9abb1c632a79",
+      "name": "Karme Ling Columbarium",
+      "lat": 42.322736,
+      "lng": -74.9455,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "a963cf588c34",
+      "name": "Karmê Chöling Meditation Retreat Center",
+      "lat": 44.304064,
+      "lng": -72.069776,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "7306819d8a7f",
+      "name": "Katog Choling Gön (Rit'hrod) Buddhist Retreat Center",
+      "lat": 35.947742,
+      "lng": -93.308814,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "26565b07b227",
+      "name": "Kevala Retreat",
+      "lat": 43.843722,
+      "lng": -90.644337,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "6bec0e9481a9",
+      "name": "Khanh Viet Temple",
+      "lat": 26.067079,
+      "lng": -80.219534,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "e77880f5ac0a",
+      "name": "Korinji Rinzai Zen Buddhist Monastery",
+      "lat": 43.630041,
+      "lng": -90.010997,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "1fec0ff5eb22",
+      "name": "Ksitigarba Tibetan Buddhist Center",
+      "lat": 36.397835,
+      "lng": -105.583359,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c14929ae1f4f",
+      "name": "Ksitigarbha Temple",
+      "lat": 47.825009,
+      "lng": -122.25721,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "e9fd1bc93959",
+      "name": "KSK Tibetan Buddhist Center",
+      "lat": 35.635528,
+      "lng": -106.04108,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "5d43cbce5693",
+      "name": "KTD - Karma Triyana Dharmachakra",
+      "lat": 42.0707,
+      "lng": -74.12402,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "7fec1ef309c2",
+      "name": "Kunzang Palyul Choling",
+      "lat": 39.081116,
+      "lng": -77.382965,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "01056362d1e2",
+      "name": "Land of Compassion Buddha",
+      "lat": 34.063909,
+      "lng": -117.895554,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "ec6633c42ab5",
+      "name": "Land of Medicine Buddha",
+      "lat": 37.010759,
+      "lng": -121.934141,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d75f59b7ffc9",
+      "name": "Lansing Buddhist Association",
+      "lat": 42.781149,
+      "lng": -84.277124,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "ea904f3cac76",
+      "name": "Lao Buddhist Associates of Kansas",
+      "lat": 37.645714,
+      "lng": -97.206959,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "8a459e8da4c6",
+      "name": "Lao Buddhist Temple",
+      "lat": 40.036474,
+      "lng": -75.115144,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "b1b7cbfdb838",
+      "name": "Lao Buddhist Temple",
+      "lat": 42.644616,
+      "lng": -95.173821,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f9bdd27a0748",
+      "name": "Lao Buddhist Temple of Denver, Inc.",
+      "lat": 39.890369,
+      "lng": -105.094393,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1351fbae85ea",
+      "name": "Lao Buddhist Temple of Elgin",
+      "lat": 42.028335,
+      "lng": -88.504677,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9c098ce36d7f",
+      "name": "Lao Buddhist Temple of Madison",
+      "lat": 43.007355,
+      "lng": -89.173253,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c8511c029d24",
+      "name": "Lao Buddhist Temple of Minnesota",
+      "lat": 44.618788,
+      "lng": -93.21962,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "6a6b4f9ca873",
+      "name": "Lao-Buddhist Association",
+      "lat": 38.88691,
+      "lng": -94.828425,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "0593112a70c5",
+      "name": "Las Vegas Buddhist Sangha",
+      "lat": 36.234156,
+      "lng": -115.161117,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "efd612b362ed",
+      "name": "Laughing Teabowl Zendo",
+      "lat": 44.088025,
+      "lng": -103.297534,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "4209ee86eb32",
+      "name": "Lhundrup Chöling",
+      "lat": 34.039732,
+      "lng": -118.443768,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "5db141fcd1e5",
+      "name": "Lien Hoa Buddhist Temple (Đạo Tràng Liên Hoa)",
+      "lat": 29.499282,
+      "lng": -98.392193,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "307409f4c412",
+      "name": "Lien Tri Monastery",
+      "lat": 31.128882,
+      "lng": -88.094964,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "d6e079a48250",
+      "name": "Ligmincha International",
+      "lat": 37.805617,
+      "lng": -78.76534,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "5ed678bfc203",
+      "name": "Lincoln Zen Center",
+      "lat": 40.813258,
+      "lng": -96.667782,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "1e0d552541f5",
+      "name": "Linh Quang Buddhist Center",
+      "lat": 40.747206,
+      "lng": -96.765373,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "c482de746bee",
+      "name": "Linh Son Buddhist Temple",
+      "lat": 43.071372,
+      "lng": -85.60873,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "f2b1569c1373",
+      "name": "Longmont Buddhist Temple",
+      "lat": 40.138327,
+      "lng": -105.103041,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "228bbebf96a5",
+      "name": "Longsal Ling",
+      "lat": 37.930565,
+      "lng": -122.308854,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "810e09603676",
+      "name": "Los Angeles Hompa Hongwanji Buddhist Temple (Nishi Betsuin)",
+      "lat": 34.049079,
+      "lng": -118.234434,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "ad2a24eee0a7",
+      "name": "Lotus Monastery - Ni Vien Lien Hoa",
+      "lat": 41.262581,
+      "lng": -95.857232,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "21fa2ef1dfd0",
+      "name": "Louisville Zen Center",
+      "lat": 38.231949,
+      "lng": -85.70862,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "b3c6f656f94d",
+      "name": "MABA - Midamerica Buddhist Association",
+      "lat": 38.588618,
+      "lng": -90.8756,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "0d588ab7ce72",
+      "name": "Magnolia Grove Monastery",
+      "lat": 34.36021,
+      "lng": -89.996194,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "d17bee6989ed",
+      "name": "Mahayana Temple",
+      "lat": 42.311911,
+      "lng": -73.946801,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "38c174f06367",
+      "name": "Mangala Shri Bhuti - Phuntsok Choling",
+      "lat": 40.093374,
+      "lng": -105.488074,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "3d522a48d396",
+      "name": "Midwest Buddhist Temple",
+      "lat": 41.91441,
+      "lng": -87.63993,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "9d10268d0be7",
+      "name": "Milarepa Center",
+      "lat": 44.303413,
+      "lng": -72.046042,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "dad27c89a3b4",
+      "name": "Mindrolling Lotus Garden",
+      "lat": 38.550704,
+      "lng": -78.488567,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d7389266a20c",
+      "name": "Minh Dang Quang Temple",
+      "lat": 40.334715,
+      "lng": -75.380754,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "d29bafab5bb0",
+      "name": "Minnesota Buddhist Vihara",
+      "lat": 45.016836,
+      "lng": -93.285224,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "3065beb0b87f",
+      "name": "Minnesota Zen Meditation Center",
+      "lat": 44.94189,
+      "lng": -93.303193,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "ddd9b6f4290e",
+      "name": "Mipham Shedra Tibetan Buddhist Meditation Center",
+      "lat": 39.888342,
+      "lng": -105.087389,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d581629c703c",
+      "name": "Missouri Buddhist Meditation Center",
+      "lat": 38.769202,
+      "lng": -90.335218,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "09fa8d713822",
+      "name": "Missouri Zen Center",
+      "lat": 38.594227,
+      "lng": -90.336627,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "d23bc8fe51fa",
+      "name": "Mon Buddhist Vihara of Indianapolis",
+      "lat": 39.878648,
+      "lng": -86.226474,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "83ba573e233f",
+      "name": "Monterey Peninsula Buddhist Temple",
+      "lat": 36.601176,
+      "lng": -121.838336,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a34671b34fd4",
+      "name": "Morgan Bay Zendo",
+      "lat": 44.46055,
+      "lng": -68.486572,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "e2d3f73c576d",
+      "name": "Mountain Cloud Zen Center",
+      "lat": 35.638322,
+      "lng": -105.917,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "806080109025",
+      "name": "Mountain View Buddhist Temple",
+      "lat": 37.401802,
+      "lng": -122.077194,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "673d4ccd399d",
+      "name": "Nagaloka Buddhist Center",
+      "lat": 43.654915,
+      "lng": -70.26253,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "6392d4ae804e",
+      "name": "Nalandabodhi Buddhism centre",
+      "lat": 40.708721,
+      "lng": -74.005361,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "fd038429b12b",
+      "name": "Nalandabodhi Colorado",
+      "lat": 40.02046,
+      "lng": -105.281328,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "cd6b70578c17",
+      "name": "Nalandabodhi Connecticut",
+      "lat": 41.828547,
+      "lng": -72.738878,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "80b1169762a8",
+      "name": "Namchak Buddhist Practice and Retreat",
+      "lat": 46.867575,
+      "lng": -113.998466,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "fc07250c0ada",
+      "name": "Namchak Retreat Ranch",
+      "lat": 47.694205,
+      "lng": -114.487542,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "6ff4211f0477",
+      "name": "Namgyal Monastery Institute of Buddhist Studies | Dü Khor Choe Ling",
+      "lat": 42.404317,
+      "lng": -76.49713,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "5adfbb551e15",
+      "name": "Natural Dharma Fellowship",
+      "lat": 43.50301,
+      "lng": -72.081568,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "eec43e0b127c",
+      "name": "Nebraska Zen Center",
+      "lat": 41.270812,
+      "lng": -95.967443,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "09ea569f73a3",
+      "name": "Nevada Buddhist Temple",
+      "lat": 36.196705,
+      "lng": -115.077464,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "31439f809cca",
+      "name": "New Haven Zen Center",
+      "lat": 41.320411,
+      "lng": -72.925598,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "c964c76399e4",
+      "name": "New Jersey Buddhist Vihara",
+      "lat": 40.399931,
+      "lng": -74.589246,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c3b7a0ad3803",
+      "name": "New York Buddhist Church",
+      "lat": 40.801698,
+      "lng": -73.970113,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "3d4ac57d25cb",
+      "name": "New York Buddhist Vihara",
+      "lat": 40.727867,
+      "lng": -73.750964,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "d6a704368979",
+      "name": "North Carolina Buddhist Temple",
+      "lat": 35.990718,
+      "lng": -78.786767,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "6e2889929fa5",
+      "name": "North Carolina Zen Center",
+      "lat": 35.768468,
+      "lng": -79.195609,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "65ec6bdd835b",
+      "name": "North Star Dharma Refuge, Zen Temple",
+      "lat": 44.88962,
+      "lng": -94.365329,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "6e00b2fc9449",
+      "name": "Northern California Vipassana Center, Dhamma Manda",
+      "lat": 38.87931,
+      "lng": -122.73405,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "c3712b35e5d7",
+      "name": "Northern Light Zen Center",
+      "lat": 43.966673,
+      "lng": -69.978052,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "34b81d53b83a",
+      "name": "Northwest Vipassana Center",
+      "lat": 46.550932,
+      "lng": -122.682455,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "1082f0d606db",
+      "name": "NYC Dhamma House",
+      "lat": 40.754382,
+      "lng": -73.990483,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "c90cefca2230",
+      "name": "Nyingma Institute",
+      "lat": 37.876242,
+      "lng": -122.255535,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "0f17026899ee",
+      "name": "Nyingma Palyul Dharma Center",
+      "lat": 40.768165,
+      "lng": -73.872048,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "071772b0ae49",
+      "name": "Nyingma Palyul Meditation Centre Toronto",
+      "lat": 43.638345,
+      "lng": -79.435891,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b0b988ba19f5",
+      "name": "Nyingmapa Center Houston",
+      "lat": 29.831576,
+      "lng": -95.713053,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "17292d455d27",
+      "name": "Nyingmapa Taksham Buddhist Center (NTBC)",
+      "lat": 45.053082,
+      "lng": -93.242034,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "4089ebbdd2c6",
+      "name": "O-An Zendo",
+      "lat": 40.886211,
+      "lng": -77.915694,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "f62534048d84",
+      "name": "Odiyana Institute Buddhist Center",
+      "lat": 34.427949,
+      "lng": -119.70774,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "58058cf97f5c",
+      "name": "Ogden Buddhist Church",
+      "lat": 41.26628,
+      "lng": -111.976325,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "bf2ab33b9b10",
+      "name": "Ohio Buddhist Vihara",
+      "lat": 39.251111,
+      "lng": -84.554167,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "f11893ea6cf3",
+      "name": "Oklahoma Buddhist Vihāra",
+      "lat": 35.520328,
+      "lng": -97.583077,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "74aee9a353ac",
+      "name": "Olmo Ling Bon Center & Institute",
+      "lat": 40.421702,
+      "lng": -79.929521,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "631a931fe28f",
+      "name": "One River Zen",
+      "lat": 41.339516,
+      "lng": -88.839136,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "0e074b7ec4ee",
+      "name": "Open Mind Zen",
+      "lat": 28.078687,
+      "lng": -80.604068,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "fcaade90e8f0",
+      "name": "Orange County Buddhist Church",
+      "lat": 33.818924,
+      "lng": -117.984843,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "31d2f5658e76",
+      "name": "Orange County Won Buddhist Temple",
+      "lat": 33.772635,
+      "lng": -117.955362,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "27d19f6dcb75",
+      "name": "Oregon Buddhist Temple",
+      "lat": 45.495749,
+      "lng": -122.628845,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "45d0d1695fd7",
+      "name": "Oregon Cambodian Buddhist Society",
+      "lat": 45.375444,
+      "lng": -122.6988,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "0ca912609eee",
+      "name": "Orgyen Khandroling Buddhist Meditation Center",
+      "lat": 39.76343,
+      "lng": -104.958185,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "3eeb5e00893a",
+      "name": "Oryoki Zendo",
+      "lat": 40.226447,
+      "lng": -76.864616,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "73a29b7c9c34",
+      "name": "Oxnard Buddhist Temple",
+      "lat": 34.200633,
+      "lng": -119.187671,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "4f38c7f6e38e",
+      "name": "Padma Rigdzin Ling Buddhist Temple",
+      "lat": 36.041906,
+      "lng": -114.986646,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b945c23405fd",
+      "name": "Padmasambhava Buddhist Center",
+      "lat": 42.178363,
+      "lng": -75.258616,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "6f120f9eba30",
+      "name": "Padmasambhava Buddhist Center",
+      "lat": 36.188946,
+      "lng": -85.252813,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f7685463b50f",
+      "name": "Padmasambhava Buddhist Center of Tennessee",
+      "lat": 36.113822,
+      "lng": -86.762916,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b6bf789fa228",
+      "name": "Padmasambhava Meditation Center",
+      "lat": 39.68184,
+      "lng": -104.947584,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f44b5966744e",
+      "name": "Padmasambhava Peace Institute",
+      "lat": 38.525858,
+      "lng": -123.160178,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "fb3cc4ff3eac",
+      "name": "Palo Alto Buddhist Temple",
+      "lat": 37.438132,
+      "lng": -122.123659,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "3f747ff608b2",
+      "name": "Palyul Dallas",
+      "lat": 32.822815,
+      "lng": -97.142436,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "ae8b9ce8aace",
+      "name": "Palyul Ohio Vajrayana Buddhist Temple",
+      "lat": 41.238968,
+      "lng": -81.622578,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "676ac388963f",
+      "name": "Palyul Retreat Center",
+      "lat": 42.437733,
+      "lng": -75.802044,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c0e703ddfc76",
+      "name": "Pao Hua Buddhist Temple",
+      "lat": 37.373103,
+      "lng": -121.838056,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "692b71c5c47d",
+      "name": "Pasadena Buddhist Temple",
+      "lat": 34.180046,
+      "lng": -118.155436,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "6f07808bcaa7",
+      "name": "Pema Khandro Ling",
+      "lat": 35.671382,
+      "lng": -105.950153,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "2470efe6332f",
+      "name": "Pema Osel Do-ngak Choling",
+      "lat": 43.929138,
+      "lng": -72.315727,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8ded353bc7e8",
+      "name": "Phagtsok Gedun Choling Temple",
+      "lat": 47.959647,
+      "lng": -122.358545,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "884d795b0268",
+      "name": "Phap An Temple of Indiana",
+      "lat": 39.759865,
+      "lng": -86.025726,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "46871d1da95d",
+      "name": "Phap Vien Minh Dang Quang",
+      "lat": 27.998409,
+      "lng": -82.5686,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "1dc5406c9eb0",
+      "name": "Pho Hien (Vietnamese Buddhist) Temple",
+      "lat": 39.185604,
+      "lng": -94.543496,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "266dd4273026",
+      "name": "Pho Minh Monastery of Anderson",
+      "lat": 40.073422,
+      "lng": -85.677237,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "35965fae41fd",
+      "name": "Pho Mon Temple",
+      "lat": 42.504602,
+      "lng": -96.422845,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "3c298e966d65",
+      "name": "Phothisomphan Meditation Monastery",
+      "lat": 41.56121,
+      "lng": -93.598672,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "e70c6324992c",
+      "name": "Phuoc Hue Buddhist Temple of San Antonio",
+      "lat": 29.54137,
+      "lng": -98.609916,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "ebf6ccd3379f",
+      "name": "Phuoc Hue Vietnamese Buddhist Temple",
+      "lat": 25.595753,
+      "lng": -80.453818,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "b66063369ece",
+      "name": "Phuoc Minh Monastery",
+      "lat": 30.194442,
+      "lng": -92.164975,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "350b42f15876",
+      "name": "Pittsburgh Buddhist Center",
+      "lat": 40.606146,
+      "lng": -79.895151,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "02b7c0f4eadb",
+      "name": "Placer Buddhist Church",
+      "lat": 38.834889,
+      "lng": -121.172066,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a96067edfcf0",
+      "name": "Portneuf Sangha",
+      "lat": 42.860593,
+      "lng": -112.451206,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "d67a2a5096a8",
+      "name": "Prairie Zen Center",
+      "lat": 40.110338,
+      "lng": -88.258088,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "40254310a10c",
+      "name": "Providence Zen Center",
+      "lat": 41.96944,
+      "lng": -71.434888,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "17e968352f74",
+      "name": "QUAN AM MEDITATION TEMPLE INC (Quan Âm Ni Viện)",
+      "lat": 44.464377,
+      "lng": -73.112432,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "3bcf7f5e82fd",
+      "name": "Quan Am Temple - Kansas City",
+      "lat": 39.111476,
+      "lng": -94.554861,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "a47cc49302a4",
+      "name": "Quan Am Tinh Vien",
+      "lat": 32.284649,
+      "lng": -90.209036,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "d9b33733990b",
+      "name": "Quoc An Buddhist Temple",
+      "lat": 41.306902,
+      "lng": -95.970285,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "80bf77e245f6",
+      "name": "Rainbow Temple",
+      "lat": 47.470535,
+      "lng": -121.704882,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f65355f5bcf0",
+      "name": "Raleigh Won Buddhism Meditation Center",
+      "lat": 35.965098,
+      "lng": -78.649422,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "baaa09c8588e",
+      "name": "Ramanya Nikaya Vimuttirasa Mon colorado temple",
+      "lat": 39.768571,
+      "lng": -104.802415,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "585d62ff06f7",
+      "name": "Rangjung Yeshe Gomde California",
+      "lat": 39.847864,
+      "lng": -123.709277,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "fd8b062c31c8",
+      "name": "Reedley Buddhist Church",
+      "lat": 36.590527,
+      "lng": -119.449842,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "34db29db916f",
+      "name": "Reno Buddhist Center",
+      "lat": 39.516543,
+      "lng": -119.812421,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "e0667c40b1b6",
+      "name": "Rime Buddhist Center",
+      "lat": 39.072317,
+      "lng": -94.564072,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "68c136b8d792",
+      "name": "Rinzai Zen Mission",
+      "lat": 20.913969,
+      "lng": -156.391186,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "02eddf308aa5",
+      "name": "Rinzai-ji Zen Center",
+      "lat": 34.033563,
+      "lng": -118.315844,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "cd66b92d9663",
+      "name": "Rissho Kosei Kai Dharma Center",
+      "lat": 35.512983,
+      "lng": -97.563204,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "868de08e80f1",
+      "name": "Rissho Kosei-Kai Buddhist Center of San Antonio",
+      "lat": 29.533424,
+      "lng": -98.605095,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "c26a05558a59",
+      "name": "Rissho Kosei-kai Buddhist Group of Fort Myers",
+      "lat": 26.58101,
+      "lng": -81.843415,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "cd497e90f213",
+      "name": "River Valley Insight Meditation Community",
+      "lat": 42.336213,
+      "lng": -72.669891,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "c4353906380f",
+      "name": "Roaring Fork Zen",
+      "lat": 39.401314,
+      "lng": -107.209686,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "341a3f621469",
+      "name": "Rochester Zen Center",
+      "lat": 43.152598,
+      "lng": -77.58987,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "6df3b6607146",
+      "name": "Rocky Mountain Ecodharma Retreat Center",
+      "lat": 40.125184,
+      "lng": -105.463535,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "a5bd9a34541d",
+      "name": "Rocky Mountain Insight",
+      "lat": 38.84834,
+      "lng": -104.863089,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "32cfce5a924a",
+      "name": "Rocky Mountain Vipassana Association",
+      "lat": 39.158482,
+      "lng": -104.54257,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "015d92e7a15f",
+      "name": "Rollinsville Zen Center",
+      "lat": 39.916596,
+      "lng": -105.501392,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "734613b02281",
+      "name": "RYUGENJI Madison Rinzai Zen",
+      "lat": 43.093182,
+      "lng": -89.348748,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "56eacfc3673e",
+      "name": "Saccananda Dhamma Center USA ( သစ္စာနန္ဒ စင်တာ)",
+      "lat": 40.552158,
+      "lng": -75.394614,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "3fdad608ea47",
+      "name": "Sakya Dechen Ling",
+      "lat": 37.889466,
+      "lng": -122.305769,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "e31dd5ed3cf7",
+      "name": "Sakya Monastery",
+      "lat": 47.689417,
+      "lng": -122.358163,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "6cc176619081",
+      "name": "Sakya Tsechen Thubten Ling",
+      "lat": 49.163142,
+      "lng": -123.14951,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8e77f784d36a",
+      "name": "Salt Lake Buddhist Fellowship",
+      "lat": 40.696095,
+      "lng": -111.825646,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "754298c415cd",
+      "name": "Salt Lake Buddhist Temple",
+      "lat": 40.766892,
+      "lng": -111.897343,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "39f9c762603e",
+      "name": "Samye Hermitage New York",
+      "lat": 42.734896,
+      "lng": -74.945088,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "445d87ea3cc6",
+      "name": "San Diego Buddhist Association (Hsi Fang Temple)",
+      "lat": 32.759742,
+      "lng": -117.146635,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "5464551fc09e",
+      "name": "San Fernando Valley Hongwanji",
+      "lat": 34.241437,
+      "lng": -118.416475,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "99d7e304979d",
+      "name": "San Francisco Zen Center",
+      "lat": 37.773807,
+      "lng": -122.425883,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "c7afa9b3f3b9",
+      "name": "San Jose Buddhist Church Betsuin",
+      "lat": 37.349978,
+      "lng": -121.894684,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "9e5175be72f6",
+      "name": "San Luis Obispo Buddhist Church",
+      "lat": 35.186142,
+      "lng": -120.706802,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "d190f9dbcd29",
+      "name": "San Mateo Buddhist Temple",
+      "lat": 37.568955,
+      "lng": -122.323662,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "7225cac97910",
+      "name": "Sangdo Palri Temple of Wisdom and Compassion",
+      "lat": 37.968415,
+      "lng": -105.66674,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "e0e5961272b6",
+      "name": "Santa Barbara Zen Center",
+      "lat": 34.438906,
+      "lng": -119.706686,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "39dabc286761",
+      "name": "Santa Cruz Zen Center",
+      "lat": 36.978029,
+      "lng": -122.029089,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "8fa8e48e88d7",
+      "name": "Saraha Nyingma Buddhist Institute",
+      "lat": 44.011781,
+      "lng": -123.086354,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "30ab0a7b5abd",
+      "name": "Sarasota Forest Monastery (SFM)",
+      "lat": 26.97157,
+      "lng": -82.363259,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "9b5a247403c4",
+      "name": "Seabrook Buddhist Temple",
+      "lat": 39.507492,
+      "lng": -75.221122,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "e67ba5088ebf",
+      "name": "Seattle Betsuin Buddhist Temple",
+      "lat": 47.59973,
+      "lng": -122.313218,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "e42cf49aa41b",
+      "name": "Senshin Buddhist Temple🛕",
+      "lat": 34.021215,
+      "lng": -118.29796,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "c1badc186239",
+      "name": "Serenity Ridge Retreat Center",
+      "lat": 37.805,
+      "lng": -78.765251,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "224e232481df",
+      "name": "SGI - USA Miami Buddhist Center",
+      "lat": 25.750677,
+      "lng": -80.214752,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "29d15d6361a1",
+      "name": "SGI USA South Carolina",
+      "lat": 34.069924,
+      "lng": -80.954358,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "26d4840f9b40",
+      "name": "SGI-USA",
+      "lat": 39.739292,
+      "lng": -104.997198,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "96c58b12a653",
+      "name": "SGI-USA Buddhist Center",
+      "lat": 41.304398,
+      "lng": -72.926765,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "52a56d82c979",
+      "name": "SGI-USA Kentucky",
+      "lat": 38.226699,
+      "lng": -85.698687,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "9f3f5ac1cf5d",
+      "name": "SGI-USA New Jersey Buddhist Center",
+      "lat": 40.887896,
+      "lng": -74.021651,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "6dce019e26b4",
+      "name": "SGI-USA San Antonio",
+      "lat": 29.511716,
+      "lng": -98.538366,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "5d467f0860e9",
+      "name": "SGI-USA Tucson Buddhist Center",
+      "lat": 32.220662,
+      "lng": -110.944656,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "3c479f4a4f5e",
+      "name": "Shakyamuni Buddhist Meditation Monastery",
+      "lat": 36.78366,
+      "lng": -76.081083,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "3fcb75f98d61",
+      "name": "Shambhala Center of Madison",
+      "lat": 43.0841,
+      "lng": -89.36245,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "862ceaabcfe3",
+      "name": "Shambhala Meditation Center",
+      "lat": 38.04544,
+      "lng": -84.503266,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "982c3d97a5dd",
+      "name": "Shambhala Meditation Center of Columbus",
+      "lat": 40.046927,
+      "lng": -82.982454,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "efa948947a5a",
+      "name": "Shambhala Meditation Centre",
+      "lat": 45.940878,
+      "lng": -66.702628,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "82fe22e99632",
+      "name": "Shambhala Publications",
+      "lat": 40.019727,
+      "lng": -105.279492,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "dda54a90cd95",
+      "name": "Shao Shan Temple",
+      "lat": 44.4342,
+      "lng": -72.460411,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "25079887e121",
+      "name": "Shingon Buddhist International Institute",
+      "lat": 36.851586,
+      "lng": -119.763237,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "88285fbce1ee",
+      "name": "Shingon Mission of Hawaii",
+      "lat": 21.297899,
+      "lng": -157.840969,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "0a8f5752d113",
+      "name": "Siri Sambuddhaloka Buddhist Meditation Center",
+      "lat": 39.656366,
+      "lng": -77.838384,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c6acc7317f3c",
+      "name": "Soka Gakkai International USA",
+      "lat": 33.542375,
+      "lng": -112.039972,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "3bb8f90b86a0",
+      "name": "SokukoJi Buddhist Temple Monastery",
+      "lat": 42.323453,
+      "lng": -85.179384,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "b34a462c184c",
+      "name": "South Carolina Dharma Group",
+      "lat": 34.023043,
+      "lng": -81.049607,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "18eebd87dea6",
+      "name": "Southern Alameda County Buddhist Church",
+      "lat": 37.593295,
+      "lng": -122.045218,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a8d8962d79a0",
+      "name": "Southwind Sangha a Soto Zen Buddhist Practice",
+      "lat": 37.723429,
+      "lng": -97.271226,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "12fb0ee28231",
+      "name": "Spirit Rock Meditation Center",
+      "lat": 38.01939,
+      "lng": -122.644979,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "60acde3abbf3",
+      "name": "Spokane Buddhist Temple",
+      "lat": 47.646524,
+      "lng": -117.389619,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a268f096abe0",
+      "name": "Sravasti Abbey",
+      "lat": 48.07713,
+      "lng": -117.139568,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "6cdcf17793df",
+      "name": "Stillwater Meditation Group",
+      "lat": 44.881182,
+      "lng": -68.673407,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "5b2744d4036b",
+      "name": "Stupa of Enlightenment at Yeshe Rangsal",
+      "lat": 37.972548,
+      "lng": -105.681242,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "3f5655a0917f",
+      "name": "Sumter Forest Temple",
+      "lat": 33.980442,
+      "lng": -80.405251,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "6d3454b2dce0",
+      "name": "Tacoma Buddhist Temple",
+      "lat": 47.246128,
+      "lng": -122.441145,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "43b1ff9f39ce",
+      "name": "Tallahassee Chan Center",
+      "lat": 30.426941,
+      "lng": -84.24386,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "3edf7d61a4a1",
+      "name": "Tam Bao Meditation Center",
+      "lat": 30.457587,
+      "lng": -91.085565,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "3da478dec295",
+      "name": "Tam Bảo Buddhist Temple",
+      "lat": 40.779774,
+      "lng": -111.911526,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "163c8881e6c4",
+      "name": "Tara Mandala Buddhist Retreat",
+      "lat": 37.163274,
+      "lng": -107.118777,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "a94bb0ee94b8",
+      "name": "Tashi Choling Buddhist Center",
+      "lat": 42.051135,
+      "lng": -122.626038,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8b66cb0954f0",
+      "name": "Tashi Gatsel Ling",
+      "lat": 43.885632,
+      "lng": -70.33172,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "349babba1993",
+      "name": "Tashi Gomang Stupa",
+      "lat": 37.922477,
+      "lng": -105.638573,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8aa7ee8ec7b1",
+      "name": "Tassajara Zen Mountain Center",
+      "lat": 36.233578,
+      "lng": -121.550353,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "3ff52d92f71c",
+      "name": "Taungpulu Kaba Aye Monastery",
+      "lat": 37.170671,
+      "lng": -122.171617,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "534de723e94f",
+      "name": "Temple Watt Satharam",
+      "lat": 38.06514,
+      "lng": -84.466841,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "ff8dff9bb565",
+      "name": "Ten Thousand Buddhas Sarira Stupa 萬佛捨利寶塔寺",
+      "lat": 43.111327,
+      "lng": -79.061495,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "73996c87621c",
+      "name": "Tendai Buddhist Institute",
+      "lat": 42.420126,
+      "lng": -73.493934,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "f623f6e07cf7",
+      "name": "Tergar Meditation Community of Madison",
+      "lat": 43.077694,
+      "lng": -89.373492,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "98b74bb407fe",
+      "name": "Thai Buddhist Temple-Las Vegas",
+      "lat": 36.224175,
+      "lng": -115.180297,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "260c8bb56941",
+      "name": "The Bodhisattva Institute",
+      "lat": 32.231192,
+      "lng": -110.895527,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "3fe7e00714bf",
+      "name": "The Buddhist Center Thubten Norbu Ling",
+      "lat": 35.634613,
+      "lng": -105.951766,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b0df315d6fd8",
+      "name": "The Cache Valley Sangha",
+      "lat": 41.74809,
+      "lng": -111.819398,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "a94da10836a0",
+      "name": "The Dzogchen Meditation Center",
+      "lat": 43.911395,
+      "lng": -69.868018,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "52f231419608",
+      "name": "The Sotaesan Center, Inc. dba. Won Buddhism",
+      "lat": 30.516703,
+      "lng": -97.691118,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "3d45246d9d48",
+      "name": "The Vietnamese Sangha Congregation in America Tu Vien Kim Son",
+      "lat": 37.039798,
+      "lng": -121.752563,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "0b9069671469",
+      "name": "Thekchen Choling Syracuse",
+      "lat": 43.078044,
+      "lng": -76.000082,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d125d692f7c4",
+      "name": "Theravada Dhamma Society of Iowa",
+      "lat": 42.005701,
+      "lng": -92.853291,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "362378fd7093",
+      "name": "Thien Tam Buddhist Temple",
+      "lat": 40.696675,
+      "lng": -89.607259,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "946a714aa424",
+      "name": "Thien That Bao Chau",
+      "lat": 34.711717,
+      "lng": -111.972931,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "8e1d6d9abfd9",
+      "name": "Thien Vien Vo Uu Buddhist Meditation Association",
+      "lat": 37.074804,
+      "lng": -121.578785,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "c88a49dd7b75",
+      "name": "Thiền Viện Phật Tông- Bhavana Meditation Center",
+      "lat": 30.218145,
+      "lng": -81.748214,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "550a87a552b5",
+      "name": "Three Rivers Tibetan Cultural Center",
+      "lat": 40.345862,
+      "lng": -79.816349,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "66d1eec9c27c",
+      "name": "Thượng Hạnh Buddhist Monastery",
+      "lat": 33.210067,
+      "lng": -96.603915,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "89efd1243ba0",
+      "name": "Tibetan Buddhist Dharma",
+      "lat": 34.109085,
+      "lng": -118.015848,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "e67585197d89",
+      "name": "Tibetan Buddhist Learning Center",
+      "lat": 40.761372,
+      "lng": -75.037336,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "d87c9ccbdeb9",
+      "name": "Tibetan Center",
+      "lat": 38.87572,
+      "lng": -104.761431,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "316c2c58726f",
+      "name": "Treetop Zen Center",
+      "lat": 44.530121,
+      "lng": -69.713415,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "8395a628b0b8",
+      "name": "Tricycle Foundation",
+      "lat": 40.737467,
+      "lng": -73.992225,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "e10ed3a37aeb",
+      "name": "Trijang Buddhist Institute",
+      "lat": 44.136349,
+      "lng": -72.734326,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Institute",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "17cd278fc212",
+      "name": "Triratna Meditation Center (TMC) Dallas - Tibetan Buddhism",
+      "lat": 32.976943,
+      "lng": -96.972149,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "937f36f699cd",
+      "name": "TRUC LAM BUDDHIST CENTER/CHUA TRUC LAM",
+      "lat": 33.624561,
+      "lng": -112.165902,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "187d0f64956d",
+      "name": "Trung Tâm Phật Giáo Viên Minh Buddhist Center",
+      "lat": 35.343888,
+      "lng": -97.476583,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "865f5a7d44f1",
+      "name": "Trúc Lâm Hoa Từ Zen Monastery (bamboo temple)",
+      "lat": 33.406807,
+      "lng": -111.817406,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "a16f55ce6106",
+      "name": "Tu An Temple (Vietnamese Buddhist Association)",
+      "lat": 38.18547,
+      "lng": -85.770942,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "2cb94bb64486",
+      "name": "Tu Bi Temple - Chùa Từ Bi",
+      "lat": 39.091541,
+      "lng": -94.512856,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "8fdca1d08322",
+      "name": "Tu vien Nguyen Khong",
+      "lat": 35.123851,
+      "lng": -106.54548,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "9452b608de6d",
+      "name": "Tu Viện A Nan",
+      "lat": 29.632406,
+      "lng": -82.307556,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "d8e2f54c7789",
+      "name": "Tu Viện Diệu Đức",
+      "lat": 41.317395,
+      "lng": -92.925169,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "0a0645f814a8",
+      "name": "Tu Viện Hương Hải",
+      "lat": 26.090815,
+      "lng": -80.318616,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "56ab4302fa8f",
+      "name": "Tu Viện Quan Âm",
+      "lat": 28.024006,
+      "lng": -82.346206,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "e71ee040257a",
+      "name": "Tu Viện Thiện Tường",
+      "lat": 40.132401,
+      "lng": -88.262455,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "48b2db690989",
+      "name": "Two Arrows Zen",
+      "lat": 40.769959,
+      "lng": -111.874894,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "961218dd06b6",
+      "name": "Two Arrows Zen - Torrey Zendo in Torrey, Utah",
+      "lat": 38.298203,
+      "lng": -111.426799,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "dc8c9cdeb4a8",
+      "name": "Tịnh Xá Ngọc Chiếu",
+      "lat": 32.287667,
+      "lng": -110.990607,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "962e6cf71488",
+      "name": "Upaya Zen Center",
+      "lat": 35.682402,
+      "lng": -105.907593,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "756aafb0052a",
+      "name": "Upper Valley Zen Center",
+      "lat": 43.64999,
+      "lng": -72.319059,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "690f8e4f8e2c",
+      "name": "Urgyen Samten Ling Meditation",
+      "lat": 40.770361,
+      "lng": -111.913544,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "1aefbe3ac914",
+      "name": "Utah Cambodian Community Buddhist Temple",
+      "lat": 40.689063,
+      "lng": -111.970544,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "ae1ef815d802",
+      "name": "uttamavihara monastery",
+      "lat": 39.680739,
+      "lng": -86.149538,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "6caa446edbbf",
+      "name": "Vairotsana Foundation",
+      "lat": 35.050345,
+      "lng": -108.071995,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "c405dd28c309",
+      "name": "Vajiradhammapadip Temple Inc.",
+      "lat": 40.926952,
+      "lng": -73.817708,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "e470630bc2d6",
+      "name": "Vajra Vidya Portland",
+      "lat": 43.652563,
+      "lng": -70.265324,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "8448a9135a16",
+      "name": "Vajra Vidya Retreat Center",
+      "lat": 37.939019,
+      "lng": -105.652061,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "245b3f5c289d",
+      "name": "Vajrapani Institute Meditation Retreat Center",
+      "lat": 37.205826,
+      "lng": -122.114382,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "f829da2296b1",
+      "name": "Vajrayana Buddhist Center",
+      "lat": 41.872627,
+      "lng": -87.775062,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "b0982afb993a",
+      "name": "Vajrayana Foundation",
+      "lat": 37.05036,
+      "lng": -121.810281,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "5fe3c0e3df11",
+      "name": "Vallecitos Mountain Retreat Center",
+      "lat": 36.634377,
+      "lng": -106.204781,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "e2de75521b57",
+      "name": "Van Duc Buddhist Temple",
+      "lat": 30.39762,
+      "lng": -88.868391,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "ea2507ba610e",
+      "name": "Van Phuoc Buddhist Temple",
+      "lat": 33.92281,
+      "lng": -98.527968,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "eed57261adb3",
+      "name": "Venice Hongwanji Buddhist Temple",
+      "lat": 33.989842,
+      "lng": -118.419009,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "4ff196d830d5",
+      "name": "Ventura Buddhist Center - An Lac Mission",
+      "lat": 34.28197,
+      "lng": -119.160957,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "6e6947628844",
+      "name": "Vermont Zen Center",
+      "lat": 44.363811,
+      "lng": -73.210098,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "7ecc496e45e0",
+      "name": "Vien Am Monnastery - Tu Viện Viên Âm",
+      "lat": 32.329791,
+      "lng": -86.298433,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "98c84929b0ff",
+      "name": "Vien Giac Buddhist Monastery",
+      "lat": 30.506383,
+      "lng": -84.332028,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "70f034bb7255",
+      "name": "Vietnamese Buddhist Congregation",
+      "lat": 39.674884,
+      "lng": -105.017267,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "03af6aa6eca1",
+      "name": "Vietnamese Buddhist Meditation Congregation",
+      "lat": 47.430722,
+      "lng": -122.16017,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "bfa4102bec6d",
+      "name": "Vipassana Hawaii",
+      "lat": 20.230032,
+      "lng": -155.770247,
+      "tradition": "Theravada",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Insight, Theravada, Vipassanna"
+    },
+    {
+      "id": "672687778102",
+      "name": "Visalia Buddhist Church",
+      "lat": 36.33135,
+      "lng": -119.28707,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "584bd117f8a4",
+      "name": "Vista Buddhist Temple",
+      "lat": 33.187301,
+      "lng": -117.284726,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a6c933cfcf76",
+      "name": "Walking Tree Zen",
+      "lat": 43.131496,
+      "lng": -72.285121,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "e233feb20e24",
+      "name": "Walnut Grove Buddhist Temple",
+      "lat": 38.242855,
+      "lng": -121.509903,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "a4b63e19b4fd",
+      "name": "Washington Buddha Vanaram",
+      "lat": 47.277742,
+      "lng": -122.279186,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "7954aa29932e",
+      "name": "Wat Buddha Oregon",
+      "lat": 44.833801,
+      "lng": -123.005988,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "b10020777591",
+      "name": "Wat Buddha Thai Thavorn Vanaram",
+      "lat": 40.740159,
+      "lng": -73.887652,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "8720440994f8",
+      "name": "Wat Buddhabarame of Nebraska - Meditation Center",
+      "lat": 40.932767,
+      "lng": -95.910544,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1292732d5cd2",
+      "name": "Wat Buddhabhavana",
+      "lat": 42.58909,
+      "lng": -71.47409,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "e0f5b1e20cce",
+      "name": "Wat Buddhadhammadharo (Wat Concord)",
+      "lat": 37.962204,
+      "lng": -122.008436,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "58cb8a145f64",
+      "name": "Wat Buddhametta Mahabaramee Mississippi",
+      "lat": 30.43255,
+      "lng": -88.630858,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c7765efe927a",
+      "name": "Wat Buddhametta: Tucson Buddhist Meditation Center",
+      "lat": 32.208726,
+      "lng": -110.8917,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "34ccf9a367ca",
+      "name": "Wat Buddhanimit Thai Buddhist Temple",
+      "lat": 38.94134,
+      "lng": -104.628382,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "6e2d825be91a",
+      "name": "Wat Buddhapradeep of Reno",
+      "lat": 39.544136,
+      "lng": -119.757514,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "b3a21243fadb",
+      "name": "Wat Buddhapunyaram",
+      "lat": 39.969858,
+      "lng": -104.681253,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "df8347c2e5bb",
+      "name": "Wat Buddharangsi Buddhist Temple",
+      "lat": 25.543183,
+      "lng": -80.437857,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "19565dcdcb26",
+      "name": "Wat Buddharatanaram",
+      "lat": 32.966606,
+      "lng": -97.252497,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "00a321801387",
+      "name": "Wat Buddhasaengdham",
+      "lat": 30.145916,
+      "lng": -85.578384,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "40376d66e4dc",
+      "name": "Wat Buddhasamakeevanaram",
+      "lat": 32.408163,
+      "lng": -93.589736,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "7dbc8172c28c",
+      "name": "Wat Buddhikaram",
+      "lat": 40.689209,
+      "lng": -111.970518,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1bd554c48aa1",
+      "name": "Wat Carolina",
+      "lat": 34.212984,
+      "lng": -78.867553,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9e9a5a0fedb5",
+      "name": "Wat Carolina",
+      "lat": 34.008348,
+      "lng": -78.146401,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "511b8b2d501a",
+      "name": "Wat Chaimongkolvararam",
+      "lat": 41.255912,
+      "lng": -111.97747,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "6f6080e341f5",
+      "name": "Wat Dhamma Bhavana Buddhist Center",
+      "lat": 61.122647,
+      "lng": -149.810999,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "cbaba61dfef7",
+      "name": "Wat Dhammagunaram of Utah",
+      "lat": 41.074173,
+      "lng": -111.953086,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f416154de328",
+      "name": "Wat Dhammasala Forest Monastery",
+      "lat": 42.782392,
+      "lng": -84.27631,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "d45c7019ab22",
+      "name": "Wat Florida Dhammaram",
+      "lat": 28.316686,
+      "lng": -81.463248,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c0b6057139e9",
+      "name": "WAT HATHAINARES OF GEORGIA",
+      "lat": 30.997582,
+      "lng": -82.45742,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1521acf6d2d5",
+      "name": "Wat Idahophoxaiyaraam",
+      "lat": 43.583331,
+      "lng": -116.511191,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9bd4332ca04b",
+      "name": "Wat Indiana Buddha Vanaram",
+      "lat": 39.903493,
+      "lng": -86.012735,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "3fd83dcf203a",
+      "name": "Wat Jacksonville Buddha Vanaram",
+      "lat": 34.836918,
+      "lng": -92.00475,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "e1228997c17b",
+      "name": "Wat Kentucky Bodhivanaram",
+      "lat": 38.201414,
+      "lng": -84.899289,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "69355b475655",
+      "name": "Wat Khmer Palelai វត្តខ្មែរបាលិលេយ្យ",
+      "lat": 39.927271,
+      "lng": -75.21692,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f531744abc50",
+      "name": "Wat Lao Buddha Phavanaram",
+      "lat": 27.823332,
+      "lng": -82.712524,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f7366b8cdc6b",
+      "name": "Wat Lao Buddha Phothisaram Inc",
+      "lat": 33.650812,
+      "lng": -84.323291,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "ec21ca7e8879",
+      "name": "Wat Lao Buddha Vihara",
+      "lat": 30.480845,
+      "lng": -88.231069,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "eb0cd19fd2f4",
+      "name": "Wat Lao Buddharaksa",
+      "lat": 30.507886,
+      "lng": -88.286304,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "eb1a0bb92a07",
+      "name": "Wat Lao Buddharam",
+      "lat": 35.549089,
+      "lng": -97.493409,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c3b450d21111",
+      "name": "Wat Lao Buddharam",
+      "lat": 35.256708,
+      "lng": -101.746106,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "bc7878ef147b",
+      "name": "Wat Lao Buddhovath of Rhode Island Inc",
+      "lat": 41.909101,
+      "lng": -71.496482,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "bda57742e327",
+      "name": "Wat Lao Dhammavanno Buddhist Temple",
+      "lat": 26.741702,
+      "lng": -81.797003,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f72f6a256135",
+      "name": "Wat Lao Houeikeo Indharam",
+      "lat": 35.201296,
+      "lng": -81.435852,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "dacdf01b7d86",
+      "name": "Wat Lao of Kansas City",
+      "lat": 39.118563,
+      "lng": -94.900494,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "a20ef55c2b2f",
+      "name": "Wat Lao Salt Lake Buddharam",
+      "lat": 40.708838,
+      "lng": -112.058288,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "80c4367deac7",
+      "name": "Wat Lao Samakhitham",
+      "lat": 42.289196,
+      "lng": -75.918695,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9f6291830f4d",
+      "name": "Wat Lao Sayaphoum",
+      "lat": 35.648495,
+      "lng": -81.565855,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "63fb3c8aa3c5",
+      "name": "Wat Lao Soukharam",
+      "lat": 39.984873,
+      "lng": -77.116425,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "4dc5af3a1516",
+      "name": "Wat Lao Thepnimith of Fort Worth",
+      "lat": 32.86553,
+      "lng": -97.414599,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "37b5bad2a321",
+      "name": "Wat Luangphor PhaNgao Buddharam Buddhist Temple",
+      "lat": 35.263492,
+      "lng": -81.068729,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "68fcd923fc98",
+      "name": "Wat Mongkolratanaram Buddhist Temple",
+      "lat": 27.943923,
+      "lng": -82.394949,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "277f6438f4ac",
+      "name": "Wat Mongkolratanaram Fort Walton Beach",
+      "lat": 30.439149,
+      "lng": -86.62834,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9c76bac39d12",
+      "name": "Wat Mongkoltepmunee",
+      "lat": 40.110115,
+      "lng": -74.946744,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "37843c3825c9",
+      "name": "Wat Montgomery Buddharam",
+      "lat": 32.38445,
+      "lng": -86.089413,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "05ef0e869424",
+      "name": "Wat Mungmesrisuk Buddhist Meditation Center",
+      "lat": 35.271721,
+      "lng": -79.07779,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "53b95458dd03",
+      "name": "Wat Navaram Buddhist Temple",
+      "lat": 28.815351,
+      "lng": -81.291698,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "3a4592cffc09",
+      "name": "Wat Nawamintararachutis Meditation Center",
+      "lat": 41.894878,
+      "lng": -71.033968,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "5fda3ca116c0",
+      "name": "Wat Nevada Dhammaram",
+      "lat": 35.954234,
+      "lng": -115.162919,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "37312094fbf7",
+      "name": "Wat Pa Lao Buddhadham",
+      "lat": 43.024297,
+      "lng": -77.710538,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "43f40698c15a",
+      "name": "Wat Pa Thai Thavorn",
+      "lat": 42.722114,
+      "lng": -74.184777,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "d333ba94a3ff",
+      "name": "Wat Padhammaratana วัดป่าธรรมรัตน์",
+      "lat": 40.43107,
+      "lng": -79.784776,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f4785286eaa9",
+      "name": "Wat Paknam America Ohio",
+      "lat": 39.842426,
+      "lng": -84.149802,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "c2dae65895fc",
+      "name": "Wat Pasantidhamma USA",
+      "lat": 36.942876,
+      "lng": -76.574135,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "985a750a50ce",
+      "name": "Wat Phawanadhammaram",
+      "lat": 28.065969,
+      "lng": -80.676497,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "b1eabdaf070d",
+      "name": "Wat Phouthapasaram Temple",
+      "lat": 29.401628,
+      "lng": -81.535376,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1ef02e0071ff",
+      "name": "Wat Phouttha Samakkheetham",
+      "lat": 35.239625,
+      "lng": -101.77875,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "4c5538de6863",
+      "name": "Wat phramahajanaka",
+      "lat": 33.305035,
+      "lng": -84.333366,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "2f3c43d1d2d8",
+      "name": "Wat Phrathat Doi Suthep NM, USA.",
+      "lat": 35.073116,
+      "lng": -106.567764,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "edec02e0c9ac",
+      "name": "Wat Promkunaram",
+      "lat": 33.53052,
+      "lng": -112.429872,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "3babd08188ff",
+      "name": "Wat Punyawanaram",
+      "lat": 28.132906,
+      "lng": -80.698404,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "35c15659bf7b",
+      "name": "Wat Saddhadhamma",
+      "lat": 29.506542,
+      "lng": -98.234138,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1630795e2bb1",
+      "name": "WAT SANGHARATTANARAM BUDDHIST TEMPLE OF OKLAHOMA",
+      "lat": 35.411465,
+      "lng": -97.473411,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "1ae767267f6f",
+      "name": "Wat Thammarattanaram-La Inc",
+      "lat": 30.05927,
+      "lng": -91.943394,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "a7bbb57e2a0c",
+      "name": "Wat Thepnimit Meditation Center VA",
+      "lat": 36.782753,
+      "lng": -76.283461,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "f90b1767eaf1",
+      "name": "Wat Thri Ratana Buddhist Temple",
+      "lat": 32.221308,
+      "lng": -110.800755,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "54c1e1dd1a27",
+      "name": "Wat Uddom Saharatanaram Khmer Buddhist Temple វត្តឧត្តម",
+      "lat": 41.715163,
+      "lng": -71.14298,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "abbbfeaade7d",
+      "name": "Wat Wichitaram Buddhist Temple",
+      "lat": 37.780033,
+      "lng": -97.336234,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "11a7c9f83ccc",
+      "name": "Watlao Buddhavath",
+      "lat": 41.556313,
+      "lng": -93.586683,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "db66cb37a04d",
+      "name": "Watpa Bodhiyana",
+      "lat": 29.742801,
+      "lng": -81.730751,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "9314d0f061aa",
+      "name": "Watsonville Buddhist Temple",
+      "lat": 36.91342,
+      "lng": -121.745811,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "8d5f0bf546a5",
+      "name": "Watsricharoendham",
+      "lat": 36.22553,
+      "lng": -115.224496,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "28236a2dabf5",
+      "name": "Watt Munisotaram",
+      "lat": 44.63354,
+      "lng": -93.046627,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "393f9a5fe2fb",
+      "name": "Watt Samaki Cambodian Buddhist Temple",
+      "lat": 43.640733,
+      "lng": -70.570247,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "b8813c6c8032",
+      "name": "Watt Th. Karam Cambodian Khmer Temple",
+      "lat": 41.808754,
+      "lng": -71.431645,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "0fbfeb80bbf4",
+      "name": "Way of Compassion Dharma Center",
+      "lat": 39.395065,
+      "lng": -107.209857,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "2e99c8b584ae",
+      "name": "West Los Angeles Buddhist Temple",
+      "lat": 34.039907,
+      "lng": -118.444755,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "0f01074bfe48",
+      "name": "West Virginia Zen Center",
+      "lat": 38.31763,
+      "lng": -81.579394,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "def9583beabe",
+      "name": "Western Supreme Buddha Temple",
+      "lat": 42.923327,
+      "lng": -74.299108,
+      "tradition": "Chinese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Chinese Temple"
+    },
+    {
+      "id": "7729dba604e2",
+      "name": "White Forest Sangha",
+      "lat": 39.733803,
+      "lng": -104.952495,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Meditation Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "43bab2a0b446",
+      "name": "White Jewel Mountain",
+      "lat": 37.953781,
+      "lng": -105.668475,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "46be1e94f731",
+      "name": "White Lotus Haven Zen of Connecticut",
+      "lat": 41.810296,
+      "lng": -72.923706,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "ca4eaaf93167",
+      "name": "White River Buddhist Temple",
+      "lat": 47.339931,
+      "lng": -122.223132,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "0302c7b0c4c7",
+      "name": "White Sands Buddhist Center",
+      "lat": 28.725554,
+      "lng": -80.883817,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "b92d15270769",
+      "name": "Wichita Cambodian Buddhist",
+      "lat": 37.635336,
+      "lng": -97.292993,
+      "tradition": "Southeast Asian",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Thai, Burmese, Lao, Cambodian, and Sri Lankan Temple"
+    },
+    {
+      "id": "47182f2923d4",
+      "name": "Wisconsin Tibetan Association Cultural Center - Phuntsok Dhargyeling",
+      "lat": 43.119146,
+      "lng": -89.315852,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "1dd4316dd14a",
+      "name": "Won Buddhism of America (Won Buddhism of New York)",
+      "lat": 40.7562,
+      "lng": -73.819006,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "07de2831de5f",
+      "name": "Won Buddhism of America, Inc",
+      "lat": 34.066713,
+      "lng": -118.290239,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "e4634d1768f9",
+      "name": "Won Buddhism of Atlanta",
+      "lat": 34.054847,
+      "lng": -84.078419,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "905951f832e9",
+      "name": "Won Buddhism of Houston Inc",
+      "lat": 29.813035,
+      "lng": -95.524165,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "ddd0a033ebca",
+      "name": "Won Buddhism of New Jersey",
+      "lat": 40.855136,
+      "lng": -74.025762,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "f82ff1d71bec",
+      "name": "Won Buddhism of Philadelphia",
+      "lat": 40.104953,
+      "lng": -75.14392,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "8c170bd93981",
+      "name": "Won Buddhism of Richmond Inc",
+      "lat": 37.630202,
+      "lng": -77.29716,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "78b5a0f65e1a",
+      "name": "Won Buddhism of Washington",
+      "lat": 39.111012,
+      "lng": -77.082781,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "6b5081f8250b",
+      "name": "Won Buddhism Temple of North Carolina",
+      "lat": 35.958632,
+      "lng": -79.108376,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "b59e1184d3b1",
+      "name": "Won Dharma Center",
+      "lat": 42.220819,
+      "lng": -73.696609,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "3f2cda682747",
+      "name": "Won-Buddhism of Boston",
+      "lat": 42.364459,
+      "lng": -71.188918,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "346f999e4649",
+      "name": "Won-buddhism Of Fresno Temple",
+      "lat": 36.811028,
+      "lng": -119.780449,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "ed5a5b25b97a",
+      "name": "Wonbuddhism of Miami Inc.",
+      "lat": 25.73862,
+      "lng": -80.368008,
+      "tradition": "Won Buddhism",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Won Buddhism"
+    },
+    {
+      "id": "aa7fd4adf1f3",
+      "name": "Yakima Buddhist Church",
+      "lat": 46.447262,
+      "lng": -120.422005,
+      "tradition": "Pure Land",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Pure Land, Soka Gakkai, Jodo Shin"
+    },
+    {
+      "id": "c875b8eb8495",
+      "name": "Yellow Springs Dharma Center",
+      "lat": 39.802224,
+      "lng": -83.890035,
+      "tradition": "Buddhist",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Other Buddhist Centers"
+    },
+    {
+      "id": "4ababa895b38",
+      "name": "Yeru Retreat Center",
+      "lat": 46.741338,
+      "lng": -93.828315,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "50ad5f00a079",
+      "name": "Yeshe Khorlo Retreat Center",
+      "lat": 37.962815,
+      "lng": -105.664613,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "91879b7af200",
+      "name": "Zen Center of Denver",
+      "lat": 39.682567,
+      "lng": -104.955938,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "2c563db31d2a",
+      "name": "Zen Center of Syracuse",
+      "lat": 43.002053,
+      "lng": -76.149431,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "9f98f4f052f4",
+      "name": "Zen Mountain Monastery",
+      "lat": 42.048224,
+      "lng": -74.277209,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Monastery",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "06b812cd11d8",
+      "name": "Zen Mountain Residence",
+      "lat": 40.456196,
+      "lng": -106.804161,
+      "tradition": "Zen",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Zen, Chan, Son, & Thien,"
+    },
+    {
+      "id": "655a006169e4",
+      "name": "Zuni Mountain Stupa",
+      "lat": 35.050598,
+      "lng": -108.071974,
+      "tradition": "Tibetan",
+      "faith": "Buddhist",
+      "type": "Center",
+      "folder": "Tibetan"
+    },
+    {
+      "id": "0a2326683ecf",
+      "name": "Định Thành Temple - Chùa Định Thành",
+      "lat": 43.08529,
+      "lng": -75.170623,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    },
+    {
+      "id": "2258e9ddda72",
+      "name": "Đức Viên Buddhist Temple",
+      "lat": 37.314388,
+      "lng": -121.835159,
+      "tradition": "Vietnamese",
+      "faith": "Buddhist",
+      "type": "Temple",
+      "folder": "Vietnamese Temples"
+    }
+  ]
+}

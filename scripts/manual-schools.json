@@ -1,0 +1,73 @@
+{
+  "_comment": "Manual school slugs for places whose names do not state lineage. Applied by scripts/apply-manual-schools.mjs.",
+  "byId": {
+    "add1f0450793": ["gelug"],
+    "db0738052b52": ["shambhala"],
+    "313f38aa5ab0": ["kagyu"],
+    "12ff4d1fdaa3": ["kagyu"],
+    "163c8881e6c4": ["nyingma"],
+    "53256afda8fc": ["nyingma"],
+    "c3b65f4159ca": ["gelug"],
+    "97285be03cc0": ["thien"],
+    "4b5ac226de01": ["thien"],
+    "40254310a10c": ["son"],
+    "92a7427d3431": ["soto"],
+    "99d7e304979d": ["soto"],
+    "341a3f621469": ["soto"],
+    "9441b28b5232": ["soto"],
+    "85364e0856c8": ["soto"],
+    "e0e5961272b6": ["soto"],
+    "39dabc286761": ["soto"],
+    "9f98f4f052f4": ["soto"],
+    "962e6cf71488": ["soto"],
+    "600de1ea8128": ["soto"],
+    "91879b7af200": ["soto"],
+    "54e272e28de2": ["soto"]
+  },
+  "byTradition": {
+    "Vietnamese": ["thien"],
+    "Chinese": ["chan"]
+  },
+  "byNamePattern": [
+    {
+      "pattern": "bodhi path",
+      "traditions": ["Tibetan"],
+      "schools": ["kagyu"]
+    },
+    {
+      "pattern": "deer park buddhist center",
+      "traditions": ["Tibetan"],
+      "schools": ["gelug"]
+    },
+    {
+      "pattern": "drala mountain",
+      "traditions": ["Tibetan"],
+      "schools": ["shambhala"]
+    },
+    {
+      "pattern": "tara mandala",
+      "traditions": ["Tibetan"],
+      "schools": ["nyingma"]
+    },
+    {
+      "pattern": "amitabha stupa",
+      "traditions": ["Tibetan"],
+      "schools": ["nyingma"]
+    },
+    {
+      "pattern": "plum village|blue cliff monastery|deer park monastery",
+      "traditions": ["Zen"],
+      "schools": ["thien"]
+    },
+    {
+      "pattern": "kwan um|providence zen",
+      "traditions": ["Zen"],
+      "schools": ["son"]
+    },
+    {
+      "pattern": "green gulch|rochester zen|boulder zen|cambridge zen|santa cruz zen|santa barbara zen|san francisco zen|zen mountain monastery",
+      "traditions": ["Zen"],
+      "schools": ["soto"]
+    }
+  ]
+}
