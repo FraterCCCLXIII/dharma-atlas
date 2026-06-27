@@ -1,8 +1,10 @@
+import { inferTeacherSchools, teacherMatchesTradition } from "@/lib/schools";
 import type { Teacher } from "@/types/teacher";
 
 export interface TeacherFilters {
   query: string;
   traditions: string[];
+  schools: string[];
 }
 
 export function filterTeachers(
@@ -25,11 +27,17 @@ export function filterTeachers(
         .toLowerCase();
       if (!haystack.includes(q)) return false;
     }
-    if (
-      filters.traditions.length &&
-      !filters.traditions.includes(teacher.tradition)
-    ) {
-      return false;
+    if (filters.traditions.length) {
+      const matchesTradition = filters.traditions.some((tradition) =>
+        teacherMatchesTradition(teacher, tradition),
+      );
+      if (!matchesTradition) return false;
+    }
+    if (filters.schools.length) {
+      const teacherSchools = inferTeacherSchools(teacher);
+      if (!filters.schools.some((school) => teacherSchools.includes(school))) {
+        return false;
+      }
     }
     return true;
   });

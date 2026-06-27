@@ -43,34 +43,22 @@ export function SiteHeader({
   );
 }
 
-function NavBarLayout({
-  center,
-  right,
-}: {
-  center: ReactNode;
-  right?: ReactNode;
-}) {
+function NavBarLayout({ center }: { center: ReactNode }) {
   return (
-    <div className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
-      <div className="justify-self-start">
-        <SiteLogo />
-      </div>
+    <div className="relative flex w-full items-center">
+      <SiteLogo />
 
-      <div className="min-w-0 justify-self-stretch px-1 sm:px-2">{center}</div>
-
-      <div className="flex shrink-0 items-center justify-end gap-2">
-        {right}
+      <div className="absolute left-1/2 flex max-w-[calc(100%-4rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-5rem)] sm:gap-3">
+        {center}
       </div>
     </div>
   );
 }
 
-function NavSearch({
+function SearchField({
   onNavigateHome,
-  trailing,
 }: {
   onNavigateHome?: () => void;
-  trailing?: ReactNode;
 }) {
   const query = useExploreStore((s) => s.query);
   const setQuery = useExploreStore((s) => s.setQuery);
@@ -83,38 +71,32 @@ function NavSearch({
   };
 
   return (
-    <div className="flex w-full min-w-0 items-center gap-2 sm:gap-3">
-      <EntityToggle />
-
-      <label className="group relative block min-w-0 flex-1">
-        <span className="sr-only">Search directory</span>
-        <MagnifyingGlass
-          size={18}
-          weight="bold"
-          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-brand"
-        />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={getSearchPlaceholder(entityFilter)}
-          className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-10 text-sm text-ink shadow-[var(--shadow-card)] outline-none transition placeholder:text-ink-muted hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(184,137,74,0.15)]"
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition hover:bg-surface-muted hover:text-ink"
-            aria-label="Clear search"
-          >
-            <X size={14} weight="bold" />
-          </button>
-        )}
-      </label>
-
-      {trailing}
-    </div>
+    <label className="group relative block w-44 min-w-0 shrink sm:w-64 md:w-72">
+      <span className="sr-only">Search directory</span>
+      <MagnifyingGlass
+        size={18}
+        weight="bold"
+        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-muted transition-colors group-focus-within:text-brand"
+      />
+      <input
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={getSearchPlaceholder(entityFilter)}
+        className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-10 text-sm text-ink shadow-[var(--shadow-card)] outline-none transition placeholder:text-ink-muted hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(184,137,74,0.15)]"
+      />
+      {query && (
+        <button
+          type="button"
+          onClick={() => setQuery("")}
+          className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition hover:bg-surface-muted hover:text-ink"
+          aria-label="Clear search"
+        >
+          <X size={14} weight="bold" />
+        </button>
+      )}
+    </label>
   );
 }
 
@@ -136,7 +118,7 @@ function FilterToggleButton({
       aria-label={filtersOpen ? "Hide filters" : "Show filters"}
       className={`relative inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-sm font-medium transition ${
         filtersOpen
-          ? "border-ink bg-ink text-surface-elevated"
+          ? "border-accent bg-accent text-brand-foreground"
           : "border-border text-ink-secondary hover:border-border-strong hover:bg-surface-muted hover:text-ink"
       }`}
     >
@@ -146,7 +128,7 @@ function FilterToggleButton({
         <span
           className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold ${
             filtersOpen
-              ? "bg-surface-elevated text-ink"
+              ? "bg-brand-foreground/15 text-brand-foreground"
               : "bg-brand text-brand-foreground"
           }`}
         >
@@ -158,16 +140,10 @@ function FilterToggleButton({
 }
 
 interface ExploreNavProps {
-  resultCount: number;
-  totalCount: number;
   activeFilterCount: number;
 }
 
-export function ExploreNav({
-  resultCount,
-  totalCount,
-  activeFilterCount,
-}: ExploreNavProps) {
+export function ExploreNav({ activeFilterCount }: ExploreNavProps) {
   const mobileView = useExploreStore((s) => s.mobileView);
   const setMobileView = useExploreStore((s) => s.setMobileView);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
@@ -179,27 +155,16 @@ export function ExploreNav({
     <SiteHeader>
       <NavBarLayout
         center={
-          <NavSearch
-            trailing={
-              <FilterToggleButton
-                filtersOpen={filtersOpen}
-                activeFilterCount={activeFilterCount}
-                onToggle={toggleFilters}
-              />
-            }
-          />
-        }
-        right={
           <>
-            <p className="hidden text-sm text-ink-secondary xl:block">
-              <span className="font-semibold text-ink">{resultCount}</span>
-              {resultCount !== totalCount && (
-                <span className="text-ink-muted"> / {totalCount}</span>
-              )}
-            </p>
-
+            <EntityToggle />
+            <SearchField />
+            <FilterToggleButton
+              filtersOpen={filtersOpen}
+              activeFilterCount={activeFilterCount}
+              onToggle={toggleFilters}
+            />
             <div
-              className={`flex rounded-full border border-border p-0.5 lg:hidden ${showMapToggle ? "" : "hidden"}`}
+              className={`flex shrink-0 rounded-full border border-border p-0.5 lg:hidden ${showMapToggle ? "" : "hidden"}`}
             >
               <button
                 type="button"
@@ -243,11 +208,14 @@ export function DetailNav() {
     <SiteHeader sticky>
       <NavBarLayout
         center={
-          <NavSearch
-            onNavigateHome={() =>
-              router.push(pathFromEntityFilter(entityFilterFromPath(pathname)))
-            }
-          />
+          <>
+            <EntityToggle />
+            <SearchField
+              onNavigateHome={() =>
+                router.push(pathFromEntityFilter(entityFilterFromPath(pathname)))
+              }
+            />
+          </>
         }
       />
     </SiteHeader>

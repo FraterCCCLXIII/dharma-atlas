@@ -1,3 +1,8 @@
+import {
+  toggleBuddhismRoot as applyBuddhismRootToggle,
+  toggleLineageSchoolSelection,
+  toggleSubschoolSelection,
+} from "@/lib/schools";
 import { create } from "zustand";
 import type { PlaceType } from "@/types/place";
 
@@ -21,6 +26,9 @@ interface ExploreState {
   setQuery: (query: string) => void;
   toggleTradition: (tradition: string) => void;
   toggleSchool: (school: string) => void;
+  toggleBuddhismRoot: () => void;
+  toggleLineageSchool: (schoolId: string) => void;
+  toggleSubschool: (subschool: string) => void;
   toggleType: (type: PlaceType) => void;
   toggleFaith: (faith: string) => void;
   clearFilters: () => void;
@@ -61,6 +69,30 @@ export const useExploreStore = create<ExploreState>((set) => ({
         ? s.schools.filter((value) => value !== school)
         : [...s.schools, school],
     })),
+  toggleBuddhismRoot: () =>
+    set((s) => {
+      const next = applyBuddhismRootToggle({
+        traditions: s.traditions,
+        schools: s.schools,
+      });
+      return { traditions: next.traditions, schools: next.schools };
+    }),
+  toggleLineageSchool: (schoolId) =>
+    set((s) => {
+      const next = toggleLineageSchoolSelection(
+        { traditions: s.traditions, schools: s.schools },
+        schoolId,
+      );
+      return { traditions: next.traditions, schools: next.schools };
+    }),
+  toggleSubschool: (subschool) =>
+    set((s) => {
+      const next = toggleSubschoolSelection(
+        { traditions: s.traditions, schools: s.schools },
+        subschool,
+      );
+      return { traditions: next.traditions, schools: next.schools };
+    }),
   toggleType: (type) =>
     set((s) => ({
       types: s.types.includes(type)

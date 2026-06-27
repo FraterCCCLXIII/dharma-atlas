@@ -5,15 +5,13 @@ import { useMemo } from "react";
 import placesDataset from "@/data/places.json";
 import teachersDataset from "@/data/teachers.json";
 import { ExploreNav } from "@/components/layout/SiteHeader";
-import {
-  buildDirectoryEntries,
-  countDirectoryResults,
-} from "@/lib/directory";
+import { buildDirectoryEntries } from "@/lib/directory";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import type { PlacesDataset } from "@/types/place";
 import type { TeachersDataset } from "@/types/teacher";
 import { DirectoryList } from "./DirectoryList";
+import { AllFeaturePage } from "./AllFeaturePage";
 import { FilterBar, useActiveFilterCount } from "./FilterBar";
 import { PlaceList } from "./PlaceList";
 import { TeacherList } from "./TeacherList";
@@ -88,20 +86,8 @@ export function ExplorePage() {
     [query, traditions, schools, types, faiths],
   );
   const teacherFilters = useMemo(
-    () => ({ query, traditions }),
-    [query, traditions],
-  );
-
-  const { resultCount, totalCount } = useMemo(
-    () =>
-      countDirectoryResults(
-        places.places,
-        teachers.teachers,
-        entityFilter,
-        placeFilters,
-        teacherFilters,
-      ),
-    [entityFilter, placeFilters, teacherFilters],
+    () => ({ query, traditions, schools }),
+    [query, traditions, schools],
   );
 
   const directoryEntries = useMemo(
@@ -129,24 +115,31 @@ export function ExplorePage() {
 
   const showMap = entityFilter !== "people";
   const isPeopleBrowse = entityFilter === "people";
+  const isAllBrowse = entityFilter === "all";
+  const hasActiveBrowse =
+    query.trim().length > 0 ||
+    traditions.length > 0 ||
+    schools.length > 0 ||
+    types.length > 0 ||
+    faiths.length > 0;
+  const showAllFeature = isAllBrowse && !hasActiveBrowse;
+  const useScrollLayout = isPeopleBrowse || isAllBrowse;
 
   const listContent =
-    entityFilter === "all" ? (
-      <DirectoryList entries={directoryEntries} />
+    isAllBrowse ? (
+      hasActiveBrowse ? (
+        <DirectoryList entries={directoryEntries} />
+      ) : null
     ) : entityFilter === "people" ? (
       <TeacherList teachers={filteredTeachers} variant="tile" />
     ) : (
       <PlaceList places={filteredPlaces} />
     );
 
-  if (isPeopleBrowse) {
+  if (useScrollLayout) {
     return (
       <div className="flex h-dvh flex-col overflow-hidden bg-surface">
-        <ExploreNav
-          resultCount={resultCount}
-          totalCount={totalCount}
-          activeFilterCount={activeFilterCount}
-        />
+        <ExploreNav activeFilterCount={activeFilterCount} />
 
         <div className="relative flex min-h-0 flex-1">
           <FilterSidebar
@@ -156,9 +149,15 @@ export function ExplorePage() {
           />
 
           <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">
-            <div className="mx-auto w-full max-w-[1600px] px-4 pb-16 sm:px-6 lg:px-8">
-              {listContent}
-            </div>
+            {showAllFeature ? (
+              <AllFeaturePage places={places.places} teachers={teachers.teachers} />
+            ) : isPeopleBrowse ? (
+              <div className="mx-auto w-full max-w-[1600px] px-4 pb-16 sm:px-6 lg:px-8">
+                {listContent}
+              </div>
+            ) : (
+              listContent
+            )}
           </main>
         </div>
       </div>
@@ -167,11 +166,7 @@ export function ExplorePage() {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-surface">
-      <ExploreNav
-        resultCount={resultCount}
-        totalCount={totalCount}
-        activeFilterCount={activeFilterCount}
-      />
+      <ExploreNav activeFilterCount={activeFilterCount} />
 
       <div className="relative flex min-h-0 flex-1">
         <FilterSidebar

@@ -1,4 +1,4 @@
-import { getSchools } from "@/lib/schools";
+import { getSchools, placeMatchesTraditionFilter } from "@/lib/schools";
 import type { Place, PlaceType } from "@/types/place";
 
 export interface PlaceFilters {
@@ -14,8 +14,12 @@ export function filterPlaces(places: Place[], filters: PlaceFilters): Place[] {
 
   return places.filter((place) => {
     if (q && !place.name.toLowerCase().includes(q)) return false;
-    if (filters.traditions.length && !filters.traditions.includes(place.tradition))
-      return false;
+    if (filters.traditions.length) {
+      const matchesTradition = filters.traditions.some((tradition) =>
+        placeMatchesTraditionFilter(place, tradition),
+      );
+      if (!matchesTradition) return false;
+    }
     if (filters.schools.length) {
       const placeSchools = getSchools(place);
       if (!filters.schools.some((school) => placeSchools.includes(school))) return false;
