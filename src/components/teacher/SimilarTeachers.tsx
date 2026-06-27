@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { cardLiftClassName } from "@/lib/card-styles";
+import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
 import type { Teacher } from "@/types/teacher";
 
@@ -27,7 +29,7 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
           <Link
             key={teacher.slug}
             href={`/teacher/${teacher.slug}`}
-            className="group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
+            className={`group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
           >
             <div className="relative aspect-[4/5] overflow-hidden bg-surface-muted">
               {teacher.photo ? (
@@ -35,13 +37,13 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
                   src={teacher.photo}
                   alt={`Portrait of ${teacher.name}`}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="h-full w-full object-cover"
                 />
               ) : null}
             </div>
             <div className="space-y-2 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
-                {teacher.tradition}
+                {formatTeacherSchoolLine(teacher, true)}
               </p>
               <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-sm font-semibold leading-snug text-ink group-hover:text-brand">
                 {teacher.name}

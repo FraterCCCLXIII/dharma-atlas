@@ -4,10 +4,10 @@ import Link from "next/link";
 import {
   ArrowRight,
   Compass,
-  FlowerLotus,
   MapTrifold,
   UsersThree,
 } from "@phosphor-icons/react";
+import { cardLiftClassName } from "@/lib/card-styles";
 import {
   getDirectoryStats,
   getFeaturedPlaces,
@@ -18,6 +18,7 @@ import { traditionMarkerColor } from "@/lib/places";
 import { useExploreStore } from "@/store/explore-store";
 import type { Place } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
+import { HomeHero } from "./HomeHero";
 import { PlaceCard } from "./PlaceCard";
 import { TeacherCard } from "./TeacherCard";
 
@@ -57,7 +58,7 @@ function BrowseCard({
   return (
     <Link
       href={href}
-      className="group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
+      className={`group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
     >
       <div className={`relative h-36 bg-gradient-to-br ${gradient}`}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
@@ -99,35 +100,18 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pt-12">
-      <section className="relative overflow-hidden rounded-3xl border border-border bg-surface-elevated px-6 py-10 shadow-[var(--shadow-card)] sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent-soft/70 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 left-1/3 h-48 w-48 rounded-full bg-brand/10 blur-3xl" />
+    <>
+      <HomeHero />
 
-        <div className="relative max-w-3xl space-y-5">
-          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-semibold uppercase tracking-wider text-ink-secondary">
-            <FlowerLotus size={14} weight="duotone" className="text-brand" />
-            A living directory
-          </p>
-          <h1 className="font-[family-name:var(--font-fraunces)] text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-            Teachers, temples, and paths of practice
-          </h1>
-          <p className="max-w-2xl text-base leading-relaxed text-ink-secondary sm:text-lg">
-            Dharma Streams brings together meditation centers, monasteries, and
-            teachers across traditions — so you can discover where to visit and
-            who to learn from in one place.
-          </p>
-        </div>
-
-        <div className="relative mt-8 grid gap-3 sm:grid-cols-3">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pt-10">
+        <section className="grid gap-3 sm:grid-cols-3">
           <Stat label="Locations" value={stats.placeCount.toLocaleString()} />
           <Stat label="Teachers" value={stats.teacherCount.toLocaleString()} />
           <Stat
             label="Traditions"
             value={stats.traditionCount.toLocaleString()}
           />
-        </div>
-      </section>
+        </section>
 
       <section className="mt-12 grid gap-4 md:grid-cols-2">
         <BrowseCard
@@ -248,6 +232,7 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
           </div>
         </section>
       )}
-    </div>
+      </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { MapPin } from "@phosphor-icons/react";
+import { cardLiftClassName } from "@/lib/card-styles";
 import { traditionGradient } from "@/lib/places";
 import type { Place } from "@/types/place";
 
@@ -26,7 +27,7 @@ export function SimilarPlaces({ places }: SimilarPlacesProps) {
           <Link
             key={place.id}
             href={`/place/${place.id}`}
-            className="group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
+            className={`group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
           >
             <div
               className={`relative h-32 bg-gradient-to-br ${traditionGradient(place.tradition)}`}

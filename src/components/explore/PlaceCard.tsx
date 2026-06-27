@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MapPin, Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
+import { cardLiftClassName } from "@/lib/card-styles";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import { useExploreStore } from "@/store/explore-store";
@@ -32,7 +33,7 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
     >
       <Link
         href={`/place/${place.id}`}
-        className={`group block overflow-hidden rounded-2xl border bg-surface-elevated text-left shadow-[var(--shadow-card)] transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
+        className={`group block overflow-hidden rounded-2xl border bg-surface-elevated text-left shadow-[var(--shadow-card)] ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
           isHovered ? "border-brand ring-1 ring-brand/20" : "border-border"
         }`}
       >

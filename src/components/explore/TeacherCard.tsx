@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { User } from "@phosphor-icons/react";
 import { motion } from "motion/react";
+import { cardLiftClassName } from "@/lib/card-styles";
+import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
 import type { Teacher } from "@/types/teacher";
 
@@ -30,7 +32,7 @@ export function TeacherCard({
     >
       <Link
         href={`/teacher/${teacher.slug}`}
-        className="group block overflow-hidden rounded-2xl border border-border bg-surface-elevated text-left shadow-[var(--shadow-card)] transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-[var(--shadow-float)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
+        className={`group block overflow-hidden rounded-2xl border border-border bg-surface-elevated text-left shadow-[var(--shadow-card)] ${cardLiftClassName} hover:border-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40`}
       >
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-muted">
           {teacher.photo ? (
@@ -38,7 +40,7 @@ export function TeacherCard({
               src={teacher.photo}
               alt={`Portrait of ${teacher.name}`}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full items-center justify-center bg-gradient-to-br from-stone-600 via-neutral-700 to-zinc-900">
@@ -54,8 +56,7 @@ export function TeacherCard({
 
         <div className={`space-y-2 ${compact ? "p-3" : "p-4"}`}>
           <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
-            {teacher.tradition}
-            {!compact && ` · ${teacher.lineage}`}
+            {formatTeacherSchoolLine(teacher, compact)}
           </p>
           <h3
             className={`line-clamp-2 font-[family-name:var(--font-fraunces)] font-semibold leading-snug text-ink group-hover:text-brand ${

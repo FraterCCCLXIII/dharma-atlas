@@ -10,11 +10,13 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { SiteLogo } from "@/components/layout/SiteLogo";
+import { SiteMenu } from "@/components/layout/SiteMenu";
 import {
   EntityToggle,
   getSearchPlaceholder,
 } from "@/components/explore/EntityToggle";
-import { entityFilterFromPath, pathFromEntityFilter } from "@/lib/explore-routes";
+import { useActiveFilterCount } from "@/components/explore/FilterBar";
+import { entityFilterFromPath, isExplorePath, pathFromEntityFilter } from "@/lib/explore-routes";
 import { useExploreStore } from "@/store/explore-store";
 
 interface SiteHeaderProps {
@@ -27,12 +29,12 @@ interface SiteHeaderProps {
 export function SiteHeader({
   children,
   className = "",
-  innerClassName = "max-w-[1600px] w-full",
+  innerClassName = "w-full",
   sticky = false,
 }: SiteHeaderProps) {
   return (
     <header
-      className={`z-30 shrink-0 border-b border-border bg-surface-elevated/95 backdrop-blur-md ${sticky ? "sticky top-0" : ""} ${className}`}
+      className={`relative z-50 shrink-0 overflow-visible border-b border-border bg-surface-elevated/95 backdrop-blur-md ${sticky ? "sticky top-0" : ""} ${className}`}
     >
       <div
         className={`mx-auto flex items-center px-4 py-3 sm:px-6 lg:px-8 ${innerClassName}`}
@@ -48,8 +50,12 @@ function NavBarLayout({ center }: { center: ReactNode }) {
     <div className="relative flex w-full items-center">
       <SiteLogo />
 
-      <div className="absolute left-1/2 flex max-w-[calc(100%-4rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-5rem)] sm:gap-3">
+      <div className="absolute left-1/2 flex max-w-[calc(100%-7.5rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-9rem)] sm:gap-3">
         {center}
+      </div>
+
+      <div className="ml-auto shrink-0 pl-2">
+        <SiteMenu />
       </div>
     </div>
   );
@@ -84,7 +90,7 @@ function SearchField({
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={getSearchPlaceholder(entityFilter)}
-        className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-10 text-sm text-ink shadow-[var(--shadow-card)] outline-none transition placeholder:text-ink-muted hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(184,137,74,0.15)]"
+        className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-10 text-sm text-ink shadow-[var(--shadow-card)] outline-none transition placeholder:text-ink-muted hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(184,137,74,0.15)] [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
       />
       {query && (
         <button
@@ -203,6 +209,21 @@ export function ExploreNav({ activeFilterCount }: ExploreNavProps) {
 export function DetailNav() {
   const router = useRouter();
   const pathname = usePathname();
+  const filtersOpen = useExploreStore((s) => s.filtersOpen);
+  const toggleFilters = useExploreStore((s) => s.toggleFilters);
+  const activeFilterCount = useActiveFilterCount();
+
+  const explorePath = pathFromEntityFilter(entityFilterFromPath(pathname));
+
+  const handleFilterToggle = () => {
+    if (isExplorePath(pathname)) {
+      toggleFilters();
+      return;
+    }
+
+    useExploreStore.setState({ filtersOpen: true });
+    router.push(explorePath);
+  };
 
   return (
     <SiteHeader sticky>
@@ -211,9 +232,12 @@ export function DetailNav() {
           <>
             <EntityToggle />
             <SearchField
-              onNavigateHome={() =>
-                router.push(pathFromEntityFilter(entityFilterFromPath(pathname)))
-              }
+              onNavigateHome={() => router.push(explorePath)}
+            />
+            <FilterToggleButton
+              filtersOpen={filtersOpen}
+              activeFilterCount={activeFilterCount}
+              onToggle={handleFilterToggle}
             />
           </>
         }

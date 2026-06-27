@@ -243,13 +243,13 @@ const SUBSCHOOL_RULES: SubschoolRule[] = [
     slug: "thai-forest",
     lineageSchool: "theravada",
     placeTraditions: ["Theravada"],
-    pattern: /forest monastery|wat metta|abhayagiri|amaravati/i,
+    pattern: /thai forest|forest monastery|wat metta|abhayagiri|amaravati/i,
   },
   {
     slug: "thai",
     lineageSchool: "southeast-asian",
     placeTraditions: ["Southeast Asian"],
-    pattern: /thai|wat [a-z]|wat\b/i,
+    pattern: /\bthai(?! forest)\b|wat [a-z]|wat\b/i,
   },
   {
     slug: "burmese",
@@ -536,10 +536,21 @@ type TeacherSchoolFields = {
   lineage: string;
   shortBio: string;
   topics: string[];
+  biography?: string[];
 };
 
+function normalizeForMatch(text: string): string {
+  return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+}
+
 function teacherHaystack(teacher: TeacherSchoolFields): string {
-  return [teacher.name, teacher.lineage, teacher.shortBio, ...teacher.topics].join(" ");
+  return [
+    teacher.name,
+    teacher.lineage,
+    teacher.shortBio,
+    ...teacher.topics,
+    ...(teacher.biography ?? []),
+  ].join(" ");
 }
 
 /** Infer subschool slugs from teacher text fields. */
@@ -552,6 +563,80 @@ export function inferTeacherSchools(teacher: TeacherSchoolFields): string[] {
   }
 
   return [...subschools].sort((a, b) => subschoolLabel(a).localeCompare(subschoolLabel(b)));
+}
+
+function sortLineageSchoolIds(ids: string[]): string[] {
+  return [...ids].sort((a, b) => {
+    const aLabel = getLineageSchoolById(a)?.label ?? a;
+    const bLabel = getLineageSchoolById(b)?.label ?? b;
+    return aLabel.localeCompare(bLabel);
+  });
+}
+
+/** Infer major school ids (Theravada, Zen, Tibetan, …) from teacher text fields. */
+export function inferTeacherLineageSchoolIds(teacher: TeacherSchoolFields): string[] {
+  const haystack = normalizeForMatch(teacherHaystack(teacher));
+  const fromLabels = new Set<string>();
+
+  for (const school of LINEAGE_SCHOOLS) {
+    if (haystack.includes(normalizeForMatch(school.label))) {
+      fromLabels.add(school.id);
+    }
+  }
+
+  if (fromLabels.size > 0) {
+    return sortLineageSchoolIds([...fromLabels]);
+  }
+
+  const fromSubschools = new Set<string>();
+  for (const subschool of inferTeacherSchools(teacher)) {
+    const parentId = getSubschoolParentSchoolId(subschool);
+    if (parentId) fromSubschools.add(parentId);
+  }
+
+  return sortLineageSchoolIds([...fromSubschools]);
+}
+
+/** Card label: major school(s), optionally with inferred subschools when not compact. */
+export function formatTeacherSchoolLine(
+  teacher: TeacherSchoolFields,
+  compact = false,
+): string {
+  const directSchool = getLineageSchoolById(teacher.tradition);
+  if (directSchool) {
+    const subschools = inferTeacherSchools(teacher);
+    if (!compact && subschools.length) {
+      return `${directSchool.label} · ${subschools.map(subschoolLabel).join(" · ")}`;
+    }
+    return directSchool.label;
+  }
+
+  if (!isBuddhistTeacherTradition(teacher.tradition)) {
+    return teacher.tradition;
+  }
+
+  const lineageSchoolIds = inferTeacherLineageSchoolIds(teacher);
+  const subschools = inferTeacherSchools(teacher);
+
+  if (lineageSchoolIds.length) {
+    const schools = lineageSchoolIds
+      .map((id) => getLineageSchoolById(id)?.label ?? id)
+      .join(" · ");
+    if (!compact && subschools.length) {
+      return `${schools} · ${subschools.map(subschoolLabel).join(" · ")}`;
+    }
+    return schools;
+  }
+
+  if (subschools.length) {
+    return subschools.map(subschoolLabel).join(" · ");
+  }
+
+  if (teacher.lineage.trim()) {
+    return teacher.lineage;
+  }
+
+  return teacher.tradition;
 }
 
 function teacherMatchesLineageSchool(

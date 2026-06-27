@@ -188,7 +188,7 @@ export function ExplorePage() {
 
           <section
             aria-hidden={!showMap}
-            className={`relative min-h-0 flex-1 p-3 sm:p-4 lg:p-5 ${
+            className={`relative z-0 min-h-0 flex-1 p-3 sm:p-4 lg:p-5 ${
               !showMap
                 ? "hidden"
                 : mobileView === "list"
