@@ -11,7 +11,7 @@ import {
   ShareNetwork,
   Sparkle,
 } from "@phosphor-icons/react";
-import { getPlaceMapsUrls } from "@/lib/dataset";
+import { getPlaceMapsUrls } from "@/lib/place-maps";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import type { Place } from "@/types/place";

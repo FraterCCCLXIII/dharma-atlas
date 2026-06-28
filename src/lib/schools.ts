@@ -1,109 +1,46 @@
 import type { Place } from "@/types/place";
+import type { LineageSchoolDef, OntologySnapshot } from "@/types/ontology";
+import { DEFAULT_ONTOLOGY_SNAPSHOT } from "@/lib/ontology/defaults";
+
+export type { LineageSchoolDef } from "@/types/ontology";
 
 export type EntityScope = "all" | "locations" | "people";
 
+let activeSnapshot: OntologySnapshot = DEFAULT_ONTOLOGY_SNAPSHOT;
+
+export function setOntologySnapshot(snapshot: OntologySnapshot) {
+  activeSnapshot = snapshot;
+}
+
+export function getActiveOntologySnapshot(): OntologySnapshot {
+  return activeSnapshot;
+}
+
+function getLineageSchools(): LineageSchoolDef[] {
+  return activeSnapshot.lineageSchools;
+}
+
+function getSubschoolRules() {
+  return activeSnapshot.subschoolRules;
+}
+
+function getSubschoolLabels() {
+  return activeSnapshot.subschoolLabels;
+}
+
+function getBuddhistPlaceTraditions() {
+  return activeSnapshot.buddhistPlaceTraditions;
+}
+
+function getOtherTraditionDefs() {
+  return activeSnapshot.otherTraditions;
+}
+
 /** Root Buddhist tradition id stored in filters and place/teacher data. */
-export const BUDDHIST_TRADITION_ID = "Buddhist";
+export const BUDDHIST_TRADITION_ID = DEFAULT_ONTOLOGY_SNAPSHOT.buddhistRoot.filterId;
 
 /** Display label for the Buddhist root tradition filter. */
-export const BUDDHIST_TRADITION_LABEL = "Buddhism";
-
-/** Labels for subschool slugs (specific sects and branches). */
-export const SUBSCHOOL_LABELS: Record<string, string> = {
-  nyingma: "Nyingma",
-  kagyu: "Kagyu",
-  gelug: "Gelug",
-  sakya: "Sakya",
-  bon: "Bon",
-  shambhala: "Shambhala",
-  "diamond-way": "Diamond Way",
-  soto: "Soto",
-  rinzai: "Rinzai",
-  obaku: "Obaku",
-  chan: "Chan",
-  son: "Son (Korean)",
-  thien: "Thiền (Vietnamese)",
-  "sanbo-zen": "Sanbo Zen",
-  "dharma-drum": "Dharma Drum",
-  vipassana: "Vipassana",
-  insight: "Insight Meditation",
-  "thai-forest": "Thai Forest",
-  thai: "Thai",
-  burmese: "Burmese",
-  lao: "Lao",
-  cambodian: "Cambodian",
-  "sri-lankan": "Sri Lankan",
-  "soka-gakkai": "Soka Gakkai",
-  "jodo-shin": "Jodo Shin",
-  "jodo-shu": "Jodo Shu",
-};
-
-/** @deprecated Use SUBSCHOOL_LABELS */
-export const SCHOOL_LABELS = SUBSCHOOL_LABELS;
-
-export type LineageSchoolDef = {
-  slug: string;
-  id: string;
-  label: string;
-  placeTraditions: string[];
-};
-
-/**
- * Major Buddhist schools (lineages / vehicles) nested under Buddhism.
- * Filter id matches place.tradition where applicable.
- */
-export const LINEAGE_SCHOOLS: LineageSchoolDef[] = [
-  {
-    slug: "tibetan",
-    id: "Tibetan",
-    label: "Tibetan",
-    placeTraditions: ["Tibetan"],
-  },
-  {
-    slug: "zen",
-    id: "Zen",
-    label: "Zen",
-    placeTraditions: ["Zen", "Chinese", "Vietnamese"],
-  },
-  {
-    slug: "theravada",
-    id: "Theravada",
-    label: "Theravada",
-    placeTraditions: ["Theravada"],
-  },
-  {
-    slug: "southeast-asian",
-    id: "Southeast Asian",
-    label: "Southeast Asian",
-    placeTraditions: ["Southeast Asian"],
-  },
-  {
-    slug: "pure-land",
-    id: "Pure Land",
-    label: "Pure Land",
-    placeTraditions: ["Pure Land"],
-  },
-  {
-    slug: "won",
-    id: "Won Buddhism",
-    label: "Won Buddhism",
-    placeTraditions: ["Won Buddhism"],
-  },
-  {
-    slug: "mahayana",
-    id: "Mahayana",
-    label: "Mahayana",
-    placeTraditions: ["Mahayana"],
-  },
-];
-
-export const BUDDHIST_PLACE_TRADITIONS = [
-  BUDDHIST_TRADITION_ID,
-  ...LINEAGE_SCHOOLS.flatMap((school) => school.placeTraditions),
-];
-
-/** @deprecated Use LINEAGE_SCHOOLS ids */
-export const TRADITIONS_WITH_SCHOOLS = LINEAGE_SCHOOLS.map((school) => school.id);
+export const BUDDHIST_TRADITION_LABEL = DEFAULT_ONTOLOGY_SNAPSHOT.buddhistRoot.label;
 
 export type TraditionFilterGroup = {
   tradition: string;
@@ -125,182 +62,20 @@ export type LineageFilterTree = {
   otherTraditions: { id: string; label: string }[];
 };
 
-type SubschoolRule = {
-  slug: string;
-  lineageSchool: string;
-  placeTraditions: string[];
-  pattern: RegExp;
-};
-
-const SUBSCHOOL_RULES: SubschoolRule[] = [
-  {
-    slug: "nyingma",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan"],
-    pattern:
-      /nyingma|palyul|dzogchen|drikung dzogchen|emaho|saraha|ati ling|chagdud|padma ling|longchen|nam cho|buddha dharma|buddha-dharma/i,
-  },
-  {
-    slug: "kagyu",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan"],
-    pattern:
-      /kagyu|karma thegsum|karma kagy|ktd\b|ktc\b|thegsum choling|drikung(?! dzogchen)|drigung|barom kagyu|kagyu changchub|kagyu droden|kagyu sukha|kagyu takten|karme ling|karmapa/i,
-  },
-  {
-    slug: "gelug",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan"],
-    pattern:
-      /gelug|ganden|sera je|seraje|drepung|tashi lh|tashi gomang|fpmt|liberation prison|jewel heart|guhyasamaja|tushita|gaden/i,
-  },
-  {
-    slug: "sakya",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan"],
-    pattern: /sakya|sakyong|sakya phuntsok|sakya monastery/i,
-  },
-  {
-    slug: "bon",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan"],
-    pattern: /\bbon\b|yungdrung bon|riwo sang/i,
-  },
-  {
-    slug: "shambhala",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan", "Buddhist"],
-    pattern: /shambhala/i,
-  },
-  {
-    slug: "diamond-way",
-    lineageSchool: "tibetan",
-    placeTraditions: ["Tibetan"],
-    pattern: /diamond way/i,
-  },
-  {
-    slug: "soto",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen"],
-    pattern: /soto|sfzc|san francisco zen center|zen center of los angeles|zcla\b/i,
-  },
-  {
-    slug: "rinzai",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen"],
-    pattern: /rinzai|ryugenji|daiyuzenji|korinji|rinzai-ji/i,
-  },
-  {
-    slug: "obaku",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen"],
-    pattern: /obaku/i,
-  },
-  {
-    slug: "chan",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen", "Chinese"],
-    pattern:
-      /chan (center|monastery|temple)|chung tai|dharma drum|ddmba|fo guang|foguang|dharma realm|city of ten thousand buddhas|cttb\b/i,
-  },
-  {
-    slug: "son",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen"],
-    pattern: /\bson\b|kwan um|seung sahn|korean zen|bo hyun sa|hwagyesa|musangsa/i,
-  },
-  {
-    slug: "thien",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen", "Vietnamese"],
-    pattern: /thien (that|tam|vien)|thien that|thien tam|thien vien/i,
-  },
-  {
-    slug: "sanbo-zen",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen"],
-    pattern: /sanbo zen|san-un|san un/i,
-  },
-  {
-    slug: "dharma-drum",
-    lineageSchool: "zen",
-    placeTraditions: ["Zen"],
-    pattern: /dharma drum|ddmba/i,
-  },
-  {
-    slug: "vipassana",
-    lineageSchool: "theravada",
-    placeTraditions: ["Theravada"],
-    pattern: /vipassana|dhamma [a-z]|dhamma\b/i,
-  },
-  {
-    slug: "insight",
-    lineageSchool: "theravada",
-    placeTraditions: ["Theravada"],
-    pattern: /insight (meditation|denver|community|retreat)|heart of the dharma/i,
-  },
-  {
-    slug: "thai-forest",
-    lineageSchool: "theravada",
-    placeTraditions: ["Theravada"],
-    pattern: /thai forest|forest monastery|wat metta|abhayagiri|amaravati/i,
-  },
-  {
-    slug: "thai",
-    lineageSchool: "southeast-asian",
-    placeTraditions: ["Southeast Asian"],
-    pattern: /\bthai(?! forest)\b|wat [a-z]|wat\b/i,
-  },
-  {
-    slug: "burmese",
-    lineageSchool: "southeast-asian",
-    placeTraditions: ["Southeast Asian"],
-    pattern: /burmese|chanmyay|myanmar|ဇေယျ/i,
-  },
-  {
-    slug: "lao",
-    lineageSchool: "southeast-asian",
-    placeTraditions: ["Southeast Asian"],
-    pattern: /\blao\b/i,
-  },
-  {
-    slug: "cambodian",
-    lineageSchool: "southeast-asian",
-    placeTraditions: ["Southeast Asian"],
-    pattern: /cambodian|khmer|wat khmer/i,
-  },
-  {
-    slug: "sri-lankan",
-    lineageSchool: "southeast-asian",
-    placeTraditions: ["Southeast Asian"],
-    pattern: /sri lankan|sinhalese|sinhala/i,
-  },
-  {
-    slug: "soka-gakkai",
-    lineageSchool: "pure-land",
-    placeTraditions: ["Pure Land"],
-    pattern: /soka gakkai|sgi-usa|sgi usa|\bsgi\b|fncc\b/i,
-  },
-  {
-    slug: "jodo-shin",
-    lineageSchool: "pure-land",
-    placeTraditions: ["Pure Land"],
-    pattern: /jodo shin|shinshu|hongwanji|nishi hongwanji|higashi hongwanji|buddhist church of/i,
-  },
-  {
-    slug: "jodo-shu",
-    lineageSchool: "pure-land",
-    placeTraditions: ["Pure Land"],
-    pattern: /jodo shu|jodoshu|jōdo shū/i,
-  },
-];
-
 function getLineageSchoolById(id: string): LineageSchoolDef | undefined {
-  return LINEAGE_SCHOOLS.find((school) => school.id === id);
+  return getLineageSchools().find((school) => school.id === id);
+}
+
+export function getSubschoolLabelMap(): Record<string, string> {
+  return getSubschoolLabels();
+}
+
+export function getBuddhistPlaceTraditionOptions(): string[] {
+  return getBuddhistPlaceTraditions();
 }
 
 export function subschoolLabel(slug: string): string {
-  return SUBSCHOOL_LABELS[slug] ?? slug;
+  return getSubschoolLabels()[slug] ?? slug;
 }
 
 /** @deprecated Use subschoolLabel */
@@ -309,7 +84,7 @@ export function schoolLabel(slug: string): string {
 }
 
 export function isBuddhistPlaceTradition(tradition: string): boolean {
-  return BUDDHIST_PLACE_TRADITIONS.includes(tradition);
+  return getBuddhistPlaceTraditions().includes(tradition);
 }
 
 export function isBuddhistTeacherTradition(tradition: string): boolean {
@@ -317,7 +92,7 @@ export function isBuddhistTeacherTradition(tradition: string): boolean {
 }
 
 export function getSubschoolSlugsForLineageSchool(schoolSlug: string): string[] {
-  return SUBSCHOOL_RULES.filter((rule) => rule.lineageSchool === schoolSlug).map(
+  return getSubschoolRules().filter((rule) => rule.lineageSchool === schoolSlug).map(
     (rule) => rule.slug,
   );
 }
@@ -331,7 +106,7 @@ export function getSubschoolSlugsForLineageSchoolId(schoolId: string): string[] 
 /** @deprecated Use getSubschoolSlugsForLineageSchoolId */
 export function getSchoolSlugsForTradition(tradition: string): string[] {
   if (tradition === BUDDHIST_TRADITION_ID) {
-    return SUBSCHOOL_RULES.map((rule) => rule.slug);
+    return getSubschoolRules().map((rule) => rule.slug);
   }
   return getSubschoolSlugsForLineageSchoolId(tradition);
 }
@@ -341,12 +116,15 @@ export type LineageFilterState = {
   schools: string[];
 };
 
-const LINEAGE_SCHOOL_IDS = LINEAGE_SCHOOLS.map((school) => school.id);
+function getLineageSchoolIds() {
+  return getLineageSchools().map((school) => school.id);
+}
 
 function otherTraditions(state: LineageFilterState): string[] {
+  const lineageSchoolIds = getLineageSchoolIds();
   return state.traditions.filter(
     (tradition) =>
-      tradition !== BUDDHIST_TRADITION_ID && !LINEAGE_SCHOOL_IDS.includes(tradition),
+      tradition !== BUDDHIST_TRADITION_ID && !lineageSchoolIds.includes(tradition),
   );
 }
 
@@ -355,10 +133,10 @@ export function isBuddhismRootSelected(state: LineageFilterState): boolean {
 }
 
 export function getSubschoolParentSchoolId(subschool: string): string | null {
-  const rule = SUBSCHOOL_RULES.find((entry) => entry.slug === subschool);
+  const rule = getSubschoolRules().find((entry) => entry.slug === subschool);
   if (!rule) return null;
 
-  const school = LINEAGE_SCHOOLS.find((entry) => entry.slug === rule.lineageSchool);
+  const school = getLineageSchools().find((entry) => entry.slug === rule.lineageSchool);
   return school?.id ?? null;
 }
 
@@ -402,7 +180,7 @@ export function toggleLineageSchoolSelection(
 ): LineageFilterState {
   const preserved = otherTraditions(state);
   const selectedSchools = state.traditions.filter((tradition) =>
-    LINEAGE_SCHOOL_IDS.includes(tradition),
+    getLineageSchoolIds().includes(tradition),
   );
 
   if (isBuddhismRootSelected(state)) {
@@ -461,7 +239,7 @@ export function countLineageFilterSelections(state: LineageFilterState): number 
   if (isBuddhismRootSelected(state)) return 1;
 
   const selectedSchools = state.traditions.filter((tradition) =>
-    LINEAGE_SCHOOL_IDS.includes(tradition),
+    getLineageSchoolIds().includes(tradition),
   ).length;
   const otherSelectedTraditions = otherTraditions(state).length;
 
@@ -503,7 +281,7 @@ export function placeMatchesTraditionFilter(
 export function inferSchools(place: Pick<Place, "name" | "tradition">): string[] {
   const subschools = new Set<string>();
 
-  for (const rule of SUBSCHOOL_RULES) {
+  for (const rule of getSubschoolRules()) {
     if (!rule.placeTraditions.includes(place.tradition)) continue;
     if (rule.pattern.test(place.name)) subschools.add(rule.slug);
   }
@@ -558,7 +336,7 @@ export function inferTeacherSchools(teacher: TeacherSchoolFields): string[] {
   const haystack = teacherHaystack(teacher);
   const subschools = new Set<string>();
 
-  for (const rule of SUBSCHOOL_RULES) {
+  for (const rule of getSubschoolRules()) {
     if (rule.pattern.test(haystack)) subschools.add(rule.slug);
   }
 
@@ -578,7 +356,7 @@ export function inferTeacherLineageSchoolIds(teacher: TeacherSchoolFields): stri
   const haystack = normalizeForMatch(teacherHaystack(teacher));
   const fromLabels = new Set<string>();
 
-  for (const school of LINEAGE_SCHOOLS) {
+  for (const school of getLineageSchools()) {
     if (haystack.includes(normalizeForMatch(school.label))) {
       fromLabels.add(school.id);
     }
@@ -693,14 +471,14 @@ function buildLineageSchoolNodes(
 
   if (includePlaces) {
     for (const place of places) {
-      for (const school of LINEAGE_SCHOOLS) {
+      for (const school of getLineageSchools()) {
         if (placeMatchesLineageSchool(place, school)) {
           schoolHasEntities.add(school.slug);
         }
       }
 
       for (const subschool of getSchools(place)) {
-        const rule = SUBSCHOOL_RULES.find((entry) => entry.slug === subschool);
+        const rule = getSubschoolRules().find((entry) => entry.slug === subschool);
         if (rule) {
           schoolHasEntities.add(rule.lineageSchool);
           addSubschoolToLineageSchool(subschoolsBySchool, rule.lineageSchool, subschool);
@@ -715,7 +493,7 @@ function buildLineageSchoolNodes(
         isBuddhistTeacherTradition(teacher.tradition) ||
         inferTeacherSchools(teacher).length > 0
       ) {
-        for (const school of LINEAGE_SCHOOLS) {
+        for (const school of getLineageSchools()) {
           if (teacherMatchesLineageSchool(teacher, school)) {
             schoolHasEntities.add(school.slug);
           }
@@ -723,7 +501,7 @@ function buildLineageSchoolNodes(
       }
 
       for (const subschool of inferTeacherSchools(teacher)) {
-        const rule = SUBSCHOOL_RULES.find((entry) => entry.slug === subschool);
+        const rule = getSubschoolRules().find((entry) => entry.slug === subschool);
         if (rule) {
           schoolHasEntities.add(rule.lineageSchool);
           addSubschoolToLineageSchool(subschoolsBySchool, rule.lineageSchool, subschool);
@@ -732,7 +510,7 @@ function buildLineageSchoolNodes(
     }
   }
 
-  return LINEAGE_SCHOOLS.filter((school) => schoolHasEntities.has(school.slug)).map(
+  return getLineageSchools().filter((school) => schoolHasEntities.has(school.slug)).map(
     (school) => ({
       id: school.id,
       label: school.label,
@@ -762,7 +540,9 @@ export function getLineageFilterTree(
     includeTeachers,
   );
 
-  const otherTraditionIds = new Set<string>();
+  const otherTraditionIds = new Set<string>(
+    getOtherTraditionDefs().map((tradition) => tradition.filterId),
+  );
 
   if (includeTeachers) {
     for (const teacher of teachers) {
@@ -780,15 +560,19 @@ export function getLineageFilterTree(
     }
   }
 
+  const otherTraditionLabels = new Map(
+    getOtherTraditionDefs().map((tradition) => [tradition.filterId, tradition.label]),
+  );
+
   return {
     buddhism: {
-      id: BUDDHIST_TRADITION_ID,
-      label: BUDDHIST_TRADITION_LABEL,
+      id: activeSnapshot.buddhistRoot.filterId,
+      label: activeSnapshot.buddhistRoot.label,
       schools,
     },
     otherTraditions: [...otherTraditionIds]
       .sort((a, b) => a.localeCompare(b))
-      .map((id) => ({ id, label: id })),
+      .map((id) => ({ id, label: otherTraditionLabels.get(id) ?? id })),
   };
 }
 

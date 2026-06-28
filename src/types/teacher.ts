@@ -2,6 +2,7 @@ export type Book = {
   title: string;
   year: number;
   publisher: string;
+  url?: string;
 };
 
 export type Retreat = {
@@ -38,7 +39,6 @@ export type Teacher = {
   socials: { label: string; url: string }[];
   bibliography: Book[];
   retreats: Retreat[];
-  archiveNumber: string;
   relations?: {
     teachers?: Relation[];
     peers?: Relation[];

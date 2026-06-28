@@ -2,25 +2,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { TeacherPageView } from "@/components/teacher/TeacherPageView";
 import {
-  getAllTeachers,
   getSimilarTeachers,
   getTeacherBySlug,
-  getTeacherStaticParams,
+  getTeacherPhotoMap,
 } from "@/lib/teachers-dataset";
 
 interface TeacherPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return getTeacherStaticParams();
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: TeacherPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const teacher = getTeacherBySlug(slug);
+  const teacher = await getTeacherBySlug(slug);
 
   if (!teacher) {
     return { title: "Teacher not found | Dharma Streams" };
@@ -39,20 +36,24 @@ export async function generateMetadata({
 
 export default async function TeacherPage({ params }: TeacherPageProps) {
   const { slug } = await params;
-  const teacher = getTeacherBySlug(slug);
+  const teacher = await getTeacherBySlug(slug);
 
   if (!teacher) {
     notFound();
   }
 
-  const allTeachers = getAllTeachers();
-  const similar = getSimilarTeachers(teacher);
+  const [similar, photoMap] = await Promise.all([
+    getSimilarTeachers(teacher),
+    getTeacherPhotoMap(),
+  ]);
+
+  const teacherPhotos = Object.fromEntries(photoMap);
 
   return (
     <TeacherPageView
       teacher={teacher}
       similar={similar}
-      allTeachers={allTeachers}
+      teacherPhotos={teacherPhotos}
     />
   );
 }

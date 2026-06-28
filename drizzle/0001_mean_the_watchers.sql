@@ -1,0 +1,1 @@
+ALTER TABLE "teacher_books" ADD COLUMN "url" text;

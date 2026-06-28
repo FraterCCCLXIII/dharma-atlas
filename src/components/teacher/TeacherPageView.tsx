@@ -27,7 +27,7 @@ import { SimilarTeachers } from "@/components/teacher/SimilarTeachers";
 interface TeacherPageViewProps {
   teacher: Teacher;
   similar: Teacher[];
-  allTeachers: Teacher[];
+  teacherPhotos: Record<string, string>;
 }
 
 function formatWebsiteHref(website: string): string {
@@ -49,11 +49,11 @@ function DetailRow({ label, value }: { label: string; value: string }) {
 function RelationGroup({
   title,
   people,
-  allTeachers,
+  teacherPhotos,
 }: {
   title: string;
   people: Relation[];
-  allTeachers: Teacher[];
+  teacherPhotos: Record<string, string>;
 }) {
   return (
     <div className="space-y-4">
@@ -62,9 +62,8 @@ function RelationGroup({
       </h3>
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {people.map((person) => {
-          const linked = person.slug
-            ? allTeachers.find((candidate) => candidate.slug === person.slug)
-            : undefined;
+          const hasProfile = Boolean(person.slug && person.slug in teacherPhotos);
+          const photo = person.slug ? teacherPhotos[person.slug] : undefined;
 
           return (
             <li
@@ -72,9 +71,9 @@ function RelationGroup({
               className="flex items-start gap-3 rounded-xl border border-border bg-surface-elevated p-3"
             >
               <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-muted">
-                {linked?.photo ? (
+                {photo ? (
                   <img
-                    src={linked.photo}
+                    src={photo}
                     alt={person.name}
                     loading="lazy"
                     className="h-full w-full object-cover"
@@ -84,9 +83,9 @@ function RelationGroup({
                 )}
               </div>
               <div className="min-w-0">
-                {linked ? (
+                {hasProfile && person.slug ? (
                   <Link
-                    href={`/teacher/${linked.slug}`}
+                    href={`/teacher/${person.slug}`}
                     className="font-[family-name:var(--font-fraunces)] text-base font-semibold text-ink transition hover:text-brand"
                   >
                     {person.name}
@@ -116,7 +115,7 @@ function RelationGroup({
 export function TeacherPageView({
   teacher,
   similar,
-  allTeachers,
+  teacherPhotos,
 }: TeacherPageViewProps) {
   const gradient = teacherTraditionGradient(teacher.tradition);
   const deceased = isDeceased(teacher);
@@ -278,7 +277,7 @@ export function TeacherPageView({
                       <RelationGroup
                         title="Teachers"
                         people={teacher.relations.teachers}
-                        allTeachers={allTeachers}
+                        teacherPhotos={teacherPhotos}
                       />
                     )}
                   {teacher.relations.peers &&
@@ -286,7 +285,7 @@ export function TeacherPageView({
                       <RelationGroup
                         title="Peers & co-teachers"
                         people={teacher.relations.peers}
-                        allTeachers={allTeachers}
+                        teacherPhotos={teacherPhotos}
                       />
                     )}
                   {teacher.relations.students &&
@@ -294,7 +293,7 @@ export function TeacherPageView({
                       <RelationGroup
                         title="Notable students"
                         people={teacher.relations.students}
-                        allTeachers={allTeachers}
+                        teacherPhotos={teacherPhotos}
                       />
                     )}
                 </div>
@@ -315,9 +314,20 @@ export function TeacherPageView({
                       key={`${book.title}-${book.year}`}
                       className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between"
                     >
-                      <span className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
-                        {book.title}
-                      </span>
+                      {book.url ? (
+                        <a
+                          href={book.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink transition hover:text-brand"
+                        >
+                          {book.title}
+                        </a>
+                      ) : (
+                        <span className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
+                          {book.title}
+                        </span>
+                      )}
                       <span className="text-sm text-ink-muted">
                         {book.year} · {book.publisher}
                       </span>
