@@ -12,7 +12,11 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { MapPopoverCard } from "@/components/explore/MapPopoverCard";
-import { createPlaceMarkerIcon } from "@/lib/map-markers";
+import {
+  createPlaceMarkerIcon,
+  getMarkerIconOpacity,
+  getMarkerScale,
+} from "@/lib/map-markers";
 import { useExploreStore } from "@/store/explore-store";
 import type { Place } from "@/types/place";
 
@@ -111,6 +115,33 @@ function MapAutoControl({
       );
     });
   }, [hoveredId, places, map]);
+
+  return null;
+}
+
+function MapMarkerScale() {
+  const map = useMap();
+
+  useEffect(() => {
+    const applyScale = () => {
+      const zoom = map.getZoom();
+      const container = map.getContainer();
+      container.style.setProperty("--marker-scale", String(getMarkerScale(zoom)));
+      container.style.setProperty(
+        "--marker-icon-opacity",
+        String(getMarkerIconOpacity(zoom)),
+      );
+    };
+
+    applyScale();
+    map.on("zoom", applyScale);
+    map.on("zoomend", applyScale);
+
+    return () => {
+      map.off("zoom", applyScale);
+      map.off("zoomend", applyScale);
+    };
+  }, [map]);
 
   return null;
 }
@@ -215,6 +246,7 @@ export function PlaceMap({ places }: PlaceMapProps) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <MapMarkerScale />
       <MapAutoControl places={validPlaces} hoveredId={hoveredId} />
       <MapClickDismiss
         onDismiss={() => {

@@ -146,6 +146,8 @@ body {
   justify-content: center;
   width: 32px;
   height: 36px;
+  transform: scale(var(--marker-scale, 1));
+  transform-origin: center bottom;
 }
 
 .map-marker__circle {
@@ -163,10 +165,11 @@ body {
 .map-marker__circle svg {
   display: block;
   flex-shrink: 0;
+  opacity: var(--marker-icon-opacity, 1);
 }
 
 .map-marker--active .map-marker__circle {
-  transform: scale(1.16);
+  transform: scale(calc(1 + 0.16 * var(--marker-icon-opacity, 1)));
   box-shadow:
     0 0 0 3px rgba(255, 252, 247, 0.95),
     0 0 0 5px currentColor,

@@ -13,6 +13,24 @@ import type { Icon } from "@phosphor-icons/react";
 import type { Place, PlaceType } from "@/types/place";
 import { traditionMarkerColor } from "@/lib/places";
 
+const FULL_MARKER_ZOOM = 12;
+const DOT_MARKER_ZOOM = 5;
+const MIN_MARKER_SCALE = 0.32;
+
+export function getMarkerScale(zoom: number): number {
+  if (zoom >= FULL_MARKER_ZOOM) return 1;
+  if (zoom <= DOT_MARKER_ZOOM) return MIN_MARKER_SCALE;
+  const t = (zoom - DOT_MARKER_ZOOM) / (FULL_MARKER_ZOOM - DOT_MARKER_ZOOM);
+  return MIN_MARKER_SCALE + t * (1 - MIN_MARKER_SCALE);
+}
+
+/** Fades type icons out at low zoom so markers read as simple colored dots. */
+export function getMarkerIconOpacity(zoom: number): number {
+  if (zoom >= 10) return 1;
+  if (zoom <= 7) return 0;
+  return (zoom - 7) / 3;
+}
+
 const TYPE_ICONS: Record<PlaceType, Icon> = {
   Center: Buildings,
   Temple: House,
