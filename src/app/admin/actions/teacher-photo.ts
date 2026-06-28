@@ -1,11 +1,15 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { db } from "@/db/client";
+import { teachers } from "@/db/schema";
 import { requireSession } from "@/lib/auth-server";
 import { roles, type AppRole } from "@/lib/permissions";
 import {
   deleteLocalTeacherPhoto,
   isAllowedImageType,
+  resolveImageContentType,
   saveLocalTeacherPhoto,
   TEACHER_PHOTO_MAX_BYTES,
   type TeacherPhotoVariant,
@@ -37,15 +41,31 @@ export async function uploadTeacherPhotoAction(
   if (file.size > TEACHER_PHOTO_MAX_BYTES) {
     throw new Error("Image must be 5 MB or smaller.");
   }
-  if (!isAllowedImageType(file.type)) {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const contentType = resolveImageContentType(buffer, file.type);
+  if (!isAllowedImageType(contentType)) {
     throw new Error("Unsupported image type. Use JPEG, PNG, WebP, or GIF.");
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const path = saveLocalTeacherPhoto(normalizedSlug, buffer, file.type, variant);
+  const path = saveLocalTeacherPhoto(normalizedSlug, buffer, contentType, variant);
+
+  const existing = await db
+    .select({ slug: teachers.slug })
+    .from(teachers)
+    .where(eq(teachers.slug, normalizedSlug))
+    .limit(1);
+
+  if (existing.length > 0) {
+    const patch =
+      variant === "hero"
+        ? { heroPhoto: path, updatedAt: new Date() }
+        : { photo: path, updatedAt: new Date() };
+    await db.update(teachers).set(patch).where(eq(teachers.slug, normalizedSlug));
+  }
 
   revalidatePath(`/teacher/${normalizedSlug}`);
   revalidatePath("/teachers");
+  revalidatePath("/admin/teachers");
 
   return { path };
 }

@@ -22,7 +22,47 @@ export function extFromContentType(contentType: string): string {
 }
 
 export function isAllowedImageType(contentType: string): boolean {
-  return ALLOWED_TYPES.has(contentType.split(";")[0].trim().toLowerCase());
+  const base = contentType.split(";")[0].trim().toLowerCase();
+  if (!base) return false;
+  return ALLOWED_TYPES.has(base);
+}
+
+export function inferImageType(buffer: Buffer): string | null {
+  if (buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+    return "image/jpeg";
+  }
+  if (
+    buffer.length >= 8 &&
+    buffer[0] === 0x89 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x4e &&
+    buffer[3] === 0x47
+  ) {
+    return "image/png";
+  }
+  if (
+    buffer.length >= 6 &&
+    buffer[0] === 0x47 &&
+    buffer[1] === 0x49 &&
+    buffer[2] === 0x46 &&
+    buffer[3] === 0x38
+  ) {
+    return "image/gif";
+  }
+  if (
+    buffer.length >= 12 &&
+    buffer.toString("ascii", 0, 4) === "RIFF" &&
+    buffer.toString("ascii", 8, 12) === "WEBP"
+  ) {
+    return "image/webp";
+  }
+  return null;
+}
+
+export function resolveImageContentType(buffer: Buffer, declaredType: string): string {
+  const normalized = declaredType.split(";")[0].trim().toLowerCase();
+  if (normalized && isAllowedImageType(normalized)) return normalized;
+  return inferImageType(buffer) ?? normalized;
 }
 
 export { MAX_BYTES as TEACHER_PHOTO_MAX_BYTES };

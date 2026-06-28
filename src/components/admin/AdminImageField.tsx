@@ -1,11 +1,12 @@
 "use client";
 
 import { Trash, UploadSimple, User } from "@phosphor-icons/react";
-import { useId, useRef, useState } from "react";
+import { useId, useRef, useState, type ClipboardEvent } from "react";
 import {
   deleteTeacherPhotoAction,
   uploadTeacherPhotoAction,
 } from "@/app/admin/actions/teacher-photo";
+import { imageFromClipboard } from "@/lib/clipboard-image";
 
 interface AdminImageFieldProps {
   label: string;
@@ -26,6 +27,7 @@ export function AdminImageField({
 }: AdminImageFieldProps) {
   const inputId = useId();
   const fileRef = useRef<HTMLInputElement>(null);
+  const pasteRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -53,6 +55,16 @@ export function AdminImageField({
     }
   }
 
+  function handlePaste(event: ClipboardEvent<HTMLDivElement>) {
+    if (busy || !slugReady) return;
+
+    const file = imageFromClipboard(event);
+    if (!file) return;
+
+    event.preventDefault();
+    void handleUpload(file);
+  }
+
   async function handleDelete() {
     if (!value) return;
     if (!confirm("Remove this image?")) return;
@@ -77,15 +89,30 @@ export function AdminImageField({
       <p className="text-xs font-semibold text-ink-secondary">{label}</p>
 
       <div
-        className={`relative overflow-hidden rounded-xl border border-border bg-surface-muted ${aspectClassName} max-w-xs`}
+        ref={pasteRef}
+        tabIndex={slugReady && !busy ? 0 : -1}
+        role="button"
+        aria-label={`${label} paste target`}
+        onPaste={handlePaste}
+        onClick={() => pasteRef.current?.focus()}
+        className={`relative max-w-xs overflow-hidden rounded-xl border bg-surface-muted outline-none transition ${
+          slugReady
+            ? "cursor-pointer border-border hover:border-brand/40 focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/30"
+            : "border-border"
+        } ${aspectClassName}`}
       >
         {value ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={value} alt="" className="h-full w-full object-cover" />
+          <img src={value} alt="" className="pointer-events-none h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-2 text-ink-muted">
+          <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-2 px-4 text-center text-ink-muted">
             <User size={40} weight="duotone" className="opacity-40" />
             <span className="text-xs">No image</span>
+            {slugReady && (
+              <span className="text-[11px] leading-snug text-ink-muted/80">
+                Click here, then paste
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -132,7 +159,13 @@ export function AdminImageField({
       </div>
 
       {!slugReady && (
-        <p className="text-xs text-ink-muted">Set a slug first, then upload a portrait.</p>
+        <p className="text-xs text-ink-muted">Set a slug first, then upload or paste a portrait.</p>
+      )}
+
+      {slugReady && (
+        <p className="max-w-xs text-xs text-ink-muted">
+          Click the preview and paste from your clipboard (⌘V / Ctrl+V), or use Upload.
+        </p>
       )}
 
       {error && (
