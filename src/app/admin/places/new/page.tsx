@@ -20,6 +20,7 @@ export default function NewPlacePage() {
         phone: null,
         website: null,
         schools: [],
+        isDraft: false,
       }}
     />
   );

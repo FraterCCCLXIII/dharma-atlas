@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { getPlacesCount } from "@/lib/data/places";
 import { getTeachersCount } from "@/lib/data/teachers";
+import { getPendingReportsCount } from "@/lib/data/reports";
 import { getPendingSubmissionsCount } from "@/lib/data/submissions";
 
 export default async function AdminDashboardPage() {
-  const [teacherCount, placeCount, pendingCount] = await Promise.all([
+  const [teacherCount, placeCount, pendingSubmissions, pendingReports] = await Promise.all([
     getTeachersCount(),
     getPlacesCount(),
     getPendingSubmissionsCount(),
+    getPendingReportsCount(),
   ]);
 
   const cards = [
@@ -15,8 +17,13 @@ export default async function AdminDashboardPage() {
     { label: "Locations", count: placeCount, href: "/admin/places" },
     {
       label: "Pending submissions",
-      count: pendingCount,
+      count: pendingSubmissions,
       href: "/admin/submissions",
+    },
+    {
+      label: "Pending reports",
+      count: pendingReports,
+      href: "/admin/reports",
     },
   ];
 
@@ -29,7 +36,7 @@ export default async function AdminDashboardPage() {
         Manage directory content, review submissions, and publish updates.
       </p>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-3">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
           <Link
             key={card.href}

@@ -48,6 +48,7 @@ export const teacherInputSchema = z.object({
   bibliography: z.array(bookSchema),
   retreats: z.array(retreatSchema),
   relations: z.array(relationSchema),
+  isDraft: z.boolean().default(false),
 });
 
 export type TeacherInput = z.infer<typeof teacherInputSchema>;

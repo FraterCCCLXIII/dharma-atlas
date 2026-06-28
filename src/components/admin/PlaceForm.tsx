@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { fieldClassName, FormField } from "@/components/forms/FormField";
+import { DraftStatusField } from "@/components/admin/DraftStatusField";
 import {
   getActiveOntologySnapshot,
   getBuddhistPlaceTraditionOptions,
@@ -30,6 +31,7 @@ const emptyPlace = (): PlaceInput => ({
   phone: null,
   website: null,
   schools: [],
+  isDraft: false,
 });
 
 const KNOWN_SCHOOL_SLUGS = Object.keys(getSubschoolLabelMap()).sort((a, b) =>
@@ -327,6 +329,13 @@ export function PlaceForm({ initial, mode }: PlaceFormProps) {
             placeholder="custom-slug, another-slug"
           />
         </FormField>
+      </FormSection>
+
+      <FormSection title="Visibility">
+        <DraftStatusField
+          checked={place.isDraft}
+          onChange={(isDraft) => set("isDraft", isDraft)}
+        />
       </FormSection>
 
       {error && (

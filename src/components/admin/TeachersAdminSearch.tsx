@@ -1,8 +1,29 @@
 "use client";
 
+import { User } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { DraftBadge } from "@/components/admin/DraftStatusField";
 import type { Teacher } from "@/types/teacher";
+
+function TeacherRowPhoto({ teacher }: { teacher: Teacher }) {
+  return (
+    <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-surface-muted">
+      {teacher.photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={teacher.photo}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <User size={16} weight="duotone" className="text-ink-muted/50" />
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function TeachersAdminSearch({ teachers }: { teachers: Teacher[] }) {
   const [query, setQuery] = useState("");
@@ -47,7 +68,15 @@ export function TeachersAdminSearch({ teachers }: { teachers: Teacher[] }) {
           <tbody>
             {filtered.map((t) => (
               <tr key={t.slug} className="border-b border-border/60 hover:bg-surface-muted/50">
-                <td className="py-3 pr-4 font-medium">{t.name}</td>
+                <td className="py-3 pr-4">
+                  <div className="flex items-center gap-3">
+                    <TeacherRowPhoto teacher={t} />
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="font-medium">{t.name}</span>
+                      {t.isDraft && <DraftBadge />}
+                    </div>
+                  </div>
+                </td>
                 <td className="py-3 pr-4 text-ink-secondary">{t.tradition}</td>
                 <td className="py-3 text-ink-secondary">{t.location}</td>
                 <td className="py-3 text-right">

@@ -30,6 +30,7 @@ export function teacherToInput(teacher: Teacher): TeacherInput {
     bibliography: teacher.bibliography,
     retreats: teacher.retreats,
     relations,
+    isDraft: teacher.isDraft ?? false,
   };
 }
 
@@ -47,5 +48,6 @@ export function placeToInput(place: Place): PlaceInput {
     phone: place.phone,
     website: place.website,
     schools: place.schools ?? [],
+    isDraft: place.isDraft ?? false,
   };
 }

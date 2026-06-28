@@ -46,6 +46,7 @@ export async function approveSubmissionAction(formData: FormData) {
       shortBio: row.notes?.slice(0, 300) ?? "",
       website: row.website,
       photo: "",
+      isDraft: true,
     });
 
     await db
@@ -74,6 +75,7 @@ export async function approveSubmissionAction(formData: FormData) {
     address: row.location ?? "",
     website: row.website,
     schools: [],
+    isDraft: true,
   });
 
   await db

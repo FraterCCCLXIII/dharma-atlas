@@ -9,7 +9,7 @@ export default async function EditPlacePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const place = await getPlaceById(id);
+  const place = await getPlaceById(id, { includeDrafts: true });
   if (!place) notFound();
 
   return <PlaceForm mode="edit" initial={placeToInput(place)} />;

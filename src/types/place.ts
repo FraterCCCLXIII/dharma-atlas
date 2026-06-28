@@ -21,6 +21,7 @@ export interface Place {
   address: string;
   phone: string | null;
   website: string | null;
+  isDraft?: boolean;
 }
 
 export interface PlacesDataset {

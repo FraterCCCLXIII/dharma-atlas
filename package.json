@@ -10,6 +10,7 @@
     "import-data": "node scripts/import-kml.mjs",
     "import-sources": "PYTHONUNBUFFERED=1 python3 scripts/import-sources.py",
     "export-teachers": "node scripts/export-teachers.mjs",
+    "download-teacher-photos": "tsx scripts/download-teacher-photos.ts",
     "apply-schools": "node scripts/apply-manual-schools.mjs",
     "enrich-data": "PYTHONUNBUFFERED=1 python3 scripts/enrich-places.py",
     "db:generate": "drizzle-kit generate",

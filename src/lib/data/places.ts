@@ -5,6 +5,8 @@ import { db } from "@/db/client";
 import { places } from "@/db/schema";
 import type { Place, Faith, PlaceType } from "@/types/place";
 
+const publishedOnly = eq(places.isDraft, false);
+
 function rowToPlace(row: typeof places.$inferSelect): Place {
   return {
     id: row.id,
@@ -19,6 +21,7 @@ function rowToPlace(row: typeof places.$inferSelect): Place {
     phone: row.phone,
     website: row.website,
     schools: row.schools.length ? row.schools : undefined,
+    isDraft: row.isDraft,
   };
 }
 
@@ -27,19 +30,41 @@ export async function getPlacesCount() {
   return row?.count ?? 0;
 }
 
+export async function getPublishedPlacesCount() {
+  const [row] = await db.select({ count: count() }).from(places).where(publishedOnly);
+  return row?.count ?? 0;
+}
+
 export async function getAllPlaces(): Promise<Place[]> {
+  const rows = await db
+    .select()
+    .from(places)
+    .where(publishedOnly)
+    .orderBy(places.name);
+  return rows.map(rowToPlace);
+}
+
+export async function getAllPlacesForAdmin(): Promise<Place[]> {
   const rows = await db.select().from(places).orderBy(places.name);
   return rows.map(rowToPlace);
 }
 
 export async function getAllPlaceIds(): Promise<string[]> {
-  const rows = await db.select({ id: places.id }).from(places);
+  const rows = await db
+    .select({ id: places.id })
+    .from(places)
+    .where(publishedOnly);
   return rows.map((r) => r.id);
 }
 
-export async function getPlaceById(id: string): Promise<Place | null> {
+export async function getPlaceById(
+  id: string,
+  options?: { includeDrafts?: boolean },
+): Promise<Place | null> {
   const [row] = await db.select().from(places).where(eq(places.id, id)).limit(1);
-  return row ? rowToPlace(row) : null;
+  if (!row) return null;
+  if (row.isDraft && !options?.includeDrafts) return null;
+  return rowToPlace(row);
 }
 
 export async function searchPlaces(options: {

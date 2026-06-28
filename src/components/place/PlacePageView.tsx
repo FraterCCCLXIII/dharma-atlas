@@ -8,9 +8,9 @@ import {
   Compass,
   FlowerLotus,
   MapPin,
-  ShareNetwork,
   Sparkle,
 } from "@phosphor-icons/react";
+import { DetailPageActions } from "@/components/report/ReportEntryModal";
 import { getPlaceMapsUrls } from "@/lib/place-maps";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
@@ -40,17 +40,6 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
   const gradient = traditionGradient(place.tradition);
   const schools = getSchools(place);
-
-  const handleShare = () => {
-    if (navigator.share) {
-      void navigator.share({
-        title: place.name,
-        url: window.location.href,
-      });
-    } else {
-      void navigator.clipboard.writeText(window.location.href);
-    }
-  };
 
   return (
     <div className="min-h-dvh bg-surface">
@@ -113,14 +102,13 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
           </p>
           </div>
 
-          <button
-            type="button"
-            onClick={handleShare}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
-          >
-            <ShareNetwork size={16} weight="bold" />
-            <span className="hidden sm:inline">Share</span>
-          </button>
+          <DetailPageActions
+            shareTitle={place.name}
+            entityType="location"
+            entityId={place.id}
+            entityName={place.name}
+            entityPath={`/place/${place.id}`}
+          />
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">

@@ -12,6 +12,7 @@ import {
   teachers,
 } from "@/db/schema";
 import { requirePermission } from "@/lib/auth-server";
+import { deleteAllLocalPhotosForSlug } from "@/lib/teacher-photo-files";
 import { teacherInputSchema, type TeacherInput } from "@/lib/validations/teacher";
 
 async function replaceTeacherRelations(slug: string, input: TeacherInput) {
@@ -78,6 +79,7 @@ function teacherRow(input: TeacherInput) {
     photo: input.photo,
     heroPhoto: input.heroPhoto ?? null,
     website: input.website ?? null,
+    isDraft: input.isDraft,
     updatedAt: new Date(),
   };
 }
@@ -113,6 +115,7 @@ export async function updateTeacherAction(originalSlug: string, input: TeacherIn
 
 export async function deleteTeacherAction(slug: string) {
   await requirePermission("teacher", "delete");
+  deleteAllLocalPhotosForSlug(slug);
   await db.delete(teachers).where(eq(teachers.slug, slug));
 
   revalidatePath("/");

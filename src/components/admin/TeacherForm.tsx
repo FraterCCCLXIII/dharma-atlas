@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
+import { AdminImageField } from "@/components/admin/AdminImageField";
+import { DraftStatusField } from "@/components/admin/DraftStatusField";
 import { fieldClassName, FormField } from "@/components/forms/FormField";
 import type { TeacherInput } from "@/lib/validations/teacher";
 import {
@@ -31,6 +33,7 @@ const emptyTeacher = (): TeacherInput => ({
   bibliography: [],
   retreats: [],
   relations: [],
+  isDraft: false,
 });
 
 function FormSection({ title, description, children }: { title: string; description?: string; children: ReactNode }) {
@@ -358,13 +361,28 @@ export function TeacherForm({ initial, mode }: TeacherFormProps) {
         </FormField>
       </FormSection>
 
+      <FormSection title="Visibility">
+        <DraftStatusField
+          checked={teacher.isDraft}
+          onChange={(isDraft) => set("isDraft", isDraft)}
+        />
+      </FormSection>
+
       <FormSection title="Photos & links">
-        <FormField id="photo" label="Photo URL">
-          <input id="photo" value={teacher.photo} onChange={(e) => set("photo", e.target.value)} className={fieldClassName} />
-        </FormField>
-        <FormField id="heroPhoto" label="Hero photo URL">
-          <input id="heroPhoto" value={teacher.heroPhoto ?? ""} onChange={(e) => set("heroPhoto", e.target.value || undefined)} className={fieldClassName} />
-        </FormField>
+        <AdminImageField
+          label="Portrait"
+          slug={teacher.slug}
+          value={teacher.photo}
+          onChange={(path) => set("photo", path)}
+        />
+        <AdminImageField
+          label="Hero photo (optional)"
+          slug={teacher.slug}
+          value={teacher.heroPhoto ?? ""}
+          onChange={(path) => set("heroPhoto", path || undefined)}
+          aspectClassName="aspect-[16/9]"
+          variant="hero"
+        />
         <FormField id="website" label="Website">
           <input id="website" value={teacher.website ?? ""} onChange={(e) => set("website", e.target.value || undefined)} className={fieldClassName} />
         </FormField>

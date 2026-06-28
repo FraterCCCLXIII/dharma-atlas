@@ -9,7 +9,7 @@ export default async function EditTeacherPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const teacher = await getTeacherBySlug(slug);
+  const teacher = await getTeacherBySlug(slug, { includeDrafts: true });
   if (!teacher) notFound();
 
   return <TeacherForm mode="edit" initial={teacherToInput(teacher)} />;

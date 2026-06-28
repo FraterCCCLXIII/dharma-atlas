@@ -24,6 +24,7 @@ export const placeInputSchema = z.object({
   phone: z.string().optional().nullable(),
   website: z.string().optional().nullable(),
   schools: z.array(z.string()),
+  isDraft: z.boolean().default(false),
 });
 
 export type PlaceInput = z.infer<typeof placeInputSchema>;

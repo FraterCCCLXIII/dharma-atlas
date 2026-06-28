@@ -22,6 +22,7 @@ function placeRow(input: PlaceInput) {
     phone: input.phone ?? null,
     website: input.website ?? null,
     schools: input.schools,
+    isDraft: input.isDraft,
     updatedAt: new Date(),
   };
 }

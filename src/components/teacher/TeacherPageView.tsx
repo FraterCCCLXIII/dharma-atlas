@@ -8,12 +8,12 @@ import {
   CalendarBlank,
   FlowerLotus,
   Globe,
-  ShareNetwork,
   Sparkle,
   Translate,
   User,
   UsersThree,
 } from "@phosphor-icons/react";
+import { DetailPageActions } from "@/components/report/ReportEntryModal";
 import { teacherTraditionGradient } from "@/lib/teachers";
 import {
   formatLifespan,
@@ -127,18 +127,6 @@ export function TeacherPageView({
       (teacher.relations.peers?.length ?? 0) > 0 ||
       (teacher.relations.students?.length ?? 0) > 0);
 
-  const handleShare = () => {
-    if (navigator.share) {
-      void navigator.share({
-        title: teacher.name,
-        text: teacher.shortBio,
-        url: window.location.href,
-      });
-    } else {
-      void navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
   return (
     <div className="min-h-dvh bg-surface">
       <DetailNav />
@@ -178,14 +166,14 @@ export function TeacherPageView({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={handleShare}
-            className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
-          >
-            <ShareNetwork size={16} weight="bold" />
-            <span className="hidden sm:inline">Share</span>
-          </button>
+          <DetailPageActions
+            shareTitle={teacher.name}
+            shareText={teacher.shortBio}
+            entityType="teacher"
+            entityId={teacher.slug}
+            entityName={teacher.name}
+            entityPath={`/teacher/${teacher.slug}`}
+          />
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_360px]">

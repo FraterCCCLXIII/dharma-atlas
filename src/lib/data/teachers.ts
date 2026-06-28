@@ -14,6 +14,8 @@ import type { Teacher, Book, Retreat, Relation } from "@/types/teacher";
 type TeacherRow = typeof teachers.$inferSelect;
 type BookRow = typeof teacherBooks.$inferSelect;
 
+const publishedOnly = eq(teachers.isDraft, false);
+
 function sortBooks(books: BookRow[]) {
   return [...books].sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
 }
@@ -52,6 +54,7 @@ function assembleFromRows(
     photo: row.photo,
     heroPhoto: row.heroPhoto ?? undefined,
     website: row.website ?? undefined,
+    isDraft: row.isDraft,
     socials: socialRows.map((s) => ({ label: s.label, url: s.url })),
     bibliography: bookRows.map<Book>((b) => ({
       title: b.title,
@@ -88,17 +91,32 @@ async function assembleTeacher(row: TeacherRow): Promise<Teacher> {
   return assembleFromRows(row, bookRows, retreatRows, socialRows, relationRows);
 }
 
+async function loadAllTeachersRows(includeDrafts: boolean) {
+  const query = db.select().from(teachers).orderBy(teachers.name);
+  if (!includeDrafts) {
+    return query.where(publishedOnly);
+  }
+  return query;
+}
+
 export async function getTeachersCount() {
   const [row] = await db.select({ count: count() }).from(teachers);
   return row?.count ?? 0;
 }
 
-export async function getAllTeachers(): Promise<Teacher[]> {
-  const rows = await db.select().from(teachers).orderBy(teachers.name);
+export async function getPublishedTeachersCount() {
+  const [row] = await db.select({ count: count() }).from(teachers).where(publishedOnly);
+  return row?.count ?? 0;
+}
+
+async function assembleTeachersFromRows(rows: TeacherRow[]): Promise<Teacher[]> {
   if (rows.length === 0) return [];
 
   const [allBooks, allRetreats, allSocials, allRelations] = await Promise.all([
-    db.select().from(teacherBooks).orderBy(asc(teacherBooks.teacherSlug), asc(teacherBooks.sortOrder), asc(teacherBooks.id)),
+    db
+      .select()
+      .from(teacherBooks)
+      .orderBy(asc(teacherBooks.teacherSlug), asc(teacherBooks.sortOrder), asc(teacherBooks.id)),
     db.select().from(teacherRetreats),
     db.select().from(teacherSocials),
     db.select().from(teacherRelations),
@@ -143,16 +161,31 @@ export async function getAllTeachers(): Promise<Teacher[]> {
   );
 }
 
-export async function getTeacherBySlug(slug: string): Promise<Teacher | null> {
+export async function getAllTeachers(): Promise<Teacher[]> {
+  const rows = await loadAllTeachersRows(false);
+  return assembleTeachersFromRows(rows);
+}
+
+export async function getAllTeachersForAdmin(): Promise<Teacher[]> {
+  const rows = await loadAllTeachersRows(true);
+  return assembleTeachersFromRows(rows);
+}
+
+export async function getTeacherBySlug(
+  slug: string,
+  options?: { includeDrafts?: boolean },
+): Promise<Teacher | null> {
   const [row] = await db.select().from(teachers).where(eq(teachers.slug, slug)).limit(1);
   if (!row) return null;
+  if (row.isDraft && !options?.includeDrafts) return null;
   return assembleTeacher(row);
 }
 
 export async function getTeacherPhotoMap(): Promise<Map<string, string>> {
   const rows = await db
     .select({ slug: teachers.slug, photo: teachers.photo })
-    .from(teachers);
+    .from(teachers)
+    .where(publishedOnly);
   return new Map(rows.map((r) => [r.slug, r.photo]));
 }
 
@@ -175,7 +208,10 @@ export async function getSimilarTeachers(teacher: Teacher, limit = 4): Promise<T
 }
 
 export async function getTeacherStaticParams() {
-  const rows = await db.select({ slug: teachers.slug }).from(teachers);
+  const rows = await db
+    .select({ slug: teachers.slug })
+    .from(teachers)
+    .where(publishedOnly);
   return rows.map((r) => ({ slug: r.slug }));
 }
 

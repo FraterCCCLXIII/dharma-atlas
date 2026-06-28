@@ -23,6 +23,7 @@ export const places = pgTable("places", {
   phone: text("phone"),
   website: text("website"),
   schools: text("schools").array().notNull().default([]),
+  isDraft: boolean("is_draft").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -44,6 +45,7 @@ export const teachers = pgTable("teachers", {
   photo: text("photo").notNull().default(""),
   heroPhoto: text("hero_photo"),
   website: text("website"),
+  isDraft: boolean("is_draft").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -110,6 +112,23 @@ export const submissions = pgTable("submissions", {
 export type PlaceRow = typeof places.$inferSelect;
 export type TeacherRow = typeof teachers.$inferSelect;
 export type SubmissionRow = typeof submissions.$inferSelect;
+
+export const reports = pgTable("reports", {
+  id: serial("id").primaryKey(),
+  entityType: text("entity_type").notNull(),
+  entityId: text("entity_id").notNull(),
+  entityName: text("entity_name").notNull(),
+  entityPath: text("entity_path").notNull(),
+  reason: text("reason").notNull(),
+  details: text("details"),
+  submitterEmail: text("submitter_email").notNull(),
+  status: text("status").notNull().default("pending"),
+  reviewedBy: text("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type ReportRow = typeof reports.$inferSelect;
 
 export const ontologyNodes = pgTable("ontology_nodes", {
   slug: text("slug").primaryKey(),

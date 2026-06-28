@@ -36,6 +36,13 @@
       "when": 1782575704249,
       "tag": "0004_aspiring_lockjaw",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1782576500000,
+      "tag": "0006_draft_status",
+      "breakpoints": true
     }
   ]
 }

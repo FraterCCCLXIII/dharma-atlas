@@ -6,6 +6,7 @@ export const statement = {
   teacher: ["create", "update", "delete"],
   place: ["create", "update", "delete"],
   submission: ["read", "update"],
+  report: ["read", "update"],
   ontology: ["read", "update"],
 } as const;
 
@@ -15,6 +16,7 @@ export const editor = ac.newRole({
   teacher: ["create", "update", "delete"],
   place: ["create", "update", "delete"],
   submission: ["read", "update"],
+  report: ["read", "update"],
   ontology: ["read", "update"],
 });
 
@@ -23,6 +25,7 @@ export const owner = ac.newRole({
   teacher: ["create", "update", "delete"],
   place: ["create", "update", "delete"],
   submission: ["read", "update"],
+  report: ["read", "update"],
   ontology: ["read", "update"],
 });
 

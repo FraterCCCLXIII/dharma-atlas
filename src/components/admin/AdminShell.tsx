@@ -7,15 +7,18 @@ const navItems = [
   { href: "/admin/places", label: "Locations" },
   { href: "/admin/ontology", label: "Ontology" },
   { href: "/admin/submissions", label: "Submissions" },
+  { href: "/admin/reports", label: "Reports" },
 ];
 
 export function AdminShell({
   children,
-  pendingCount,
+  pendingSubmissions,
+  pendingReports,
   userEmail,
 }: {
   children: ReactNode;
-  pendingCount: number;
+  pendingSubmissions: number;
+  pendingReports: number;
   userEmail: string;
 }) {
   return (
@@ -34,9 +37,14 @@ export function AdminShell({
           {navItems.map((item) => (
             <AdminNavLink key={item.href} href={item.href} exact={item.exact}>
               {item.label}
-              {item.href === "/admin/submissions" && pendingCount > 0 && (
+              {item.href === "/admin/submissions" && pendingSubmissions > 0 && (
                 <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
-                  {pendingCount}
+                  {pendingSubmissions}
+                </span>
+              )}
+              {item.href === "/admin/reports" && pendingReports > 0 && (
+                <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
+                  {pendingReports}
                 </span>
               )}
             </AdminNavLink>

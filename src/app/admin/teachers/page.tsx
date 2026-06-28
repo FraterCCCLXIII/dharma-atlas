@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { getAllTeachers } from "@/lib/data/teachers";
+import { getAllTeachersForAdmin } from "@/lib/data/teachers";
 import { TeachersAdminSearch } from "@/components/admin/TeachersAdminSearch";
 
 export default async function AdminTeachersPage() {
-  const teachers = await getAllTeachers();
+  const teachers = await getAllTeachersForAdmin();
 
   return (
     <div>

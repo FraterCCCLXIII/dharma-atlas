@@ -36,6 +36,7 @@ export type Teacher = {
   photo: string;
   heroPhoto?: string;
   website?: string | null;
+  isDraft?: boolean;
   socials: { label: string; url: string }[];
   bibliography: Book[];
   retreats: Retreat[];

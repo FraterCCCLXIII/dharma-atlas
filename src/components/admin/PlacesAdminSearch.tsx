@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
+import { DraftBadge } from "@/components/admin/DraftStatusField";
 import type { Place } from "@/types/place";
 
 export function PlacesAdminSearch({
@@ -89,17 +90,24 @@ export function PlacesAdminSearch({
           <tbody>
             {places.map((p) => (
               <tr key={p.id} className="border-b border-border/60 hover:bg-surface-muted/50">
-                <td className="py-3 pr-4 font-medium">{p.name}</td>
+                <td className="py-3 pr-4">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{p.name}</span>
+                    {p.isDraft && <DraftBadge />}
+                  </div>
+                </td>
                 <td className="py-3 pr-4 text-ink-secondary">{p.type}</td>
                 <td className="py-3 pr-4 text-ink-secondary">{p.tradition}</td>
                 <td className="max-w-xs truncate py-3 text-ink-secondary">{p.address}</td>
                 <td className="py-3 text-right whitespace-nowrap">
-                  <Link
-                    href={`/place/${p.id}`}
-                    className="mr-3 text-xs text-ink-muted hover:text-ink"
-                  >
-                    View
-                  </Link>
+                  {!p.isDraft && (
+                    <Link
+                      href={`/place/${p.id}`}
+                      className="mr-3 text-xs text-ink-muted hover:text-ink"
+                    >
+                      View
+                    </Link>
+                  )}
                   <Link
                     href={`/admin/places/${p.id}/edit`}
                     className="text-xs font-semibold text-brand hover:underline"
