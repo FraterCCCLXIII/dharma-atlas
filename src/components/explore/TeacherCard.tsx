@@ -4,7 +4,13 @@ import Link from "next/link";
 import { User } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { personProfilePath } from "@/lib/explore-routes";
-import { cardLiftClassName } from "@/lib/card-styles";
+import {
+  cardContentClassName,
+  cardContentCompactClassName,
+  cardImageFrameClassName,
+  cardImagePaddingClassName,
+  cardLiftClassName,
+} from "@/lib/card-styles";
 import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
 import type { Teacher } from "@/types/teacher";
@@ -33,29 +39,33 @@ export function TeacherCard({
     >
       <Link
         href={personProfilePath(teacher.slug)}
-        className={`group block overflow-hidden rounded-2xl border border-border bg-surface-elevated text-left shadow-[var(--shadow-card)] ${cardLiftClassName} hover:border-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40`}
+        className={`group block rounded-2xl text-left ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40`}
       >
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-muted">
-          {teacher.photo ? (
-            <img
-              src={teacher.photo}
-              alt={`Portrait of ${teacher.name}`}
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center bg-gradient-to-br from-stone-600 via-neutral-700 to-zinc-900">
-              <User size={48} weight="duotone" className="text-white/40" />
-            </div>
-          )}
-          {showKindBadge && (
-            <span className="absolute left-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
-              Person
-            </span>
-          )}
+        <div className={cardImagePaddingClassName}>
+          <div
+            className={`relative aspect-[4/5] w-full bg-surface-muted ${cardImageFrameClassName}`}
+          >
+            {teacher.photo ? (
+              <img
+                src={teacher.photo}
+                alt={`Portrait of ${teacher.name}`}
+                loading="lazy"
+                className="h-full w-full rounded-xl object-cover"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center rounded-xl bg-gradient-to-br from-stone-600 via-neutral-700 to-zinc-900">
+                <User size={48} weight="duotone" className="text-white/40" />
+              </div>
+            )}
+            {showKindBadge && (
+              <span className="absolute left-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+                Person
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className={`space-y-2 ${compact ? "p-3" : "p-4"}`}>
+        <div className={compact ? cardContentCompactClassName : cardContentClassName}>
           <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
             {formatTeacherSchoolLine(teacher, compact)}
           </p>

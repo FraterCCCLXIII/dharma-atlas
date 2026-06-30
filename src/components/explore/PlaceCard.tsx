@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { MapPin, Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { cardLiftClassName } from "@/lib/card-styles";
+import {
+  cardContentClassName,
+  cardImageFrameClassName,
+  cardImagePaddingClassName,
+  cardLiftClassName,
+} from "@/lib/card-styles";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
@@ -35,30 +40,32 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
     >
       <Link
         href={`/place/${place.id}`}
-        className={`group block overflow-hidden rounded-2xl border bg-surface-elevated text-left shadow-[var(--shadow-card)] ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
-          isHovered ? "border-brand ring-1 ring-brand/20" : "border-border"
+        className={`group block rounded-2xl text-left ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
+          isHovered ? "bg-surface-muted" : ""
         }`}
       >
-        <div
-          className={`relative flex h-36 items-end bg-gradient-to-br p-4 ${traditionGradient(place.tradition)}`}
-        >
-          {photos.length > 0 ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={photos[0]}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          ) : null}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-          <span className="relative inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
-            <Sparkle size={12} weight="fill" />
-            {showKindBadge ? "Location" : place.type}
-          </span>
+        <div className={cardImagePaddingClassName}>
+          <div
+            className={`relative flex h-36 items-end bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(place.tradition)}`}
+          >
+            {photos.length > 0 ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={photos[0]}
+                alt=""
+                className="absolute inset-0 h-full w-full rounded-xl object-cover"
+              />
+            ) : null}
+            <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            <span className="relative m-3 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+              <Sparkle size={12} weight="fill" />
+              {showKindBadge ? "Location" : place.type}
+            </span>
+          </div>
         </div>
 
-        <div className="space-y-2 p-4">
+        <div className={cardContentClassName}>
           <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-base font-semibold leading-snug text-ink group-hover:text-brand">
             {place.name}
           </h3>

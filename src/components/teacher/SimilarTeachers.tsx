@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { personProfilePath } from "@/lib/explore-routes";
-import { cardLiftClassName } from "@/lib/card-styles";
+import {
+  cardContentClassName,
+  cardImageFrameClassName,
+  cardImagePaddingClassName,
+  cardLiftClassName,
+} from "@/lib/card-styles";
 import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
 import type { Teacher } from "@/types/teacher";
@@ -30,19 +35,23 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
           <Link
             key={teacher.slug}
             href={personProfilePath(teacher.slug)}
-            className={`group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
+            className={`group rounded-2xl ${cardLiftClassName}`}
           >
-            <div className="relative aspect-[4/5] overflow-hidden bg-surface-muted">
-              {teacher.photo ? (
-                <img
-                  src={teacher.photo}
-                  alt={`Portrait of ${teacher.name}`}
-                  loading="lazy"
-                  className="h-full w-full object-cover"
-                />
-              ) : null}
+            <div className={cardImagePaddingClassName}>
+              <div
+                className={`relative aspect-[4/5] bg-surface-muted ${cardImageFrameClassName}`}
+              >
+                {teacher.photo ? (
+                  <img
+                    src={teacher.photo}
+                    alt={`Portrait of ${teacher.name}`}
+                    loading="lazy"
+                    className="h-full w-full rounded-xl object-cover"
+                  />
+                ) : null}
+              </div>
             </div>
-            <div className="space-y-2 p-4">
+            <div className={cardContentClassName}>
               <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
                 {formatTeacherSchoolLine(teacher, true)}
               </p>

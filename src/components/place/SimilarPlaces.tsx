@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { MapPin } from "@phosphor-icons/react";
-import { cardLiftClassName } from "@/lib/card-styles";
+import {
+  cardContentClassName,
+  cardImageFrameClassName,
+  cardImagePaddingClassName,
+  cardLiftClassName,
+} from "@/lib/card-styles";
 import { traditionGradient } from "@/lib/places";
 import type { Place } from "@/types/place";
 
@@ -27,17 +32,19 @@ export function SimilarPlaces({ places }: SimilarPlacesProps) {
           <Link
             key={place.id}
             href={`/place/${place.id}`}
-            className={`group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
+            className={`group rounded-2xl ${cardLiftClassName}`}
           >
-            <div
-              className={`relative h-32 bg-gradient-to-br ${traditionGradient(place.tradition)}`}
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
-              <span className="absolute bottom-3 left-3 rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
-                {place.type}
-              </span>
+            <div className={cardImagePaddingClassName}>
+              <div
+                className={`relative h-32 bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(place.tradition)}`}
+              >
+                <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
+                <span className="absolute bottom-3 left-3 rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+                  {place.type}
+                </span>
+              </div>
             </div>
-            <div className="space-y-2 p-4">
+            <div className={cardContentClassName}>
               <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-sm font-semibold leading-snug text-ink group-hover:text-brand">
                 {place.name}
               </h3>
