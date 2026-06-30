@@ -83,7 +83,62 @@ npm run cloud -- update-place <placeId> ./place.json
 npm run cloud -- revalidate --all
 ```
 
-See `.env.example` for required variables.
+See `.env.example` and `coolify.env.example` for required variables.
+
+## Deploying to Coolify
+
+Repository: [github.com/FraterCCCLXIII/dharma-atlas](https://github.com/FraterCCCLXIII/dharma-atlas)
+
+### 1. Postgres service
+
+Create a **Postgres 16** database in Coolify. Note the internal connection URL.
+
+### 2. Application service
+
+| Setting | Value |
+|---------|-------|
+| Build pack | **Dockerfile** |
+| Port | **3000** |
+| Health check | `/` |
+
+Copy variables from `coolify.env.example` into Coolify → Environment. Generate secrets:
+
+```bash
+openssl rand -hex 32   # BETTER_AUTH_SECRET
+openssl rand -hex 32   # ADMIN_API_KEY
+```
+
+Set `BETTER_AUTH_URL` to your public domain (e.g. `https://dharma.example.com`).
+
+### 3. Persistent storage (required for uploads)
+
+| Container path | Purpose |
+|----------------|---------|
+| `/app/public/places` | Location photos |
+| `/app/public/people` | Teacher/person photos |
+
+On first boot, empty volumes are auto-seeded from the image. Admin uploads persist across redeploys.
+
+### 4. First deploy bootstrap
+
+After the app is healthy:
+
+```bash
+# Seed database (from your machine)
+REMOTE_APP_URL=https://your-domain.com ADMIN_API_KEY=... npm run cloud -- seed --from-files
+
+# Create owner account (DATABASE_URL via Coolify tunnel or public port)
+DATABASE_URL=postgresql://... npm run auth:create-owner -- you@example.com 'your-password' 'Your Name'
+```
+
+Migrations run automatically on container start.
+
+### 5. Local `.env.local` for Cursor
+
+```env
+REMOTE_APP_URL=https://your-domain.com
+ADMIN_API_KEY=<same-as-coolify>
+```
 
 ## Data note
 

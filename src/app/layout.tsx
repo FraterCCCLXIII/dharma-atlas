@@ -20,6 +20,8 @@ export const metadata: Metadata = {
     "Explore Buddhist temples, monasteries, meditation centers, and ashrams across the United States on an interactive map.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{

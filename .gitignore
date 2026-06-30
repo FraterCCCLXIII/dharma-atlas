@@ -35,6 +35,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# coolify deploy secrets (paste into Coolify UI)
+coolify.env
+
 # python
 __pycache__/
 *.pyc

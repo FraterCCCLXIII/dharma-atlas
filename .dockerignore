@@ -1,0 +1,15 @@
+.git
+.gitignore
+.next
+node_modules
+npm-debug.log*
+.env*
+!.env.example
+backups
+scripts/reports
+scripts/__pycache__
+*.tsbuildinfo
+.DS_Store
+README.md
+docker-compose.yml
+data

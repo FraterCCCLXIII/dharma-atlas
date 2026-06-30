@@ -1,0 +1,49 @@
+# Coolify reference compose — use Coolify UI for production; this documents the full stack.
+#
+# App service: point Coolify at this repo's Dockerfile (port 3000).
+# Postgres: create a separate Coolify Postgres 16 service and set DATABASE_URL on the app.
+
+name: dharma-atlas
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      DATABASE_URL: postgresql://dharma:${POSTGRES_PASSWORD}@postgres:5432/dharma_streams
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
+    volumes:
+      - places_uploads:/app/public/places
+      - people_uploads:/app/public/people
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dharma_streams
+      POSTGRES_USER: dharma
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dharma -d dharma_streams"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+  places_uploads:
+  people_uploads:
