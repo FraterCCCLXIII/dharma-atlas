@@ -1,4 +1,3 @@
-import { flushSync } from "react-dom";
 import type { Root } from "react-dom/client";
 import type { ReactNode } from "react";
 import type L from "leaflet";
@@ -50,11 +49,31 @@ export function openMarkerPopupNow(
   refreshPopupLayout(marker.getPopup());
 }
 
-/** Render popup React content synchronously so Leaflet measures the full card. */
-export function renderPopupRoot(root: Root, node: ReactNode) {
-  flushSync(() => {
-    root.render(node);
+/** Render popup React content, then refresh Leaflet layout after paint. */
+export function renderPopupRoot(
+  root: Root,
+  node: ReactNode,
+  onRendered?: () => void,
+) {
+  root.render(node);
+  if (!onRendered) return;
+
+  queueMicrotask(() => {
+    requestAnimationFrame(onRendered);
   });
+}
+
+/** Unmount a popup root outside the current React render to avoid race errors. */
+export function unmountPopupRoot(root: Root | undefined) {
+  if (!root) return;
+
+  setTimeout(() => {
+    try {
+      root.unmount();
+    } catch {
+      // Root may already be unmounted if cleanup runs more than once.
+    }
+  }, 0);
 }
 
 /**

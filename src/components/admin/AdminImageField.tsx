@@ -110,7 +110,7 @@ export function AdminImageField({
             <User size={40} weight="duotone" className="opacity-40" />
             <span className="text-xs">No image</span>
             {slugReady && (
-              <span className="text-[11px] leading-snug text-ink-muted/80">
+              <span className="text-[12px] leading-snug text-ink-muted/80">
                 Click here, then paste
               </span>
             )}

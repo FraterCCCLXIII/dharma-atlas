@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { SiteLogo } from "@/components/layout/SiteLogo";
 
 export const metadata: Metadata = {
   title: "Create account | Dharma Atlas",
@@ -18,10 +19,10 @@ export default async function SignupPage({
     <div className="flex min-h-dvh items-center justify-center bg-surface px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
-            Dharma Atlas
-          </p>
-          <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-4xl font-semibold">
+          <div className="flex justify-center">
+            <SiteLogo variant="wordmark" />
+          </div>
+          <h1 className="mt-6 font-display text-4xl font-semibold">
             Create account
           </h1>
           <p className="mt-2 text-sm text-ink-secondary">

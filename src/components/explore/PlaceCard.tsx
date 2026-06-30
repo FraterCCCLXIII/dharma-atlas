@@ -9,6 +9,7 @@ import {
   cardLiftClassName,
 } from "@/lib/card-styles";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
+import { isValidCoord } from "@/lib/coords";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import { useExploreStore } from "@/store/explore-store";
@@ -34,7 +35,11 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, delay: Math.min(index * 0.02, 0.2) }}
-      onMouseEnter={() => setHoveredId(place.id)}
+      onMouseEnter={() => {
+        if (isValidCoord(place.lat, place.lng)) {
+          setHoveredId(place.id);
+        }
+      }}
       onMouseLeave={() => setHoveredId(null)}
     >
       <Link
@@ -57,7 +62,7 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
             ) : null}
             <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
             <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            <span className="relative m-3 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+            <span className="relative m-3 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
               <Sparkle size={12} weight="fill" />
               {showKindBadge ? "Location" : place.type}
             </span>
@@ -66,7 +71,7 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
 
         <div className="px-4 pb-4 pt-1">
           <div className="space-y-1">
-            <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-base font-semibold leading-snug text-ink group-hover:text-brand">
+            <h3 className="line-clamp-2 font-display text-base font-semibold leading-snug text-ink">
               {place.name}
             </h3>
             <span className="inline-flex items-center gap-1 text-xs text-ink-muted">

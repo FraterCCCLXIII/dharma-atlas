@@ -19,7 +19,7 @@ export function SimilarPlaces({ places }: SimilarPlacesProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
+        <h2 className="font-display text-2xl font-semibold text-ink">
           Similar places nearby
         </h2>
         <p className="mt-1 text-sm text-ink-secondary">
@@ -39,13 +39,13 @@ export function SimilarPlaces({ places }: SimilarPlacesProps) {
                 className={`relative h-32 bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(place.tradition)}`}
               >
                 <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
-                <span className="absolute bottom-3 left-3 rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+                <span className="absolute bottom-3 left-3 rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
                   {place.type}
                 </span>
               </div>
             </div>
             <div className={cardContentClassName}>
-              <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-sm font-semibold leading-snug text-ink group-hover:text-brand">
+              <h3 className="line-clamp-2 font-display text-sm font-semibold leading-snug text-ink">
                 {place.name}
               </h3>
               <p className="inline-flex items-center gap-1 text-xs text-ink-muted">

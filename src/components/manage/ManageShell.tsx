@@ -4,6 +4,7 @@ import Link from "next/link";
 import { List } from "@phosphor-icons/react";
 import { useState, type ReactNode } from "react";
 import { ManageNavLink } from "@/components/manage/ManageNavLink";
+import { SiteLogo } from "@/components/layout/SiteLogo";
 import { authClient } from "@/lib/auth-client";
 
 export function ManageShell({
@@ -32,12 +33,8 @@ export function ManageShell({
         }`}
       >
         <div className="mb-8 px-2">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
-            Dharma Atlas
-          </p>
-          <p className="mt-1 font-[family-name:var(--font-fraunces)] text-lg font-semibold">
-            Your listings
-          </p>
+          <SiteLogo variant="wordmark" />
+          <p className="mt-3 font-display text-lg font-semibold">Your listings</p>
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
@@ -72,9 +69,8 @@ export function ManageShell({
           >
             <List size={20} />
           </button>
-          <p className="font-[family-name:var(--font-fraunces)] text-lg font-semibold">
-            Manage
-          </p>
+          <SiteLogo variant="icon" />
+          <p className="font-display text-lg font-semibold">Manage</p>
         </header>
         <main className="min-w-0 flex-1 overflow-y-auto p-4 md:p-8">{children}</main>
       </div>

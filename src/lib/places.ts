@@ -68,5 +68,5 @@ export const TRADITION_COLORS: Record<string, string> = {
 };
 
 export function traditionMarkerColor(tradition: string): string {
-  return TRADITION_COLORS[tradition] ?? "#b8894a";
+  return TRADITION_COLORS[tradition] ?? "#d17f28";
 }

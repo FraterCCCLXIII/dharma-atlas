@@ -143,7 +143,7 @@ export function ExplorePageClient({
 
   if (useScrollLayout) {
     return (
-      <div className="flex h-dvh flex-col overflow-hidden bg-surface">
+      <div className="flex h-dvh flex-col overflow-hidden bg-surface-elevated">
         <ExploreNav activeFilterCount={activeFilterCount} />
 
         <div className="relative flex min-h-0 flex-1">
@@ -172,7 +172,7 @@ export function ExplorePageClient({
   }
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-surface">
+    <div className="flex h-dvh flex-col overflow-hidden bg-surface-elevated">
       <ExploreNav activeFilterCount={activeFilterCount} />
 
       <div className="relative flex min-h-0 flex-1">

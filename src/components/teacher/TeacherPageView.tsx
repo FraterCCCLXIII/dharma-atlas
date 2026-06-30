@@ -58,7 +58,7 @@ function RelationGroup({
 }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
         {title}
       </h3>
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -87,16 +87,16 @@ function RelationGroup({
                 {hasProfile && person.slug ? (
                   <Link
                     href={personProfilePath(person.slug)}
-                    className="font-[family-name:var(--font-fraunces)] text-base font-semibold text-ink transition hover:text-brand"
+                    className="font-display text-base font-semibold text-ink transition hover:text-brand"
                   >
                     {person.name}
                   </Link>
                 ) : (
-                  <p className="font-[family-name:var(--font-fraunces)] text-base font-semibold text-ink">
+                  <p className="font-display text-base font-semibold text-ink">
                     {person.name}
                   </p>
                 )}
-                <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand">
+                <p className="mt-0.5 text-[12px] font-semibold uppercase text-brand">
                   {person.role}
                 </p>
                 {person.note && (
@@ -156,7 +156,7 @@ export function TeacherPageView({
               </span>
             </div>
             <div className="space-y-2">
-              <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+              <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
                 {teacher.name}
               </h1>
               <p className="text-sm text-ink-secondary">
@@ -180,7 +180,7 @@ export function TeacherPageView({
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_360px]">
           <div className="order-2 space-y-10 lg:order-1">
             <section className="space-y-4 border-b border-border pb-10">
-              <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+              <h2 className="font-display text-xl font-semibold text-ink">
                 About
               </h2>
               <p className="max-w-2xl text-base leading-relaxed text-ink-secondary">
@@ -218,7 +218,7 @@ export function TeacherPageView({
 
             {teacher.biography.length > 0 && (
               <section className="space-y-4 border-b border-border pb-10">
-                <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+                <h2 className="font-display text-xl font-semibold text-ink">
                   Biography
                 </h2>
                 <div className="max-w-2xl space-y-4">
@@ -236,7 +236,7 @@ export function TeacherPageView({
 
             {teacher.topics.length > 0 && (
               <section className="space-y-4 border-b border-border pb-10">
-                <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+                <h2 className="font-display text-xl font-semibold text-ink">
                   Teachings & topics
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -256,7 +256,7 @@ export function TeacherPageView({
               <section className="space-y-6 border-b border-border pb-10">
                 <div className="flex items-center gap-2">
                   <UsersThree size={22} weight="duotone" className="text-brand" />
-                  <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+                  <h2 className="font-display text-xl font-semibold text-ink">
                     Lineage & relations
                   </h2>
                 </div>
@@ -293,7 +293,7 @@ export function TeacherPageView({
               <section className="space-y-4">
                 <div className="flex items-center gap-2">
                   <BookOpen size={22} weight="duotone" className="text-brand" />
-                  <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+                  <h2 className="font-display text-xl font-semibold text-ink">
                     Bibliography
                   </h2>
                 </div>
@@ -308,12 +308,12 @@ export function TeacherPageView({
                           href={book.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink transition hover:text-brand"
+                          className="font-display text-lg font-semibold text-ink transition hover:text-brand"
                         >
                           {book.title}
                         </a>
                       ) : (
-                        <span className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
+                        <span className="font-display text-lg font-semibold text-ink">
                           {book.title}
                         </span>
                       )}
@@ -349,10 +349,10 @@ export function TeacherPageView({
             <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)]">
               <div className="space-y-5 p-6">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
                     Profile
                   </p>
-                  <p className="mt-1 font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
+                  <p className="mt-1 font-display text-lg font-semibold text-ink">
                     Profile details
                   </p>
                 </div>

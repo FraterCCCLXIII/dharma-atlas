@@ -112,10 +112,10 @@ export function ClaimsAdminList({
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
                   claim · {claim.status}
                 </p>
-                <h2 className="mt-1 font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+                <h2 className="mt-1 font-display text-xl font-semibold">
                   {claim.placeName}
                 </h2>
                 <p className="mt-1 text-sm text-ink-secondary">

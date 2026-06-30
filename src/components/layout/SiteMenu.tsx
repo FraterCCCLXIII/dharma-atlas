@@ -72,31 +72,62 @@ export function SiteMenu() {
           left: menuPosition.left,
           transform: "translateX(-100%)",
         }}
-        className="z-[1000] min-w-[11rem] overflow-hidden rounded-xl border border-border bg-surface-elevated py-1 shadow-[var(--shadow-float)]"
+        className="z-[1000] flex min-w-[11rem] flex-col overflow-hidden rounded-xl border border-border bg-surface-elevated shadow-[var(--shadow-float)]"
       >
-        {isLoggedIn ? (
-          <>
-            <p className="truncate px-4 py-2 text-xs text-ink-muted">
-              {session?.user.email}
-            </p>
-            <Link
-              href="/manage"
-              role="menuitem"
-              onClick={() => setMenuOpen(false)}
-              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-            >
-              Manage listings
-            </Link>
-            {isAdmin && (
+        <div className="py-1">
+          {isLoggedIn ? (
+            <>
+              <p className="truncate px-4 py-2 text-xs text-ink-muted">
+                {session?.user.email}
+              </p>
               <Link
-                href="/admin"
+                href="/manage"
                 role="menuitem"
                 onClick={() => setMenuOpen(false)}
                 className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
               >
-                Admin
+                Manage listings
               </Link>
-            )}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  role="menuitem"
+                  onClick={() => setMenuOpen(false)}
+                  className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+                >
+                  Admin
+                </Link>
+              )}
+            </>
+          ) : null}
+          <Link
+            href="/submit"
+            role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+          >
+            Submit entry
+          </Link>
+          <Link
+            href="/claim"
+            role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+          >
+            Claim location
+          </Link>
+          <Link
+            href="/about"
+            role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+          >
+            About
+          </Link>
+        </div>
+
+        <div className="border-t border-border p-2">
+          {isLoggedIn ? (
             <button
               type="button"
               role="menuitem"
@@ -105,45 +136,21 @@ export function SiteMenu() {
                 await authClient.signOut();
                 window.location.href = "/";
               }}
-              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+              className="block w-full rounded-lg px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
             >
               Sign out
             </button>
-          </>
-        ) : (
-          <Link
-            href="/login"
-            role="menuitem"
-            onClick={() => setMenuOpen(false)}
-            className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-          >
-            Sign in
-          </Link>
-        )}
-        <Link
-          href="/submit"
-          role="menuitem"
-          onClick={() => setMenuOpen(false)}
-          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-        >
-          Submit entry
-        </Link>
-        <Link
-          href="/claim"
-          role="menuitem"
-          onClick={() => setMenuOpen(false)}
-          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-        >
-          Claim location
-        </Link>
-        <Link
-          href="/about"
-          role="menuitem"
-          onClick={() => setMenuOpen(false)}
-          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-        >
-          About
-        </Link>
+          ) : (
+            <Link
+              href="/login"
+              role="menuitem"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full rounded-lg bg-brand px-4 py-2.5 text-center text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover"
+            >
+              Sign in
+            </Link>
+          )}
+        </div>
       </div>,
       document.body,
     );

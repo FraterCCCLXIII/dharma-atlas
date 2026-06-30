@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { DM_Sans, Fraunces } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -34,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         {children}

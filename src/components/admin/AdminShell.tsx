@@ -4,6 +4,7 @@ import Link from "next/link";
 import { List } from "@phosphor-icons/react";
 import { useState, type ReactNode } from "react";
 import { AdminNavLink } from "@/components/admin/AdminNavLink";
+import { SiteLogo } from "@/components/layout/SiteLogo";
 import { authClient } from "@/lib/auth-client";
 
 const navItems = [
@@ -51,12 +52,8 @@ export function AdminShell({
         }`}
       >
         <div className="mb-8 px-2">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
-            Dharma Atlas
-          </p>
-          <p className="mt-1 font-[family-name:var(--font-fraunces)] text-lg font-semibold">
-            Admin
-          </p>
+          <SiteLogo variant="wordmark" />
+          <p className="mt-3 font-display text-lg font-semibold">Admin</p>
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
@@ -66,17 +63,17 @@ export function AdminShell({
               <AdminNavLink key={item.href} href={item.href} exact={item.exact}>
                 {item.label}
                 {item.href === "/admin/submissions" && pendingSubmissions > 0 && (
-                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
+                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[11px] font-semibold text-brand-foreground">
                     {pendingSubmissions}
                   </span>
                 )}
                 {item.href === "/admin/claims" && pendingClaims > 0 && (
-                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
+                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[11px] font-semibold text-brand-foreground">
                     {pendingClaims}
                   </span>
                 )}
                 {item.href === "/admin/reports" && pendingReports > 0 && (
-                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
+                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[11px] font-semibold text-brand-foreground">
                     {pendingReports}
                   </span>
                 )}
@@ -106,9 +103,8 @@ export function AdminShell({
           >
             <List size={20} />
           </button>
-          <p className="font-[family-name:var(--font-fraunces)] text-lg font-semibold">
-            Admin
-          </p>
+          <SiteLogo variant="icon" />
+          <p className="font-display text-lg font-semibold">Admin</p>
         </header>
         <main className="min-w-0 flex-1 overflow-y-auto p-4 md:p-8">{children}</main>
       </div>

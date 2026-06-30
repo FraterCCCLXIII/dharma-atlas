@@ -43,7 +43,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+      <h1 className="font-display text-3xl font-semibold">
         Dashboard
       </h1>
       <p className="mt-2 text-sm text-ink-muted">
@@ -57,10 +57,10 @@ export default async function AdminDashboardPage() {
             href={card.href}
             className="rounded-2xl border border-border bg-surface-elevated p-6 shadow-[var(--shadow-card)] transition hover:border-brand/30"
           >
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
               {card.label}
             </p>
-            <p className="mt-2 font-[family-name:var(--font-fraunces)] text-4xl font-semibold text-ink">
+            <p className="mt-2 font-display text-4xl font-semibold text-ink">
               {card.count}
             </p>
           </Link>

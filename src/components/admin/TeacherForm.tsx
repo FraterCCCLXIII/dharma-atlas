@@ -40,7 +40,7 @@ function FormSection({ title, description, children }: { title: string; descript
   return (
     <section className="space-y-4 border-t border-border pt-8 first:border-t-0 first:pt-0">
       <div>
-        <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">{title}</h2>
+        <h2 className="font-display text-xl font-semibold text-ink">{title}</h2>
         {description && <p className="mt-1 text-sm text-ink-muted">{description}</p>}
       </div>
       {children}
@@ -115,7 +115,7 @@ export function TeacherForm({ initial, mode }: TeacherFormProps) {
           <Link href="/admin/teachers" className="text-xs text-ink-muted hover:text-ink">
             ← Teachers
           </Link>
-          <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+          <h1 className="mt-2 font-display text-3xl font-semibold">
             {mode === "create" ? "Add teacher" : `Edit: ${teacher.name}`}
           </h1>
         </div>

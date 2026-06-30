@@ -21,7 +21,7 @@ export default async function EditMemberPlacePage({
 
   return (
     <div>
-      <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+      <h1 className="font-display text-3xl font-semibold">
         Edit listing
       </h1>
       <p className="mt-2 text-sm text-ink-muted">Update public details for {place.name}.</p>

@@ -99,7 +99,7 @@ export function PlacePhotosField({ placeId, initialPhotos }: PlacePhotosFieldPro
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={photo.path} alt="" className="aspect-[4/3] h-full w-full object-cover" />
               {index === 0 && (
-                <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm">
                   Cover
                 </span>
               )}

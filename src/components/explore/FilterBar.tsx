@@ -50,7 +50,7 @@ function FilterChip({
   return (
     <div
       className={`inline-flex w-full items-stretch overflow-hidden rounded-lg border text-left font-medium transition ${
-        nested ? "text-[11px]" : "text-xs"
+        nested ? "text-[12px]" : "text-xs"
       } ${
         active
           ? "border-accent bg-accent text-brand-foreground shadow-sm"
@@ -110,7 +110,7 @@ function FilterSection({
 }) {
   return (
     <section className="space-y-2">
-      <h3 className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+      <h3 className="text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
         {title}
       </h3>
       <div className="space-y-1.5">{children}</div>

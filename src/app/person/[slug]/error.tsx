@@ -11,7 +11,7 @@ export default function PersonError({
 }) {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">
-      <h1 className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold">
+      <h1 className="font-display text-2xl font-semibold">
         Could not load this profile
       </h1>
       <p className="mt-2 text-sm text-ink-secondary">{error.message}</p>

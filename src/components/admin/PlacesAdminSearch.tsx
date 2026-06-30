@@ -120,19 +120,19 @@ export function PlacesAdminSearch({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left">
-              <th className="py-2 pr-4 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="py-2 pr-4 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
                 Name
               </th>
-              <th className="py-2 pr-4 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="py-2 pr-4 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
                 Type
               </th>
-              <th className="py-2 pr-4 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="py-2 pr-4 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
                 Tradition
               </th>
-              <th className="py-2 pr-4 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="py-2 pr-4 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
                 Flags
               </th>
-              <th className="py-2 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="py-2 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
                 Address
               </th>
               <th className="py-2" />

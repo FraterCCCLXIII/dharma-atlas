@@ -134,7 +134,7 @@ export function ReportEntryModal({
       >
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>
-            <h2 id={titleId} className="font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+            <h2 id={titleId} className="font-display text-xl font-semibold">
               Report an issue
             </h2>
             <p className="mt-1 text-sm text-ink-muted">

@@ -23,7 +23,7 @@ export default async function ManageDashboardPage() {
 
   return (
     <div>
-        <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+        <h1 className="font-display text-3xl font-semibold">
           Your listings
         </h1>
         <p className="mt-2 text-sm text-ink-muted">
@@ -43,7 +43,7 @@ export default async function ManageDashboardPage() {
           <section className="mt-8 space-y-6">
             {userClaims.length > 0 && (
               <div>
-                <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+                <h2 className="font-display text-xl font-semibold">
                   Your claims
                 </h2>
                 <ul className="mt-3 space-y-2">
@@ -61,7 +61,7 @@ export default async function ManageDashboardPage() {
             )}
             {userSubmissions.length > 0 && (
               <div>
-                <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+                <h2 className="font-display text-xl font-semibold">
                   Your submissions
                 </h2>
                 <ul className="mt-3 space-y-2">
@@ -88,11 +88,11 @@ export default async function ManageDashboardPage() {
             >
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+                  <h2 className="font-display text-xl font-semibold">
                     {place.name}
                   </h2>
                   {place.isDraft && (
-                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
                       Draft
                     </span>
                   )}

@@ -29,7 +29,7 @@ export function TeacherList({ teachers, variant = "default" }: TeacherListProps)
           isTile ? "" : "min-h-0 flex-1"
         }`}
       >
-        <p className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
+        <p className="font-display text-lg font-semibold text-ink">
           No people found
         </p>
         <p className="mt-2 max-w-sm text-sm text-ink-muted">

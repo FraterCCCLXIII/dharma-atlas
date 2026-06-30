@@ -168,7 +168,7 @@ function TreeRow({
           style={{ paddingLeft: `${depth * 12 + 4}px` }}
         >
           {showInside && (
-            <span className="pointer-events-none absolute inset-x-3 top-1 text-[10px] font-medium text-brand">
+            <span className="pointer-events-none absolute inset-x-3 top-1 text-[11px] font-medium text-brand">
               {dropModeLabel("inside")}
             </span>
           )}
@@ -428,7 +428,7 @@ export function OntologyEditor({ initialNodes }: OntologyEditorProps) {
         <Link href="/admin" className="text-xs text-ink-muted hover:text-ink">
           ← Dashboard
         </Link>
-        <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+        <h1 className="mt-2 font-display text-3xl font-semibold">
           Ontology
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-ink-muted">

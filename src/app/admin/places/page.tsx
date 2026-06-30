@@ -21,7 +21,7 @@ export default async function AdminPlacesPage({
     <div>
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+          <h1 className="font-display text-3xl font-semibold">
             Locations
           </h1>
           <p className="mt-1 text-sm text-ink-muted">{total} in the directory</p>

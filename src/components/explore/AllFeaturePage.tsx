@@ -28,50 +28,45 @@ interface AllFeaturePageProps {
   teachers: Teacher[];
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-border bg-surface-elevated px-4 py-3 shadow-[var(--shadow-card)]">
-      <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
-        {value}
-      </p>
-      <p className="mt-1 text-xs font-medium uppercase tracking-wider text-ink-muted">
-        {label}
-      </p>
-    </div>
-  );
-}
-
 function BrowseCard({
   href,
-  eyebrow,
   title,
   description,
   icon: Icon,
   gradient,
+  imageSrc,
+  imageAlt,
 }: {
   href: string;
-  eyebrow: string;
   title: string;
   description: string;
   icon: typeof MapTrifold;
-  gradient: string;
+  gradient?: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }) {
   return (
     <Link
       href={href}
       className={`group relative overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
     >
-      <div className={`relative h-36 bg-gradient-to-br ${gradient}`}>
+      <div className={`relative h-52 ${gradient ? `bg-gradient-to-br ${gradient}` : "bg-surface-muted"}`}>
+        {imageSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageSrc}
+            alt={imageAlt ?? ""}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : null}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
         <div className="absolute bottom-4 left-4 flex h-11 w-11 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-sm">
           <Icon size={22} weight="duotone" />
         </div>
       </div>
       <div className="space-y-2 p-5">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-brand">
-          {eyebrow}
-        </p>
-        <h3 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+        <h3 className="font-display text-xl font-semibold text-ink">
           {title}
         </h3>
         <p className="text-sm leading-relaxed text-ink-secondary">{description}</p>
@@ -102,45 +97,36 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
 
   return (
     <>
-      <HomeHero />
+      <HomeHero stats={stats} />
 
       <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pt-10">
-        <section className="grid gap-3 sm:grid-cols-3">
-          <Stat label="Locations" value={stats.placeCount.toLocaleString()} />
-          <Stat label="People" value={stats.teacherCount.toLocaleString()} />
-          <Stat
-            label="Traditions"
-            value={stats.traditionCount.toLocaleString()}
-          />
-        </section>
-
-      <section className="mt-12 grid gap-4 md:grid-cols-2">
+        <section className="grid gap-4 md:grid-cols-2">
         <BrowseCard
           href="/locations"
-          eyebrow="Places"
           title="Explore locations"
           description="Browse temples, monasteries, and meditation centers on an interactive map."
           icon={MapTrifold}
-          gradient="from-teal-700 via-emerald-800 to-stone-900"
+          imageSrc="/browse-locations.png"
+          imageAlt="White Buddhist stupa under a blue sky"
         />
         <BrowseCard
           href={PEOPLE_LIST_PATH}
-          eyebrow="People"
           title="Explore people"
           description="Discover guides, lineage holders, and contemporary voices across spiritual paths."
           icon={UsersThree}
-          gradient="from-amber-700 via-orange-700 to-stone-900"
+          imageSrc="/browse-people.png"
+          imageAlt="Buddhist monk in saffron robes"
         />
-      </section>
+        </section>
 
       {topTraditions.length > 0 && (
         <section className="mt-14 space-y-4">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+              <p className="text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
                 Browse by tradition
               </p>
-              <h2 className="mt-1 font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
+              <h2 className="mt-1 font-display text-2xl font-semibold text-ink">
                 Find your lineage
               </h2>
             </div>
@@ -177,10 +163,10 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
         <section className="mt-14 space-y-5">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+              <p className="text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
                 Featured people
               </p>
-              <h2 className="mt-1 font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
+              <h2 className="mt-1 font-display text-2xl font-semibold text-ink">
                 Voices across traditions
               </h2>
             </div>
@@ -210,10 +196,10 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
         <section className="mt-14 space-y-5">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+              <p className="text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
                 Featured locations
               </p>
-              <h2 className="mt-1 font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
+              <h2 className="mt-1 font-display text-2xl font-semibold text-ink">
                 Places worth visiting
               </h2>
             </div>

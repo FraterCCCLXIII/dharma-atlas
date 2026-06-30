@@ -6,7 +6,7 @@ export function PlaceTeachersSection({ teachers }: { teachers: Teacher[] }) {
 
   return (
     <section className="mt-10">
-      <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+      <h2 className="font-display text-xl font-semibold text-ink">
         Teachers & programs
       </h2>
       <ul className="mt-4 grid gap-3 sm:grid-cols-2">

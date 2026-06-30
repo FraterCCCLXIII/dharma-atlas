@@ -16,7 +16,7 @@ export default async function AdminClaimsPage({
 
   return (
     <div>
-      <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold">Claims</h1>
+      <h1 className="font-display text-3xl font-semibold">Claims</h1>
       <p className="mt-2 text-sm text-ink-muted">
         Review affiliation requests before granting edit access to center representatives.
       </p>

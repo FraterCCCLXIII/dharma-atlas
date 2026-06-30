@@ -6,7 +6,7 @@ export default async function AdminBackupPage() {
 
   return (
     <div>
-      <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+      <h1 className="font-display text-3xl font-semibold">
         Backups
       </h1>
       <p className="mt-2 max-w-2xl text-sm text-ink-muted">

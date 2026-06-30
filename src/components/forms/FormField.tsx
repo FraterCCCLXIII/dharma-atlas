@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 export const fieldClassName =
-  "w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-muted focus:border-brand focus:shadow-[0_0_0_3px_rgba(184,137,74,0.15)]";
+  "w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-muted focus:border-brand focus:shadow-[0_0_0_3px_rgba(209,127,40,0.15)]";
 
 export const submitButtonClassName =
   "w-full rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover";

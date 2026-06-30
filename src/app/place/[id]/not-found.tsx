@@ -9,10 +9,10 @@ export default function PlaceNotFound() {
     <div className="flex min-h-dvh flex-col bg-surface">
       <DetailNav />
       <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+        <p className="text-xs font-semibold uppercase tracking-wide text-brand">
           Not found
         </p>
-        <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-3xl font-semibold text-ink">
+        <h1 className="mt-2 font-display text-3xl font-semibold text-ink">
           Place not found
         </h1>
         <p className="mt-3 max-w-md text-sm text-ink-secondary">

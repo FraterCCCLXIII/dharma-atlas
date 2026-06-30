@@ -22,7 +22,7 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
+        <h2 className="font-display text-2xl font-semibold text-ink">
           Also in the directory
         </h2>
         <p className="mt-1 text-sm text-ink-secondary">
@@ -52,10 +52,10 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
               </div>
             </div>
             <div className={cardContentClassName}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-brand">
                 {formatTeacherSchoolLine(teacher, true)}
               </p>
-              <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-sm font-semibold leading-snug text-ink group-hover:text-brand">
+              <h3 className="line-clamp-2 font-display text-sm font-semibold leading-snug text-ink">
                 {teacher.name}
               </h3>
               <p className="text-xs text-ink-muted">

@@ -141,7 +141,7 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
               {place.faith}
             </span>
           </div>
-          <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {place.name}
           </h1>
           <p className="inline-flex items-start gap-1.5 text-sm text-ink-secondary">
@@ -165,7 +165,7 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
           <div className="space-y-10">
             <section className="space-y-4 border-b border-border pb-10">
-              <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+              <h2 className="font-display text-xl font-semibold text-ink">
                 About this place
               </h2>
               {aboutText ? (
@@ -191,7 +191,7 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
             </section>
 
             <section className="space-y-4">
-              <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+              <h2 className="font-display text-xl font-semibold text-ink">
                 Where you&apos;ll find it
               </h2>
               <PlaceSingleMap place={place} />
@@ -202,10 +202,10 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
             <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)]">
               <div className="space-y-5 p-6">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
                     Visit
                   </p>
-                  <p className="mt-1 font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
+                  <p className="mt-1 font-display text-lg font-semibold text-ink">
                     Plan your visit
                   </p>
                 </div>

@@ -58,7 +58,7 @@ export function TeacherCard({
               </div>
             )}
             {showKindBadge && (
-              <span className="absolute left-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+              <span className="absolute left-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-[12px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
                 Person
               </span>
             )}
@@ -66,11 +66,11 @@ export function TeacherCard({
         </div>
 
         <div className={compact ? cardContentCompactClassName : cardContentClassName}>
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-brand">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-brand">
             {formatTeacherSchoolLine(teacher, compact)}
           </p>
           <h3
-            className={`line-clamp-2 font-[family-name:var(--font-fraunces)] font-semibold leading-snug text-ink group-hover:text-brand ${
+            className={`line-clamp-2 font-display font-semibold leading-snug text-ink ${
               compact ? "text-sm" : "text-base"
             }`}
           >

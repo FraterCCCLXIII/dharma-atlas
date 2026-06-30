@@ -60,7 +60,7 @@ function FormSection({
   return (
     <section className="space-y-4 border-t border-border pt-8 first:border-t-0 first:pt-0">
       <div>
-        <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
+        <h2 className="font-display text-xl font-semibold text-ink">
           {title}
         </h2>
         {description && <p className="mt-1 text-sm text-ink-muted">{description}</p>}
@@ -142,7 +142,7 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
           <Link href="/admin/places" className="text-xs text-ink-muted hover:text-ink">
             ← Locations
           </Link>
-          <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-3xl font-semibold">
+          <h1 className="mt-2 font-display text-3xl font-semibold">
             {mode === "create" ? "Add location" : `Edit: ${place.name}`}
           </h1>
         </div>
@@ -349,7 +349,7 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
                 className="rounded border-border text-brand focus:ring-brand/30"
               />
               <span>{subschoolLabel(slug)}</span>
-              <span className="ml-auto font-mono text-[10px] text-ink-muted">{slug}</span>
+              <span className="ml-auto font-mono text-[11px] text-ink-muted">{slug}</span>
             </label>
           ))}
         </div>

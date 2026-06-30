@@ -1,6 +1,7 @@
 "use client";
 
 import type { KeyboardEvent, ReactNode } from "react";
+import { useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -11,8 +12,10 @@ import {
   X,
 } from "@phosphor-icons/react";
 import Link from "next/link";
-import { SiteLogo } from "@/components/layout/SiteLogo";
+import { NavBarLogoContext } from "@/components/layout/NavBarLogoContext";
+import { SiteLogo, SiteLogoWordmarkMeasure } from "@/components/layout/SiteLogo";
 import { SiteMenu } from "@/components/layout/SiteMenu";
+import { useNavLogoCompact } from "@/hooks/useNavLogoCompact";
 import {
   EntityToggle,
   getSearchPlaceholder,
@@ -47,19 +50,44 @@ export function SiteHeader({
   );
 }
 
-function NavBarLayout({ center }: { center: ReactNode }) {
+function NavBarLayout({
+  center,
+  leading,
+}: {
+  center: ReactNode;
+  leading?: ReactNode;
+}) {
+  const navRowRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const centerRef = useRef<HTMLDivElement>(null);
+  const wordmarkMeasureRef = useRef<HTMLImageElement>(null);
+  const compact = useNavLogoCompact(
+    navRowRef,
+    logoRef,
+    centerRef,
+    wordmarkMeasureRef,
+  );
+
   return (
-    <div className="relative flex w-full items-center">
-      <SiteLogo />
+    <NavBarLogoContext.Provider value={compact}>
+      <div ref={navRowRef} className="relative flex w-full items-center">
+        {leading}
 
-      <div className="absolute left-1/2 flex max-w-[calc(100%-7.5rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-9rem)] sm:gap-3">
-        {center}
-      </div>
+        <SiteLogoWordmarkMeasure measureRef={wordmarkMeasureRef} />
+        <SiteLogo logoRef={logoRef} />
 
-      <div className="ml-auto shrink-0 pl-2">
-        <SiteMenu />
+        <div
+          ref={centerRef}
+          className="absolute left-1/2 flex max-w-[calc(100%-7.5rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-9rem)] sm:gap-3"
+        >
+          {center}
+        </div>
+
+        <div className="ml-auto shrink-0 pl-2">
+          <SiteMenu />
+        </div>
       </div>
-    </div>
+    </NavBarLogoContext.Provider>
   );
 }
 
@@ -92,7 +120,7 @@ function SearchField({
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={getSearchPlaceholder(entityFilter)}
-        className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-10 text-sm text-ink shadow-[var(--shadow-card)] outline-none transition placeholder:text-ink-muted hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(184,137,74,0.15)] [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+        className="w-full rounded-full border border-border bg-surface py-2.5 pl-11 pr-10 text-sm text-ink shadow-[var(--shadow-card)] outline-none transition placeholder:text-ink-muted hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)] focus:border-brand focus:shadow-[0_0_0_3px_rgba(209,127,40,0.15)] [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
       />
       {query && (
         <button
@@ -134,7 +162,7 @@ function FilterToggleButton({
       <span className="hidden sm:inline">Filters</span>
       {activeFilterCount > 0 && (
         <span
-          className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold ${
+          className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[12px] font-semibold ${
             filtersOpen
               ? "bg-brand-foreground/15 text-brand-foreground"
               : "bg-brand text-brand-foreground"
@@ -229,17 +257,18 @@ export function DetailNav() {
 
   return (
     <SiteHeader sticky>
-      <div className="relative flex w-full items-center">
-        <Link
-          href={explorePath}
-          className="mr-2 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
-          aria-label="Back to map"
-        >
-          <ArrowLeft size={16} weight="bold" />
-        </Link>
-        <div className="flex min-w-0 flex-1 items-center">
-          <SiteLogo />
-          <div className="absolute left-1/2 flex max-w-[calc(100%-7.5rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-9rem)] sm:gap-3">
+      <NavBarLayout
+        leading={
+          <Link
+            href={explorePath}
+            className="mr-2 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
+            aria-label="Back to map"
+          >
+            <ArrowLeft size={16} weight="bold" />
+          </Link>
+        }
+        center={
+          <>
             <EntityToggle />
             <SearchField onNavigateHome={() => router.push(explorePath)} />
             <FilterToggleButton
@@ -247,12 +276,9 @@ export function DetailNav() {
               activeFilterCount={activeFilterCount}
               onToggle={handleFilterToggle}
             />
-          </div>
-          <div className="ml-auto shrink-0 pl-2">
-            <SiteMenu />
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      />
     </SiteHeader>
   );
 }

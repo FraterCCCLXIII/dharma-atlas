@@ -25,6 +25,7 @@ import {
   openMarkerPopupWhenReady,
   scheduleHoverClose,
 } from "@/lib/map-popup";
+import { isValidCoord, toLatLng } from "@/lib/coords";
 import { useExploreStore } from "@/store/explore-store";
 import type { Place } from "@/types/place";
 
@@ -33,10 +34,6 @@ const DEFAULT_ZOOM = 4;
 
 interface PlaceMapProps {
   places: Place[];
-}
-
-function isValidCoord(lat: number, lng: number) {
-  return Number.isFinite(lat) && Number.isFinite(lng);
 }
 
 function MapAutoControl({
@@ -49,6 +46,11 @@ function MapAutoControl({
   const map = useMap();
   const userInteractedRef = useRef(false);
   const programmaticRef = useRef(false);
+  const placesRef = useRef(places);
+  const hoveredIdRef = useRef(hoveredId);
+
+  placesRef.current = places;
+  hoveredIdRef.current = hoveredId;
 
   const placesKey = useMemo(() => places.map((p) => p.id).join(","), [places]);
 
@@ -82,19 +84,29 @@ function MapAutoControl({
     if (userInteractedRef.current) return;
 
     if (places.length === 0) {
+      let cancelled = false;
+
       map.whenReady(() => {
+        if (cancelled || userInteractedRef.current) return;
         runProgrammatic(() => map.setView(DEFAULT_CENTER, DEFAULT_ZOOM));
       });
-      return;
+
+      return () => {
+        cancelled = true;
+      };
     }
 
     const points = places
-      .filter((p) => isValidCoord(p.lat, p.lng))
-      .map((p) => [p.lat, p.lng] as [number, number]);
+      .map((p) => toLatLng(p.lat, p.lng))
+      .filter((point): point is [number, number] => point !== null);
 
     if (points.length === 0) return;
 
+    let cancelled = false;
+
     map.whenReady(() => {
+      if (cancelled || userInteractedRef.current) return;
+
       if (points.length === 1) {
         runProgrammatic(() => map.setView(points[0], 10));
         return;
@@ -106,22 +118,35 @@ function MapAutoControl({
         }),
       );
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [placesKey, map, places.length]);
 
   useEffect(() => {
     if (userInteractedRef.current || !hoveredId) return;
 
-    const place = places.find((p) => p.id === hoveredId);
-    if (!place || !isValidCoord(place.lat, place.lng)) return;
+    let cancelled = false;
 
     map.whenReady(() => {
-      if (!isValidCoord(place.lat, place.lng)) return;
+      if (cancelled || userInteractedRef.current) return;
+
+      const activeId = hoveredIdRef.current;
+      if (!activeId) return;
+
+      const place = placesRef.current.find((p) => p.id === activeId);
+      const target = place ? toLatLng(place.lat, place.lng) : null;
+      if (!target) return;
+
       const zoom = map.getZoom();
       const targetZoom = Number.isFinite(zoom) ? Math.max(zoom, 10) : 10;
-      runProgrammatic(() =>
-        map.flyTo([place.lat, place.lng], targetZoom, { duration: 0.8 }),
-      );
+      runProgrammatic(() => map.flyTo(target, targetZoom, { duration: 0.8 }));
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [hoveredId, places, map]);
 
   return null;

@@ -31,7 +31,7 @@ export function MapPopoverCard({ place, onViewDetails }: MapPopoverCardProps) {
         ) : null}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.2),transparent_55%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/25 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+        <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/25 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
           <Sparkle size={10} weight="fill" />
           {place.type}
         </span>
@@ -39,10 +39,10 @@ export function MapPopoverCard({ place, onViewDetails }: MapPopoverCardProps) {
 
       <div className="space-y-2.5 p-3">
         <div>
-          <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-sm font-semibold leading-snug text-ink">
+          <h3 className="line-clamp-2 font-display text-sm font-semibold leading-snug text-ink">
             {place.name}
           </h3>
-          <p className="mt-1 inline-flex items-start gap-1 text-[11px] text-ink-muted">
+          <p className="mt-1 inline-flex items-start gap-1 text-[12px] text-ink-muted">
             <MapPin size={12} weight="bold" className="mt-0.5 shrink-0 text-brand" />
             <span className="line-clamp-2">
               {address || place.tradition}

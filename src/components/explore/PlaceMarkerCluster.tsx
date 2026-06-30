@@ -18,8 +18,10 @@ import {
   cancelHoverClose,
   openMarkerPopupNow,
   openMarkerPopupWhenReady,
+  refreshPopupLayout,
   renderPopupRoot,
   scheduleHoverClose,
+  unmountPopupRoot,
 } from "@/lib/map-popup";
 import { useExploreStore } from "@/store/explore-store";
 import type { Place } from "@/types/place";
@@ -64,6 +66,7 @@ function mountPopoverCard(
   renderPopupRoot(
     marker.__popupRoot!,
     <MapPopoverCard place={place} onViewDetails={onViewDetails} />,
+    () => refreshPopupLayout(marker.getPopup()),
   );
 }
 
@@ -173,8 +176,11 @@ export function PlaceMarkerCluster({ places }: { places: Place[] }) {
     map.addLayer(cluster);
 
     return () => {
+      cancelHoverClose(hideTimerRef);
       for (const marker of new Set(markerByPlaceId.values())) {
-        marker.__popupRoot?.unmount();
+        unmountPopupRoot(marker.__popupRoot);
+        marker.__popupRoot = undefined;
+        marker.__popupContainer = undefined;
       }
       map.removeLayer(cluster);
       markerByPlaceIdRef.current = new Map();
