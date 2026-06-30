@@ -81,6 +81,9 @@ export function PlacesAdminSearch({
               <th className="py-2 pr-4 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
                 Tradition
               </th>
+              <th className="py-2 pr-4 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+                Flags
+              </th>
               <th className="py-2 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
                 Address
               </th>
@@ -98,6 +101,13 @@ export function PlacesAdminSearch({
                 </td>
                 <td className="py-3 pr-4 text-ink-secondary">{p.type}</td>
                 <td className="py-3 pr-4 text-ink-secondary">{p.tradition}</td>
+                <td className="py-3 pr-4 text-xs text-ink-muted">
+                  {p.qualityFlags?.length ? (
+                    <span title={p.qualityFlags.join(", ")}>{p.qualityFlags.length} flags</span>
+                  ) : (
+                    "—"
+                  )}
+                </td>
                 <td className="max-w-xs truncate py-3 text-ink-secondary">{p.address}</td>
                 <td className="py-3 text-right whitespace-nowrap">
                   {!p.isDraft && (

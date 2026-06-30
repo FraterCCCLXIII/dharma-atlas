@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PlacePageView } from "@/components/place/PlacePageView";
+import { hasDisplayablePlacePhoto } from "@/lib/place-photo";
+import { placeMetaDescription } from "@/lib/place-description";
 import {
   getPlaceById,
   getSimilarPlaces,
@@ -22,7 +24,11 @@ export async function generateMetadata({ params }: PlacePageProps): Promise<Meta
 
   return {
     title: `${place.name} | Dharma Streams`,
-    description: `${place.name} — a ${place.type.toLowerCase()} in the ${place.tradition} tradition.`,
+    description: placeMetaDescription(place),
+    openGraph:
+      hasDisplayablePlacePhoto(place) && place.photo
+        ? { images: [{ url: place.photo }] }
+        : undefined,
   };
 }
 

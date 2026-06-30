@@ -1,0 +1,1318 @@
+Pipeline mode: full (all locations)
+
+▶ Audit places
+Audited 3277 places
+  missing_description: 3263
+  missing_photo: 3246
+  missing_hours: 2942
+  missing_phone: 1636
+  bad_website: 1365
+  missing_website: 890
+  missing_address: 460
+  stacked_coords: 266
+  encoding_error: 173
+  unverified_description: 14
+Wrote /Users/paulbloch/dharma-centers/scripts/reports/places-audit.json
+Wrote /Users/paulbloch/dharma-centers/scripts/reports/places-audit.csv
+  (0s)
+
+▶ Clean places
+Cleaned 3277 places
+  bad websites: 1365 → 0
+Wrote 3277 places
+  (0s)
+
+▶ Google Places discovery (all regions, full grid + queries)
+Discovering across 154 metros, 9 grid points each, ~38 searches/point (36 text + 2 nearby)
+Existing places: 3277
+  Done London: +0 new (running total 0)
+  Done Manchester: +0 new (running total 0)
+  Done Edinburgh: +0 new (running total 0)
+  [4/154] Dublin @ Dublin@grid-2-2: api=5 new=0
+  [4/154] Dublin @ Dublin@grid-2-2: api=10 new=0
+  [4/154] Dublin @ Dublin@grid-2-2: api=15 new=0
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  Done Dublin: +0 new (running total 0)
+  [5/154] Paris @ Paris@grid-0-0: api=20 new=3
+  [5/154] Paris @ Paris@grid-0-0: api=25 new=5
+  [5/154] Paris @ Paris@grid-0-0: api=30 new=9
+  [5/154] Paris @ Paris@grid-0-0: api=35 new=9
+  [5/154] Paris @ Paris@grid-0-0: api=40 new=9
+  [5/154] Paris @ Paris@grid-0-0: api=45 new=10
+  [5/154] Paris @ Paris@grid-0-0: api=50 new=10
+  [5/154] Paris @ Paris@grid-0-0: api=55 new=12
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  [5/154] Paris @ Paris@grid-0-1: api=60 new=28
+  [5/154] Paris @ Paris@grid-0-1: api=65 new=38
+  [5/154] Paris @ Paris@grid-0-1: api=70 new=38
+  [5/154] Paris @ Paris@grid-0-1: api=75 new=38
+  [5/154] Paris @ Paris@grid-0-1: api=80 new=42
+  [5/154] Paris @ Paris@grid-0-1: api=85 new=42
+  [5/154] Paris @ Paris@grid-0-1: api=90 new=42
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  [5/154] Paris @ Paris@grid-0-1: api=95 new=44
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  [5/154] Paris @ Paris@grid-0-2: api=100 new=46
+  [5/154] Paris @ Paris@grid-0-2: api=105 new=48
+  [5/154] Paris @ Paris@grid-0-2: api=110 new=48
+  [5/154] Paris @ Paris@grid-0-2: api=115 new=48
+  [5/154] Paris @ Paris@grid-0-2: api=120 new=48
+  [5/154] Paris @ Paris@grid-0-2: api=125 new=49
+  [5/154] Paris @ Paris@grid-0-2: api=130 new=49
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  [5/154] Paris @ Paris@grid-0-2: api=135 new=50
+  [5/154] Paris @ Paris@grid-1-0: api=140 new=52
+  [5/154] Paris @ Paris@grid-1-0: api=145 new=71
+  [5/154] Paris @ Paris@grid-1-0: api=150 new=72
+  [5/154] Paris @ Paris@grid-1-0: api=155 new=72
+  [5/154] Paris @ Paris@grid-1-0: api=160 new=73
+  [5/154] Paris @ Paris@grid-1-0: api=165 new=73
+  [5/154] Paris @ Paris@grid-1-0: api=170 new=75
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API error after 5 tries: HTTP Error 400: Bad Request
+  [5/154] Paris @ Paris@grid-1-1: api=175 new=113
+  [5/154] Paris @ Paris@grid-1-1: api=180 new=118
+  [5/154] Paris @ Paris@grid-1-1: api=185 new=143
+  [5/154] Paris @ Paris@grid-1-1: api=190 new=146
+  [5/154] Paris @ Paris@grid-1-1: api=195 new=150
+  [5/154] Paris @ Paris@grid-1-1: api=200 new=162
+  [5/154] Paris @ Paris@grid-1-1: api=205 new=164
+  [5/154] Paris @ Paris@grid-1-1: api=210 new=166
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+  API HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadR
+Pipeline mode: full (all locations), from=discover
+
+▶ Google Places discovery (all regions, full grid + queries)
+Discovering across 154 metros, 9 grid points each, ~38 searches/point (36 text + 2 nearby)
+Existing places: 3443
+  [1/154] London @ London@grid-0-2: api=5 new=0
+  [1/154] London @ London@grid-1-1: api=10 new=1
+  [1/154] London @ London@grid-2-1: api=15 new=2
+  Done London: +2 new (running total 2)
+  [2/154] Manchester @ Manchester@grid-0-0: api=20 new=2
+  [2/154] Manchester @ Manchester@grid-1-0: api=25 new=2
+  [2/154] Manchester @ Manchester@grid-1-2: api=30 new=2
+  [2/154] Manchester @ Manchester@grid-2-2: api=35 new=2
+  Done Manchester: +0 new (running total 2)
+  [3/154] Edinburgh @ Edinburgh@grid-0-1: api=40 new=2
+  [3/154] Edinburgh @ Edinburgh@grid-1-1: api=45 new=2
+  [3/154] Edinburgh @ Edinburgh@grid-2-0: api=50 new=2
+  Done Edinburgh: +0 new (running total 2)
+  [4/154] Dublin @ Dublin@grid-0-0: api=55 new=2
+  [4/154] Dublin @ Dublin@grid-0-2: api=60 new=2
+  [4/154] Dublin @ Dublin@grid-1-2: api=65 new=3
+  [4/154] Dublin @ Dublin@grid-2-1: api=70 new=3
+  Done Dublin: +1 new (running total 3)
+  [5/154] Paris @ Paris@grid-0-1: api=75 new=3
+  [5/154] Paris @ Paris@grid-1-0: api=80 new=3
+  [5/154] Paris @ Paris@grid-1-2: api=85 new=9
+  [5/154] Paris @ Paris@grid-1-2: api=90 new=11
+  [5/154] Paris @ Paris@grid-1-2: api=95 new=19
+  [5/154] Paris @ Paris@grid-1-2: api=100 new=19
+  [5/154] Paris @ Paris@grid-1-2: api=105 new=19
+  [5/154] Paris @ Paris@grid-1-2: api=110 new=22
+  [5/154] Paris @ Paris@grid-1-2: api=115 new=22
+  [5/154] Paris @ Paris@grid-1-2: api=120 new=22
+  [5/154] Paris @ Paris@grid-2-0: api=125 new=24
+  [5/154] Paris @ Paris@grid-2-0: api=130 new=30
+  [5/154] Paris @ Paris@grid-2-0: api=135 new=30
+  [5/154] Paris @ Paris@grid-2-0: api=140 new=30
+  [5/154] Paris @ Paris@grid-2-0: api=145 new=30
+  [5/154] Paris @ Paris@grid-2-0: api=150 new=30
+  [5/154] Paris @ Paris@grid-2-0: api=155 new=30
+  [5/154] Paris @ Paris@grid-2-0: api=160 new=30
+  [5/154] Paris @ Paris@grid-2-1: api=165 new=31
+  [5/154] Paris @ Paris@grid-2-1: api=170 new=39
+  [5/154] Paris @ Paris@grid-2-1: api=175 new=39
+  [5/154] Paris @ Paris@grid-2-1: api=180 new=39
+  [5/154] Paris @ Paris@grid-2-1: api=185 new=41
+  [5/154] Paris @ Paris@grid-2-1: api=190 new=41
+  [5/154] Paris @ Paris@grid-2-1: api=195 new=41
+  [5/154] Paris @ Paris@grid-2-1: api=200 new=41
+  [5/154] Paris @ Paris@grid-2-2: api=205 new=42
+  [5/154] Paris @ Paris@grid-2-2: api=210 new=42
+  [5/154] Paris @ Paris@grid-2-2: api=215 new=42
+  [5/154] Paris @ Paris@grid-2-2: api=220 new=42
+  [5/154] Paris @ Paris@grid-2-2: api=225 new=42
+  [5/154] Paris @ Paris@grid-2-2: api=230 new=42
+  [5/154] Paris @ Paris@grid-2-2: api=235 new=42
+  Done Paris: +39 new (running total 42)
+  [6/154] Lyon @ Lyon@grid-0-0: api=240 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=245 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=250 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=255 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=260 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=265 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=270 new=42
+  [6/154] Lyon @ Lyon@grid-0-0: api=275 new=44
+  [6/154] Lyon @ Lyon@grid-0-1: api=280 new=46
+  [6/154] Lyon @ Lyon@grid-0-1: api=285 new=46
+  [6/154] Lyon @ Lyon@grid-0-1: api=290 new=49
+  [6/154] Lyon @ Lyon@grid-0-1: api=295 new=49
+  [6/154] Lyon @ Lyon@grid-0-1: api=300 new=49
+  [6/154] Lyon @ Lyon@grid-0-1: api=305 new=49
+  [6/154] Lyon @ Lyon@grid-0-1: api=310 new=49
+  [6/154] Lyon @ Lyon@grid-0-1: api=315 new=49
+  [6/154] Lyon @ Lyon@grid-0-2: api=320 new=50
+  [6/154] Lyon @ Lyon@grid-0-2: api=325 new=51
+  [6/154] Lyon @ Lyon@grid-0-2: api=330 new=51
+  [6/154] Lyon @ Lyon@grid-0-2: api=335 new=51
+  [6/154] Lyon @ Lyon@grid-0-2: api=340 new=51
+  [6/154] Lyon @ Lyon@grid-0-2: api=345 new=51
+  [6/154] Lyon @ Lyon@grid-0-2: api=350 new=51
+  [6/154] Lyon @ Lyon@grid-0-2: api=355 new=51
+  [6/154] Lyon @ Lyon@grid-1-0: api=360 new=53
+  [6/154] Lyon @ Lyon@grid-1-0: api=365 new=54
+  [6/154] Lyon @ Lyon@grid-1-0: api=370 new=54
+  [6/154] Lyon @ Lyon@grid-1-0: api=375 new=54
+  [6/154] Lyon @ Lyon@grid-1-0: api=380 new=54
+  [6/154] Lyon @ Lyon@grid-1-0: api=385 new=54
+  [6/154] Lyon @ Lyon@grid-1-0: api=390 new=54
+  [6/154] Lyon @ Lyon@grid-1-0: api=395 new=55
+  [6/154] Lyon @ Lyon@grid-1-1: api=400 new=61
+  [6/154] Lyon @ Lyon@grid-1-1: api=405 new=69
+  [6/154] Lyon @ Lyon@grid-1-1: api=410 new=69
+  [6/154] Lyon @ Lyon@grid-1-1: api=415 new=69
+  [6/154] Lyon @ Lyon@grid-1-1: api=420 new=72
+  [6/154] Lyon @ Lyon@grid-1-1: api=425 new=72
+  [6/154] Lyon @ Lyon@grid-1-1: api=430 new=72
+  [6/154] Lyon @ Lyon@grid-1-2: api=435 new=74
+  [6/154] Lyon @ Lyon@grid-1-2: api=440 new=75
+  [6/154] Lyon @ Lyon@grid-1-2: api=445 new=76
+  [6/154] Lyon @ Lyon@grid-1-2: api=450 new=76
+  [6/154] Lyon @ Lyon@grid-1-2: api=455 new=76
+  [6/154] Lyon @ Lyon@grid-1-2: api=460 new=76
+  [6/154] Lyon @ Lyon@grid-1-2: api=465 new=76
+  [6/154] Lyon @ Lyon@grid-1-2: api=470 new=76
+  [6/154] Lyon @ Lyon@grid-2-0: api=475 new=76
+  [6/154] Lyon @ Lyon@grid-2-0: api=480 new=76
+  [6/154] Lyon @ Lyon@grid-2-0: api=485 new=79
+  [6/154] Lyon @ Lyon@grid-2-0: api=490 new=79
+  [6/154] Lyon @ Lyon@grid-2-0: api=495 new=79
+  [6/154] Lyon @ Lyon@grid-2-0: api=500 new=80
+  [6/154] Lyon @ Lyon@grid-2-0: api=505 new=80
+  [6/154] Lyon @ Lyon@grid-2-0: api=510 new=80
+  [6/154] Lyon @ Lyon@grid-2-1: api=515 new=80
+  [6/154] Lyon @ Lyon@grid-2-1: api=520 new=81
+  [6/154] Lyon @ Lyon@grid-2-1: api=525 new=81
+  [6/154] Lyon @ Lyon@grid-2-1: api=530 new=81
+  [6/154] Lyon @ Lyon@grid-2-1: api=535 new=81
+  [6/154] Lyon @ Lyon@grid-2-1: api=540 new=81
+  [6/154] Lyon @ Lyon@grid-2-1: api=545 new=81
+  [6/154] Lyon @ Lyon@grid-2-1: api=550 new=81
+  [6/154] Lyon @ Lyon@grid-2-2: api=555 new=82
+  [6/154] Lyon @ Lyon@grid-2-2: api=560 new=83
+  [6/154] Lyon @ Lyon@grid-2-2: api=565 new=83
+  [6/154] Lyon @ Lyon@grid-2-2: api=570 new=83
+  [6/154] Lyon @ Lyon@grid-2-2: api=575 new=83
+  [6/154] Lyon @ Lyon@grid-2-2: api=580 new=83
+  [6/154] Lyon @ Lyon@grid-2-2: api=585 new=83
+  [6/154] Lyon @ Lyon@grid-2-2: api=590 new=83
+  Done Lyon: +41 new (running total 83)
+  [7/154] Marseille @ Marseille@grid-0-0: api=595 new=83
+  [7/154] Marseille @ Marseille@grid-0-0: api=600 new=83
+  [7/154] Marseille @ Marseille@grid-0-0: api=605 new=83
+  [7/154] Marseille @ Marseille@grid-0-0: api=610 new=83
+  (306s)
+Failed: Google Places discovery (all regions, full grid + queries)
+Pipeline mode: full (all locations), from=discover
+
+▶ Google Places discovery (all regions, full grid + queries)
+Discovering across 154 metros, 9 grid points each, ~38 searches/point (36 text + 2 nearby)
+Existing places: 3443
+  Done London: +0 new (running total 0)
+  [2/154] Manchester @ Manchester@grid-0-2: api=5 new=0
+  Done Manchester: +0 new (running total 0)
+  [3/154] Edinburgh @ Edinburgh@grid-0-1: api=10 new=0
+  [3/154] Edinburgh @ Edinburgh@grid-1-2: api=15 new=0
+  [3/154] Edinburgh @ Edinburgh@grid-2-1: api=20 new=0
+  Done Edinburgh: +0 new (running total 0)
+  [4/154] Dublin @ Dublin@grid-0-1: api=25 new=0
+  [4/154] Dublin @ Dublin@grid-1-2: api=30 new=0
+  [4/154] Dublin @ Dublin@grid-2-2: api=35 new=0
+  Done Dublin: +0 new (running total 0)
+  [5/154] Paris @ Paris@grid-2-0: api=40 new=0
+  [5/154] Paris @ Paris@grid-2-0: api=45 new=0
+  [5/154] Paris @ Paris@grid-2-0: api=50 new=0
+  [5/154] Paris @ Paris@grid-2-1: api=55 new=0
+  [5/154] Paris @ Paris@grid-2-2: api=60 new=0
+  [5/154] Paris @ Paris@grid-2-2: api=65 new=0
+  [5/154] Paris @ Paris@grid-2-2: api=70 new=0
+  [5/154] Paris @ Paris@grid-2-2: api=75 new=0
+  Done Paris: +0 new (running total 0)
+  [6/154] Lyon @ Lyon@grid-0-0: api=80 new=0
+  [6/154] Lyon @ Lyon@grid-0-0: api=85 new=0
+  [6/154] Lyon @ Lyon@grid-0-0: api=90 new=0
+  [6/154] Lyon @ Lyon@grid-0-0: api=95 new=0
+  [6/154] Lyon @ Lyon@grid-0-0: api=100 new=0
+  [6/154] Lyon @ Lyon@grid-0-0: api=105 new=0
+  [6/154] Lyon @ Lyon@grid-0-0: api=110 new=0
+  [6/154] Lyon @ Lyon@grid-0-1: api=115 new=0
+  [6/154] Lyon @ Lyon@grid-0-1: api=120 new=0
+  [6/154] Lyon @ Lyon@grid-0-1: api=125 new=0
+  [6/154] Lyon @ Lyon@grid-0-2: api=130 new=0
+  [6/154] Lyon @ Lyon@grid-0-2: api=135 new=0
+  [6/154] Lyon @ Lyon@grid-0-2: api=140 new=0
+  [6/154] Lyon @ Lyon@grid-0-2: api=145 new=0
+  [6/154] Lyon @ Lyon@grid-0-2: api=150 new=0
+  [6/154] Lyon @ Lyon@grid-1-0: api=155 new=0
+  [6/154] Lyon @ Lyon@grid-1-0: api=160 new=0
+  [6/154] Lyon @ Lyon@grid-1-0: api=165 new=0
+  [6/154] Lyon @ Lyon@grid-1-0: api=170 new=0
+  [6/154] Lyon @ Lyon@grid-1-0: api=175 new=0
+  [6/154] Lyon @ Lyon@grid-1-1: api=180 new=0
+  [6/154] Lyon @ Lyon@grid-1-2: api=185 new=0
+  [6/154] Lyon @ Lyon@grid-1-2: api=190 new=0
+  [6/154] Lyon @ Lyon@grid-1-2: api=195 new=0
+  [6/154] Lyon @ Lyon@grid-1-2: api=200 new=0
+  [6/154] Lyon @ Lyon@grid-2-0: api=205 new=0
+  [6/154] Lyon @ Lyon@grid-2-0: api=210 new=0
+  [6/154] Lyon @ Lyon@grid-2-0: api=215 new=0
+  [6/154] Lyon @ Lyon@grid-2-0: api=220 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=225 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=230 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=235 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=240 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=245 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=250 new=0
+  [6/154] Lyon @ Lyon@grid-2-1: api=255 new=0
+  [6/154] Lyon @ Lyon@grid-2-2: api=260 new=0
+  [6/154] Lyon @ Lyon@grid-2-2: api=265 new=0
+  [6/154] Lyon @ Lyon@grid-2-2: api=270 new=0
+  [6/154] Lyon @ Lyon@grid-2-2: api=275 new=0
+  Done Lyon: +0 new (running total 0)
+  [7/154] Marseille @ Marseille@grid-0-0: api=280 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=285 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=290 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=295 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=300 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=305 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=310 new=0
+  [7/154] Marseille @ Marseille@grid-0-0: api=315 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=320 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=325 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=330 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=335 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=340 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=345 new=0
+  [7/154] Marseille @ Marseille@grid-0-1: api=350 new=0
+  [7/154] Marseille @ Marseille@grid-0-2: api=355 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=360 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=365 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=370 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=375 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=380 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=385 new=1
+  [7/154] Marseille @ Marseille@grid-0-2: api=390 new=1
+  [7/154] Marseille @ Marseille@grid-1-0: api=395 new=1
+  [7/154] Marseille @ Marseille@grid-1-0: api=400 new=1
+  [7/154] Marseille @ Marseille@grid-1-0: api=405 new=5
+  [7/154] Marseille @ Marseille@grid-1-0: api=410 new=5
+  [7/154] Marseille @ Marseille@grid-1-0: api=415 new=5
+  [7/154] Marseille @ Marseille@grid-1-0: api=420 new=5
+  [7/154] Marseille @ Marseille@grid-1-0: api=425 new=5
+  [7/154] Marseille @ Marseille@grid-1-0: api=430 new=5
+  [7/154] Marseille @ Marseille@grid-1-1: api=435 new=11
+  [7/154] Marseille @ Marseille@grid-1-1: api=440 new=18
+  [7/154] Marseille @ Marseille@grid-1-1: api=445 new=18
+  [7/154] Marseille @ Marseille@grid-1-1: api=450 new=19
+  [7/154] Marseille @ Marseille@grid-1-1: api=455 new=19
+  [7/154] Marseille @ Marseille@grid-1-1: api=460 new=19
+  [7/154] Marseille @ Marseille@grid-1-1: api=465 new=20
+  [7/154] Marseille @ Marseille@grid-1-1: api=470 new=25
+  [7/154] Marseille @ Marseille@grid-1-2: api=475 new=25
+  [7/154] Marseille @ Marseille@grid-1-2: api=480 new=26
+  [7/154] Marseille @ Marseille@grid-1-2: api=485 new=26
+  [7/154] Marseille @ Marseille@grid-1-2: api=490 new=27
+  [7/154] Marseille @ Marseille@grid-1-2: api=495 new=27
+  [7/154] Marseille @ Marseille@grid-1-2: api=500 new=27
+  [7/154] Marseille @ Marseille@grid-1-2: api=505 new=27
+  [7/154] Marseille @ Marseille@grid-1-2: api=510 new=27
+  [7/154] Marseille @ Marseille@grid-2-0: api=515 new=27
+  [7/154] Marseille @ Marseille@grid-2-0: api=520 new=28
+  [7/154] Marseille @ Marseille@grid-2-0: api=525 new=28
+  [7/154] Marseille @ Marseille@grid-2-0: api=530 new=28
+  [7/154] Marseille @ Marseille@grid-2-0: api=535 new=28
+  [7/154] Marseille @ Marseille@grid-2-0: api=540 new=28
+  [7/154] Marseille @ Marseille@grid-2-0: api=545 new=28
+  [7/154] Marseille @ Marseille@grid-2-1: api=550 new=30
+  [7/154] Marseille @ Marseille@grid-2-1: api=555 new=32
+  [7/154] Marseille @ Marseille@grid-2-1: api=560 new=37
+  [7/154] Marseille @ Marseille@grid-2-1: api=565 new=37
+  [7/154] Marseille @ Marseille@grid-2-1: api=570 new=38
+  [7/154] Marseille @ Marseille@grid-2-1: api=575 new=38
+  [7/154] Marseille @ Marseille@grid-2-1: api=580 new=38
+  [7/154] Marseille @ Marseille@grid-2-1: api=585 new=39
+  [7/154] Marseille @ Marseille@grid-2-2: api=590 new=41
+  [7/154] Marseille @ Marseille@grid-2-2: api=595 new=41
+  [7/154] Marseille @ Marseille@grid-2-2: api=600 new=43
+  [7/154] Marseille @ Marseille@grid-2-2: api=605 new=43
+  [7/154] Marseille @ Marseille@grid-2-2: api=610 new=43
+  [7/154] Marseille @ Marseille@grid-2-2: api=615 new=43
+  [7/154] Marseille @ Marseille@grid-2-2: api=620 new=43
+  [7/154] Marseille @ Marseille@grid-2-2: api=625 new=43
+  Done Marseille: +43 new (running total 43)
+  [8/154] Berlin @ Berlin@grid-0-0: api=630 new=46
+  [8/154] Berlin @ Berlin@grid-0-0: api=635 new=49
+  [8/154] Berlin @ Berlin@grid-0-0: api=640 new=50
+  [8/154] Berlin @ Berlin@grid-0-0: api=645 new=50
+  [8/154] Berlin @ Berlin@grid-0-0: api=650 new=52
+  [8/154] Berlin @ Berlin@grid-0-0: api=655 new=52
+  [8/154] Berlin @ Berlin@grid-0-0: api=660 new=52
+  [8/154] Berlin @ Berlin@grid-0-0: api=665 new=56
+  [8/154] Berlin @ Berlin@grid-0-1: api=670 new=59
+  [8/154] Berlin @ Berlin@grid-0-1: api=675 new=60
+  [8/154] Berlin @ Berlin@grid-0-1: api=680 new=60
+  [8/154] Berlin @ Berlin@grid-0-1: api=685 new=60
+  [8/154] Berlin @ Berlin@grid-0-1: api=690 new=61
+  [8/154] Berlin @ Berlin@grid-0-1: api=695 new=62
+  [8/154] Berlin @ Berlin@grid-0-1: api=700 new=62
+  [8/154] Berlin @ Berlin@grid-0-1: api=705 new=67
+  [8/154] Berlin @ Berlin@grid-0-2: api=710 new=67
+  [8/154] Berlin @ Berlin@grid-0-2: api=715 new=67
+  [8/154] Berlin @ Berlin@grid-0-2: api=720 new=67
+  [8/154] Berlin @ Berlin@grid-0-2: api=725 new=67
+  [8/154] Berlin @ Berlin@grid-0-2: api=730 new=68
+  [8/154] Berlin @ Berlin@grid-0-2: api=735 new=68
+  [8/154] Berlin @ Berlin@grid-0-2: api=740 new=68
+  [8/154] Berlin @ Berlin@grid-1-0: api=745 new=77
+  [8/154] Berlin @ Berlin@grid-1-0: api=750 new=82
+  [8/154] Berlin @ Berlin@grid-1-0: api=755 new=82
+  [8/154] Berlin @ Berlin@grid-1-0: api=760 new=83
+  [8/154] Berlin @ Berlin@grid-1-0: api=765 new=83
+  [8/154] Berlin @ Berlin@grid-1-0: api=770 new=83
+  [8/154] Berlin @ Berlin@grid-1-0: api=775 new=83
+  [8/154] Berlin @ Berlin@grid-1-0: api=780 new=85
+  [8/154] Berlin @ Berlin@grid-1-1: api=785 new=105
+  [8/154] Berlin @ Berlin@grid-1-1: api=790 new=126
+  [8/154] Berlin @ Berlin@grid-1-1: api=795 new=130
+  [8/154] Berlin @ Berlin@grid-1-1: api=800 new=131
+  [8/154] Berlin @ Berlin@grid-1-1: api=805 new=136
+  [8/154] Berlin @ Berlin@grid-1-1: api=810 new=141
+  [8/154] Berlin @ Berlin@grid-1-1: api=815 new=143
+  [8/154] Berlin @ Berlin@grid-1-1: api=820 new=150
+  [8/154] Berlin @ Berlin@grid-1-2: api=825 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=830 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=835 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=840 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=845 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=850 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=855 new=154
+  [8/154] Berlin @ Berlin@grid-1-2: api=860 new=156
+  [8/154] Berlin @ Berlin@grid-2-0: api=865 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=870 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=875 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=880 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=885 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=890 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=895 new=157
+  [8/154] Berlin @ Berlin@grid-2-0: api=900 new=157
+  [8/154] Berlin @ Berlin@grid-2-1: api=905 new=158
+  [8/154] Berlin @ Berlin@grid-2-1: api=910 new=159
+  [8/154] Berlin @ Berlin@grid-2-1: api=915 new=159
+  [8/154] Berlin @ Berlin@grid-2-1: api=920 new=159
+  [8/154] Berlin @ Berlin@grid-2-1: api=925 new=159
+  [8/154] Berlin @ Berlin@grid-2-1: api=930 new=159
+  [8/154] Berlin @ Berlin@grid-2-1: api=935 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=940 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=945 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=950 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=955 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=960 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=965 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=970 new=159
+  [8/154] Berlin @ Berlin@grid-2-2: api=975 new=160
+  Done Berlin: +117 new (running total 160)
+  [9/154] Munich @ Munich@grid-0-0: api=980 new=160
+  [9/154] Munich @ Munich@grid-0-0: api=985 new=160
+  [9/154] Munich @ Munich@grid-0-0: api=990 new=162
+  [9/154] Munich @ Munich@grid-0-0: api=995 new=162
+  [9/154] Munich @ Munich@grid-0-0: api=1000 new=162
+  [9/154] Munich @ Munich@grid-0-0: api=1005 new=162
+  [9/154] Munich @ Munich@grid-0-0: api=1010 new=162
+  [9/154] Munich @ Munich@grid-0-0: api=1015 new=164
+  [9/154] Munich @ Munich@grid-0-1: api=1020 new=165
+  [9/154] Munich @ Munich@grid-0-1: api=1025 new=166
+  [9/154] Munich @ Munich@grid-0-1: api=1030 new=166
+  [9/154] Munich @ Munich@grid-0-1: api=1035 new=166
+  [9/154] Munich @ Munich@grid-0-1: api=1040 new=166
+  [9/154] Munich @ Munich@grid-0-1: api=1045 new=166
+  [9/154] Munich @ Munich@grid-0-1: api=1050 new=166
+  [9/154] Munich @ Munich@grid-0-1: api=1055 new=166
+  [9/154] Munich @ Munich@grid-0-2: api=1060 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1065 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1070 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1075 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1080 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1085 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1090 new=168
+  [9/154] Munich @ Munich@grid-0-2: api=1095 new=168
+  [9/154] Munich @ Munich@grid-1-0: api=1100 new=171
+  [9/154] Munich @ Munich@grid-1-0: api=1105 new=173
+  [9/154] Munich @ Munich@grid-1-0: api=1110 new=173
+  [9/154] Munich @ Munich@grid-1-0: api=1115 new=173
+  [9/154] Munich @ Munich@grid-1-0: api=1120 new=176
+  [9/154] Munich @ Munich@grid-1-0: api=1125 new=176
+  [9/154] Munich @ Munich@grid-1-0: api=1130 new=176
+  [9/154] Munich @ Munich@grid-1-1: api=1135 new=185
+  [9/154] Munich @ Munich@grid-1-1: api=1140 new=211
+  [9/154] Munich @ Munich@grid-1-1: api=1145 new=214
+  [9/154] Munich @ Munich@grid-1-1: api=1150 new=217
+  [9/154] Munich @ Munich@grid-1-1: api=1155 new=217
+  [9/154] Munich @ Munich@grid-1-1: api=1160 new=219
+  [9/154] Munich @ Munich@grid-1-1: api=1165 new=220
+  [9/154] Munich @ Munich@grid-1-1: api=1170 new=225
+  [9/154] Munich @ Munich@grid-1-2: api=1175 new=227
+  [9/154] Munich @ Munich@grid-1-2: api=1180 new=228
+  [9/154] Munich @ Munich@grid-1-2: api=1185 new=228
+  [9/154] Munich @ Munich@grid-1-2: api=1190 new=228
+  [9/154] Munich @ Munich@grid-1-2: api=1195 new=228
+  [9/154] Munich @ Munich@grid-1-2: api=1200 new=229
+  [9/154] Munich @ Munich@grid-1-2: api=1205 new=229
+  [9/154] Munich @ Munich@grid-1-2: api=1210 new=231
+  [9/154] Munich @ Munich@grid-2-0: api=1215 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1220 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1225 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1230 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1235 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1240 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1245 new=232
+  [9/154] Munich @ Munich@grid-2-0: api=1250 new=232
+  [9/154] Munich @ Munich@grid-2-1: api=1255 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1260 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1265 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1270 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1275 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1280 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1285 new=236
+  [9/154] Munich @ Munich@grid-2-1: api=1290 new=237
+  [9/154] Munich @ Munich@grid-2-2: api=1295 new=238
+  [9/154] Munich @ Munich@grid-2-2: api=1300 new=238
+  [9/154] Munich @ Munich@grid-2-2: api=1305 new=238
+  [9/154] Munich @ Munich@grid-2-2: api=1310 new=238
+  [9/154] Munich @ Munich@grid-2-2: api=1315 new=238
+  [9/154] Munich @ Munich@grid-2-2: api=1320 new=238
+  [9/154] Munich @ Munich@grid-2-2: api=1325 new=238
+  Done Munich: +78 new (running total 238)
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1330 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1335 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1340 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1345 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1350 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1355 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1360 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-0: api=1365 new=239
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1370 new=240
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1375 new=242
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1380 new=243
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1385 new=243
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1390 new=244
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1395 new=244
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1400 new=244
+  [10/154] Hamburg @ Hamburg@grid-0-1: api=1405 new=244
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1410 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1415 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1420 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1425 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1430 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1435 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1440 new=246
+  [10/154] Hamburg @ Hamburg@grid-0-2: api=1445 new=246
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1450 new=247
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1455 new=247
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1460 new=247
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1465 new=247
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1470 new=248
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1475 new=248
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1480 new=249
+  [10/154] Hamburg @ Hamburg@grid-1-0: api=1485 new=251
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1490 new=273
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1495 new=284
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1500 new=285
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1505 new=285
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1510 new=288
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1515 new=288
+  [10/154] Hamburg @ Hamburg@grid-1-1: api=1520 new=288
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1525 new=299
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1530 new=300
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1535 new=301
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1540 new=301
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1545 new=301
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1550 new=301
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1555 new=301
+  [10/154] Hamburg @ Hamburg@grid-1-2: api=1560 new=301
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1565 new=301
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1570 new=302
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1575 new=303
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1580 new=303
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1585 new=303
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1590 new=304
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1595 new=304
+  [10/154] Hamburg @ Hamburg@grid-2-0: api=1600 new=304
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1605 new=304
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1610 new=305
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1615 new=306
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1620 new=306
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1625 new=306
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1630 new=306
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1635 new=306
+  [10/154] Hamburg @ Hamburg@grid-2-1: api=1640 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1645 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1650 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1655 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1660 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1665 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1670 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1675 new=308
+  [10/154] Hamburg @ Hamburg@grid-2-2: api=1680 new=308
+  Done Hamburg: +70 new (running total 308)
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1685 new=313
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1690 new=313
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1695 new=313
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1700 new=313
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1705 new=314
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1710 new=314
+  [11/154] Frankfurt @ Frankfurt@grid-0-0: api=1715 new=314
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1720 new=318
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1725 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1730 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1735 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1740 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1745 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1750 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-1: api=1755 new=322
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1760 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1765 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1770 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1775 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1780 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1785 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1790 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-0-2: api=1795 new=323
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1800 new=330
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1805 new=333
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1810 new=333
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1815 new=333
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1820 new=333
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1825 new=333
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1830 new=333
+  [11/154] Frankfurt @ Frankfurt@grid-1-0: api=1835 new=335
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1840 new=349
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1845 new=350
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1850 new=350
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1855 new=350
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1860 new=360
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1865 new=360
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1870 new=361
+  [11/154] Frankfurt @ Frankfurt@grid-1-1: api=1875 new=369
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1880 new=371
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1885 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1890 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1895 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1900 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1905 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-1-2: api=1910 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1915 new=372
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1920 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1925 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1930 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1935 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1940 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1945 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-0: api=1950 new=373
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1955 new=374
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1960 new=375
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1965 new=375
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1970 new=375
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1975 new=375
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1980 new=375
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1985 new=375
+  [11/154] Frankfurt @ Frankfurt@grid-2-1: api=1990 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=1995 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2000 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2005 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2010 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2015 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2020 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2025 new=377
+  [11/154] Frankfurt @ Frankfurt@grid-2-2: api=2030 new=377
+  Done Frankfurt: +69 new (running total 377)
+  [12/154] Cologne @ Cologne@grid-0-0: api=2035 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2040 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2045 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2050 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2055 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2060 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2065 new=381
+  [12/154] Cologne @ Cologne@grid-0-0: api=2070 new=381
+  [12/154] Cologne @ Cologne@grid-0-1: api=2075 new=389
+  [12/154] Cologne @ Cologne@grid-0-1: api=2080 new=390
+  [12/154] Cologne @ Cologne@grid-0-1: api=2085 new=390
+  [12/154] Cologne @ Cologne@grid-0-1: api=2090 new=391
+  [12/154] Cologne @ Cologne@grid-0-1: api=2095 new=392
+  [12/154] Cologne @ Cologne@grid-0-1: api=2100 new=394
+  [12/154] Cologne @ Cologne@grid-0-1: api=2105 new=395
+  [12/154] Cologne @ Cologne@grid-0-2: api=2110 new=398
+  [12/154] Cologne @ Cologne@grid-0-2: api=2115 new=399
+  [12/154] Cologne @ Cologne@grid-0-2: api=2120 new=400
+  [12/154] Cologne @ Cologne@grid-0-2: api=2125 new=401
+  [12/154] Cologne @ Cologne@grid-0-2: api=2130 new=401
+  [12/154] Cologne @ Cologne@grid-0-2: api=2135 new=401
+  [12/154] Cologne @ Cologne@grid-0-2: api=2140 new=401
+  [12/154] Cologne @ Cologne@grid-0-2: api=2145 new=402
+  [12/154] Cologne @ Cologne@grid-1-0: api=2150 new=402
+  [12/154] Cologne @ Cologne@grid-1-0: api=2155 new=403
+  [12/154] Cologne @ Cologne@grid-1-0: api=2160 new=403
+  [12/154] Cologne @ Cologne@grid-1-0: api=2165 new=403
+  [12/154] Cologne @ Cologne@grid-1-0: api=2170 new=403
+  [12/154] Cologne @ Cologne@grid-1-0: api=2175 new=403
+  [12/154] Cologne @ Cologne@grid-1-0: api=2180 new=403
+  [12/154] Cologne @ Cologne@grid-1-0: api=2185 new=406
+  [12/154] Cologne @ Cologne@grid-1-1: api=2190 new=420
+  [12/154] Cologne @ Cologne@grid-1-1: api=2195 new=422
+  [12/154] Cologne @ Cologne@grid-1-1: api=2200 new=422
+  [12/154] Cologne @ Cologne@grid-1-1: api=2205 new=422
+  [12/154] Cologne @ Cologne@grid-1-1: api=2210 new=429
+  [12/154] Cologne @ Cologne@grid-1-1: api=2215 new=429
+  [12/154] Cologne @ Cologne@grid-1-1: api=2220 new=429
+  [12/154] Cologne @ Cologne@grid-1-1: api=2225 new=437
+  [12/154] Cologne @ Cologne@grid-1-2: api=2230 new=439
+  [12/154] Cologne @ Cologne@grid-1-2: api=2235 new=441
+  [12/154] Cologne @ Cologne@grid-1-2: api=2240 new=441
+  [12/154] Cologne @ Cologne@grid-1-2: api=2245 new=441
+  [12/154] Cologne @ Cologne@grid-1-2: api=2250 new=441
+  [12/154] Cologne @ Cologne@grid-1-2: api=2255 new=441
+  [12/154] Cologne @ Cologne@grid-1-2: api=2260 new=441
+  [12/154] Cologne @ Cologne@grid-1-2: api=2265 new=443
+  [12/154] Cologne @ Cologne@grid-2-0: api=2270 new=450
+  [12/154] Cologne @ Cologne@grid-2-0: api=2275 new=454
+  [12/154] Cologne @ Cologne@grid-2-0: api=2280 new=454
+  [12/154] Cologne @ Cologne@grid-2-0: api=2285 new=454
+  [12/154] Cologne @ Cologne@grid-2-0: api=2290 new=454
+  [12/154] Cologne @ Cologne@grid-2-0: api=2295 new=454
+  [12/154] Cologne @ Cologne@grid-2-0: api=2300 new=454
+  [12/154] Cologne @ Cologne@grid-2-1: api=2305 new=457
+  [12/154] Cologne @ Cologne@grid-2-1: api=2310 new=459
+  [12/154] Cologne @ Cologne@grid-2-1: api=2315 new=459
+  [12/154] Cologne @ Cologne@grid-2-1: api=2320 new=459
+  [12/154] Cologne @ Cologne@grid-2-1: api=2325 new=459
+  [12/154] Cologne @ Cologne@grid-2-1: api=2330 new=460
+  [12/154] Cologne @ Cologne@grid-2-1: api=2335 new=460
+  [12/154] Cologne @ Cologne@grid-2-1: api=2340 new=460
+  [12/154] Cologne @ Cologne@grid-2-2: api=2345 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2350 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2355 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2360 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2365 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2370 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2375 new=461
+  [12/154] Cologne @ Cologne@grid-2-2: api=2380 new=461
+  Done Cologne: +84 new (running total 461)
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2385 new=463
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2390 new=464
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2395 new=466
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2400 new=466
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2405 new=471
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2410 new=471
+  [13/154] Amsterdam @ Amsterdam@grid-0-0: api=2415 new=471
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2420 new=474
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2425 new=476
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2430 new=476
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2435 new=476
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2440 new=479
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2445 new=483
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2450 new=483
+  [13/154] Amsterdam @ Amsterdam@grid-0-1: api=2455 new=484
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2460 new=491
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2465 new=500
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2470 new=501
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2475 new=501
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2480 new=506
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2485 new=507
+  [13/154] Amsterdam @ Amsterdam@grid-0-2: api=2490 new=507
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2495 new=508
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2500 new=512
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2505 new=513
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2510 new=513
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2515 new=519
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2520 new=521
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2525 new=521
+  [13/154] Amsterdam @ Amsterdam@grid-1-0: api=2530 new=522
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2535 new=536
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2540 new=540
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2545 new=540
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2550 new=540
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2555 new=558
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2560 new=558
+  [13/154] Amsterdam @ Amsterdam@grid-1-1: api=2565 new=563
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2570 new=567
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2575 new=570
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2580 new=570
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2585 new=570
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2590 new=571
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2595 new=571
+  [13/154] Amsterdam @ Amsterdam@grid-1-2: api=2600 new=571
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2605 new=571
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2610 new=572
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2615 new=577
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2620 new=577
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2625 new=577
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2630 new=578
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2635 new=578
+  [13/154] Amsterdam @ Amsterdam@grid-2-0: api=2640 new=578
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2645 new=580
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2650 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2655 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2660 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2665 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2670 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-1: api=2675 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2680 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2685 new=581
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2690 new=582
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2695 new=582
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2700 new=582
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2705 new=582
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2710 new=582
+  [13/154] Amsterdam @ Amsterdam@grid-2-2: api=2715 new=582
+  Done Amsterdam: +121 new (running total 582)
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2720 new=583
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2725 new=583
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2730 new=583
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2735 new=583
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2740 new=585
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2745 new=585
+  [14/154] Rotterdam @ Rotterdam@grid-0-0: api=2750 new=585
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2755 new=586
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2760 new=588
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2765 new=588
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2770 new=588
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2775 new=589
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2780 new=589
+  [14/154] Rotterdam @ Rotterdam@grid-0-1: api=2785 new=589
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2790 new=590
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2795 new=592
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2800 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2805 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2810 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2815 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2820 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-0-2: api=2825 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2830 new=594
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2835 new=599
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2840 new=600
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2845 new=600
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2850 new=602
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2855 new=602
+  [14/154] Rotterdam @ Rotterdam@grid-1-0: api=2860 new=602
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2865 new=604
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2870 new=610
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2875 new=617
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2880 new=617
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2885 new=620
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2890 new=627
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2895 new=627
+  [14/154] Rotterdam @ Rotterdam@grid-1-1: api=2900 new=632
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2905 new=634
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2910 new=636
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2915 new=636
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2920 new=636
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2925 new=638
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2930 new=638
+  [14/154] Rotterdam @ Rotterdam@grid-1-2: api=2935 new=640
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2940 new=643
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2945 new=647
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2950 new=648
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2955 new=648
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2960 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2965 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-0: api=2970 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=2975 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=2980 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=2985 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=2990 new=658
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=2995 new=660
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=3000 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=3005 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-1: api=3010 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3015 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3020 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3025 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3030 new=661
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3035 new=662
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3040 new=662
+  [14/154] Rotterdam @ Rotterdam@grid-2-2: api=3045 new=662
+  Done Rotterdam: +80 new (running total 662)
+  [15/154] Brussels @ Brussels@grid-0-0: api=3050 new=663
+  [15/154] Brussels @ Brussels@grid-0-0: api=3055 new=663
+  [15/154] Brussels @ Brussels@grid-0-0: api=3060 new=667
+  [15/154] Brussels @ Brussels@grid-0-0: api=3065 new=667
+  [15/154] Brussels @ Brussels@grid-0-0: api=3070 new=667
+  [15/154] Brussels @ Brussels@grid-0-0: api=3075 new=667
+  [15/154] Brussels @ Brussels@grid-0-0: api=3080 new=667
+  [15/154] Brussels @ Brussels@grid-0-0: api=3085 new=667
+  [15/154] Brussels @ Brussels@grid-0-1: api=3090 new=671
+  [15/154] Brussels @ Brussels@grid-0-1: api=3095 new=676
+  [15/154] Brussels @ Brussels@grid-0-1: api=3100 new=676
+  [15/154] Brussels @ Brussels@grid-0-1: api=3105 new=676
+  [15/154] Brussels @ Brussels@grid-0-1: api=3110 new=676
+  [15/154] Brussels @ Brussels@grid-0-1: api=3115 new=676
+  [15/154] Brussels @ Brussels@grid-0-1: api=3120 new=676
+  [15/154] Brussels @ Brussels@grid-0-2: api=3125 new=679
+  [15/154] Brussels @ Brussels@grid-0-2: api=3130 new=682
+  [15/154] Brussels @ Brussels@grid-0-2: api=3135 new=682
+  [15/154] Brussels @ Brussels@grid-0-2: api=3140 new=682
+  [15/154] Brussels @ Brussels@grid-0-2: api=3145 new=683
+  [15/154] Brussels @ Brussels@grid-0-2: api=3150 new=683
+  [15/154] Brussels @ Brussels@grid-0-2: api=3155 new=683
+  [15/154] Brussels @ Brussels@grid-1-0: api=3160 new=685
+  [15/154] Brussels @ Brussels@grid-1-0: api=3165 new=685
+  [15/154] Brussels @ Brussels@grid-1-0: api=3170 new=685
+  [15/154] Brussels @ Brussels@grid-1-0: api=3175 new=685
+  [15/154] Brussels @ Brussels@grid-1-0: api=3180 new=685
+  [15/154] Brussels @ Brussels@grid-1-0: api=3185 new=685
+  [15/154] Brussels @ Brussels@grid-1-0: api=3190 new=686
+  [15/154] Brussels @ Brussels@grid-1-0: api=3195 new=686
+  [15/154] Brussels @ Brussels@grid-1-1: api=3200 new=692
+  [15/154] Brussels @ Brussels@grid-1-1: api=3205 new=717
+  [15/154] Brussels @ Brussels@grid-1-1: api=3210 new=719
+  [15/154] Brussels @ Brussels@grid-1-1: api=3215 new=719
+  [15/154] Brussels @ Brussels@grid-1-1: api=3220 new=724
+  [15/154] Brussels @ Brussels@grid-1-1: api=3225 new=725
+  [15/154] Brussels @ Brussels@grid-1-1: api=3230 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3235 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3240 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3245 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3250 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3255 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3260 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3265 new=726
+  [15/154] Brussels @ Brussels@grid-1-2: api=3270 new=726
+  [15/154] Brussels @ Brussels@grid-2-0: api=3275 new=728
+  [15/154] Brussels @ Brussels@grid-2-0: api=3280 new=730
+  [15/154] Brussels @ Brussels@grid-2-0: api=3285 new=730

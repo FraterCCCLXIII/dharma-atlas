@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MapPin, Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { cardLiftClassName } from "@/lib/card-styles";
+import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import { useExploreStore } from "@/store/explore-store";
@@ -21,6 +22,7 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
 
   const isHovered = hoveredId === place.id;
   const schools = getSchools(place);
+  const photos = getPlaceDisplayPhotos(place);
 
   return (
     <motion.article
@@ -40,7 +42,16 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
         <div
           className={`relative flex h-36 items-end bg-gradient-to-br p-4 ${traditionGradient(place.tradition)}`}
         >
+          {photos.length > 0 ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={photos[0]}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : null}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           <span className="relative inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
             <Sparkle size={12} weight="fill" />
             {showKindBadge ? "Location" : place.type}

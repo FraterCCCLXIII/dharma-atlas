@@ -19,7 +19,9 @@ export async function requireSession() {
 }
 
 function roleOf(role: string | null | undefined): AppRole {
-  return role === "owner" ? "owner" : "editor";
+  if (role === "owner") return "owner";
+  if (role === "editor") return "editor";
+  return "member";
 }
 
 export async function requirePermission<R extends Resource>(

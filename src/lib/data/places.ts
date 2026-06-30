@@ -1,29 +1,12 @@
 import "server-only";
 
-import { count, eq, ilike, or } from "drizzle-orm";
+import { count, eq, ilike, or, and, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
 import { places } from "@/db/schema";
-import type { Place, Faith, PlaceType } from "@/types/place";
+import { rowToPlace } from "@/lib/place-row";
+import type { Place } from "@/types/place";
 
 const publishedOnly = eq(places.isDraft, false);
-
-function rowToPlace(row: typeof places.$inferSelect): Place {
-  return {
-    id: row.id,
-    name: row.name,
-    lat: row.lat,
-    lng: row.lng,
-    tradition: row.tradition,
-    faith: row.faith as Faith,
-    type: row.type as PlaceType,
-    folder: row.folder,
-    address: row.address,
-    phone: row.phone,
-    website: row.website,
-    schools: row.schools.length ? row.schools : undefined,
-    isDraft: row.isDraft,
-  };
-}
 
 export async function getPlacesCount() {
   const [row] = await db.select({ count: count() }).from(places);
@@ -71,19 +54,26 @@ export async function searchPlaces(options: {
   query?: string;
   page?: number;
   pageSize?: number;
+  publishedOnly?: boolean;
 }) {
   const page = options.page ?? 1;
   const pageSize = options.pageSize ?? 50;
   const offset = (page - 1) * pageSize;
   const q = options.query?.trim();
 
-  const where = q
-    ? or(
+  const filters: SQL[] = [];
+  if (options.publishedOnly) filters.push(publishedOnly);
+  if (q) {
+    filters.push(
+      or(
         ilike(places.name, `%${q}%`),
         ilike(places.tradition, `%${q}%`),
         ilike(places.address, `%${q}%`),
-      )
-    : undefined;
+      )!,
+    );
+  }
+
+  const where = filters.length > 0 ? and(...filters) : undefined;
 
   const [rows, [totalRow]] = await Promise.all([
     db
@@ -134,4 +124,4 @@ function distanceKm(a: Place, b: Place): number {
   return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
 }
 
-export { rowToPlace };
+export { rowToPlace } from "@/lib/place-row";

@@ -11,11 +11,13 @@ import {
   inferSchools,
   subschoolLabel,
 } from "@/lib/schools";
+import { hasDisplayablePlacePhoto } from "@/lib/place-photo";
 import { faiths, placeTypes, type PlaceInput } from "@/lib/validations/place";
 import {
   createPlaceAction,
   deletePlaceAction,
   updatePlaceAction,
+  verifyPlaceFieldAction,
 } from "@/app/admin/actions/places";
 
 const emptyPlace = (): PlaceInput => ({
@@ -30,6 +32,14 @@ const emptyPlace = (): PlaceInput => ({
   address: "",
   phone: null,
   website: null,
+  description: null,
+  descriptionSource: null,
+  coordPrecision: "unknown",
+  dataSource: null,
+  verifiedFields: [],
+  qualityFlags: [],
+  photo: null,
+  photoSource: null,
   schools: [],
   isDraft: false,
 });
@@ -269,6 +279,50 @@ export function PlaceForm({ initial, mode }: PlaceFormProps) {
             />
           </FormField>
         </div>
+      </FormSection>
+
+      <FormSection title="Profile" description="Description and image shown on the public profile.">
+        <FormField id="description" label="Description">
+          <textarea
+            id="description"
+            rows={4}
+            value={place.description ?? ""}
+            onChange={(e) => set("description", e.target.value || null)}
+            className={`${fieldClassName} resize-y`}
+            placeholder="A short description of this center…"
+          />
+        </FormField>
+        {hasDisplayablePlacePhoto(place) && place.photo && (
+          <div className="overflow-hidden rounded-xl border border-border">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={place.photo} alt="" className="h-40 w-full object-cover" />
+            <p className="px-3 py-2 text-xs text-ink-muted">
+              Photo source: {place.photoSource ?? "unknown"}
+            </p>
+          </div>
+        )}
+        {mode === "edit" && originalId && place.qualityFlags && place.qualityFlags.length > 0 && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            <p className="font-medium">Quality flags</p>
+            <p className="mt-1 text-xs">{place.qualityFlags.join(", ")}</p>
+            {place.description && !place.verifiedFields?.includes("description") && (
+              <button
+                type="button"
+                className="mt-2 text-xs font-semibold text-brand hover:underline"
+                onClick={async () => {
+                  await verifyPlaceFieldAction(originalId, "description");
+                  set("verifiedFields", [...(place.verifiedFields ?? []), "description"]);
+                  set(
+                    "qualityFlags",
+                    (place.qualityFlags ?? []).filter((f) => f !== "unverified_description"),
+                  );
+                }}
+              >
+                Approve description
+              </button>
+            )}
+          </div>
+        )}
       </FormSection>
 
       <FormSection title="Contact">

@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, MapPin, Sparkle } from "@phosphor-icons/react";
+import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
 import type { Place } from "@/types/place";
 
@@ -11,13 +12,23 @@ interface MapPopoverCardProps {
 
 export function MapPopoverCard({ place, onViewDetails }: MapPopoverCardProps) {
   const address = place.address?.trim();
+  const photos = getPlaceDisplayPhotos(place);
 
   return (
     <div className="map-popover-card">
       <div
         className={`relative h-[72px] bg-gradient-to-br ${traditionGradient(place.tradition)}`}
       >
+        {photos.length > 0 ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={photos[0]}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : null}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.2),transparent_55%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/25 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
           <Sparkle size={10} weight="fill" />
           {place.type}

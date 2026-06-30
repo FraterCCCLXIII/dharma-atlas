@@ -21,10 +21,51 @@ function placeRow(input: PlaceInput) {
     address: input.address,
     phone: input.phone ?? null,
     website: input.website ?? null,
+    description: input.description ?? null,
+    descriptionSource: input.descriptionSource ?? null,
+    coordPrecision: input.coordPrecision,
+    dataSource: input.dataSource ?? null,
+    verifiedFields: input.verifiedFields,
+    qualityFlags: input.qualityFlags,
+    photo: input.photo ?? null,
+    photoSource: input.photoSource ?? null,
+    googlePlaceId: input.googlePlaceId ?? null,
+    googleMapsUri: input.googleMapsUri ?? null,
+    openingHours: input.openingHours ? JSON.stringify(input.openingHours) : null,
+    googleRating: input.googleRating ?? null,
+    googleRatingCount: input.googleRatingCount ?? null,
+    businessStatus: input.businessStatus ?? null,
+    googlePrimaryType: input.googlePrimaryType ?? null,
     schools: input.schools,
     isDraft: input.isDraft,
     updatedAt: new Date(),
   };
+}
+
+export async function verifyPlaceFieldAction(placeId: string, field: string) {
+  await requirePermission("place", "update");
+  const [row] = await db.select().from(places).where(eq(places.id, placeId)).limit(1);
+  if (!row) throw new Error("Place not found");
+
+  const verifiedFields = [...new Set([...row.verifiedFields, field])];
+  const qualityFlags = row.qualityFlags.filter(
+    (flag) => flag !== `unverified_${field}` && flag !== "unverified_description",
+  );
+
+  await db
+    .update(places)
+    .set({
+      verifiedFields,
+      qualityFlags,
+      verifiedAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(places.id, placeId));
+
+  revalidatePath("/");
+  revalidatePath("/locations");
+  revalidatePath(`/place/${placeId}`);
+  revalidatePath("/admin/places");
 }
 
 export async function createPlaceAction(input: PlaceInput) {

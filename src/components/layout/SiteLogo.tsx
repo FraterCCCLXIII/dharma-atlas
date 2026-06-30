@@ -15,10 +15,10 @@ export function SiteLogo({ className = "" }: SiteLogoProps) {
       className={`group inline-flex shrink-0 items-center rounded-lg transition hover:opacity-80 ${className}`}
     >
       <Image
-        src="/logo-mark.svg"
+        src="/logo-earth.svg"
         alt=""
-        width={200}
-        height={200}
+        width={116}
+        height={116}
         priority
         aria-hidden
         unoptimized

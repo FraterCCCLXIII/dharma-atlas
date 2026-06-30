@@ -29,6 +29,12 @@ export const owner = ac.newRole({
   ontology: ["read", "update"],
 });
 
-export const roles = { owner, editor };
+export const member = ac.newRole({});
+
+export const roles = { owner, editor, member };
 
 export type AppRole = keyof typeof roles;
+
+export function isAdminRole(role: string | null | undefined) {
+  return role === "owner" || role === "editor";
+}

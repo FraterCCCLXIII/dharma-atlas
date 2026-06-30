@@ -112,6 +112,7 @@ for (const folder of folderList) {
       address: existing?.address ?? "",
       phone: existing?.phone ?? null,
       website: existing?.website ?? null,
+      coordPrecision: existing?.coordPrecision ?? "pin",
     };
 
     if (existing?.schools?.length) {

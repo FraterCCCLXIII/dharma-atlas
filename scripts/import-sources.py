@@ -309,7 +309,30 @@ def buddhanet_region_query(address: str, country_name: str) -> str:
             if state.lower() in tail.lower():
                 return f"{state}, India"
 
+    city = city_from_messy_address(address)
+    if city and country_name:
+        return f"{city}, {country_name}"
+
     return country_name or "Unknown"
+
+
+def geocode_query_for_place(place: dict) -> str:
+    """Best-effort geocode query from an existing place record."""
+    folder = place.get("folder") or ""
+    country_name = country_name_from_folder(folder)
+    address = unescape((place.get("address") or "")).replace("&nbsp;", " ").strip()
+    name = (place.get("name") or "").strip()
+
+    if address:
+        if folder.startswith("BuddhaNet"):
+            city = city_from_messy_address(address)
+            if city and country_name:
+                return f"{city}, {country_name}"
+            return buddhanet_region_query(address, country_name)
+        return extract_locality(address, country_name)
+    if name and country_name:
+        return f"{name}, {country_name}"
+    return name or country_name or "Unknown"
 
 
 def city_from_messy_address(address: str) -> str:
@@ -338,7 +361,14 @@ def locality_for_raw(raw: RawPlace) -> tuple[str, str]:
     if raw.folder.startswith("Goenka Vipassana"):
         query = (raw.address or raw.geocode_query or raw.name).strip()
     elif raw.folder.startswith("BuddhaNet"):
-        query = buddhanet_region_query(raw.address, country_name)
+        if raw.address:
+            city = city_from_messy_address(raw.address)
+            if city and country_name:
+                query = f"{city}, {country_name}"
+            else:
+                query = buddhanet_region_query(raw.address, country_name)
+        else:
+            query = buddhanet_region_query(raw.address, country_name)
     elif raw.address:
         query = extract_locality(raw.address, country_name)
     elif raw.geocode_query:
@@ -777,6 +807,84 @@ def raw_to_place(raw: RawPlace, lat: float, lng: float) -> dict:
     }
 
 
+def regeocode_stacked_places(*, allow_api: bool, min_cluster: int = 2) -> None:
+    """Re-geocode places that share coordinates (country/region centroid stacking)."""
+    dataset = load_json(PLACES_PATH)
+    places: list[dict] = list(dataset.get("places", []))
+
+    clusters: dict[str, list[int]] = {}
+    for idx, place in enumerate(places):
+        key = f"{place['lat']:.4f},{place['lng']:.4f}"
+        clusters.setdefault(key, []).append(idx)
+
+    stacked_indices: list[int] = []
+    for indices in clusters.values():
+        if len(indices) >= min_cluster:
+            stacked_indices.extend(indices)
+
+    if not stacked_indices:
+        print("No stacked coordinate clusters found.")
+        return
+
+    query_to_indices: dict[str, list[int]] = {}
+    for place_idx in stacked_indices:
+        place = places[place_idx]
+        query = geocode_query_for_place(place)
+        query_to_indices.setdefault(query, []).append(place_idx)
+
+    geocode_cache = load_geocode_cache()
+    updated = 0
+    unchanged = 0
+    failed = 0
+    api_calls = 0
+    total_queries = len(query_to_indices)
+
+    print(
+        f"Re-geocoding {len(stacked_indices)} places "
+        f"({total_queries} unique queries, clusters of {min_cluster}+, "
+        f"allow_api={allow_api})…"
+    )
+
+    for idx, (query, place_indices) in enumerate(sorted(query_to_indices.items()), start=1):
+        folder = places[place_indices[0]].get("folder") or ""
+        country_code = country_from_folder(folder)
+        had_cache = cache_lookup(geocode_cache, query) is not None
+        coords = geocode_api(query, geocode_cache, country_code, allow_api=allow_api)
+
+        if allow_api and not had_cache:
+            api_calls += 1
+
+        if not coords:
+            failed += len(place_indices)
+        else:
+            for place_idx in place_indices:
+                place = places[place_idx]
+                if coords[0] == place["lat"] and coords[1] == place["lng"]:
+                    unchanged += 1
+                else:
+                    place["lat"] = coords[0]
+                    place["lng"] = coords[1]
+                    updated += 1
+
+        if idx % 25 == 0 or idx == total_queries:
+            print(
+                f"  {idx}/{total_queries} queries — updated {updated}, "
+                f"unchanged {unchanged}, failed {failed}, api calls {api_calls}"
+            )
+            save_json(GEOCODE_CACHE_PATH, geocode_cache)
+
+    dataset["places"] = places
+    dataset["count"] = len(places)
+    save_json(PLACES_PATH, dataset)
+    save_json(GEOCODE_CACHE_PATH, geocode_cache)
+
+    print("\nRe-geocode complete.")
+    print(f"  Updated: {updated}")
+    print(f"  Unchanged: {unchanged}")
+    print(f"  Failed: {failed}")
+    print(f"  API calls: {api_calls}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Import directory sources into places.json")
     parser.add_argument(
@@ -789,8 +897,23 @@ def main() -> None:
         action="store_true",
         help="Skip BuddhaNet bulk import (faster; other sources only)",
     )
+    parser.add_argument(
+        "--regeocode-stacked",
+        action="store_true",
+        help="Re-geocode places that share coordinates (fixes map stacking)",
+    )
+    parser.add_argument(
+        "--min-cluster",
+        type=int,
+        default=2,
+        help="Minimum places sharing coords to re-geocode (default: 2)",
+    )
     args = parser.parse_args()
     allow_api = not args.no_api
+
+    if args.regeocode_stacked:
+        regeocode_stacked_places(allow_api=allow_api, min_cluster=args.min_cluster)
+        return
 
     print("Loading existing places…")
     dataset = load_json(PLACES_PATH)

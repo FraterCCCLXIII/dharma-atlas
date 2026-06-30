@@ -7,6 +7,22 @@ export type PlaceType =
   | "Institute"
   | "Ashram";
 
+export type CoordPrecision = "pin" | "address" | "city" | "region" | "unknown";
+
+export type PhotoSource =
+  | "website"
+  | "google_places"
+  | "wikimedia"
+  | "osm"
+  | "generated"
+  | "admin";
+
+export interface PlaceOpeningHours {
+  weekdayDescriptions?: string[];
+  openNow?: boolean;
+  source?: "google_places";
+}
+
 export interface Place {
   id: string;
   name: string;
@@ -21,6 +37,22 @@ export interface Place {
   address: string;
   phone: string | null;
   website: string | null;
+  description?: string;
+  descriptionSource?: string;
+  coordPrecision?: CoordPrecision;
+  dataSource?: string;
+  verifiedAt?: string;
+  verifiedFields?: string[];
+  qualityFlags?: string[];
+  photo?: string;
+  photoSource?: PhotoSource;
+  googlePlaceId?: string;
+  googleMapsUri?: string;
+  openingHours?: PlaceOpeningHours;
+  googleRating?: number;
+  googleRatingCount?: number;
+  businessStatus?: string;
+  googlePrimaryType?: string;
   isDraft?: boolean;
 }
 

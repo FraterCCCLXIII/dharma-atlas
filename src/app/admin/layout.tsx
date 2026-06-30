@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { OntologyRuntimeProvider } from "@/components/explore/OntologyRuntimeProvider";
 import { getSession } from "@/lib/auth-server";
+import { getPendingClaimsCount } from "@/lib/data/claims";
 import { getPendingReportsCount } from "@/lib/data/reports";
 import { getPendingSubmissionsCount } from "@/lib/data/submissions";
 import { getOntologySnapshot } from "@/lib/data/ontology";
@@ -23,8 +24,9 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
-  const [pendingSubmissions, pendingReports, ontology] = await Promise.all([
+  const [pendingSubmissions, pendingClaims, pendingReports, ontology] = await Promise.all([
     getPendingSubmissionsCount(),
+    getPendingClaimsCount(),
     getPendingReportsCount(),
     getOntologySnapshot(),
   ]);
@@ -33,6 +35,7 @@ export default async function AdminLayout({
     <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
       <AdminShell
         pendingSubmissions={pendingSubmissions}
+        pendingClaims={pendingClaims}
         pendingReports={pendingReports}
         userEmail={session.user.email}
       >

@@ -1,6 +1,7 @@
 "use client";
 
 import { Flag, ShareNetwork, X } from "@phosphor-icons/react";
+import Link from "next/link";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
 import {
@@ -212,6 +213,7 @@ interface DetailPageActionsProps {
   entityId: string;
   entityName: string;
   entityPath: string;
+  claimHref?: string;
 }
 
 export function DetailPageActions({
@@ -221,6 +223,7 @@ export function DetailPageActions({
   entityId,
   entityName,
   entityPath,
+  claimHref,
 }: DetailPageActionsProps) {
   const [reportOpen, setReportOpen] = useState(false);
 
@@ -247,6 +250,15 @@ export function DetailPageActions({
           <ShareNetwork size={16} weight="bold" />
           <span className="hidden sm:inline">Share</span>
         </button>
+        {claimHref && (
+          <Link
+            href={claimHref}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
+          >
+            <span className="hidden sm:inline">Claim</span>
+            <span className="sm:hidden">Claim</span>
+          </Link>
+        )}
         <button
           type="button"
           onClick={() => setReportOpen(true)}

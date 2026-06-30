@@ -1,12 +1,15 @@
 import {
   boolean,
   doublePrecision,
+  index,
   integer,
   pgTable,
   serial,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { user } from "./auth-schema";
 
 export * from "./auth-schema";
 
@@ -23,6 +26,22 @@ export const places = pgTable("places", {
   phone: text("phone"),
   website: text("website"),
   schools: text("schools").array().notNull().default([]),
+  description: text("description"),
+  descriptionSource: text("description_source"),
+  coordPrecision: text("coord_precision").notNull().default("unknown"),
+  dataSource: text("data_source"),
+  verifiedAt: timestamp("verified_at", { withTimezone: true }),
+  verifiedFields: text("verified_fields").array().notNull().default([]),
+  qualityFlags: text("quality_flags").array().notNull().default([]),
+  photo: text("photo"),
+  photoSource: text("photo_source"),
+  googlePlaceId: text("google_place_id"),
+  googleMapsUri: text("google_maps_uri"),
+  openingHours: text("opening_hours"),
+  googleRating: doublePrecision("google_rating"),
+  googleRatingCount: integer("google_rating_count"),
+  businessStatus: text("business_status"),
+  googlePrimaryType: text("google_primary_type"),
   isDraft: boolean("is_draft").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
@@ -144,3 +163,49 @@ export const ontologyNodes = pgTable("ontology_nodes", {
 });
 
 export type OntologyNodeRow = typeof ontologyNodes.$inferSelect;
+
+export const placeMemberships = pgTable(
+  "place_memberships",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    role: text("role").notNull().default("manager"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("place_memberships_user_place_idx").on(table.userId, table.placeId),
+    index("place_memberships_place_idx").on(table.placeId),
+  ],
+);
+
+export const claims = pgTable(
+  "claims",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    placeId: text("place_id").references(() => places.id, { onDelete: "set null" }),
+    placeName: text("place_name").notNull(),
+    listingUrl: text("listing_url"),
+    affiliationRole: text("affiliation_role").notNull(),
+    message: text("message").notNull(),
+    status: text("status").notNull().default("pending"),
+    reviewedBy: text("reviewed_by"),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("claims_status_idx").on(table.status),
+    index("claims_user_idx").on(table.userId),
+    index("claims_place_idx").on(table.placeId),
+  ],
+);
+
+export type PlaceMembershipRow = typeof placeMemberships.$inferSelect;
+export type ClaimRow = typeof claims.$inferSelect;

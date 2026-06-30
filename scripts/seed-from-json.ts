@@ -19,6 +19,8 @@ import {
   teacherSocials,
   teachers,
 } from "../src/db/schema";
+import { rowToPlace } from "../src/lib/place-row";
+import { mergePlaceFields } from "../src/lib/place-quality";
 import type { Place, PlacesDataset } from "../src/types/place";
 import type { Teacher, TeachersDataset } from "../src/types/teacher";
 
@@ -78,39 +80,70 @@ function normalizeRelations(teacher: Teacher) {
   return rows;
 }
 
+function openingHoursColumn(
+  hours: Place["openingHours"] | undefined | null,
+): string | null {
+  if (!hours) return null;
+  return JSON.stringify(hours);
+}
+
+function placeDbFields(merged: ReturnType<typeof mergePlaceFields>, incoming: Place) {
+  return {
+    name: merged.name ?? incoming.name,
+    lat: merged.lat ?? incoming.lat,
+    lng: merged.lng ?? incoming.lng,
+    tradition: merged.tradition ?? incoming.tradition,
+    faith: merged.faith ?? incoming.faith,
+    type: merged.type ?? incoming.type,
+    folder: merged.folder ?? incoming.folder,
+    address: merged.address ?? incoming.address,
+    phone: merged.phone ?? incoming.phone ?? null,
+    website: merged.website ?? incoming.website ?? null,
+    description: merged.description ?? incoming.description ?? null,
+    descriptionSource: merged.descriptionSource ?? incoming.descriptionSource ?? null,
+    coordPrecision: merged.coordPrecision ?? incoming.coordPrecision ?? "unknown",
+    dataSource: merged.dataSource ?? incoming.dataSource ?? incoming.folder ?? null,
+    verifiedFields: merged.verifiedFields ?? incoming.verifiedFields ?? [],
+    qualityFlags: merged.qualityFlags ?? incoming.qualityFlags ?? [],
+    photo: merged.photo ?? incoming.photo ?? null,
+    photoSource: merged.photoSource ?? incoming.photoSource ?? null,
+    googlePlaceId: merged.googlePlaceId ?? incoming.googlePlaceId ?? null,
+    googleMapsUri: merged.googleMapsUri ?? incoming.googleMapsUri ?? null,
+    openingHours: openingHoursColumn(merged.openingHours ?? incoming.openingHours),
+    googleRating: merged.googleRating ?? incoming.googleRating ?? null,
+    googleRatingCount: merged.googleRatingCount ?? incoming.googleRatingCount ?? null,
+    businessStatus: merged.businessStatus ?? incoming.businessStatus ?? null,
+    googlePrimaryType: merged.googlePrimaryType ?? incoming.googlePrimaryType ?? null,
+    schools: merged.schools ?? incoming.schools ?? [],
+  };
+}
+
 async function seedPlaces(list: Place[]) {
+  const forceFields = process.argv
+    .filter((arg) => arg.startsWith("--force-field="))
+    .map((arg) => arg.slice("--force-field=".length));
+
   let count = 0;
-  for (const place of list) {
+  for (const incoming of list) {
+    const [existingRow] = await db
+      .select()
+      .from(places)
+      .where(eq(places.id, incoming.id))
+      .limit(1);
+
+    const existing = existingRow ? rowToPlace(existingRow) : {};
+    const merged = mergePlaceFields(existing, incoming, { forceFields });
+
     await db
       .insert(places)
       .values({
-        id: place.id,
-        name: place.name,
-        lat: place.lat,
-        lng: place.lng,
-        tradition: place.tradition,
-        faith: place.faith,
-        type: place.type,
-        folder: place.folder,
-        address: place.address,
-        phone: place.phone,
-        website: place.website,
-        schools: place.schools ?? [],
+        id: incoming.id,
+        ...placeDbFields(merged, incoming),
       })
       .onConflictDoUpdate({
         target: places.id,
         set: {
-          name: place.name,
-          lat: place.lat,
-          lng: place.lng,
-          tradition: place.tradition,
-          faith: place.faith,
-          type: place.type,
-          folder: place.folder,
-          address: place.address,
-          phone: place.phone,
-          website: place.website,
-          schools: place.schools ?? [],
+          ...placeDbFields(merged, incoming),
           updatedAt: new Date(),
         },
       });

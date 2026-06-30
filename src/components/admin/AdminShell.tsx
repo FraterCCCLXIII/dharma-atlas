@@ -7,17 +7,20 @@ const navItems = [
   { href: "/admin/places", label: "Locations" },
   { href: "/admin/ontology", label: "Ontology" },
   { href: "/admin/submissions", label: "Submissions" },
+  { href: "/admin/claims", label: "Claims" },
   { href: "/admin/reports", label: "Reports" },
 ];
 
 export function AdminShell({
   children,
   pendingSubmissions,
+  pendingClaims,
   pendingReports,
   userEmail,
 }: {
   children: ReactNode;
   pendingSubmissions: number;
+  pendingClaims: number;
   pendingReports: number;
   userEmail: string;
 }) {
@@ -40,6 +43,11 @@ export function AdminShell({
               {item.href === "/admin/submissions" && pendingSubmissions > 0 && (
                 <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
                   {pendingSubmissions}
+                </span>
+              )}
+              {item.href === "/admin/claims" && pendingClaims > 0 && (
+                <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[10px] font-semibold text-brand-foreground">
+                  {pendingClaims}
                 </span>
               )}
               {item.href === "/admin/reports" && pendingReports > 0 && (

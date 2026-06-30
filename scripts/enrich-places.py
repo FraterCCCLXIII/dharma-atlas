@@ -175,41 +175,72 @@ def save_cache(cache: dict) -> None:
     CACHE_PATH.write_text(json.dumps(cache, indent=2))
 
 
+def needs_enrichment(place: dict) -> bool:
+    return (
+        not place.get("address")
+        or not place.get("phone")
+        or not place.get("website")
+    )
+
+
 def enrich_place(place: dict, cache: dict) -> dict:
     key = place["id"]
     if key in cache:
         cached = cache[key]
-        return {**place, **cached}
+        merged = dict(place)
+        if not merged.get("address") and cached.get("address"):
+            merged["address"] = cached["address"]
+        if not merged.get("phone") and cached.get("phone"):
+            merged["phone"] = cached["phone"]
+        if not merged.get("website") and cached.get("website"):
+            merged["website"] = cached["website"]
+        return merged
+
+    if not needs_enrichment(place):
+        return place
 
     lat, lng = place["lat"], place["lng"]
-    address = reverse_geocode(lat, lng)
-    time.sleep(NOMINATIM_DELAY)
+    address = reverse_geocode(lat, lng) if not place.get("address") else ""
+    if not place.get("address"):
+        time.sleep(NOMINATIM_DELAY)
 
     phone, website = overpass_contact(lat, lng, place["name"])
     time.sleep(OVERPASS_DELAY)
 
     enriched = {
-        "address": address or "",
-        "phone": phone,
-        "website": website,
+        "address": place.get("address") or address or "",
+        "phone": place.get("phone") or phone,
+        "website": place.get("website") or website,
     }
     cache[key] = enriched
     save_cache(cache)
-    return {**place, **enriched}
+    result = {**place}
+    if not result.get("address") and enriched["address"]:
+        result["address"] = enriched["address"]
+    if not result.get("phone") and enriched["phone"]:
+        result["phone"] = enriched["phone"]
+    if not result.get("website") and enriched["website"]:
+        result["website"] = enriched["website"]
+    return result
 
 
 def main() -> None:
     payload = json.loads(PLACES_PATH.read_text())
     places = payload["places"]
     cache = load_cache()
+    targets = [p for p in places if needs_enrichment(p)]
     total = len(places)
+    print(f"Enriching {len(targets)}/{total} places missing contact fields")
 
+    enriched_count = 0
     for index, place in enumerate(places, start=1):
-        places[index - 1] = enrich_place(place, cache)
-        if index % 5 == 0 or index == total:
+        if needs_enrichment(place):
+            places[index - 1] = enrich_place(place, cache)
+            enriched_count += 1
+        if index % 25 == 0 or index == total:
             payload["places"] = places
             PLACES_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False))
-            print(f"Enriched {index}/{total}", flush=True)
+            print(f"  Progress {index}/{total} (enriched {enriched_count})", flush=True)
 
     with_phone = sum(1 for p in places if p.get("phone"))
     with_website = sum(1 for p in places if p.get("website"))

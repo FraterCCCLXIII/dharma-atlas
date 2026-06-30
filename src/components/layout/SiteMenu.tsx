@@ -69,6 +69,22 @@ export function SiteMenu() {
         className="z-[1000] min-w-[11rem] overflow-hidden rounded-xl border border-border bg-surface-elevated py-1 shadow-[var(--shadow-float)]"
       >
         <Link
+          href="/manage"
+          role="menuitem"
+          onClick={() => setMenuOpen(false)}
+          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+        >
+          Manage listings
+        </Link>
+        <Link
+          href="/login"
+          role="menuitem"
+          onClick={() => setMenuOpen(false)}
+          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+        >
+          Sign in
+        </Link>
+        <Link
           href="/submit"
           role="menuitem"
           onClick={() => setMenuOpen(false)}

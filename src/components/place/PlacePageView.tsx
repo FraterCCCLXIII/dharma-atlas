@@ -11,12 +11,15 @@ import {
   Sparkle,
 } from "@phosphor-icons/react";
 import { DetailPageActions } from "@/components/report/ReportEntryModal";
+import { placeDisplayDescription } from "@/lib/place-description";
 import { getPlaceMapsUrls } from "@/lib/place-maps";
+import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import type { Place } from "@/types/place";
 import { DetailNav } from "@/components/layout/SiteHeader";
 import { PlaceContactDetails } from "@/components/place/PlaceContactDetails";
+import { PlaceHours } from "@/components/place/PlaceHours";
 import { SimilarPlaces } from "./SimilarPlaces";
 
 const PlaceSingleMap = dynamic(
@@ -40,6 +43,9 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
   const gradient = traditionGradient(place.tradition);
   const schools = getSchools(place);
+  const aboutText = placeDisplayDescription(place);
+  const photos = getPlaceDisplayPhotos(place);
+  const showPhotoGrid = photos.length > 1;
 
   return (
     <div className="min-h-dvh bg-surface">
@@ -56,18 +62,54 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
             <span className="hidden sm:inline">Back</span>
           </Link>
 
-          <div className="grid h-[240px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-2xl sm:h-[360px] sm:gap-3 lg:h-[420px]">
-            <div className={`relative col-span-2 row-span-2 bg-gradient-to-br ${gradient}`}>
+          {showPhotoGrid ? (
+            <div className="grid h-[240px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-2xl sm:h-[360px] sm:gap-3 lg:h-[420px]">
+              <div className={`relative col-span-2 row-span-2 bg-gradient-to-br ${gradient}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photos[0]}
+                  alt={place.name}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 rounded-full bg-black/30 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                  {place.tradition}
+                </div>
+              </div>
+              {[1, 2, 3, 4].map((index) => (
+                <div
+                  key={index}
+                  className={`bg-gradient-to-br ${gradient} ${photos[index] ? "opacity-90" : "opacity-70"}`}
+                  style={
+                    photos[index]
+                      ? { backgroundImage: `url(${photos[index]})`, backgroundSize: "cover" }
+                      : undefined
+                  }
+                />
+              ))}
+            </div>
+          ) : (
+            <div
+              className={`relative h-[240px] overflow-hidden rounded-2xl sm:h-[360px] lg:h-[420px] ${
+                photos.length === 1 ? "" : `bg-gradient-to-br ${gradient}`
+              }`}
+            >
+              {photos.length === 1 ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={photos[0]}
+                  alt={place.name}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : null}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 rounded-full bg-black/30 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                 {place.tradition}
               </div>
             </div>
-            <div className={`bg-gradient-to-br ${gradient} opacity-90`} />
-            <div className={`bg-gradient-to-br ${gradient} opacity-75`} />
-            <div className={`bg-gradient-to-br ${gradient} opacity-85`} />
-            <div className={`bg-gradient-to-br ${gradient} opacity-70`} />
-          </div>
+          )}
         </div>
 
         <div className="mb-6 flex items-start justify-between gap-4">
@@ -108,6 +150,7 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
             entityId={place.id}
             entityName={place.name}
             entityPath={`/place/${place.id}`}
+            claimHref={`/claim?place=${place.id}`}
           />
         </div>
 
@@ -117,12 +160,16 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
               <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
                 About this place
               </h2>
-              <p className="max-w-2xl text-base leading-relaxed text-ink-secondary">
-                {place.name} is a {place.type.toLowerCase()} in the{" "}
-                {place.tradition} tradition, listed under{" "}
-                <span className="font-medium text-ink">{place.folder}</span>. Use
-                the map below to plan your visit or get directions.
-              </p>
+              {aboutText ? (
+                <p className="max-w-2xl text-base leading-relaxed text-ink-secondary">
+                  {aboutText}
+                </p>
+              ) : (
+                <p className="max-w-2xl text-sm leading-relaxed text-ink-muted">
+                  We don&apos;t have a written description for this location yet. Contact
+                  details and the map below are the best starting points for planning a visit.
+                </p>
+              )}
               <div className="flex flex-wrap gap-3 pt-2">
                 <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm">
                   <FlowerLotus size={20} weight="duotone" className="text-brand" />
@@ -171,6 +218,17 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
                 </dl>
 
                 <PlaceContactDetails place={place} compact />
+                <PlaceHours place={place} />
+
+                {place.googleRating != null && (
+                  <p className="text-sm text-ink-secondary">
+                    Google rating:{" "}
+                    <span className="font-medium text-ink">{place.googleRating.toFixed(1)}</span>
+                    {place.googleRatingCount != null && (
+                      <span className="text-ink-muted"> ({place.googleRatingCount} reviews)</span>
+                    )}
+                  </p>
+                )}
 
                 <div className="space-y-2 pt-2">
                   <a
@@ -183,7 +241,7 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
                     Get directions
                   </a>
                   <a
-                    href={maps.search}
+                    href={place.googleMapsUri ?? maps.search}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-semibold text-ink transition hover:bg-surface-muted"

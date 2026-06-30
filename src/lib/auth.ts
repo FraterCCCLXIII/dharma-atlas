@@ -24,7 +24,7 @@ export const auth = betterAuth({
       ac,
       roles,
       adminRoles: ["owner"],
-      defaultRole: "editor",
+      defaultRole: "member",
     }),
   ],
 });
