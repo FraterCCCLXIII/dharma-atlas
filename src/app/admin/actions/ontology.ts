@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { replaceOntologyNodes } from "@/lib/data/ontology";
 import { requirePermission } from "@/lib/auth-server";
 import { syncOntologyNodeTypes } from "@/lib/ontology/sync-node-types";
+import { PEOPLE_LIST_PATH } from "@/lib/explore-routes";
 import { ontologyInputSchema } from "@/lib/validations/ontology";
 
 export async function saveOntologyAction(input: unknown) {
@@ -14,7 +15,7 @@ export async function saveOntologyAction(input: unknown) {
 
   revalidatePath("/");
   revalidatePath("/locations");
-  revalidatePath("/teachers");
+  revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/ontology");
   redirect("/admin/ontology");
 }
@@ -26,7 +27,7 @@ export async function resetOntologyAction() {
 
   revalidatePath("/");
   revalidatePath("/locations");
-  revalidatePath("/teachers");
+  revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/ontology");
   redirect("/admin/ontology");
 }

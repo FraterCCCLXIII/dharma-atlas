@@ -14,6 +14,7 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import { DetailPageActions } from "@/components/report/ReportEntryModal";
+import { personProfilePath } from "@/lib/explore-routes";
 import { teacherTraditionGradient } from "@/lib/teachers";
 import {
   formatLifespan,
@@ -85,7 +86,7 @@ function RelationGroup({
               <div className="min-w-0">
                 {hasProfile && person.slug ? (
                   <Link
-                    href={`/teacher/${person.slug}`}
+                    href={personProfilePath(person.slug)}
                     className="font-[family-name:var(--font-fraunces)] text-base font-semibold text-ink transition hover:text-brand"
                   >
                     {person.name}
@@ -151,7 +152,7 @@ export function TeacherPageView({
                 {teacher.tradition}
               </span>
               <span className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-medium text-ink-secondary">
-                {deceased ? "Historical figure" : "Living teacher"}
+                {deceased ? "Historical figure" : "Living"}
               </span>
             </div>
             <div className="space-y-2">
@@ -172,7 +173,7 @@ export function TeacherPageView({
             entityType="teacher"
             entityId={teacher.slug}
             entityName={teacher.name}
-            entityPath={`/teacher/${teacher.slug}`}
+            entityPath={personProfilePath(teacher.slug)}
           />
         </div>
 
@@ -180,7 +181,7 @@ export function TeacherPageView({
           <div className="order-2 space-y-10 lg:order-1">
             <section className="space-y-4 border-b border-border pb-10">
               <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-ink">
-                About this teacher
+                About
               </h2>
               <p className="max-w-2xl text-base leading-relaxed text-ink-secondary">
                 {teacher.shortBio}
@@ -352,7 +353,7 @@ export function TeacherPageView({
                     Profile
                   </p>
                   <p className="mt-1 font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
-                    Teacher details
+                    Profile details
                   </p>
                 </div>
 

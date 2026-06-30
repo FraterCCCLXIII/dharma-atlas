@@ -1,6 +1,43 @@
 import { findBranchHeadSlug, findBuddhismNode, isRootNode } from "@/lib/ontology/sync-node-types";
 import { BUDDHIST_FILTER_ID } from "@/lib/ontology/defaults";
-import type { OntologyNode, OntologySnapshot } from "@/types/ontology";
+import type { OntologyNode, OntologySnapshot, PlaceTraditionPickerOption } from "@/types/ontology";
+
+function buildPlaceTraditionPickerOptions(
+  nodes: OntologyNode[],
+  buddhismNode: OntologyNode | undefined,
+): PlaceTraditionPickerOption[] {
+  const seen = new Set<string>();
+  const options: PlaceTraditionPickerOption[] = [];
+
+  const add = (value: string, label: string, group: PlaceTraditionPickerOption["group"]) => {
+    const trimmed = value.trim();
+    if (!trimmed || seen.has(trimmed)) return;
+    seen.add(trimmed);
+    options.push({ value: trimmed, label: label.trim() || trimmed, group });
+  };
+
+  for (const node of nodes) {
+    if (!node.appliesToLocations) continue;
+
+    const isOtherRoot = isRootNode(node) && node.slug !== buddhismNode?.slug;
+    const group: PlaceTraditionPickerOption["group"] = isOtherRoot ? "Other" : "Buddhist";
+
+    if (node.nodeType === "lineage" || node.nodeType === "tradition") {
+      add(node.filterId, node.label, group);
+    } else if (node.nodeType === "subschool") {
+      add(node.label, node.label, "Buddhist");
+    }
+
+    for (const placeTradition of node.placeTraditions) {
+      add(placeTradition, placeTradition, group);
+    }
+  }
+
+  return options.sort((a, b) => {
+    if (a.group !== b.group) return a.group === "Buddhist" ? -1 : 1;
+    return a.label.localeCompare(b.label);
+  });
+}
 
 export function buildOntologySnapshot(nodes: OntologyNode[]): OntologySnapshot {
   const buddhismNode = findBuddhismNode(nodes);
@@ -51,6 +88,8 @@ export function buildOntologySnapshot(nodes: OntologyNode[]): OntologySnapshot {
     ]),
   ];
 
+  const placeTraditionPickerOptions = buildPlaceTraditionPickerOptions(nodes, buddhismNode);
+
   return {
     buddhistRoot: {
       slug: buddhismNode?.slug ?? "",
@@ -62,6 +101,7 @@ export function buildOntologySnapshot(nodes: OntologyNode[]): OntologySnapshot {
     subschoolRules,
     otherTraditions,
     buddhistPlaceTraditions,
+    placeTraditionPickerOptions,
   };
 }
 
@@ -80,6 +120,7 @@ export function serializeOntologySnapshot(snapshot: OntologySnapshot) {
     })),
     otherTraditions: snapshot.otherTraditions,
     buddhistPlaceTraditions: snapshot.buddhistPlaceTraditions,
+    placeTraditionPickerOptions: snapshot.placeTraditionPickerOptions,
   };
 }
 

@@ -3,16 +3,16 @@
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { fieldClassName, FormField } from "@/components/forms/FormField";
+import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
 import { DraftStatusField } from "@/components/admin/DraftStatusField";
+import { PlacePhotosField } from "@/components/admin/PlacePhotosField";
 import {
-  getActiveOntologySnapshot,
-  getBuddhistPlaceTraditionOptions,
   getSubschoolLabelMap,
   inferSchools,
   subschoolLabel,
 } from "@/lib/schools";
-import { hasDisplayablePlacePhoto } from "@/lib/place-photo";
 import { faiths, placeTypes, type PlaceInput } from "@/lib/validations/place";
+import type { PlacePhoto } from "@/types/place";
 import {
   createPlaceAction,
   deletePlaceAction,
@@ -72,25 +72,15 @@ function FormSection({
 
 interface PlaceFormProps {
   initial?: PlaceInput;
+  initialPhotos?: PlacePhoto[];
   mode: "create" | "edit";
 }
 
-export function PlaceForm({ initial, mode }: PlaceFormProps) {
+export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps) {
   const [place, setPlace] = useState<PlaceInput>(initial ?? emptyPlace());
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const originalId = initial?.id ?? "";
-
-  const traditionOptions = useMemo(() => {
-    const options = new Set(getBuddhistPlaceTraditionOptions());
-    const snapshot = getActiveOntologySnapshot();
-    for (const tradition of snapshot.otherTraditions) {
-      options.add(tradition.filterId);
-    }
-    if (place.tradition.trim()) options.add(place.tradition.trim());
-    if (place.faith === "Hindu") options.add("Hindu");
-    return [...options].sort((a, b) => a.localeCompare(b));
-  }, [place.tradition, place.faith]);
 
   const customSchools = place.schools.filter((slug) => !KNOWN_SCHOOL_SLUGS.includes(slug));
 
@@ -227,20 +217,13 @@ export function PlaceForm({ initial, mode }: PlaceFormProps) {
             ))}
           </select>
         </FormField>
-        <FormField id="tradition" label="Tradition">
-          <input
+        <FormField id="tradition" label="Tradition / lineage">
+          <TraditionPickerField
             id="tradition"
-            list="place-tradition-options"
             value={place.tradition}
-            onChange={(e) => set("tradition", e.target.value)}
-            className={fieldClassName}
-            placeholder="Theravada, Zen, Tibetan, …"
+            onChange={(tradition) => set("tradition", tradition)}
+            faith={place.faith}
           />
-          <datalist id="place-tradition-options">
-            {traditionOptions.map((tradition) => (
-              <option key={tradition} value={tradition} />
-            ))}
-          </datalist>
         </FormField>
       </FormSection>
 
@@ -292,14 +275,10 @@ export function PlaceForm({ initial, mode }: PlaceFormProps) {
             placeholder="A short description of this center…"
           />
         </FormField>
-        {hasDisplayablePlacePhoto(place) && place.photo && (
-          <div className="overflow-hidden rounded-xl border border-border">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={place.photo} alt="" className="h-40 w-full object-cover" />
-            <p className="px-3 py-2 text-xs text-ink-muted">
-              Photo source: {place.photoSource ?? "unknown"}
-            </p>
-          </div>
+        {mode === "edit" && originalId ? (
+          <PlacePhotosField placeId={originalId} initialPhotos={initialPhotos} />
+        ) : (
+          <p className="text-sm text-ink-muted">Save the location first, then you can add up to 5 photos.</p>
         )}
         {mode === "edit" && originalId && place.qualityFlags && place.qualityFlags.length > 0 && (
           <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">

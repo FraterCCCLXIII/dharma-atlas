@@ -47,8 +47,8 @@ export function getSearchPlaceholder(entityFilter: EntityFilter): string {
     case "locations":
       return "Search temples & monasteries";
     case "people":
-      return "Search teachers";
+      return "Search people";
     default:
-      return "Search locations & teachers";
+      return "Search locations & people";
   }
 }

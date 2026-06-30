@@ -33,6 +33,12 @@ export type OtherTraditionDef = {
   label: string;
 };
 
+export type PlaceTraditionPickerOption = {
+  value: string;
+  label: string;
+  group: "Buddhist" | "Other";
+};
+
 /** Runtime snapshot used by filter and matching logic. */
 export type OntologySnapshot = {
   buddhistRoot: {
@@ -45,6 +51,7 @@ export type OntologySnapshot = {
   subschoolRules: SubschoolRule[];
   otherTraditions: OtherTraditionDef[];
   buddhistPlaceTraditions: string[];
+  placeTraditionPickerOptions: PlaceTraditionPickerOption[];
 };
 
 export type OntologyNodeInput = Omit<OntologyNode, "sortOrder"> & {

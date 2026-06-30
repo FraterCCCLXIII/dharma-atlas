@@ -9,6 +9,7 @@ const navItems = [
   { href: "/admin/submissions", label: "Submissions" },
   { href: "/admin/claims", label: "Claims" },
   { href: "/admin/reports", label: "Reports" },
+  { href: "/admin/backup", label: "Backups", ownerOnly: true },
 ];
 
 export function AdminShell({
@@ -17,12 +18,14 @@ export function AdminShell({
   pendingClaims,
   pendingReports,
   userEmail,
+  isOwner = false,
 }: {
   children: ReactNode;
   pendingSubmissions: number;
   pendingClaims: number;
   pendingReports: number;
   userEmail: string;
+  isOwner?: boolean;
 }) {
   return (
     <div className="flex min-h-dvh bg-surface text-ink">
@@ -37,7 +40,9 @@ export function AdminShell({
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
-          {navItems.map((item) => (
+          {navItems
+            .filter((item) => !("ownerOnly" in item && item.ownerOnly) || isOwner)
+            .map((item) => (
             <AdminNavLink key={item.href} href={item.href} exact={item.exact}>
               {item.label}
               {item.href === "/admin/submissions" && pendingSubmissions > 0 && (

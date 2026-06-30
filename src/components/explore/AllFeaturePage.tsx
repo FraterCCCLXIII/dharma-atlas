@@ -8,6 +8,7 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import { cardLiftClassName } from "@/lib/card-styles";
+import { PEOPLE_LIST_PATH } from "@/lib/explore-routes";
 import {
   getDirectoryStats,
   getFeaturedPlaces,
@@ -106,7 +107,7 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
       <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pt-10">
         <section className="grid gap-3 sm:grid-cols-3">
           <Stat label="Locations" value={stats.placeCount.toLocaleString()} />
-          <Stat label="Teachers" value={stats.teacherCount.toLocaleString()} />
+          <Stat label="People" value={stats.teacherCount.toLocaleString()} />
           <Stat
             label="Traditions"
             value={stats.traditionCount.toLocaleString()}
@@ -123,9 +124,9 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
           gradient="from-teal-700 via-emerald-800 to-stone-900"
         />
         <BrowseCard
-          href="/teachers"
+          href={PEOPLE_LIST_PATH}
           eyebrow="People"
-          title="Meet teachers"
+          title="Explore people"
           description="Discover guides, lineage holders, and contemporary voices across spiritual paths."
           icon={UsersThree}
           gradient="from-amber-700 via-orange-700 to-stone-900"
@@ -177,17 +178,17 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
-                Featured teachers
+                Featured people
               </p>
               <h2 className="mt-1 font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-ink">
                 Voices across traditions
               </h2>
             </div>
             <Link
-              href="/teachers"
+              href={PEOPLE_LIST_PATH}
               className="inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline"
             >
-              See all teachers
+              See all people
               <ArrowRight size={14} weight="bold" />
             </Link>
           </div>

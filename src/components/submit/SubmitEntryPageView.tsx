@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
+import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
 import { FormPageShell } from "@/components/layout/FormPageShell";
 import { placeTypes } from "@/lib/validations/place";
 
@@ -12,6 +13,7 @@ export function SubmitEntryPageView() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [locationTradition, setLocationTradition] = useState("");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,8 +81,8 @@ export function SubmitEntryPageView() {
         entryType === "location"
           ? "Suggest a meditation center, monastery, temple, or other place for the directory."
           : entryType === "teacher"
-            ? "Suggest a teacher, guide, or lineage holder for the directory."
-            : "Suggest a meditation center, monastery, or teacher for the directory."
+            ? "Suggest a person, guide, or lineage holder for the directory."
+            : "Suggest a meditation center, monastery, or person for the directory."
       }
     >
       {submitted ? (
@@ -99,6 +101,7 @@ export function SubmitEntryPageView() {
               onChange={(e) => {
                 setEntryType(e.target.value as EntryType);
                 setError("");
+                setLocationTradition("");
               }}
               className={fieldClassName}
             >
@@ -106,7 +109,7 @@ export function SubmitEntryPageView() {
                 Select type
               </option>
               <option value="location">Location</option>
-              <option value="teacher">Teacher</option>
+              <option value="teacher">Person</option>
             </select>
           </FormField>
 
@@ -160,12 +163,12 @@ export function SubmitEntryPageView() {
                 />
               </FormField>
 
-              <FormField id="submit-tradition" label="Tradition">
-                <input
+              <FormField id="submit-tradition" label="Tradition / lineage">
+                <TraditionPickerField
                   id="submit-tradition"
                   name="tradition"
-                  type="text"
-                  className={fieldClassName}
+                  value={locationTradition}
+                  onChange={setLocationTradition}
                   placeholder="e.g. Zen, Tibetan, Theravada, Hindu"
                 />
               </FormField>
@@ -194,7 +197,7 @@ export function SubmitEntryPageView() {
 
           {entryType === "teacher" && (
             <>
-              <FormField id="submit-name" label="Teacher name">
+              <FormField id="submit-name" label="Name">
                 <input
                   id="submit-name"
                   name="name"

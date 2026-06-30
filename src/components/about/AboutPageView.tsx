@@ -6,7 +6,7 @@ export function AboutPageView() {
       <div className="space-y-5 text-base leading-relaxed text-ink-secondary">
         <p>
           Dharma Streams is an open directory of meditation centers, monasteries,
-          and spiritual teachers across traditions — built to help practitioners
+          and spiritual guides across traditions — built to help practitioners
           find communities and lineages near them.
         </p>
         <p>

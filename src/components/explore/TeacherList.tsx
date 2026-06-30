@@ -20,11 +20,10 @@ export function TeacherList({ teachers, variant = "default" }: TeacherListProps)
         }`}
       >
         <p className="font-[family-name:var(--font-fraunces)] text-lg font-semibold text-ink">
-          No teachers found
+          No people found
         </p>
         <p className="mt-2 max-w-sm text-sm text-ink-muted">
-          Try a different search or clear your filters to see more spiritual
-          teachers.
+          Try a different search or clear your filters to see more profiles.
         </p>
       </div>
     );

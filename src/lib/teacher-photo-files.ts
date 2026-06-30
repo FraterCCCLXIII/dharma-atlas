@@ -2,8 +2,13 @@ import "server-only";
 
 import { existsSync, mkdirSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import {
+  isLocalPeoplePhotoPath,
+  PEOPLE_PHOTO_PREFIX,
+} from "@/lib/people-photo-paths";
 
-const TEACHERS_DIR = join(process.cwd(), "public/teachers");
+const PEOPLE_DIR = join(process.cwd(), "public/people");
+const LEGACY_PEOPLE_PHOTO_PREFIX = "/teachers/";
 
 const EXT_BY_TYPE: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -68,10 +73,12 @@ export function resolveImageContentType(buffer: Buffer, declaredType: string): s
 export { MAX_BYTES as TEACHER_PHOTO_MAX_BYTES };
 
 export function localTeacherPhotoDiskPath(webPath: string): string | null {
-  if (!webPath.startsWith("/teachers/")) return null;
-  const relative = webPath.slice(1);
+  if (!isLocalPeoplePhotoPath(webPath)) return null;
+  const relative = webPath.startsWith(PEOPLE_PHOTO_PREFIX)
+    ? webPath.slice(PEOPLE_PHOTO_PREFIX.length)
+    : webPath.slice(LEGACY_PEOPLE_PHOTO_PREFIX.length);
   if (relative.includes("..")) return null;
-  return join(process.cwd(), "public", relative);
+  return join(PEOPLE_DIR, relative);
 }
 
 export type TeacherPhotoVariant = "portrait" | "hero";
@@ -88,11 +95,11 @@ export function deleteLocalTeacherPhoto(webPath: string): void {
 }
 
 export function deleteLocalTeacherPhotoVariant(slug: string, variant: TeacherPhotoVariant): void {
-  if (!existsSync(TEACHERS_DIR)) return;
+  if (!existsSync(PEOPLE_DIR)) return;
   const prefix = filenamePrefix(slug, variant);
-  for (const file of readdirSync(TEACHERS_DIR)) {
+  for (const file of readdirSync(PEOPLE_DIR)) {
     if (file.startsWith(prefix)) {
-      unlinkSync(join(TEACHERS_DIR, file));
+      unlinkSync(join(PEOPLE_DIR, file));
     }
   }
 }
@@ -115,11 +122,11 @@ export function saveLocalTeacherPhoto(
     throw new Error("Image must be 5 MB or smaller.");
   }
 
-  mkdirSync(TEACHERS_DIR, { recursive: true });
+  mkdirSync(PEOPLE_DIR, { recursive: true });
   deleteLocalTeacherPhotoVariant(slug, variant);
 
   const ext = extFromContentType(contentType);
   const filename = variant === "hero" ? `${slug}-hero${ext}` : `${slug}${ext}`;
-  writeFileSync(join(TEACHERS_DIR, filename), buffer);
-  return `/teachers/${filename}`;
+  writeFileSync(join(PEOPLE_DIR, filename), buffer);
+  return `${PEOPLE_PHOTO_PREFIX}${filename}`;
 }

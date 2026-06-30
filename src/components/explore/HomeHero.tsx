@@ -26,7 +26,7 @@ export function HomeHero() {
             Discover the Dharma Everywhere
           </h1>
           <p className="max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
-            Meditation centers, monasteries, and teachers across traditions — one
+            Meditation centers, monasteries, and people across traditions — one
             living directory for your path.
           </p>
         </div>

@@ -1,8 +1,8 @@
 import type { Place } from "@/types/place";
-import type { LineageSchoolDef, OntologySnapshot } from "@/types/ontology";
+import type { LineageSchoolDef, OntologySnapshot, PlaceTraditionPickerOption } from "@/types/ontology";
 import { DEFAULT_ONTOLOGY_SNAPSHOT } from "@/lib/ontology/defaults";
 
-export type { LineageSchoolDef } from "@/types/ontology";
+export type { LineageSchoolDef, PlaceTraditionPickerOption } from "@/types/ontology";
 
 export type EntityScope = "all" | "locations" | "people";
 
@@ -72,6 +72,41 @@ export function getSubschoolLabelMap(): Record<string, string> {
 
 export function getBuddhistPlaceTraditionOptions(): string[] {
   return getBuddhistPlaceTraditions();
+}
+
+/** Options for place tradition pickers, derived from the active ontology snapshot. */
+export function getPlaceTraditionPickerOptions(
+  faith?: string,
+  includeValue?: string,
+): PlaceTraditionPickerOption[] {
+  const snapshot = getActiveOntologySnapshot();
+  let options = snapshot.placeTraditionPickerOptions;
+
+  if (faith === "Buddhist") {
+    options = options.filter((option) => option.group === "Buddhist");
+  } else if (faith === "Hindu") {
+    options = options.filter((option) => option.group === "Other");
+  }
+
+  if (includeValue?.trim()) {
+    const trimmed = includeValue.trim();
+    if (!options.some((option) => option.value === trimmed)) {
+      const group: PlaceTraditionPickerOption["group"] = isBuddhistPlaceTradition(trimmed)
+        ? "Buddhist"
+        : "Other";
+      options = [...options, { value: trimmed, label: trimmed, group }];
+    }
+  }
+
+  return options;
+}
+
+export function isKnownPlaceTradition(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  return getActiveOntologySnapshot().placeTraditionPickerOptions.some(
+    (option) => option.value === trimmed,
+  );
 }
 
 export function subschoolLabel(slug: string): string {

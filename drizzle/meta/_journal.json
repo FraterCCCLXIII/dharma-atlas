@@ -64,6 +64,13 @@
       "when": 1782840000000,
       "tag": "0009_owner_accounts",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1782920000000,
+      "tag": "0010_place_photos",
+      "breakpoints": true
     }
   ]
 }

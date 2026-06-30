@@ -17,7 +17,7 @@ export function DirectoryList({ entries }: DirectoryListProps) {
         </p>
         <p className="mt-2 max-w-sm text-sm text-ink-muted">
           Try a different search or clear your filters to see more locations
-          and teachers.
+          and people.
         </p>
       </div>
     );

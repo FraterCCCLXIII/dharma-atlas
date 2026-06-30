@@ -38,6 +38,7 @@ export default async function AdminLayout({
         pendingClaims={pendingClaims}
         pendingReports={pendingReports}
         userEmail={session.user.email}
+        isOwner={session.user.role === "owner"}
       >
         {children}
       </AdminShell>

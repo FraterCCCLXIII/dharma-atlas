@@ -29,7 +29,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx scripts/seed-from-json.ts",
     "db:studio": "drizzle-kit studio",
-    "auth:create-owner": "tsx scripts/create-owner.ts"
+    "auth:create-owner": "tsx scripts/create-owner.ts",
+    "backup": "tsx scripts/backup.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

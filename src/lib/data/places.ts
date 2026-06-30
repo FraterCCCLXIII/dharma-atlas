@@ -3,6 +3,7 @@ import "server-only";
 import { count, eq, ilike, or, and, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
 import { places } from "@/db/schema";
+import { attachPhotosToPlace } from "@/lib/data/place-photos";
 import { rowToPlace } from "@/lib/place-row";
 import type { Place } from "@/types/place";
 
@@ -47,7 +48,7 @@ export async function getPlaceById(
   const [row] = await db.select().from(places).where(eq(places.id, id)).limit(1);
   if (!row) return null;
   if (row.isDraft && !options?.includeDrafts) return null;
-  return rowToPlace(row);
+  return attachPhotosToPlace(rowToPlace(row));
 }
 
 export async function searchPlaces(options: {

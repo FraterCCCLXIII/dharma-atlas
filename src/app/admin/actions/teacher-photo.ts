@@ -14,6 +14,8 @@ import {
   TEACHER_PHOTO_MAX_BYTES,
   type TeacherPhotoVariant,
 } from "@/lib/teacher-photo-files";
+import { isLocalPeoplePhotoPath } from "@/lib/people-photo-paths";
+import { PEOPLE_LIST_PATH, personProfilePath } from "@/lib/explore-routes";
 
 async function requireTeacherPhotoPermission() {
   const session = await requireSession();
@@ -63,8 +65,8 @@ export async function uploadTeacherPhotoAction(
     await db.update(teachers).set(patch).where(eq(teachers.slug, normalizedSlug));
   }
 
-  revalidatePath(`/teacher/${normalizedSlug}`);
-  revalidatePath("/teachers");
+  revalidatePath(personProfilePath(normalizedSlug));
+  revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/teachers");
 
   return { path };
@@ -73,12 +75,12 @@ export async function uploadTeacherPhotoAction(
 export async function deleteTeacherPhotoAction(slug: string, photoPath: string) {
   await requireTeacherPhotoPermission();
 
-  if (photoPath.startsWith("/teachers/")) {
+  if (isLocalPeoplePhotoPath(photoPath)) {
     deleteLocalTeacherPhoto(photoPath);
   }
 
-  revalidatePath(`/teacher/${slug}`);
-  revalidatePath("/teachers");
+  revalidatePath(personProfilePath(slug));
+  revalidatePath(PEOPLE_LIST_PATH);
 
   return { ok: true };
 }

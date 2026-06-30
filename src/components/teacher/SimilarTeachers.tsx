@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { personProfilePath } from "@/lib/explore-routes";
 import { cardLiftClassName } from "@/lib/card-styles";
 import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
@@ -20,7 +21,7 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
           Also in the directory
         </h2>
         <p className="mt-1 text-sm text-ink-secondary">
-          Other teachers in the same tradition and lineage.
+          Other people in the same tradition and lineage.
         </p>
       </div>
 
@@ -28,7 +29,7 @@ export function SimilarTeachers({ teachers }: SimilarTeachersProps) {
         {teachers.map((teacher) => (
           <Link
             key={teacher.slug}
-            href={`/teacher/${teacher.slug}`}
+            href={personProfilePath(teacher.slug)}
             className={`group overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName}`}
           >
             <div className="relative aspect-[4/5] overflow-hidden bg-surface-muted">

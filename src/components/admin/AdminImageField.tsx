@@ -6,6 +6,7 @@ import {
   deleteTeacherPhotoAction,
   uploadTeacherPhotoAction,
 } from "@/app/admin/actions/teacher-photo";
+import { isLocalPeoplePhotoPath } from "@/lib/people-photo-paths";
 import { imageFromClipboard } from "@/lib/clipboard-image";
 
 interface AdminImageFieldProps {
@@ -73,7 +74,7 @@ export function AdminImageField({
     setError("");
 
     try {
-      if (slugReady && value.startsWith("/teachers/")) {
+      if (slugReady && isLocalPeoplePhotoPath(value)) {
         await deleteTeacherPhotoAction(slug.trim(), value);
       }
       onChange("");

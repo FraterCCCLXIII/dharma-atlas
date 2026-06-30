@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Sync teacher photo paths in Postgres (and teachers.json) with files in public/teachers/.
+ * Sync teacher photo paths in Postgres (and teachers.json) with files in public/people/.
  *
  * Fixes cases where image files were replaced on disk but DB paths still point at old extensions.
  *
@@ -18,7 +18,7 @@ import { teachers } from "../src/db/schema";
 import type { TeachersDataset } from "../src/types/teacher";
 
 const ROOT = join(import.meta.dirname, "..");
-const TEACHERS_DIR = join(ROOT, "public/teachers");
+const TEACHERS_DIR = join(ROOT, "public/people");
 const TEACHERS_JSON = join(ROOT, "src/data/teachers.json");
 
 const DRY_RUN = process.argv.includes("--dry-run");
@@ -34,12 +34,15 @@ function heroFilename(slug: string, files: string[]): string | null {
 }
 
 function localPath(filename: string): string {
-  return `/teachers/${filename}`;
+  return `/people/${filename}`;
 }
 
 function pathExists(webPath: string): boolean {
-  if (!webPath.startsWith("/teachers/")) return false;
-  return existsSync(join(ROOT, "public", webPath.slice(1)));
+  if (!webPath.startsWith("/people/") && !webPath.startsWith("/teachers/")) return false;
+  const relative = webPath.startsWith("/people/")
+    ? webPath.slice("/people/".length)
+    : webPath.slice("/teachers/".length);
+  return existsSync(join(TEACHERS_DIR, relative));
 }
 
 async function main() {

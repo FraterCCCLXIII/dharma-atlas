@@ -288,7 +288,7 @@ export async function findPortraitUrl(input: ImageSearchInput): Promise<{
 
 export function needsReplacement(photo: string): boolean {
   if (!photo) return true;
-  if (photo.startsWith("/teachers/")) return false;
+  if (photo.startsWith("/people/") || photo.startsWith("/teachers/")) return false;
   if (!isLikelyPortraitUrl(photo)) return true;
   if (photo.includes("Special:FilePath") || photo.includes("/wiki/")) return true;
   if (photo.includes("gettyimages.com")) return true;

@@ -47,6 +47,21 @@ export const places = pgTable("places", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const placePhotos = pgTable(
+  "place_photos",
+  {
+    id: serial("id").primaryKey(),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    path: text("path").notNull(),
+    photoSource: text("photo_source"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("place_photos_place_idx").on(table.placeId)],
+);
+
 export const teachers = pgTable("teachers", {
   slug: text("slug").primaryKey(),
   name: text("name").notNull(),

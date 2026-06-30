@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { User } from "@phosphor-icons/react";
 import { motion } from "motion/react";
+import { personProfilePath } from "@/lib/explore-routes";
 import { cardLiftClassName } from "@/lib/card-styles";
 import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
@@ -31,7 +32,7 @@ export function TeacherCard({
       transition={{ duration: 0.25, delay: Math.min(index * 0.02, 0.2) }}
     >
       <Link
-        href={`/teacher/${teacher.slug}`}
+        href={personProfilePath(teacher.slug)}
         className={`group block overflow-hidden rounded-2xl border border-border bg-surface-elevated text-left shadow-[var(--shadow-card)] ${cardLiftClassName} hover:border-brand/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40`}
       >
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-muted">
@@ -49,7 +50,7 @@ export function TeacherCard({
           )}
           {showKindBadge && (
             <span className="absolute left-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
-              Teacher
+              Person
             </span>
           )}
         </div>

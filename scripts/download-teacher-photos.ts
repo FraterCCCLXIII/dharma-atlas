@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Download teacher portrait images to public/teachers/ and point photo URLs at local files.
+ * Download teacher portrait images to public/people/ and point photo URLs at local files.
  *
  * For teachers without a photo (or with a broken URL), searches Wikipedia/Wikidata first.
  * Updates src/data/teachers.json and optionally the database when DATABASE_URL is set.
@@ -28,7 +28,7 @@ import { USER_AGENT } from "./sources/http";
 
 const ROOT = join(import.meta.dirname, "..");
 const TEACHERS_JSON = join(ROOT, "src/data/teachers.json");
-const OUTPUT_DIR = join(ROOT, "public/teachers");
+const OUTPUT_DIR = join(ROOT, "public/people");
 const SOURCE_JSON = join(
   ROOT,
   "../Documents/github/spiritual-teachers/scripts/data/teachers.generated.json",
@@ -73,7 +73,7 @@ function extFromContentType(contentType: string): string {
 }
 
 function localPhotoPath(slug: string, ext: string): string {
-  return `/teachers/${slug}${ext}`;
+  return `/people/${slug}${ext}`;
 }
 
 interface SourceMeta {
@@ -173,7 +173,7 @@ async function main() {
 
   for (const teacher of dataset.teachers) {
     const existingLocal =
-      teacher.photo.startsWith("/teachers/") &&
+      (teacher.photo.startsWith("/people/") || teacher.photo.startsWith("/teachers/")) &&
       existsSync(join(ROOT, "public", teacher.photo.slice(1)));
 
     if (existingLocal && !FORCE) {
@@ -221,7 +221,11 @@ async function main() {
 
     const localPath = localPhotoPath(teacher.slug, result.ext);
     teacher.photo = localPath;
-    if (teacher.heroPhoto && !teacher.heroPhoto.startsWith("/teachers/")) {
+    if (
+      teacher.heroPhoto &&
+      !teacher.heroPhoto.startsWith("/people/") &&
+      !teacher.heroPhoto.startsWith("/teachers/")
+    ) {
       teacher.heroPhoto = localPath;
     }
 

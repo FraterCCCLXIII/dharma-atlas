@@ -12,5 +12,5 @@ export default async function EditPlacePage({
   const place = await getPlaceById(id, { includeDrafts: true });
   if (!place) notFound();
 
-  return <PlaceForm mode="edit" initial={placeToInput(place)} />;
+  return <PlaceForm mode="edit" initial={placeToInput(place)} initialPhotos={place.photos ?? []} />;
 }

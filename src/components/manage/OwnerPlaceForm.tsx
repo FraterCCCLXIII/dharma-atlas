@@ -3,17 +3,21 @@
 import Link from "next/link";
 import { useState } from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
+import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
 import {
   createMemberPlaceAction,
   updateOwnerPlaceAction,
 } from "@/app/manage/actions/places";
 import { faiths, placeTypes } from "@/lib/validations/place";
 import type { OwnerPlaceEditInput } from "@/lib/validations/owner-place";
+import { PlacePhotosField } from "@/components/admin/PlacePhotosField";
 import type { Place } from "@/types/place";
 
 export function MemberCreatePlaceForm() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [faith, setFaith] = useState<(typeof faiths)[number]>("Buddhist");
+  const [tradition, setTradition] = useState("Buddhist");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,22 +65,39 @@ export function MemberCreatePlaceForm() {
       </FormField>
 
       <FormField id="faith" label="Faith tradition">
-        <select id="faith" name="faith" required className={fieldClassName} defaultValue="Buddhist">
-          {faiths.map((faith) => (
-            <option key={faith} value={faith}>
-              {faith}
+        <select
+          id="faith"
+          name="faith"
+          required
+          className={fieldClassName}
+          value={faith}
+          onChange={(event) => {
+            const nextFaith = event.target.value as (typeof faiths)[number];
+            setFaith(nextFaith);
+            if (nextFaith === "Hindu" && tradition === "Buddhist") {
+              setTradition("Hindu");
+            }
+            if (nextFaith === "Buddhist" && tradition === "Hindu") {
+              setTradition("Buddhist");
+            }
+          }}
+        >
+          {faiths.map((faithOption) => (
+            <option key={faithOption} value={faithOption}>
+              {faithOption}
             </option>
           ))}
         </select>
       </FormField>
 
       <FormField id="tradition" label="Tradition / lineage">
-        <input
+        <TraditionPickerField
           id="tradition"
           name="tradition"
-          className={fieldClassName}
-          placeholder="e.g. Zen, Tibetan, Theravada"
-          defaultValue="Buddhist"
+          value={tradition}
+          onChange={setTradition}
+          faith={faith}
+          placeholder="e.g. Zen, Tibetan, Advaita Vedanta"
         />
       </FormField>
 
@@ -204,6 +225,8 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
           className={`${fieldClassName} resize-y`}
         />
       </FormField>
+
+      <PlacePhotosField placeId={place.id} initialPhotos={place.photos ?? []} />
 
       {error && (
         <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">

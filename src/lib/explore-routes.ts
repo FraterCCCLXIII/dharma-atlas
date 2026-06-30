@@ -1,9 +1,15 @@
 import type { EntityFilter } from "@/store/explore-store";
 
+export const PEOPLE_LIST_PATH = "/people";
+
+export function personProfilePath(slug: string): string {
+  return `/person/${slug}`;
+}
+
 const EXPLORE_PATHS: Record<EntityFilter, string> = {
   all: "/",
   locations: "/locations",
-  people: "/teachers",
+  people: PEOPLE_LIST_PATH,
 };
 
 export function pathFromEntityFilter(filter: EntityFilter): string {
@@ -15,9 +21,9 @@ export function entityFilterFromPath(pathname: string): EntityFilter {
     return "locations";
   }
   if (
-    pathname === "/teachers" ||
-    pathname.startsWith("/teachers/") ||
-    pathname.startsWith("/teacher/")
+    pathname === PEOPLE_LIST_PATH ||
+    pathname.startsWith(`${PEOPLE_LIST_PATH}/`) ||
+    pathname.startsWith("/person/")
   ) {
     return "people";
   }
@@ -29,6 +35,6 @@ export function isExplorePath(pathname: string): boolean {
     pathname === "/" ||
     pathname === "/all" ||
     pathname === "/locations" ||
-    pathname === "/teachers"
+    pathname === PEOPLE_LIST_PATH
   );
 }

@@ -1,4 +1,4 @@
-import type { Place } from "@/types/place";
+import type { Place, PlacePhoto } from "@/types/place";
 
 export function isGeneratedPlacePhoto(
   photo: string | null | undefined,
@@ -10,15 +10,35 @@ export function isGeneratedPlacePhoto(
 }
 
 export function getPlaceDisplayPhotos(
-  place: { photo?: string | null; photoSource?: Place["photoSource"] | null },
+  place: {
+    photo?: string | null;
+    photoSource?: Place["photoSource"] | null;
+    photos?: PlacePhoto[];
+  },
 ): string[] {
+  const fromGallery = (place.photos ?? [])
+    .filter(
+      (entry) =>
+        entry.path.trim() &&
+        !isGeneratedPlacePhoto(entry.path, entry.photoSource ?? place.photoSource),
+    )
+    .map((entry) => entry.path.trim());
+
+  if (fromGallery.length > 0) {
+    return fromGallery;
+  }
+
   const photo = place.photo?.trim();
   if (!photo || isGeneratedPlacePhoto(photo, place.photoSource)) return [];
   return [photo];
 }
 
 export function hasDisplayablePlacePhoto(
-  place: { photo?: string | null; photoSource?: Place["photoSource"] | null },
+  place: {
+    photo?: string | null;
+    photoSource?: Place["photoSource"] | null;
+    photos?: PlacePhoto[];
+  },
 ): boolean {
   return getPlaceDisplayPhotos(place).length > 0;
 }

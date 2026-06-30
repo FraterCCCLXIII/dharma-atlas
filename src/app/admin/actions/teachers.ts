@@ -13,6 +13,7 @@ import {
 } from "@/db/schema";
 import { requirePermission } from "@/lib/auth-server";
 import { deleteAllLocalPhotosForSlug } from "@/lib/teacher-photo-files";
+import { PEOPLE_LIST_PATH, personProfilePath } from "@/lib/explore-routes";
 import { teacherInputSchema, type TeacherInput } from "@/lib/validations/teacher";
 
 async function replaceTeacherRelations(slug: string, input: TeacherInput) {
@@ -92,8 +93,8 @@ export async function createTeacherAction(input: TeacherInput) {
   await replaceTeacherRelations(data.slug, data);
 
   revalidatePath("/");
-  revalidatePath("/teachers");
-  revalidatePath(`/teacher/${data.slug}`);
+  revalidatePath(PEOPLE_LIST_PATH);
+  revalidatePath(personProfilePath(data.slug));
   revalidatePath("/admin/teachers");
   redirect(`/admin/teachers/${data.slug}/edit`);
 }
@@ -106,9 +107,9 @@ export async function updateTeacherAction(originalSlug: string, input: TeacherIn
   await replaceTeacherRelations(data.slug, data);
 
   revalidatePath("/");
-  revalidatePath("/teachers");
-  revalidatePath(`/teacher/${originalSlug}`);
-  revalidatePath(`/teacher/${data.slug}`);
+  revalidatePath(PEOPLE_LIST_PATH);
+  revalidatePath(personProfilePath(originalSlug));
+  revalidatePath(personProfilePath(data.slug));
   revalidatePath("/admin/teachers");
   redirect("/admin/teachers");
 }
@@ -119,7 +120,7 @@ export async function deleteTeacherAction(slug: string) {
   await db.delete(teachers).where(eq(teachers.slug, slug));
 
   revalidatePath("/");
-  revalidatePath("/teachers");
+  revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/teachers");
   redirect("/admin/teachers");
 }

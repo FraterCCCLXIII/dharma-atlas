@@ -34,3 +34,9 @@ export async function requirePermission<R extends Resource>(
   if (!result.success) throw new Error("Forbidden");
   return session;
 }
+
+export async function requireOwner() {
+  const session = await requireSession();
+  if (session.user.role !== "owner") throw new Error("Forbidden");
+  return session;
+}
