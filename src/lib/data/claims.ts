@@ -12,6 +12,8 @@ export interface Claim {
   userEmail: string;
   userName: string;
   placeId: string | null;
+  teacherSlug?: string | null;
+  entityType?: string;
   placeName: string;
   listingUrl: string | null;
   affiliationRole: string;
@@ -32,6 +34,8 @@ function rowToClaim(
     userEmail: userRow.email,
     userName: userRow.name,
     placeId: row.placeId,
+    teacherSlug: row.teacherSlug,
+    entityType: row.entityType,
     placeName: row.placeName,
     listingUrl: row.listingUrl,
     affiliationRole: row.affiliationRole,
@@ -93,7 +97,9 @@ export async function getPendingClaimForUserPlace(userId: string, placeId: strin
 
 export async function createClaim(data: {
   userId: string;
+  entityType?: "place" | "teacher";
   placeId?: string;
+  teacherSlug?: string;
   placeName: string;
   listingUrl?: string;
   affiliationRole: string;
@@ -110,7 +116,9 @@ export async function createClaim(data: {
     .insert(claims)
     .values({
       userId: data.userId,
+      entityType: data.entityType ?? "place",
       placeId: data.placeId ?? null,
+      teacherSlug: data.teacherSlug ?? null,
       placeName: data.placeName,
       listingUrl: data.listingUrl ?? null,
       affiliationRole: data.affiliationRole,
@@ -120,6 +128,17 @@ export async function createClaim(data: {
     .returning();
 
   return row!;
+}
+
+export async function getClaimsForUser(userId: string): Promise<Claim[]> {
+  const rows = await db
+    .select({ claim: claims, user })
+    .from(claims)
+    .innerJoin(user, eq(claims.userId, user.id))
+    .where(eq(claims.userId, userId))
+    .orderBy(desc(claims.createdAt));
+
+  return rows.map((row) => rowToClaim(row.claim, row.user));
 }
 
 export async function updateClaimStatus(

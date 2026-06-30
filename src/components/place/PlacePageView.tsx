@@ -21,6 +21,7 @@ import { DetailNav } from "@/components/layout/SiteHeader";
 import { PlaceContactDetails } from "@/components/place/PlaceContactDetails";
 import { PlaceHours } from "@/components/place/PlaceHours";
 import { SimilarPlaces } from "./SimilarPlaces";
+import { PlaceTeachersSection } from "./PlaceTeachersSection";
 
 const PlaceSingleMap = dynamic(
   () => import("./PlaceSingleMap").then((m) => m.PlaceSingleMap),
@@ -37,9 +38,10 @@ const PlaceSingleMap = dynamic(
 interface PlacePageViewProps {
   place: Place;
   similar: Place[];
+  teachers?: import("@/types/teacher").Teacher[];
 }
 
-export function PlacePageView({ place, similar }: PlacePageViewProps) {
+export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
   const gradient = traditionGradient(place.tradition);
   const schools = getSchools(place);
@@ -77,17 +79,23 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
                   {place.tradition}
                 </div>
               </div>
-              {[1, 2, 3, 4].map((index) => (
-                <div
-                  key={index}
-                  className={`bg-gradient-to-br ${gradient} ${photos[index] ? "opacity-90" : "opacity-70"}`}
-                  style={
-                    photos[index]
-                      ? { backgroundImage: `url(${photos[index]})`, backgroundSize: "cover" }
-                      : undefined
-                  }
-                />
-              ))}
+              {[1, 2, 3, 4].map((index) =>
+                photos[index] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={index}
+                    src={photos[index]}
+                    alt={`${place.name} photo ${index + 1}`}
+                    className={`h-full w-full object-cover bg-gradient-to-br ${gradient}`}
+                  />
+                ) : (
+                  <div
+                    key={index}
+                    className={`bg-gradient-to-br ${gradient} opacity-70`}
+                    aria-hidden
+                  />
+                ),
+              )}
             </div>
           ) : (
             <div
@@ -254,6 +262,8 @@ export function PlacePageView({ place, similar }: PlacePageViewProps) {
             </div>
           </aside>
         </div>
+
+        <PlaceTeachersSection teachers={teachers} />
 
         {similar.length > 0 && (
           <section className="mt-16 border-t border-border pt-12">

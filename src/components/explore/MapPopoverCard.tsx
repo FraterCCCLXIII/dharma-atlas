@@ -24,6 +24,8 @@ export function MapPopoverCard({ place, onViewDetails }: MapPopoverCardProps) {
           <img
             src={photos[0]}
             alt=""
+            loading="eager"
+            decoding="sync"
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : null}

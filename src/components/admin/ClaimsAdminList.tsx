@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import type { Claim } from "@/lib/data/claims";
-import { approveClaimAction, rejectClaimAction } from "@/app/admin/actions/claims";
+import {
+  approveClaimAction,
+  linkClaimPlaceAction,
+  rejectClaimAction,
+} from "@/app/admin/actions/claims";
 
 const filters = [
   { value: "all", label: "All" },
@@ -10,6 +15,69 @@ const filters = [
   { value: "approved", label: "Approved" },
   { value: "rejected", label: "Rejected" },
 ] as const;
+
+function ClaimPlaceLinker({ claim }: { claim: Claim }) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<
+    { id: string; name: string; address: string }[]
+  >([]);
+  const [searching, setSearching] = useState(false);
+
+  async function search(value: string) {
+    const trimmed = value.trim();
+    if (trimmed.length < 2) {
+      setResults([]);
+      return;
+    }
+    setSearching(true);
+    try {
+      const res = await fetch(`/api/places/search?q=${encodeURIComponent(trimmed)}`);
+      const data = (await res.json()) as {
+        places: { id: string; name: string; address: string }[];
+      };
+      setResults(data.places);
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  return (
+    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/50 p-4">
+      <p className="text-sm font-medium text-amber-900">Link to a listing before approving</p>
+      <input
+        type="search"
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          void search(e.target.value);
+        }}
+        placeholder="Search places…"
+        className="mt-2 w-full rounded-lg border border-border px-3 py-2 text-sm"
+      />
+      {searching && <p className="mt-2 text-xs text-ink-muted">Searching…</p>}
+      <ul className="mt-2 space-y-1">
+        {results.map((place) => (
+          <li key={place.id}>
+            <form action={linkClaimPlaceAction} className="flex items-center justify-between gap-2">
+              <input type="hidden" name="id" value={claim.id} />
+              <input type="hidden" name="placeId" value={place.id} />
+              <span className="text-sm">
+                {place.name}
+                {place.address ? ` · ${place.address}` : ""}
+              </span>
+              <button
+                type="submit"
+                className="shrink-0 rounded-full border border-border px-3 py-1 text-xs font-semibold"
+              >
+                Link
+              </button>
+            </form>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function ClaimsAdminList({
   claims,
@@ -83,6 +151,10 @@ export function ClaimsAdminList({
                 </div>
               )}
             </dl>
+
+            {claim.status === "pending" && !claim.placeId && (
+              <ClaimPlaceLinker claim={claim} />
+            )}
 
             {claim.status === "pending" && claim.placeId && (
               <div className="mt-4 flex gap-2">

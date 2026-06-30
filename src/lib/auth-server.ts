@@ -2,7 +2,7 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { roles, statement, type AppRole } from "@/lib/permissions";
+import { isAdminRole, roles, statement, type AppRole } from "@/lib/permissions";
 
 type Resource = keyof typeof statement;
 type Action<R extends Resource> = (typeof statement)[R][number];
@@ -38,5 +38,11 @@ export async function requirePermission<R extends Resource>(
 export async function requireOwner() {
   const session = await requireSession();
   if (session.user.role !== "owner") throw new Error("Forbidden");
+  return session;
+}
+
+export async function requireAdminSession() {
+  const session = await requireSession();
+  if (!isAdminRole(session.user.role)) throw new Error("Forbidden");
   return session;
 }

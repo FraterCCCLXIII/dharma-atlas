@@ -62,8 +62,22 @@ export function ReportEntryModal({
     document.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
 
+    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    const first = focusable?.[0];
+    first?.focus();
+
+    const trapFocus = (event: FocusEvent) => {
+      if (!dialogRef.current?.contains(event.target as Node) && focusable?.length) {
+        first?.focus();
+      }
+    };
+    document.addEventListener("focusin", trapFocus);
+
     return () => {
       document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("focusin", trapFocus);
       document.body.style.overflow = "";
     };
   }, [open, onClose]);

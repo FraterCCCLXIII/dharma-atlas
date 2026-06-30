@@ -14,6 +14,22 @@ export function SubmitEntryPageView() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [locationTradition, setLocationTradition] = useState("");
+  const [duplicates, setDuplicates] = useState<
+    { id: string; name: string; address: string; tradition: string }[]
+  >([]);
+
+  const checkDuplicates = async (name: string, location: string) => {
+    if (name.trim().length < 2) {
+      setDuplicates([]);
+      return;
+    }
+    const params = new URLSearchParams({ name, location });
+    const res = await fetch(`/api/submissions/check-duplicates?${params}`);
+    const data = (await res.json()) as {
+      matches: { id: string; name: string; address: string; tradition: string }[];
+    };
+    setDuplicates(data.matches ?? []);
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -123,6 +139,12 @@ export function SubmitEntryPageView() {
                   required
                   className={fieldClassName}
                   placeholder="e.g. San Francisco Zen Center"
+                  onChange={(e) => {
+                    const location = (
+                      document.getElementById("submit-location") as HTMLInputElement | null
+                    )?.value;
+                    void checkDuplicates(e.target.value, location ?? "");
+                  }}
                 />
               </FormField>
 
@@ -150,8 +172,30 @@ export function SubmitEntryPageView() {
                   required
                   className={fieldClassName}
                   placeholder="e.g. San Francisco, CA"
+                  onChange={(e) => {
+                    const name = (
+                      document.getElementById("submit-name") as HTMLInputElement | null
+                    )?.value;
+                    void checkDuplicates(name ?? "", e.target.value);
+                  }}
                 />
               </FormField>
+
+              {duplicates.length > 0 && (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+                  <p className="font-medium">Did you mean one of these?</p>
+                  <ul className="mt-2 space-y-1">
+                    {duplicates.map((match) => (
+                      <li key={match.id}>
+                        <a href={`/place/${match.id}`} className="text-brand hover:underline">
+                          {match.name}
+                        </a>
+                        {match.address ? ` · ${match.address}` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <FormField id="submit-address" label="Street address">
                 <input

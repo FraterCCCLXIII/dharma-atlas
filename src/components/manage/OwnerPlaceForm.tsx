@@ -6,6 +6,7 @@ import { fieldClassName, FormField, submitButtonClassName } from "@/components/f
 import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
 import {
   createMemberPlaceAction,
+  requestPublishAction,
   updateOwnerPlaceAction,
 } from "@/app/manage/actions/places";
 import { faiths, placeTypes } from "@/lib/validations/place";
@@ -145,15 +146,20 @@ export function MemberCreatePlaceForm() {
 }
 
 export function OwnerPlaceForm({ place }: { place: Place }) {
+  const hoursLines = place.openingHours?.weekdayDescriptions?.join("\n") ?? "";
   const [form, setForm] = useState<OwnerPlaceEditInput>({
     name: place.name,
+    type: place.type,
+    tradition: place.tradition,
     address: place.address,
     phone: place.phone ?? null,
     website: place.website ?? null,
     description: place.description ?? null,
+    hoursText: hoursLines || null,
   });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [requestingPublish, setRequestingPublish] = useState(false);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -187,6 +193,31 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
         />
       </FormField>
 
+      <FormField id="type" label="Place type">
+        <select
+          id="type"
+          value={form.type}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, type: e.target.value as OwnerPlaceEditInput["type"] }))
+          }
+          className={fieldClassName}
+        >
+          {placeTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+      </FormField>
+
+      <FormField id="tradition" label="Tradition">
+        <TraditionPickerField
+          id="tradition"
+          value={form.tradition}
+          onChange={(tradition) => setForm((f) => ({ ...f, tradition }))}
+        />
+      </FormField>
+
       <FormField id="address" label="Address">
         <input
           id="address"
@@ -194,6 +225,10 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
           onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))}
           className={fieldClassName}
         />
+        <p className="mt-1 text-xs text-ink-muted">
+          Coordinates ({place.lat.toFixed(4)}, {place.lng.toFixed(4)}) update when the address
+          changes.
+        </p>
       </FormField>
 
       <FormField id="phone" label="Phone">
@@ -226,6 +261,17 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
         />
       </FormField>
 
+      <FormField id="hours" label="Opening hours">
+        <textarea
+          id="hours"
+          rows={4}
+          value={form.hoursText ?? ""}
+          onChange={(e) => setForm((f) => ({ ...f, hoursText: e.target.value || null }))}
+          className={`${fieldClassName} resize-y`}
+          placeholder={"Monday: 9am – 5pm\nTuesday: 9am – 5pm"}
+        />
+      </FormField>
+
       <PlacePhotosField placeId={place.id} initialPhotos={place.photos ?? []} />
 
       {error && (
@@ -238,12 +284,36 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
         <button type="submit" disabled={saving} className={submitButtonClassName}>
           {saving ? "Saving…" : "Save changes"}
         </button>
-        <Link
-          href={`/place/${place.id}`}
-          className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted"
-        >
-          View public page
-        </Link>
+        {!place.isDraft ? (
+          <Link
+            href={`/place/${place.id}`}
+            className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted"
+          >
+            View public page
+          </Link>
+        ) : (
+          <span className="inline-flex items-center rounded-full border border-dashed border-border px-4 py-2 text-sm text-ink-muted">
+            Preview unavailable — draft
+          </span>
+        )}
+        {place.isDraft && (
+          <button
+            type="button"
+            disabled={requestingPublish}
+            onClick={async () => {
+              setRequestingPublish(true);
+              try {
+                await requestPublishAction(place.id);
+              } catch (e) {
+                setError(e instanceof Error ? e.message : "Could not request publish");
+                setRequestingPublish(false);
+              }
+            }}
+            className="inline-flex items-center rounded-full border border-brand px-4 py-2 text-sm font-medium text-brand transition hover:bg-brand/5"
+          >
+            {requestingPublish ? "Requesting…" : "Request publish"}
+          </button>
+        )}
         <Link
           href="/manage"
           className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted"

@@ -49,3 +49,64 @@ export function composeSubmissionNotes(data: PublicSubmissionInput): string | un
 
   return parts.length > 0 ? parts.join("\n\n") : undefined;
 }
+
+const NOTE_FIELD_PATTERN = /^(Type|Tradition|Address|Lineage):\s*(.+)$/;
+
+/** Parse structured fields from legacy notes or supplement jsonb payload. */
+export function parseSubmissionPayload(
+  row: {
+    entryType: string;
+    payload?: unknown;
+    notes?: string | null;
+    location?: string | null;
+  },
+): Partial<PublicSubmissionInput> {
+  if (row.payload && typeof row.payload === "object") {
+    const parsed = publicSubmissionSchema.safeParse(row.payload);
+    if (parsed.success) return parsed.data;
+  }
+
+  const fields: Record<string, string> = {};
+  for (const block of (row.notes ?? "").split("\n\n")) {
+    const line = block.trim();
+    const match = line.match(NOTE_FIELD_PATTERN);
+    if (match) fields[match[1]] = match[2].trim();
+  }
+
+  if (row.entryType === "location") {
+    const placeType = fields.Type;
+    return {
+      entryType: "location",
+      location: row.location ?? "",
+      ...(placeType && placeTypes.includes(placeType as (typeof placeTypes)[number])
+        ? { placeType: placeType as (typeof placeTypes)[number] }
+        : {}),
+      ...(fields.Tradition ? { tradition: fields.Tradition } : {}),
+      ...(fields.Address ? { address: fields.Address } : {}),
+    };
+  }
+
+  if (row.entryType === "teacher") {
+    return {
+      entryType: "teacher",
+      ...(row.location ? { location: row.location } : {}),
+      ...(fields.Tradition ? { tradition: fields.Tradition } : {}),
+      ...(fields.Lineage ? { lineage: fields.Lineage } : {}),
+    };
+  }
+
+  return {};
+}
+
+export function submissionLocationAddress(
+  data: Partial<PublicSubmissionInput> & { location?: string | null },
+): string {
+  if (data.entryType === "location") {
+    const address =
+      "address" in data && typeof data.address === "string" ? data.address : undefined;
+    const city =
+      "location" in data && typeof data.location === "string" ? data.location : undefined;
+    return [address, city].filter(Boolean).join(", ");
+  }
+  return data.location?.trim() ?? "";
+}

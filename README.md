@@ -118,10 +118,14 @@ Set `BETTER_AUTH_URL` to your public domain (e.g. `https://dharma.example.com`).
 
 ### 3. Persistent storage (required for uploads)
 
-| Container path | Purpose |
-|----------------|---------|
-| `/app/public/places` | Location photos |
-| `/app/public/people` | Teacher/person photos |
+| Container path | Host path (example) | Purpose |
+|----------------|---------------------|---------|
+| `/app/public/places` | `.../volumes/places` | Location photos |
+| `/app/public/people` | `.../volumes/people` | Teacher/person photos |
+
+Add these in Coolify → **Persistent Storage** (bind mounts to the `volumes/places` and `volumes/people` subdirectories).
+
+**Do not** add separate Coolify **Storages** (file volumes) that mount the application root directory (`.../qh28mzd2s1x7ei7eufz559w6`) to `/app/public/places` or `/app/public/people`. Duplicate mounts override the photo directories and every redeploy will break all `/places/*` and `/people/*` images.
 
 On first boot, empty volumes are auto-seeded from the image. Admin uploads persist across redeploys.
 

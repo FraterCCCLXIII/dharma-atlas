@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPlacesForUser } from "@/lib/data/memberships";
+import { getClaimsForUser } from "@/lib/data/claims";
+import { getSubmissionsForEmail } from "@/lib/data/submissions";
 import { getSession } from "@/lib/auth-server";
 import { isAdminRole } from "@/lib/permissions";
 
@@ -14,6 +16,10 @@ export default async function ManageDashboardPage() {
   if (!session) return null;
 
   const places = await getPlacesForUser(session.user.id);
+  const [userClaims, userSubmissions] = await Promise.all([
+    getClaimsForUser(session.user.id),
+    getSubmissionsForEmail(session.user.email),
+  ]);
 
   return (
     <div>
@@ -31,6 +37,47 @@ export default async function ManageDashboardPage() {
               Open admin CMS
             </Link>
           </p>
+        )}
+
+        {(userClaims.length > 0 || userSubmissions.length > 0) && (
+          <section className="mt-8 space-y-6">
+            {userClaims.length > 0 && (
+              <div>
+                <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+                  Your claims
+                </h2>
+                <ul className="mt-3 space-y-2">
+                  {userClaims.map((claim) => (
+                    <li
+                      key={claim.id}
+                      className="rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm"
+                    >
+                      <span className="font-medium">{claim.placeName}</span>
+                      <span className="ml-2 capitalize text-ink-muted">{claim.status}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {userSubmissions.length > 0 && (
+              <div>
+                <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold">
+                  Your submissions
+                </h2>
+                <ul className="mt-3 space-y-2">
+                  {userSubmissions.map((submission) => (
+                    <li
+                      key={submission.id}
+                      className="rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm"
+                    >
+                      <span className="font-medium">{submission.name}</span>
+                      <span className="ml-2 capitalize text-ink-muted">{submission.status}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
         )}
 
         <div className="mt-8 space-y-3">

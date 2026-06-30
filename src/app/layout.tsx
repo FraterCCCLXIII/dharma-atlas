@@ -18,9 +18,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.BETTER_AUTH_URL ?? "https://dharmaatlas.com"),
   title: "Dharma Atlas | Temples, Monasteries & Ashrams",
   description:
-    "Explore Buddhist temples, monasteries, meditation centers, and ashrams across the United States on an interactive map.",
+    "Explore Buddhist temples, monasteries, meditation centers, and ashrams worldwide on an interactive map.",
 };
 
 export const dynamic = "force-dynamic";

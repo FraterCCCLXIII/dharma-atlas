@@ -26,6 +26,8 @@ export function ClaimLocationPageView({
   const { data: session, isPending } = authClient.useSession();
   const [query, setQuery] = useState(initialPlaceName ?? "");
   const [results, setResults] = useState<SearchPlace[]>([]);
+  const [searchPage, setSearchPage] = useState(1);
+  const [searchTotal, setSearchTotal] = useState(0);
   const [searching, setSearching] = useState(false);
   const [selected, setSelected] = useState<SearchPlace | null>(
     initialPlaceId && initialPlaceName
@@ -42,20 +44,25 @@ export function ClaimLocationPageView({
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const runSearch = useCallback(async (value: string) => {
+  const runSearch = useCallback(async (value: string, page = 1, append = false) => {
     const trimmed = value.trim();
     if (trimmed.length < 2) {
       setResults([]);
+      setSearchTotal(0);
       return;
     }
 
     setSearching(true);
     try {
-      const res = await fetch(`/api/places/search?q=${encodeURIComponent(trimmed)}`);
-      const data = (await res.json()) as { places: SearchPlace[] };
-      setResults(data.places);
+      const res = await fetch(
+        `/api/places/search?q=${encodeURIComponent(trimmed)}&page=${page}`,
+      );
+      const data = (await res.json()) as { places: SearchPlace[]; total: number };
+      setSearchTotal(data.total);
+      setSearchPage(page);
+      setResults((prev) => (append ? [...prev, ...data.places] : data.places));
     } catch {
-      setResults([]);
+      if (!append) setResults([]);
     } finally {
       setSearching(false);
     }
@@ -208,6 +215,16 @@ export function ClaimLocationPageView({
                 </li>
               ))}
             </ul>
+          )}
+
+          {!selected && results.length < searchTotal && !searching && (
+            <button
+              type="button"
+              onClick={() => void runSearch(query, searchPage + 1, true)}
+              className="text-sm font-medium text-brand hover:underline"
+            >
+              Load more results ({results.length} of {searchTotal})
+            </button>
           )}
 
           {selected && (

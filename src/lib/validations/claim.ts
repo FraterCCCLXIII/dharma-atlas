@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const createClaimSchema = z.object({
+  entityType: z.enum(["place", "teacher"]).optional().default("place"),
   placeId: z.string().min(1).optional(),
+  teacherSlug: z.string().min(1).optional(),
   placeName: z.string().min(1),
   listingUrl: z.string().url().optional().or(z.literal("")),
   affiliationRole: z.string().min(1),

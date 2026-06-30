@@ -116,8 +116,8 @@ export async function createBackup(options: CreateBackupOptions = {}): Promise<B
   const peopleDest = join(directory, "people");
 
   const dumpMethod = await dumpDatabase(dbConfig, databasePath);
-  copyDirectory(join(rootDir, PLACES_DIR), placesDest);
-  copyDirectory(join(rootDir, PEOPLE_DIR), peopleDest);
+  copyDirectory(join(rootDir, "public", "places"), placesDest);
+  copyDirectory(join(rootDir, "public", "people"), peopleDest);
 
   const manifest: BackupManifest = {
     version: 1,

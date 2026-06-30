@@ -3,6 +3,7 @@ import {
   doublePrecision,
   index,
   integer,
+  jsonb,
   pgTable,
   serial,
   text,
@@ -43,6 +44,7 @@ export const places = pgTable("places", {
   businessStatus: text("business_status"),
   googlePrimaryType: text("google_primary_type"),
   isDraft: boolean("is_draft").notNull().default(false),
+  publishRequestedAt: timestamp("publish_requested_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -138,6 +140,7 @@ export const submissions = pgTable("submissions", {
   location: text("location"),
   website: text("website"),
   notes: text("notes"),
+  payload: jsonb("payload"),
   reviewedBy: text("reviewed_by"),
   reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -206,6 +209,8 @@ export const claims = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     placeId: text("place_id").references(() => places.id, { onDelete: "set null" }),
+    teacherSlug: text("teacher_slug"),
+    entityType: text("entity_type").notNull().default("place"),
     placeName: text("place_name").notNull(),
     listingUrl: text("listing_url"),
     affiliationRole: text("affiliation_role").notNull(),

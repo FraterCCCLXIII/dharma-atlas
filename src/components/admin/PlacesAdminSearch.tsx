@@ -6,18 +6,30 @@ import { useMemo, useState } from "react";
 import { DraftBadge } from "@/components/admin/DraftStatusField";
 import type { Place } from "@/types/place";
 
+const QUALITY_FLAGS = [
+  "missing_photo",
+  "missing_description",
+  "missing_hours",
+  "bad_website",
+  "stacked_coords",
+  "encoding_error",
+  "missing_coords",
+] as const;
+
 export function PlacesAdminSearch({
   places,
   total,
   page,
   pageSize,
   initialQuery,
+  initialFlag = "",
 }: {
   places: Place[];
   total: number;
   page: number;
   pageSize: number;
   initialQuery: string;
+  initialFlag?: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -63,6 +75,42 @@ export function PlacesAdminSearch({
           Search
         </button>
       </form>
+
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete("flag");
+            params.set("page", "1");
+            router.push(`/admin/places?${params.toString()}`);
+          }}
+          className={`rounded-full border px-3 py-1 text-xs font-medium ${
+            !initialFlag ? "border-brand bg-brand/10 text-brand" : "border-border text-ink-secondary"
+          }`}
+        >
+          All flags
+        </button>
+        {QUALITY_FLAGS.map((flag) => (
+          <button
+            key={flag}
+            type="button"
+            onClick={() => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.set("flag", flag);
+              params.set("page", "1");
+              router.push(`/admin/places?${params.toString()}`);
+            }}
+            className={`rounded-full border px-3 py-1 text-xs font-medium ${
+              initialFlag === flag
+                ? "border-brand bg-brand/10 text-brand"
+                : "border-border text-ink-secondary"
+            }`}
+          >
+            {flag.replace(/_/g, " ")}
+          </button>
+        ))}
+      </div>
 
       <p className="mb-4 text-xs text-ink-muted">
         Showing {showing.start}–{showing.end} of {total}

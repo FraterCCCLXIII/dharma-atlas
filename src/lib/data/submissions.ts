@@ -63,6 +63,15 @@ export async function getSubmissionById(id: number): Promise<Submission | null> 
   return row ? rowToSubmission(row) : null;
 }
 
+export async function getSubmissionsForEmail(email: string): Promise<Submission[]> {
+  const rows = await db
+    .select()
+    .from(submissions)
+    .where(eq(submissions.submitterEmail, email))
+    .orderBy(desc(submissions.createdAt));
+  return rows.map(rowToSubmission);
+}
+
 export async function createSubmission(data: {
   entryType: SubmissionEntryType;
   submitterName: string;
@@ -71,6 +80,7 @@ export async function createSubmission(data: {
   location?: string;
   website?: string;
   notes?: string;
+  payload?: Record<string, unknown>;
 }) {
   const [row] = await db
     .insert(submissions)
@@ -82,6 +92,7 @@ export async function createSubmission(data: {
       location: data.location ?? null,
       website: data.website ?? null,
       notes: data.notes ?? null,
+      payload: data.payload ?? null,
       status: "pending",
     })
     .returning();

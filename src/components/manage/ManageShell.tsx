@@ -1,5 +1,10 @@
+"use client";
+
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { List } from "@phosphor-icons/react";
+import { useState, type ReactNode } from "react";
+import { ManageNavLink } from "@/components/manage/ManageNavLink";
+import { authClient } from "@/lib/auth-client";
 
 export function ManageShell({
   children,
@@ -8,9 +13,24 @@ export function ManageShell({
   children: ReactNode;
   userEmail: string;
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex min-h-dvh bg-surface text-ink">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-surface-elevated px-4 py-6">
+      {sidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-56 shrink-0 flex-col border-r border-border bg-surface-elevated px-4 py-6 transition-transform md:static md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <div className="mb-8 px-2">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
             Dharma Atlas
@@ -21,24 +41,13 @@ export function ManageShell({
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
-          <Link
-            href="/manage"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted hover:text-ink"
-          >
+          <ManageNavLink href="/manage" exact>
             Dashboard
-          </Link>
-          <Link
-            href="/manage/places/new"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted hover:text-ink"
-          >
+          </ManageNavLink>
+          <ManageNavLink href="/manage/places/new">
             Add location
-          </Link>
-          <Link
-            href="/claim"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted hover:text-ink"
-          >
-            Claim existing
-          </Link>
+          </ManageNavLink>
+          <ManageNavLink href="/claim">Claim existing</ManageNavLink>
         </nav>
 
         <div className="mt-auto space-y-3 border-t border-border px-2 pt-4">
@@ -53,29 +62,34 @@ export function ManageShell({
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 overflow-y-auto p-8">{children}</main>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="flex items-center gap-3 border-b border-border px-4 py-3 md:hidden">
+          <button
+            type="button"
+            aria-label="Open navigation"
+            onClick={() => setSidebarOpen(true)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border"
+          >
+            <List size={20} />
+          </button>
+          <p className="font-[family-name:var(--font-fraunces)] text-lg font-semibold">
+            Manage
+          </p>
+        </header>
+        <main className="min-w-0 flex-1 overflow-y-auto p-4 md:p-8">{children}</main>
+      </div>
     </div>
   );
 }
 
 function SignOutButton() {
   return (
-    <form
-      action={async () => {
-        "use server";
-        const { auth } = await import("@/lib/auth");
-        const { headers } = await import("next/headers");
-        await auth.api.signOut({ headers: await headers() });
-        const { redirect } = await import("next/navigation");
-        redirect("/login");
-      }}
+    <button
+      type="button"
+      onClick={() => void authClient.signOut()}
+      className="text-xs text-ink-muted transition hover:text-ink"
     >
-      <button
-        type="submit"
-        className="text-xs text-ink-muted transition hover:text-ink"
-      >
-        Sign out
-      </button>
-    </form>
+      Sign out
+    </button>
   );
 }

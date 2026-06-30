@@ -7,6 +7,17 @@ import { randomBytes } from "node:crypto";
 import { db } from "@/db/client";
 import { places, submissions, teachers } from "@/db/schema";
 import { requirePermission } from "@/lib/auth-server";
+import {
+  geocodeAddress,
+  hasValidCoords,
+} from "@/lib/geocode";
+import {
+  parseSubmissionPayload,
+  submissionLocationAddress,
+} from "@/lib/validations/submission";
+import {
+  notifySubmissionReviewed,
+} from "@/lib/email";
 
 function slugify(name: string) {
   return name
@@ -27,6 +38,8 @@ export async function approveSubmissionAction(formData: FormData) {
   const [row] = await db.select().from(submissions).where(eq(submissions.id, id)).limit(1);
   if (!row || row.status !== "pending") throw new Error("Submission not found or already reviewed");
 
+  const parsed = parseSubmissionPayload(row);
+
   if (row.entryType === "teacher") {
     const baseSlug = slugify(row.name);
     let slug = baseSlug || `teacher-${id}`;
@@ -37,11 +50,20 @@ export async function approveSubmissionAction(formData: FormData) {
       slug = `${baseSlug}-${suffix++}`;
     }
 
+    const tradition =
+      parsed.entryType === "teacher" && parsed.tradition?.trim()
+        ? parsed.tradition.trim()
+        : "Buddhist";
+    const lineage =
+      parsed.entryType === "teacher" && parsed.lineage?.trim()
+        ? parsed.lineage.trim()
+        : (row.notes?.slice(0, 200) ?? "Unknown");
+
     await db.insert(teachers).values({
       slug,
       name: row.name,
-      tradition: "Buddhist",
-      lineage: row.notes?.slice(0, 200) ?? "Unknown",
+      tradition,
+      lineage,
       location: row.location ?? "Unknown",
       shortBio: row.notes?.slice(0, 300) ?? "",
       website: row.website,
@@ -58,24 +80,51 @@ export async function approveSubmissionAction(formData: FormData) {
       })
       .where(eq(submissions.id, id));
 
+    await notifySubmissionReviewed({
+      to: row.submitterEmail,
+      name: row.name,
+      approved: true,
+    });
+
     revalidatePath("/admin/submissions");
     redirect(`/admin/teachers/${slug}/edit`);
   }
 
   const placeId = generatePlaceId();
+  const tradition =
+    parsed.entryType === "location" && parsed.tradition?.trim()
+      ? parsed.tradition.trim()
+      : "Buddhist";
+  const placeType =
+    parsed.entryType === "location" && parsed.placeType ? parsed.placeType : "Center";
+  const addressQuery = submissionLocationAddress({
+    ...parsed,
+    location: row.location ?? undefined,
+  });
+  const fullAddress =
+    parsed.entryType === "location" && parsed.address?.trim()
+      ? [parsed.address.trim(), row.location ?? ""].filter(Boolean).join(", ")
+      : (row.location ?? "");
+  const geocoded = await geocodeAddress(addressQuery || row.name);
+  const lat = geocoded?.lat ?? 0;
+  const lng = geocoded?.lng ?? 0;
+  const qualityFlags = hasValidCoords(lat, lng) ? [] : ["missing_coords"];
+
   await db.insert(places).values({
     id: placeId,
     name: row.name,
-    lat: 0,
-    lng: 0,
-    tradition: "Buddhist",
+    lat,
+    lng,
+    tradition,
     faith: "Buddhist",
-    type: "Center",
+    type: placeType,
     folder: "Submissions",
-    address: row.location ?? "",
+    address: fullAddress,
     website: row.website,
     schools: [],
     isDraft: true,
+    qualityFlags,
+    coordPrecision: hasValidCoords(lat, lng) ? "address" : "unknown",
   });
 
   await db
@@ -87,6 +136,12 @@ export async function approveSubmissionAction(formData: FormData) {
     })
     .where(eq(submissions.id, id));
 
+  await notifySubmissionReviewed({
+    to: row.submitterEmail,
+    name: row.name,
+    approved: true,
+  });
+
   revalidatePath("/admin/submissions");
   redirect(`/admin/places/${placeId}/edit`);
 }
@@ -96,6 +151,8 @@ export async function rejectSubmissionAction(formData: FormData) {
   if (!Number.isFinite(id)) throw new Error("Invalid submission id");
 
   const session = await requirePermission("submission", "update");
+  const [row] = await db.select().from(submissions).where(eq(submissions.id, id)).limit(1);
+  if (!row) throw new Error("Submission not found");
 
   await db
     .update(submissions)
@@ -105,6 +162,12 @@ export async function rejectSubmissionAction(formData: FormData) {
       reviewedAt: new Date(),
     })
     .where(eq(submissions.id, id));
+
+  await notifySubmissionReviewed({
+    to: row.submitterEmail,
+    name: row.name,
+    approved: false,
+  });
 
   revalidatePath("/admin/submissions");
   redirect("/admin/submissions");

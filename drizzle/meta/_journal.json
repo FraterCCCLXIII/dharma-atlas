@@ -75,8 +75,29 @@
     {
       "idx": 10,
       "version": "7",
-      "when": 1782920000000,
+      "when": 1783000000000,
       "tag": "0010_place_photos",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1783050000000,
+      "tag": "0011_submission_payload",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1783100000000,
+      "tag": "0012_publish_requested",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1783150000000,
+      "tag": "0013_teacher_claims",
       "breakpoints": true
     }
   ]

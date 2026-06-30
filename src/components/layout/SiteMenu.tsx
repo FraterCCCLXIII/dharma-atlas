@@ -3,12 +3,18 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { authClient } from "@/lib/auth-client";
+import { isAdminRole } from "@/lib/permissions";
 
 export function SiteMenu() {
+  const { data: session } = authClient.useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const isLoggedIn = Boolean(session?.user);
+  const isAdmin = isAdminRole(session?.user.role);
 
   const updateMenuPosition = useCallback(() => {
     const button = buttonRef.current;
@@ -68,22 +74,52 @@ export function SiteMenu() {
         }}
         className="z-[1000] min-w-[11rem] overflow-hidden rounded-xl border border-border bg-surface-elevated py-1 shadow-[var(--shadow-float)]"
       >
-        <Link
-          href="/manage"
-          role="menuitem"
-          onClick={() => setMenuOpen(false)}
-          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-        >
-          Manage listings
-        </Link>
-        <Link
-          href="/login"
-          role="menuitem"
-          onClick={() => setMenuOpen(false)}
-          className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-        >
-          Sign in
-        </Link>
+        {isLoggedIn ? (
+          <>
+            <p className="truncate px-4 py-2 text-xs text-ink-muted">
+              {session?.user.email}
+            </p>
+            <Link
+              href="/manage"
+              role="menuitem"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+            >
+              Manage listings
+            </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                role="menuitem"
+                onClick={() => setMenuOpen(false)}
+                className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+              >
+                Admin
+              </Link>
+            )}
+            <button
+              type="button"
+              role="menuitem"
+              onClick={async () => {
+                setMenuOpen(false);
+                await authClient.signOut();
+                window.location.href = "/";
+              }}
+              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+            >
+              Sign out
+            </button>
+          </>
+        ) : (
+          <Link
+            href="/login"
+            role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+          >
+            Sign in
+          </Link>
+        )}
         <Link
           href="/submit"
           role="menuitem"

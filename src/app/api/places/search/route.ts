@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { searchPlaces } from "@/lib/data/places";
+import { clientIp, rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
+  const ip = clientIp(request);
+  const limited = rateLimit({ key: `places-search:${ip}`, limit: 60 });
+  if (!limited.allowed) return rateLimitResponse(limited.retryAfterMs);
+
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q") ?? "";
   const page = Number(searchParams.get("page") ?? "1");

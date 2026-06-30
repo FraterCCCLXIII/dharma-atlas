@@ -3,12 +3,14 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  ArrowLeft,
   ListBullets,
   MagnifyingGlass,
   MapTrifold,
   SlidersHorizontal,
   X,
 } from "@phosphor-icons/react";
+import Link from "next/link";
 import { SiteLogo } from "@/components/layout/SiteLogo";
 import { SiteMenu } from "@/components/layout/SiteMenu";
 import {
@@ -227,21 +229,30 @@ export function DetailNav() {
 
   return (
     <SiteHeader sticky>
-      <NavBarLayout
-        center={
-          <>
+      <div className="relative flex w-full items-center">
+        <Link
+          href={explorePath}
+          className="mr-2 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
+          aria-label="Back to map"
+        >
+          <ArrowLeft size={16} weight="bold" />
+        </Link>
+        <div className="flex min-w-0 flex-1 items-center">
+          <SiteLogo />
+          <div className="absolute left-1/2 flex max-w-[calc(100%-7.5rem)] -translate-x-1/2 items-center gap-2 sm:max-w-[calc(100%-9rem)] sm:gap-3">
             <EntityToggle />
-            <SearchField
-              onNavigateHome={() => router.push(explorePath)}
-            />
+            <SearchField onNavigateHome={() => router.push(explorePath)} />
             <FilterToggleButton
               filtersOpen={filtersOpen}
               activeFilterCount={activeFilterCount}
               onToggle={handleFilterToggle}
             />
-          </>
-        }
-      />
+          </div>
+          <div className="ml-auto shrink-0 pl-2">
+            <SiteMenu />
+          </div>
+        </div>
+      </div>
     </SiteHeader>
   );
 }

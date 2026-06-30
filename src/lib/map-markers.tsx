@@ -31,6 +31,11 @@ export function getMarkerIconOpacity(zoom: number): number {
   return (zoom - 7) / 3;
 }
 
+/** Popup offset — Leaflet's default margin-bottom handles tip spacing. */
+export function getMarkerPopupOffset(_zoom?: number): [number, number] {
+  return [0, 0];
+}
+
 const TYPE_ICONS: Record<PlaceType, Icon> = {
   Center: Buildings,
   Temple: House,
@@ -40,25 +45,39 @@ const TYPE_ICONS: Record<PlaceType, Icon> = {
   Ashram: TreeEvergreen,
 };
 
-export function createPlaceMarkerIcon(place: Place, active: boolean): L.DivIcon {
+export function createPlaceMarkerIcon(
+  place: Place,
+  active: boolean,
+  options?: { stackCount?: number },
+): L.DivIcon {
   const Icon = TYPE_ICONS[place.type] ?? Buildings;
   const color = traditionMarkerColor(place.tradition);
+  const stackCount = options?.stackCount ?? 0;
+  const showStackCount = stackCount > 1;
 
   const html = renderToStaticMarkup(
     createElement(
       "div",
-      { className: `map-marker${active ? " map-marker--active" : ""}` },
+      {
+        className: `map-marker${active ? " map-marker--active" : ""}${showStackCount ? " map-marker--stack" : ""}`,
+      },
       createElement(
         "div",
         {
           className: "map-marker__circle",
           style: { backgroundColor: color, color },
         },
-        createElement(Icon, {
-          size: 14,
-          weight: "bold",
-          color: "#fffcf7",
-        }),
+        showStackCount
+          ? createElement(
+              "span",
+              { className: "map-marker__count" },
+              stackCount > 99 ? "99+" : String(stackCount),
+            )
+          : createElement(Icon, {
+              size: 14,
+              weight: "bold",
+              color: "#fffcf7",
+            }),
       ),
     ),
   );
@@ -67,7 +86,32 @@ export function createPlaceMarkerIcon(place: Place, active: boolean): L.DivIcon 
     className: "map-marker-wrap",
     html,
     iconSize: [32, 36],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -34],
+    iconAnchor: [16, 36],
+    popupAnchor: [0, 0],
+  });
+}
+
+/** Leaflet.markercluster default density colors (green → yellow → orange). */
+function clusterColors(count: number) {
+  if (count >= 100) {
+    return { outer: "rgba(253, 156, 115, 0.6)", inner: "rgba(241, 128, 23, 0.85)" };
+  }
+  if (count >= 10) {
+    return { outer: "rgba(241, 211, 87, 0.6)", inner: "rgba(240, 194, 12, 0.85)" };
+  }
+  return { outer: "rgba(181, 226, 140, 0.6)", inner: "rgba(110, 204, 57, 0.85)" };
+}
+
+export function createMapClusterIcon(count: number): L.DivIcon {
+  const { outer, inner } = clusterColors(count);
+  const label = count > 999 ? "999+" : String(count);
+
+  const html = `<div class="map-cluster" style="background-color:${outer}"><div class="map-cluster__inner" style="background-color:${inner};color:#fff"><span>${label}</span></div></div>`;
+
+  return L.divIcon({
+    className: "map-cluster-wrap",
+    html,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
   });
 }

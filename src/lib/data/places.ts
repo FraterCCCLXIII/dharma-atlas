@@ -1,6 +1,6 @@
 import "server-only";
 
-import { count, eq, ilike, or, and, type SQL } from "drizzle-orm";
+import { count, eq, ilike, or, and, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
 import { places } from "@/db/schema";
 import { attachPhotosToPlace } from "@/lib/data/place-photos";
@@ -56,6 +56,7 @@ export async function searchPlaces(options: {
   page?: number;
   pageSize?: number;
   publishedOnly?: boolean;
+  qualityFlag?: string;
 }) {
   const page = options.page ?? 1;
   const pageSize = options.pageSize ?? 50;
@@ -64,6 +65,9 @@ export async function searchPlaces(options: {
 
   const filters: SQL[] = [];
   if (options.publishedOnly) filters.push(publishedOnly);
+  if (options.qualityFlag?.trim()) {
+    filters.push(sql`${places.qualityFlags} @> ARRAY[${options.qualityFlag.trim()}]::text[]`);
+  }
   if (q) {
     filters.push(
       or(
@@ -95,34 +99,26 @@ export async function searchPlaces(options: {
   };
 }
 
-export async function getSimilarPlaces(place: Place, limit = 4): Promise<Place[]> {
-  const all = await getAllPlaces();
-  return all
-    .filter((candidate) => candidate.id !== place.id)
-    .sort((a, b) => {
-      const aSameTradition = a.tradition === place.tradition ? 0 : 1;
-      const bSameTradition = b.tradition === place.tradition ? 0 : 1;
-      if (aSameTradition !== bSameTradition) return aSameTradition - bSameTradition;
-
-      const aSameType = a.type === place.type ? 0 : 1;
-      const bSameType = b.type === place.type ? 0 : 1;
-      if (aSameType !== bSameType) return aSameType - bSameType;
-
-      return distanceKm(place, a) - distanceKm(place, b);
-    })
-    .slice(0, limit);
+export async function getPublishRequestedCount() {
+  const [row] = await db
+    .select({ count: count() })
+    .from(places)
+    .where(sql`${places.publishRequestedAt} IS NOT NULL AND ${places.isDraft} = true`);
+  return row?.count ?? 0;
 }
 
-function distanceKm(a: Place, b: Place): number {
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const dLat = toRad(b.lat - a.lat);
-  const dLng = toRad(b.lng - a.lng);
-  const lat1 = toRad(a.lat);
-  const lat2 = toRad(b.lat);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
-  return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+export async function getSimilarPlaces(place: Place, limit = 4): Promise<Place[]> {
+  const rows = await db
+    .select()
+    .from(places)
+    .where(and(publishedOnly, sql`${places.id} <> ${place.id}`))
+    .orderBy(
+      sql`CASE WHEN ${places.tradition} = ${place.tradition} THEN 0 ELSE 1 END`,
+      sql`ABS(${places.lat} - ${place.lat}) + ABS(${places.lng} - ${place.lng})`,
+    )
+    .limit(limit);
+
+  return rows.map(rowToPlace);
 }
 
 export { rowToPlace } from "@/lib/place-row";

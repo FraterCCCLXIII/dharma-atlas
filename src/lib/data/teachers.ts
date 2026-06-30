@@ -1,6 +1,6 @@
 import "server-only";
 
-import { asc, count, eq } from "drizzle-orm";
+import { and, asc, count, eq, ilike, inArray, or, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
   teacherBooks,
@@ -189,6 +189,70 @@ export async function getTeacherPhotoMap(): Promise<Map<string, string>> {
   return new Map(rows.map((r) => [r.slug, r.photo]));
 }
 
+export async function searchTeachers(options: {
+  query?: string;
+  page?: number;
+  pageSize?: number;
+  publishedOnly?: boolean;
+}) {
+  const page = options.page ?? 1;
+  const pageSize = options.pageSize ?? 50;
+  const offset = (page - 1) * pageSize;
+  const q = options.query?.trim();
+
+  const filters: SQL[] = [];
+  if (options.publishedOnly) filters.push(publishedOnly);
+  if (q) {
+    filters.push(
+      or(
+        ilike(teachers.name, `%${q}%`),
+        ilike(teachers.tradition, `%${q}%`),
+        ilike(teachers.lineage, `%${q}%`),
+      )!,
+    );
+  }
+
+  const where = filters.length > 0 ? and(...filters) : undefined;
+
+  const [rows, [totalRow]] = await Promise.all([
+    db
+      .select()
+      .from(teachers)
+      .where(where)
+      .orderBy(teachers.name)
+      .limit(pageSize)
+      .offset(offset),
+    db.select({ count: count() }).from(teachers).where(where),
+  ]);
+
+  const teacherList = await assembleTeachersFromRows(rows);
+  return {
+    teachers: teacherList,
+    total: totalRow?.count ?? 0,
+    page,
+    pageSize,
+  };
+}
+
+export async function getTeachersAtPlace(placeName: string, tradition: string, limit = 6) {
+  const retreatRows = await db
+    .select({ teacherSlug: teacherRetreats.teacherSlug })
+    .from(teacherRetreats)
+    .where(ilike(teacherRetreats.location, `%${placeName}%`))
+    .limit(limit * 2);
+
+  const slugs = [...new Set(retreatRows.map((r) => r.teacherSlug))].slice(0, limit);
+  if (slugs.length > 0) {
+    const rows = await db
+      .select()
+      .from(teachers)
+      .where(and(publishedOnly, inArray(teachers.slug, slugs)));
+    return assembleTeachersFromRows(rows);
+  }
+
+  return getTeachersByTradition(tradition, limit);
+}
+
 export async function getSimilarTeachers(teacher: Teacher, limit = 4): Promise<Teacher[]> {
   const all = await getAllTeachers();
   return all
@@ -207,6 +271,16 @@ export async function getSimilarTeachers(teacher: Teacher, limit = 4): Promise<T
     .slice(0, limit);
 }
 
+export async function getTeachersByTradition(tradition: string, limit = 6) {
+  const rows = await db
+    .select()
+    .from(teachers)
+    .where(and(publishedOnly, eq(teachers.tradition, tradition)))
+    .orderBy(teachers.name)
+    .limit(limit);
+  return Promise.all(rows.map((row) => assembleTeacher(row)));
+}
+
 export async function getTeacherStaticParams() {
   const rows = await db
     .select({ slug: teachers.slug })
@@ -215,4 +289,11 @@ export async function getTeacherStaticParams() {
   return rows.map((r) => ({ slug: r.slug }));
 }
 
-export { assembleTeacher };
+export async function getAllTeacherSlugs(): Promise<string[]> {
+  const rows = await db
+    .select({ slug: teachers.slug })
+    .from(teachers)
+    .where(publishedOnly);
+  return rows.map((row) => row.slug);
+}
+

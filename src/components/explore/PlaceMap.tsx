@@ -12,11 +12,19 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { MapPopoverCard } from "@/components/explore/MapPopoverCard";
+import { PlaceMarkerCluster } from "@/components/explore/PlaceMarkerCluster";
 import {
   createPlaceMarkerIcon,
   getMarkerIconOpacity,
+  getMarkerPopupOffset,
   getMarkerScale,
 } from "@/lib/map-markers";
+import {
+  cancelHoverClose,
+  openMarkerPopupNow,
+  openMarkerPopupWhenReady,
+  scheduleHoverClose,
+} from "@/lib/map-popup";
 import { useExploreStore } from "@/store/explore-store";
 import type { Place } from "@/types/place";
 
@@ -156,30 +164,49 @@ function MapClickDismiss({ onDismiss }: { onDismiss: () => void }) {
 function PlaceMarker({
   place,
   isActive,
-  pinnedId,
-  onPin,
   onViewDetails,
 }: {
   place: Place;
   isActive: boolean;
-  pinnedId: string | null;
-  onPin: () => void;
   onViewDetails: () => void;
 }) {
+  const map = useMap();
   const markerRef = useRef<L.Marker>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
   const icon = useMemo(
     () => createPlaceMarkerIcon(place, isActive),
     [place, isActive],
   );
 
-  useEffect(() => {
-    if (isActive) {
-      markerRef.current?.openPopup();
-    } else {
+  const showPopup = () => {
+    cancelHoverClose(hideTimerRef);
+    setHoveredId(place.id);
+    const marker = markerRef.current;
+    if (marker) openMarkerPopupNow(marker);
+  };
+
+  const scheduleHide = () => {
+    scheduleHoverClose(hideTimerRef, () => {
+      if (useExploreStore.getState().hoveredId !== place.id) return;
+      setHoveredId(null);
       markerRef.current?.closePopup();
+    });
+  };
+
+  useEffect(() => {
+    if (!isActive) {
+      markerRef.current?.closePopup();
+      return;
     }
-  }, [isActive]);
+
+    const marker = markerRef.current;
+    if (!marker || marker.isPopupOpen()) return;
+
+    return openMarkerPopupWhenReady(map, marker);
+  }, [isActive, map]);
+
+  useEffect(() => () => cancelHoverClose(hideTimerRef), []);
 
   return (
     <Marker
@@ -189,28 +216,20 @@ function PlaceMarker({
       eventHandlers={{
         click: (e) => {
           L.DomEvent.stopPropagation(e);
-          onPin();
+          showPopup();
         },
-        mouseover: () => setHoveredId(place.id),
-        mouseout: () => {
-          if (pinnedId !== place.id) {
-            setHoveredId(null);
-          }
-        },
+        mouseover: showPopup,
+        mouseout: scheduleHide,
       }}
     >
       <Popup
         closeButton={false}
-        autoPan
-        offset={[0, -4]}
+        autoPan={false}
+        offset={getMarkerPopupOffset()}
         className="map-place-popup"
         eventHandlers={{
-          mouseover: () => setHoveredId(place.id),
-          mouseout: () => {
-            if (pinnedId !== place.id) {
-              setHoveredId(null);
-            }
-          },
+          mouseover: showPopup,
+          mouseout: scheduleHide,
         }}
       >
         <MapPopoverCard place={place} onViewDetails={onViewDetails} />
@@ -222,8 +241,6 @@ function PlaceMarker({
 export function PlaceMap({ places }: PlaceMapProps) {
   const router = useRouter();
   const hoveredId = useExploreStore((s) => s.hoveredId);
-  const pinnedPopupId = useExploreStore((s) => s.pinnedPopupId);
-  const setPinnedPopupId = useExploreStore((s) => s.setPinnedPopupId);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
 
   const validPlaces = useMemo(
@@ -231,7 +248,7 @@ export function PlaceMap({ places }: PlaceMapProps) {
     [places],
   );
 
-  const activePopoverId = pinnedPopupId ?? hoveredId;
+  const useCluster = validPlaces.length > 80;
 
   return (
     <MapContainer
@@ -248,22 +265,19 @@ export function PlaceMap({ places }: PlaceMapProps) {
       />
       <MapMarkerScale />
       <MapAutoControl places={validPlaces} hoveredId={hoveredId} />
-      <MapClickDismiss
-        onDismiss={() => {
-          setPinnedPopupId(null);
-          setHoveredId(null);
-        }}
-      />
-      {validPlaces.map((place) => (
-        <PlaceMarker
-          key={place.id}
-          place={place}
-          isActive={activePopoverId === place.id}
-          pinnedId={pinnedPopupId}
-          onPin={() => setPinnedPopupId(place.id)}
-          onViewDetails={() => router.push(`/place/${place.id}`)}
-        />
-      ))}
+      <MapClickDismiss onDismiss={() => setHoveredId(null)} />
+      {useCluster ? (
+        <PlaceMarkerCluster places={validPlaces} />
+      ) : (
+        validPlaces.map((place) => (
+          <PlaceMarker
+            key={place.id}
+            place={place}
+            isActive={hoveredId === place.id}
+            onViewDetails={() => router.push(`/place/${place.id}`)}
+          />
+        ))
+      )}
     </MapContainer>
   );
 }

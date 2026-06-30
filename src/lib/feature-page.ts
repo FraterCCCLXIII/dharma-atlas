@@ -67,30 +67,42 @@ export function getFeaturedTeachers(
   return picked;
 }
 
-const US_BOUNDS = {
-  minLat: 24,
-  maxLat: 50,
-  minLng: -125,
-  maxLng: -66,
-};
-
 const FEATURED_PLACE_TYPES = new Set(["Monastery", "Temple", "Center"]);
+
+function hasPhoto(place: Place): boolean {
+  return Boolean(place.photo?.trim()) || (place.photos?.length ?? 0) > 0;
+}
 
 export function getFeaturedPlaces(places: Place[], limit = 6): Place[] {
   const candidates = places
     .filter(
       (place) =>
-        place.lat >= US_BOUNDS.minLat &&
-        place.lat <= US_BOUNDS.maxLat &&
-        place.lng >= US_BOUNDS.minLng &&
-        place.lng <= US_BOUNDS.maxLng &&
         FEATURED_PLACE_TYPES.has(place.type) &&
-        place.name.trim().length > 0,
+        place.name.trim().length > 0 &&
+        !place.isDraft,
     )
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => {
+      const photoScore = Number(hasPhoto(b)) - Number(hasPhoto(a));
+      if (photoScore !== 0) return photoScore;
+      return a.name.localeCompare(b.name);
+    });
 
   if (candidates.length <= limit) return candidates;
 
-  const step = Math.floor(candidates.length / limit);
-  return Array.from({ length: limit }, (_, index) => candidates[index * step]);
+  const picked: Place[] = [];
+  const seenTraditions = new Set<string>();
+  for (const place of candidates) {
+    if (seenTraditions.has(place.tradition)) continue;
+    seenTraditions.add(place.tradition);
+    picked.push(place);
+    if (picked.length >= limit) return picked;
+  }
+
+  for (const place of candidates) {
+    if (picked.some((entry) => entry.id === place.id)) continue;
+    picked.push(place);
+    if (picked.length >= limit) return picked;
+  }
+
+  return picked;
 }

@@ -7,12 +7,13 @@ import {
   getPlaceById,
   getSimilarPlaces,
 } from "@/lib/dataset";
+import { getTeachersAtPlace } from "@/lib/data/teachers";
 
 interface PlacePageProps {
   params: Promise<{ id: string }>;
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: PlacePageProps): Promise<Metadata> {
   const { id } = await params;
@@ -41,6 +42,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
   }
 
   const similar = await getSimilarPlaces(place);
+  const linkedTeachers = await getTeachersAtPlace(place.name, place.tradition);
 
-  return <PlacePageView place={place} similar={similar} />;
+  return <PlacePageView place={place} similar={similar} teachers={linkedTeachers} />;
 }

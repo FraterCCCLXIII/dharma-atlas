@@ -6,11 +6,16 @@ import { searchPlaces } from "@/lib/data/places";
 export default async function AdminPlacesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; flag?: string }>;
 }) {
-  const { q = "", page: pageStr = "1" } = await searchParams;
+  const { q = "", page: pageStr = "1", flag = "" } = await searchParams;
   const page = Math.max(1, Number(pageStr) || 1);
-  const { places, total, pageSize } = await searchPlaces({ query: q, page, pageSize: 50 });
+  const { places, total, pageSize } = await searchPlaces({
+    query: q,
+    page,
+    pageSize: 50,
+    qualityFlag: flag || undefined,
+  });
 
   return (
     <div>
@@ -36,6 +41,7 @@ export default async function AdminPlacesPage({
           page={page}
           pageSize={pageSize}
           initialQuery={q}
+          initialFlag={flag}
         />
       </Suspense>
     </div>

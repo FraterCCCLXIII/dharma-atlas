@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth-server";
 import { createClaim } from "@/lib/data/claims";
+import { notifyNewClaim } from "@/lib/email";
+import { clientIp, rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 import { getMembership } from "@/lib/data/memberships";
 import { createClaimSchema } from "@/lib/validations/claim";
 
 export async function POST(request: Request) {
+  const ip = clientIp(request);
+  const limited = rateLimit({ key: `claims:${ip}`, limit: 10 });
+  if (!limited.allowed) return rateLimitResponse(limited.retryAfterMs);
+
   try {
     const session = await getSession();
     if (!session) {
@@ -26,11 +32,18 @@ export async function POST(request: Request) {
 
     await createClaim({
       userId: session.user.id,
+      entityType: data.entityType,
       placeId: data.placeId,
+      teacherSlug: data.teacherSlug,
       placeName: data.placeName,
       listingUrl: data.listingUrl || undefined,
       affiliationRole: data.affiliationRole,
       message: data.message,
+    });
+
+    await notifyNewClaim({
+      placeName: data.placeName,
+      userEmail: session.user.email,
     });
 
     return NextResponse.json({ success: true });
