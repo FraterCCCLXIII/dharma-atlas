@@ -4,7 +4,6 @@ import Link from "next/link";
 import { MapPin, Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import {
-  cardContentClassName,
   cardImageFrameClassName,
   cardImagePaddingClassName,
   cardLiftClassName,
@@ -65,11 +64,19 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
           </div>
         </div>
 
-        <div className={cardContentClassName}>
-          <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-base font-semibold leading-snug text-ink group-hover:text-brand">
-            {place.name}
-          </h3>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
+        <div className="px-4 pb-4 pt-1">
+          <div className="space-y-1">
+            <h3 className="line-clamp-2 font-[family-name:var(--font-fraunces)] text-base font-semibold leading-snug text-ink group-hover:text-brand">
+              {place.name}
+            </h3>
+            <span className="inline-flex items-center gap-1 text-xs text-ink-muted">
+              <MapPin size={14} weight="bold" className="shrink-0" />
+              <span className="line-clamp-1">
+                {place.address?.trim() || `${place.lat.toFixed(2)}, ${place.lng.toFixed(2)}`}
+              </span>
+            </span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
             <span className="rounded-md bg-surface-muted px-2 py-0.5 font-medium">
               {place.tradition}
             </span>
@@ -81,12 +88,6 @@ export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
                 {schoolLabel(school)}
               </span>
             ))}
-            <span className="inline-flex items-start gap-1 text-ink-muted">
-              <MapPin size={14} weight="bold" className="mt-0.5 shrink-0" />
-              <span className="line-clamp-1">
-                {place.address?.trim() || `${place.lat.toFixed(2)}, ${place.lng.toFixed(2)}`}
-              </span>
-            </span>
           </div>
         </div>
       </Link>
