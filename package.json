@@ -1,5 +1,5 @@
 {
-  "name": "dharma-centers",
+  "name": "dharma-atlas",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -30,7 +30,8 @@
     "db:seed": "tsx scripts/seed-from-json.ts",
     "db:studio": "drizzle-kit studio",
     "auth:create-owner": "tsx scripts/create-owner.ts",
-    "backup": "tsx scripts/backup.ts"
+    "backup": "tsx scripts/backup.ts",
+    "cloud": "bash -c 'set -a; [ -f .env.local ] && source .env.local; set +a; tsx scripts/cloud-api.ts \"$@\"' --"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

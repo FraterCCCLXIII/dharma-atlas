@@ -1,13 +1,13 @@
-# Dharma Directory
+# Dharma Atlas
 
-An Airbnb-style discovery app for Buddhist temples, monasteries, meditation centers, and ashrams across the United States.
+An Airbnb-style discovery app for Buddhist temples, monasteries, meditation centers, and ashrams worldwide.
 
 ## Features
 
 - Interactive map with synced list + marker selection
 - Search and filter by place type and tradition
 - Mobile list/map toggle
-- 627+ seeded locations from [Shambhala Publications' Google My Maps](https://www.google.com/maps/d/u/0/viewer?mid=1NrKT9tt74PDeKaq9aFQ4FQZjSrVU9j4)
+- 5,600+ locations from Google Places discovery, BuddhaNet, dhamma.org, Shambhala KML, and more
 
 ## Stack
 
@@ -71,6 +71,19 @@ npm run db:seed
 Review `scripts/reports/places-audit.csv` after running the pipeline.
 
 Optional env keys for higher recovery rates: `GOOGLE_PLACES_API_KEY`, `GOOGLE_GEOCODING_API_KEY`.
+
+## Remote admin API (Coolify / Cursor)
+
+Set `ADMIN_API_KEY` on the server and locally (`REMOTE_APP_URL` + same key). Then use the HTTP API or CLI:
+
+```bash
+npm run cloud -- seed --from-files
+npm run cloud -- upload-place-photo <placeId> ./photo.jpg
+npm run cloud -- update-place <placeId> ./place.json
+npm run cloud -- revalidate --all
+```
+
+See `.env.example` for required variables.
 
 ## Data note
 

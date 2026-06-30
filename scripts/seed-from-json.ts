@@ -6,25 +6,9 @@
  * Usage: npm run db:seed
  */
 
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import {
-  places,
-  teacherBooks,
-  teacherRelations,
-  teacherRetreats,
-  teacherSocials,
-  teachers,
-} from "../src/db/schema";
-import { rowToPlace } from "../src/lib/place-row";
-import { mergePlaceFields } from "../src/lib/place-quality";
-import type { Place, PlacesDataset } from "../src/types/place";
-import type { Teacher, TeachersDataset } from "../src/types/teacher";
+import { runDataSeed } from "../src/lib/seed/run-seed";
 
-const ROOT = join(import.meta.dirname, "..");
 const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
@@ -32,249 +16,23 @@ if (!DATABASE_URL) {
   process.exit(1);
 }
 
+const forceFields = process.argv
+  .filter((arg) => arg.startsWith("--force-field="))
+  .map((arg) => arg.slice("--force-field=".length));
+
 const client = postgres(DATABASE_URL, { max: 1 });
-const db = drizzle(client);
-
-function loadPlaces(): Place[] {
-  const raw = JSON.parse(
-    readFileSync(join(ROOT, "src/data/places.json"), "utf8"),
-  ) as PlacesDataset;
-  return raw.places;
-}
-
-function loadTeachers(): Teacher[] {
-  const raw = JSON.parse(
-    readFileSync(join(ROOT, "src/data/teachers.json"), "utf8"),
-  ) as TeachersDataset;
-  return raw.teachers;
-}
-
-function normalizeRelations(teacher: Teacher) {
-  const rels = teacher.relations;
-  if (!rels) return [];
-
-  const rows: {
-    fromSlug: string;
-    toSlug: string | null;
-    name: string;
-    role: string;
-    note: string | null;
-    type: string;
-  }[] = [];
-
-  for (const type of ["teacher", "peer", "student"] as const) {
-    const group = rels[type === "teacher" ? "teachers" : `${type}s` as "peers" | "students"];
-    if (!group) continue;
-    for (const rel of group) {
-      rows.push({
-        fromSlug: teacher.slug,
-        toSlug: rel.slug ?? null,
-        name: rel.name,
-        role: rel.role,
-        note: rel.note ?? null,
-        type,
-      });
-    }
-  }
-
-  return rows;
-}
-
-function openingHoursColumn(
-  hours: Place["openingHours"] | undefined | null,
-): string | null {
-  if (!hours) return null;
-  return JSON.stringify(hours);
-}
-
-function placeDbFields(merged: ReturnType<typeof mergePlaceFields>, incoming: Place) {
-  return {
-    name: merged.name ?? incoming.name,
-    lat: merged.lat ?? incoming.lat,
-    lng: merged.lng ?? incoming.lng,
-    tradition: merged.tradition ?? incoming.tradition,
-    faith: merged.faith ?? incoming.faith,
-    type: merged.type ?? incoming.type,
-    folder: merged.folder ?? incoming.folder,
-    address: merged.address ?? incoming.address,
-    phone: merged.phone ?? incoming.phone ?? null,
-    website: merged.website ?? incoming.website ?? null,
-    description: merged.description ?? incoming.description ?? null,
-    descriptionSource: merged.descriptionSource ?? incoming.descriptionSource ?? null,
-    coordPrecision: merged.coordPrecision ?? incoming.coordPrecision ?? "unknown",
-    dataSource: merged.dataSource ?? incoming.dataSource ?? incoming.folder ?? null,
-    verifiedFields: merged.verifiedFields ?? incoming.verifiedFields ?? [],
-    qualityFlags: merged.qualityFlags ?? incoming.qualityFlags ?? [],
-    photo: merged.photo ?? incoming.photo ?? null,
-    photoSource: merged.photoSource ?? incoming.photoSource ?? null,
-    googlePlaceId: merged.googlePlaceId ?? incoming.googlePlaceId ?? null,
-    googleMapsUri: merged.googleMapsUri ?? incoming.googleMapsUri ?? null,
-    openingHours: openingHoursColumn(merged.openingHours ?? incoming.openingHours),
-    googleRating: merged.googleRating ?? incoming.googleRating ?? null,
-    googleRatingCount: merged.googleRatingCount ?? incoming.googleRatingCount ?? null,
-    businessStatus: merged.businessStatus ?? incoming.businessStatus ?? null,
-    googlePrimaryType: merged.googlePrimaryType ?? incoming.googlePrimaryType ?? null,
-    schools: merged.schools ?? incoming.schools ?? [],
-  };
-}
-
-async function seedPlaces(list: Place[]) {
-  const forceFields = process.argv
-    .filter((arg) => arg.startsWith("--force-field="))
-    .map((arg) => arg.slice("--force-field=".length));
-
-  let count = 0;
-  for (const incoming of list) {
-    const [existingRow] = await db
-      .select()
-      .from(places)
-      .where(eq(places.id, incoming.id))
-      .limit(1);
-
-    const existing = existingRow ? rowToPlace(existingRow) : {};
-    const merged = mergePlaceFields(existing, incoming, { forceFields });
-
-    await db
-      .insert(places)
-      .values({
-        id: incoming.id,
-        ...placeDbFields(merged, incoming),
-      })
-      .onConflictDoUpdate({
-        target: places.id,
-        set: {
-          ...placeDbFields(merged, incoming),
-          updatedAt: new Date(),
-        },
-      });
-    count++;
-    if (count % 500 === 0) console.log(`  places: ${count}/${list.length}`);
-  }
-  return count;
-}
-
-async function seedTeacher(teacher: Teacher) {
-  await db
-    .insert(teachers)
-    .values({
-      slug: teacher.slug,
-      name: teacher.name,
-      tradition: teacher.tradition,
-      lineage: teacher.lineage,
-      location: teacher.location,
-      base: teacher.base ?? null,
-      yearsTeaching: teacher.yearsTeaching,
-      birthYear: teacher.birthYear ?? null,
-      deathYear: teacher.deathYear ?? null,
-      languages: teacher.languages,
-      shortBio: teacher.shortBio,
-      biography: teacher.biography,
-      topics: teacher.topics,
-      photo: teacher.photo,
-      heroPhoto: teacher.heroPhoto ?? null,
-      website: teacher.website ?? null,
-    })
-    .onConflictDoUpdate({
-      target: teachers.slug,
-      set: {
-        name: teacher.name,
-        tradition: teacher.tradition,
-        lineage: teacher.lineage,
-        location: teacher.location,
-        base: teacher.base ?? null,
-        yearsTeaching: teacher.yearsTeaching,
-        birthYear: teacher.birthYear ?? null,
-        deathYear: teacher.deathYear ?? null,
-        languages: teacher.languages,
-        shortBio: teacher.shortBio,
-        biography: teacher.biography,
-        topics: teacher.topics,
-        photo: teacher.photo,
-        heroPhoto: teacher.heroPhoto ?? null,
-        website: teacher.website ?? null,
-        updatedAt: new Date(),
-      },
-    });
-
-  const slug = teacher.slug;
-
-  await db.delete(teacherSocials).where(eq(teacherSocials.teacherSlug, slug));
-  if (teacher.socials.length) {
-    await db
-      .insert(teacherSocials)
-      .values(teacher.socials.map((s) => ({ ...s, teacherSlug: slug })));
-  }
-
-  await db.delete(teacherBooks).where(eq(teacherBooks.teacherSlug, slug));
-  if (teacher.bibliography.length) {
-    await db
-      .insert(teacherBooks)
-      .values(
-        teacher.bibliography.map((b, index) => ({
-          teacherSlug: slug,
-          title: b.title,
-          year: b.year,
-          publisher: b.publisher,
-          url: b.url ?? null,
-          sortOrder: index,
-        })),
-      );
-  }
-
-  await db.delete(teacherRetreats).where(eq(teacherRetreats.teacherSlug, slug));
-  if (teacher.retreats.length) {
-    await db
-      .insert(teacherRetreats)
-      .values(teacher.retreats.map((r) => ({ ...r, teacherSlug: slug })));
-  }
-
-  await db.delete(teacherRelations).where(eq(teacherRelations.fromSlug, slug));
-  const relationRows = normalizeRelations(teacher);
-  if (relationRows.length) {
-    await db.insert(teacherRelations).values(relationRows);
-  }
-}
 
 async function main() {
-  console.log("Loading JSON…");
-  const placeList = loadPlaces();
-  const teacherList = loadTeachers();
+  console.log("Loading JSON and seeding…");
+  const result = await runDataSeed({
+    fromFiles: true,
+    forceFields,
+    includeOntology: true,
+  });
 
-  console.log(`Seeding ${placeList.length} places…`);
-  const placeCount = await seedPlaces(placeList);
-
-  console.log(`Seeding ${teacherList.length} teachers…`);
-  for (let i = 0; i < teacherList.length; i++) {
-    await seedTeacher(teacherList[i]!);
-    if ((i + 1) % 50 === 0) console.log(`  teachers: ${i + 1}/${teacherList.length}`);
-  }
-
-  const { buildDefaultOntologyNodes } = await import("../src/lib/ontology/defaults");
-  const { buildOntologySnapshot } = await import("../src/lib/ontology/build-snapshot");
-  const { ontologyNodes } = await import("../src/db/schema");
-
-  const [existing] = await db.select({ slug: ontologyNodes.slug }).from(ontologyNodes).limit(1);
-  if (!existing) {
-    const nodes = buildDefaultOntologyNodes();
-    buildOntologySnapshot(nodes);
-    await db.insert(ontologyNodes).values(
-      nodes.map((node) => ({
-        slug: node.slug,
-        label: node.label,
-        parentSlug: node.parentSlug,
-        sortOrder: node.sortOrder,
-        nodeType: node.nodeType,
-        filterId: node.filterId,
-        placeTraditions: node.placeTraditions,
-        inferPattern: node.inferPattern,
-        appliesToLocations: node.appliesToLocations,
-        appliesToPeople: node.appliesToPeople,
-      })),
-    );
-    console.log(`Seeded ${nodes.length} ontology nodes.`);
-  }
-
-  console.log(`Done — ${placeCount} places, ${teacherList.length} teachers.`);
+  console.log(
+    `Done — ${result.places} places, ${result.teachers} teachers, ${result.ontologyNodes} ontology nodes.`,
+  );
 }
 
 main()
