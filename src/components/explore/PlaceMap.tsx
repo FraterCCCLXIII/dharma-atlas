@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import L from "leaflet";
 import {
@@ -36,21 +36,10 @@ interface PlaceMapProps {
   places: Place[];
 }
 
-function MapAutoControl({
-  places,
-  hoveredId,
-}: {
-  places: Place[];
-  hoveredId: string | null;
-}) {
+function MapAutoControl({ places }: { places: Place[] }) {
   const map = useMap();
   const userInteractedRef = useRef(false);
   const programmaticRef = useRef(false);
-  const placesRef = useRef(places);
-  const hoveredIdRef = useRef(hoveredId);
-
-  placesRef.current = places;
-  hoveredIdRef.current = hoveredId;
 
   const placesKey = useMemo(() => places.map((p) => p.id).join(","), [places]);
 
@@ -124,31 +113,6 @@ function MapAutoControl({
     };
   }, [placesKey, map, places.length]);
 
-  useEffect(() => {
-    if (userInteractedRef.current || !hoveredId) return;
-
-    let cancelled = false;
-
-    map.whenReady(() => {
-      if (cancelled || userInteractedRef.current) return;
-
-      const activeId = hoveredIdRef.current;
-      if (!activeId) return;
-
-      const place = placesRef.current.find((p) => p.id === activeId);
-      const target = place ? toLatLng(place.lat, place.lng) : null;
-      if (!target) return;
-
-      const zoom = map.getZoom();
-      const targetZoom = Number.isFinite(zoom) ? Math.max(zoom, 10) : 10;
-      runProgrammatic(() => map.flyTo(target, targetZoom, { duration: 0.8 }));
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [hoveredId, places, map]);
-
   return null;
 }
 
@@ -183,6 +147,35 @@ function MapClickDismiss({ onDismiss }: { onDismiss: () => void }) {
   useMapEvents({
     click: () => onDismiss(),
   });
+  return null;
+}
+
+function MapBoundsSync() {
+  const map = useMap();
+  const setMapBounds = useExploreStore((s) => s.setMapBounds);
+
+  const reportBounds = useCallback(() => {
+    const bounds = map.getBounds();
+    setMapBounds({
+      north: bounds.getNorth(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      west: bounds.getWest(),
+    });
+  }, [map, setMapBounds]);
+
+  useEffect(() => {
+    map.whenReady(reportBounds);
+    map.on("moveend", reportBounds);
+    map.on("zoomend", reportBounds);
+
+    return () => {
+      map.off("moveend", reportBounds);
+      map.off("zoomend", reportBounds);
+      setMapBounds(null);
+    };
+  }, [map, reportBounds, setMapBounds]);
+
   return null;
 }
 
@@ -289,7 +282,8 @@ export function PlaceMap({ places }: PlaceMapProps) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapMarkerScale />
-      <MapAutoControl places={validPlaces} hoveredId={hoveredId} />
+      <MapBoundsSync />
+      <MapAutoControl places={validPlaces} />
       <MapClickDismiss onDismiss={() => setHoveredId(null)} />
       {useCluster ? (
         <PlaceMarkerCluster places={validPlaces} />

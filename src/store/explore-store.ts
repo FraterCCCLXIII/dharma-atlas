@@ -1,3 +1,4 @@
+import type { MapBounds } from "@/lib/coords";
 import {
   toggleBuddhismRoot as applyBuddhismRootToggle,
   toggleLineageSchoolSelection,
@@ -20,6 +21,7 @@ interface ExploreState {
   faiths: string[];
   mobileView: MobileView;
   filtersOpen: boolean;
+  mapBounds: MapBounds | null;
   setHoveredId: (id: string | null) => void;
   setPinnedPopupId: (id: string | null) => void;
   setEntityFilter: (filter: EntityFilter) => void;
@@ -34,6 +36,7 @@ interface ExploreState {
   clearFilters: () => void;
   setMobileView: (view: MobileView) => void;
   toggleFilters: () => void;
+  setMapBounds: (bounds: MapBounds | null) => void;
 }
 
 export const useExploreStore = create<ExploreState>((set) => ({
@@ -47,6 +50,7 @@ export const useExploreStore = create<ExploreState>((set) => ({
   faiths: [],
   mobileView: "list",
   filtersOpen: false,
+  mapBounds: null,
   setHoveredId: (id) => set({ hoveredId: id }),
   setPinnedPopupId: (id) =>
     set(id ? { pinnedPopupId: id, hoveredId: id } : { pinnedPopupId: null }),
@@ -55,6 +59,7 @@ export const useExploreStore = create<ExploreState>((set) => ({
       entityFilter,
       hoveredId: null,
       pinnedPopupId: null,
+      mapBounds: null,
     }),
   setQuery: (query) => set({ query }),
   toggleTradition: (tradition) =>
@@ -109,4 +114,5 @@ export const useExploreStore = create<ExploreState>((set) => ({
     set({ query: "", traditions: [], schools: [], types: [], faiths: [] }),
   setMobileView: (view) => set({ mobileView: view }),
   toggleFilters: () => set((s) => ({ filtersOpen: !s.filtersOpen })),
+  setMapBounds: (mapBounds) => set({ mapBounds }),
 }));

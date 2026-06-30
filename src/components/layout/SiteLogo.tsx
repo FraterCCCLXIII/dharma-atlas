@@ -35,45 +35,50 @@ export function SiteLogo({
   const useBreakpointFallback = variant === "auto" && navCompact === null;
 
   return (
-    <Link
-      ref={logoRef}
-      href="/"
-      aria-label="Dharma Atlas home"
-      className={`group inline-flex shrink-0 items-center overflow-visible rounded-lg transition hover:opacity-80 ${className}`}
-    >
-      {showIconOnly || useBreakpointFallback ? (
-        <Image
-          src="/logo-globe.svg"
-          alt=""
-          width={255}
-          height={255}
-          priority
-          aria-hidden
-          unoptimized
-          className={
-            showIconOnly
-              ? `h-8 w-8 ${logoImageClassName}`
-              : `h-8 w-8 sm:hidden ${logoImageClassName}`
-          }
-        />
-      ) : null}
-      {showWordmarkOnly || useBreakpointFallback ? (
-        <Image
-          src="/logo-header.svg"
-          alt=""
-          width={1650}
-          height={250}
-          priority
-          aria-hidden
-          unoptimized
-          className={
-            showWordmarkOnly
-              ? `h-8 w-auto sm:h-9 ${logoImageClassName}`
-              : `hidden h-8 w-auto sm:block sm:h-9 ${logoImageClassName}`
-          }
-        />
-      ) : null}
-    </Link>
+    <div className={`relative inline-flex shrink-0 items-start ${className}`}>
+      <Link
+        ref={logoRef}
+        href="/"
+        aria-label="Dharma Atlas home"
+        className="group inline-flex shrink-0 items-center overflow-visible rounded-lg transition hover:opacity-80"
+      >
+        {showIconOnly || useBreakpointFallback ? (
+          <Image
+            src="/logo-globe.svg"
+            alt=""
+            width={255}
+            height={255}
+            priority
+            aria-hidden
+            unoptimized
+            className={
+              showIconOnly
+                ? `h-8 w-8 ${logoImageClassName}`
+                : `h-8 w-8 sm:hidden ${logoImageClassName}`
+            }
+          />
+        ) : null}
+        {showWordmarkOnly || useBreakpointFallback ? (
+          <Image
+            src="/logo-header.svg"
+            alt=""
+            width={1650}
+            height={250}
+            priority
+            aria-hidden
+            unoptimized
+            className={
+              showWordmarkOnly
+                ? `h-8 w-auto sm:h-9 ${logoImageClassName}`
+                : `hidden h-8 w-auto sm:block sm:h-9 ${logoImageClassName}`
+            }
+          />
+        ) : null}
+      </Link>
+      <span className="-ml-2 -mt-1 rounded-full border border-border bg-surface-muted px-1 py-px text-[8px] font-medium uppercase tracking-wide text-ink-muted">
+        Beta
+      </span>
+    </div>
   );
 }
 

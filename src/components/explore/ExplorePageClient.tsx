@@ -1,9 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExploreNav } from "@/components/layout/SiteHeader";
 import { buildDirectoryEntries } from "@/lib/directory";
+import { isPlaceInMapBounds } from "@/lib/coords";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import type { Place } from "@/types/place";
@@ -66,6 +67,20 @@ function FilterSidebar({
   );
 }
 
+function useSyncListToMap() {
+  const [syncListToMap, setSyncListToMap] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const update = () => setSyncListToMap(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return syncListToMap;
+}
+
 export function ExplorePageClient({
   places,
   teachers,
@@ -83,8 +98,10 @@ export function ExplorePageClient({
   const faiths = useExploreStore((s) => s.faiths);
   const mobileView = useExploreStore((s) => s.mobileView);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
+  const mapBounds = useExploreStore((s) => s.mapBounds);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const activeFilterCount = useActiveFilterCount();
+  const syncListToMap = useSyncListToMap();
 
   const placeFilters = useMemo(
     () => ({ query, traditions, schools, types, faiths }),
@@ -130,6 +147,16 @@ export function ExplorePageClient({
   const showAllFeature = isAllBrowse && !hasActiveBrowse;
   const useScrollLayout = isPeopleBrowse || isAllBrowse;
 
+  const listPlaces = useMemo(() => {
+    if (!showMap || !syncListToMap || !mapBounds) return filteredPlaces;
+    return filteredPlaces.filter((place) =>
+      isPlaceInMapBounds(place.lat, place.lng, mapBounds),
+    );
+  }, [filteredPlaces, showMap, syncListToMap, mapBounds]);
+
+  const listEmptyReason =
+    listPlaces.length === 0 && filteredPlaces.length > 0 ? "map" : "filters";
+
   const listContent =
     isAllBrowse ? (
       hasActiveBrowse ? (
@@ -138,7 +165,7 @@ export function ExplorePageClient({
     ) : entityFilter === "people" ? (
       <TeacherList teachers={filteredTeachers} variant="tile" />
     ) : (
-      <PlaceList places={filteredPlaces} />
+      <PlaceList places={listPlaces} emptyReason={listEmptyReason} />
     );
 
   if (useScrollLayout) {
