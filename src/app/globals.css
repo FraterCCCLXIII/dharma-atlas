@@ -130,6 +130,58 @@ body {
   border-radius: inherit;
 }
 
+/* Embedded maps in scrollable pages — keep Leaflet layers below sticky nav (z-50). */
+.map-embedded {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+
+.map-embedded .leaflet-pane {
+  z-index: 1;
+}
+
+.map-embedded .leaflet-tile-pane {
+  z-index: 2;
+}
+
+.map-embedded .leaflet-overlay-pane {
+  z-index: 3;
+}
+
+.map-embedded .leaflet-shadow-pane {
+  z-index: 4;
+}
+
+.map-embedded .leaflet-marker-pane {
+  z-index: 5;
+}
+
+.map-embedded .leaflet-tooltip-pane {
+  z-index: 6;
+}
+
+.map-embedded .leaflet-popup-pane {
+  z-index: 7;
+}
+
+.map-embedded .leaflet-map-pane canvas {
+  z-index: 1;
+}
+
+.map-embedded .leaflet-map-pane svg {
+  z-index: 2;
+}
+
+.map-embedded .leaflet-control {
+  z-index: 8;
+}
+
+.map-embedded .leaflet-top,
+.map-embedded .leaflet-bottom {
+  z-index: 8;
+}
+
 
 .leaflet-popup-content-wrapper {
   border-radius: 14px;

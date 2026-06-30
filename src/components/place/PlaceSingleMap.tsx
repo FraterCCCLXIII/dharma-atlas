@@ -12,7 +12,7 @@ export function PlaceSingleMap({ place }: PlaceSingleMapProps) {
   const icon = createPlaceMarkerIcon(place, true);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border">
+    <div className="map-embedded overflow-hidden rounded-2xl border border-border">
       <MapContainer
         center={[place.lat, place.lng]}
         zoom={13}
