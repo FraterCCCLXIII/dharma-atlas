@@ -34,6 +34,7 @@
     "cloud": "bash -c 'set -a; [ -f .env.local ] && source .env.local; set +a; tsx scripts/cloud-api.ts \"$@\"' --"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.9",
     "@phosphor-icons/react": "^2.1.10",
     "better-auth": "^1.6.22",
     "drizzle-orm": "^0.45.2",
