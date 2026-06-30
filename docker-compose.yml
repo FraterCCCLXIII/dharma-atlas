@@ -1,11 +1,11 @@
-name: dharma-centers
+name: dharma-atlas
 
 services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: dharma_streams
+      POSTGRES_DB: dharma_atlas
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
     ports:

@@ -2,10 +2,10 @@ import { FormPageShell } from "@/components/layout/FormPageShell";
 
 export function AboutPageView() {
   return (
-    <FormPageShell title="About Dharma Streams">
+    <FormPageShell title="About Dharma Atlas">
       <div className="space-y-5 text-base leading-relaxed text-ink-secondary">
         <p>
-          Dharma Streams is an open directory of meditation centers, monasteries,
+          Dharma Atlas is an open directory of meditation centers, monasteries,
           and spiritual guides across traditions — built to help practitioners
           find communities and lineages near them.
         </p>

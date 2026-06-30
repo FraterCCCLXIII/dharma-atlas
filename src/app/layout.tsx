@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Dharma Streams | Temples, Monasteries & Ashrams",
+  title: "Dharma Atlas | Temples, Monasteries & Ashrams",
   description:
     "Explore Buddhist temples, monasteries, meditation centers, and ashrams across the United States on an interactive map.",
 };

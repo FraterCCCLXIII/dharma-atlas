@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Export teachers from spiritual-teachers generated JSON into dharma-centers.
+ * Export teachers from spiritual-teachers generated JSON into dharma-atlas.
  *
  * Usage:
  *   node scripts/export-teachers.mjs

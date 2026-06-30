@@ -13,7 +13,7 @@ export function ManageShell({
       <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-surface-elevated px-4 py-6">
         <div className="mb-8 px-2">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
-            Dharma Streams
+            Dharma Atlas
           </p>
           <p className="mt-1 font-[family-name:var(--font-fraunces)] text-lg font-semibold">
             Your listings

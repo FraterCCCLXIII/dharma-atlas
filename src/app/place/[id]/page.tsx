@@ -19,11 +19,11 @@ export async function generateMetadata({ params }: PlacePageProps): Promise<Meta
   const place = await getPlaceById(id);
 
   if (!place) {
-    return { title: "Place not found | Dharma Streams" };
+    return { title: "Place not found | Dharma Atlas" };
   }
 
   return {
-    title: `${place.name} | Dharma Streams`,
+    title: `${place.name} | Dharma Atlas`,
     description: placeMetaDescription(place),
     openGraph:
       getPlaceDisplayPhotos(place).length > 0

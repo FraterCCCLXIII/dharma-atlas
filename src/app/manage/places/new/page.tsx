@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { MemberCreatePlaceForm } from "@/components/manage/OwnerPlaceForm";
 
 export const metadata: Metadata = {
-  title: "Add location | Dharma Streams",
+  title: "Add location | Dharma Atlas",
   robots: { index: false, follow: false },
 };
 

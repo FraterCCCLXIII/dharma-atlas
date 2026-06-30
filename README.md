@@ -27,6 +27,12 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+If your local Postgres was created before the `dharma_atlas` rename, either recreate the Docker volume or run:
+
+```bash
+psql postgresql://dev:dev@localhost:5433/postgres -c "ALTER DATABASE dharma_streams RENAME TO dharma_atlas;"
+```
+
 ## Re-import map data
 
 ```bash

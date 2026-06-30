@@ -20,14 +20,14 @@ export async function generateMetadata({
   const teacher = await getTeacherBySlug(slug);
 
   if (!teacher) {
-    return { title: "Person not found | Dharma Streams" };
+    return { title: "Person not found | Dharma Atlas" };
   }
 
   return {
-    title: `${teacher.name} | Dharma Streams`,
+    title: `${teacher.name} | Dharma Atlas`,
     description: teacher.shortBio,
     openGraph: {
-      title: `${teacher.name} | Dharma Streams`,
+      title: `${teacher.name} | Dharma Atlas`,
       description: teacher.shortBio,
       images: teacher.heroPhoto ?? teacher.photo ? [teacher.heroPhoto ?? teacher.photo] : undefined,
     },

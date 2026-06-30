@@ -6,7 +6,9 @@ WORKDIR /app
 
 FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+# Coolify injects NODE_ENV=production at build time, which skips devDependencies
+# (tailwindcss, typescript, etc.) unless we opt in explicitly.
+RUN npm ci --ignore-scripts --include=dev
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules

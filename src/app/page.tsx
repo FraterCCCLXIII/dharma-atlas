@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ExplorePage } from "@/components/explore/ExplorePage";
 
 export const metadata: Metadata = {
-  title: "Dharma Streams | People, Temples & Paths of Practice",
+  title: "Dharma Atlas | People, Temples & Paths of Practice",
   description:
     "Discover meditation centers, monasteries, and spiritual guides across traditions in one living directory.",
 };

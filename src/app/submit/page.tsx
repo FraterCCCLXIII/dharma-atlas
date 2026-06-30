@@ -4,9 +4,9 @@ import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 import { SubmitEntryPageClient } from "@/components/submit/SubmitEntryPageClient";
 
 export const metadata: Metadata = {
-  title: "Submit an entry | Dharma Streams",
+  title: "Submit an entry | Dharma Atlas",
   description:
-    "Suggest a meditation center, monastery, or teacher for the Dharma Streams directory.",
+    "Suggest a meditation center, monastery, or teacher for the Dharma Atlas directory.",
 };
 
 export default async function SubmitPage() {

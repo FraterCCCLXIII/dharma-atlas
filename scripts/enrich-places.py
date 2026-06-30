@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PLACES_PATH = ROOT / "src/data/places.json"
 CACHE_PATH = ROOT / "scripts/enrich-cache.json"
-USER_AGENT = "DharmaStreams/1.0 (contact enrichment; local dev)"
+USER_AGENT = "DharmaAtlas/1.0 (contact enrichment; local dev)"
 
 NOMINATIM_DELAY = 1.1
 OVERPASS_DELAY = 0.5

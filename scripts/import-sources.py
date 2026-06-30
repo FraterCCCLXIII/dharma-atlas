@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PLACES_PATH = ROOT / "src/data/places.json"
 SOURCES_DIR = ROOT / "data/sources"
 GEOCODE_CACHE_PATH = ROOT / "scripts/geocode-cache.json"
-USER_AGENT = "DharmaStreams/1.0 (directory import; local dev)"
+USER_AGENT = "DharmaAtlas/1.0 (directory import; local dev)"
 NOMINATIM_DELAY = 1.05
 BUDDHANET_DELAY = 0.2
 

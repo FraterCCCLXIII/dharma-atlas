@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 PLACES_PATH = ROOT / "src/data/places.json"
 REPORTS_DIR = ROOT / "scripts/reports"
 GEOCODE_CACHE_PATH = ROOT / "scripts/geocode-cache.json"
-USER_AGENT = "DharmaStreams/1.0 (place pipeline; local dev)"
+USER_AGENT = "DharmaAtlas/1.0 (place pipeline; local dev)"
 
 BAD_WEBSITE_HOSTS = {
     "mapof.it",

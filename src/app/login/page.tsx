@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthForm } from "@/components/auth/AuthForm";
 
 export const metadata: Metadata = {
-  title: "Sign in | Dharma Streams",
+  title: "Sign in | Dharma Atlas",
   robots: { index: false, follow: false },
 };
 
@@ -19,7 +19,7 @@ export default async function LoginPage({
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
-            Dharma Streams
+            Dharma Atlas
           </p>
           <h1 className="mt-2 font-[family-name:var(--font-fraunces)] text-4xl font-semibold">
             Sign in

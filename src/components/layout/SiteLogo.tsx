@@ -11,7 +11,7 @@ export function SiteLogo({ className = "" }: SiteLogoProps) {
   return (
     <Link
       href="/"
-      aria-label="Dharma Streams home"
+      aria-label="Dharma Atlas home"
       className={`group inline-flex shrink-0 items-center rounded-lg transition hover:opacity-80 ${className}`}
     >
       <Image

@@ -9,7 +9,7 @@ import { getOntologySnapshot } from "@/lib/data/ontology";
 import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 
 export const metadata: Metadata = {
-  title: "Admin | Dharma Streams",
+  title: "Admin | Dharma Atlas",
   robots: { index: false, follow: false },
 };
 

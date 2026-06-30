@@ -5,7 +5,7 @@ import { getSession } from "@/lib/auth-server";
 import { isAdminRole } from "@/lib/permissions";
 
 export const metadata: Metadata = {
-  title: "Your listings | Dharma Streams",
+  title: "Your listings | Dharma Atlas",
   robots: { index: false, follow: false },
 };
 

@@ -1,5 +1,5 @@
 export const USER_AGENT =
-  "DharmaCenters/1.0 (https://github.com/dharma-centers; contact@dharmastreams.org)";
+  "DharmaAtlas/1.0 (https://github.com/FraterCCCLXIII/dharma-atlas; contact@dharma-atlas.org)";
 
 let lastRequestAt = 0;
 const MIN_INTERVAL_MS = 150;

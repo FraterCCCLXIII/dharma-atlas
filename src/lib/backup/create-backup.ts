@@ -105,7 +105,7 @@ export async function createBackup(options: CreateBackupOptions = {}): Promise<B
   }
 
   const dbConfig = parseDatabaseUrl(databaseUrl);
-  const id = `dharma-streams-${backupTimestamp()}`;
+  const id = `dharma-atlas-${backupTimestamp()}`;
   const backupsRoot = options.outputDir ?? backupDir(rootDir);
   const directory = join(backupsRoot, id);
 
@@ -153,7 +153,10 @@ export function listBackups(rootDir: string = process.cwd()): BackupManifest[] {
 
   const backups: BackupManifest[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !entry.name.startsWith("dharma-streams-")) continue;
+    if (!entry.isDirectory()) continue;
+    if (!entry.name.startsWith("dharma-atlas-") && !entry.name.startsWith("dharma-streams-")) {
+      continue;
+    }
 
     const manifestPath = join(dir, entry.name, "manifest.json");
     if (!existsSync(manifestPath)) continue;
