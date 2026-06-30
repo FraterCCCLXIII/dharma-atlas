@@ -23,6 +23,7 @@ import {
   scheduleHoverClose,
   unmountPopupRoot,
 } from "@/lib/map-popup";
+import { stackSpiderfyPositions } from "@/lib/map-stack-spiderfy";
 import { useExploreStore } from "@/store/explore-store";
 import type { Place } from "@/types/place";
 
@@ -136,18 +137,43 @@ export function PlaceMarkerCluster({ places }: { places: Place[] }) {
     container: null,
     root: null,
   });
+  const expandedStackRef = useRef<{
+    parent: ClusterMarker;
+    group: Place[];
+    spiders: ClusterMarker[];
+  } | null>(null);
 
   useEffect(() => {
+    const collapseExpandedStack = () => {
+      const expanded = expandedStackRef.current;
+      if (!expanded) return;
+
+      for (const spider of expanded.spiders) {
+        spider.closePopup();
+        unmountPopupRoot(spider.__popupRoot);
+        spider.__popupRoot = undefined;
+        spider.__popupContainer = undefined;
+        map.removeLayer(spider);
+      }
+
+      for (const place of expanded.group) {
+        markerByPlaceIdRef.current.set(place.id, expanded.parent);
+      }
+
+      expanded.parent.setOpacity(1);
+      expanded.parent.closePopup();
+      expandedStackRef.current = null;
+    };
+
     const cluster = (
       L as typeof L & {
         markerClusterGroup: (options?: object) => MarkerClusterGroup;
       }
     ).markerClusterGroup({
       zoomToBoundsOnClick: true,
-      spiderfyOnMaxZoom: true,
+      spiderfyOnMaxZoom: false,
       showCoverageOnHover: false,
       maxClusterRadius: 56,
-      disableClusteringAtZoom: 14,
       iconCreateFunction: (cluster: { getChildCount: () => number }) =>
         createMapClusterIcon(cluster.getChildCount()),
     });
@@ -157,31 +183,23 @@ export function PlaceMarkerCluster({ places }: { places: Place[] }) {
     const groups = groupPlacesByCoord(places);
     const markerByPlaceId = new Map<string, ClusterMarker>();
 
-    for (const [, group] of groups) {
-      const representative = group[0];
-      const marker = L.marker([representative.lat, representative.lng], {
-        icon: createPlaceMarkerIcon(representative, false, {
-          stackCount: group.length,
-        }),
-      }) as ClusterMarker;
-
-      marker.__placeGroup = group;
-
-      marker.bindPopup(document.createElement("div"), {
-        closeButton: false,
-        autoPan: false,
-        offset: getMarkerPopupOffset(),
-        className: "map-place-popup",
-      });
-
-      mountPopoverCard(marker, representative, () =>
-        router.push(`/place/${representative.id}`),
-      );
-
-      for (const place of group) {
-        markerByPlaceId.set(place.id, marker);
+    const bindMarkerPopup = (marker: ClusterMarker, place: Place) => {
+      if (!marker.getPopup()) {
+        marker.bindPopup(document.createElement("div"), {
+          closeButton: false,
+          autoPan: false,
+          offset: getMarkerPopupOffset(),
+          className: "map-place-popup",
+        });
       }
+      mountPopoverCard(marker, place, () => router.push(`/place/${place.id}`));
+    };
 
+    const attachHoverPopup = (
+      marker: ClusterMarker,
+      group: Place[],
+      resolvePlace: () => Place,
+    ) => {
       const showPopup = (place: Place) => {
         cancelHoverClose(hideTimerRef);
         setHoveredId(place.id);
@@ -207,32 +225,86 @@ export function PlaceMarkerCluster({ places }: { places: Place[] }) {
         });
       };
 
-      marker.on("click", (event) => {
-        L.DomEvent.stopPropagation(event);
-        showPopup(representative);
-      });
-
-      marker.on("mouseover", () => {
-        const currentHover = useExploreStore.getState().hoveredId;
-        if (group.some((place) => place.id === currentHover)) {
-          showPopup(group.find((p) => p.id === currentHover) ?? representative);
-          return;
-        }
-        showPopup(representative);
-      });
+      marker.on("mouseover", () => showPopup(resolvePlace()));
       marker.on("mouseout", scheduleHide);
 
       marker.on("popupopen", () => {
         const popupEl = marker.getPopup()?.getElement();
         if (!popupEl) return;
 
-        popupEl.addEventListener("mouseover", () => {
-          const currentHover = useExploreStore.getState().hoveredId;
-          const place =
-            group.find((p) => p.id === currentHover) ?? representative;
+        popupEl.addEventListener("mouseover", () => showPopup(resolvePlace()));
+        popupEl.addEventListener("mouseout", scheduleHide);
+      });
+
+      return { showPopup, scheduleHide };
+    };
+
+    const expandStack = (parent: ClusterMarker, group: Place[]) => {
+      collapseExpandedStack();
+      parent.closePopup();
+
+      const positions = stackSpiderfyPositions(map, parent.getLatLng(), group.length);
+      const spiders: ClusterMarker[] = [];
+
+      parent.setOpacity(0.35);
+
+      group.forEach((place, index) => {
+        const spider = L.marker(positions[index], {
+          icon: createPlaceMarkerIcon(place, false),
+          zIndexOffset: 1000 + index,
+        }) as ClusterMarker;
+
+        spider.__placeGroup = [place];
+        bindMarkerPopup(spider, place);
+        markerByPlaceId.set(place.id, spider);
+
+        const { showPopup } = attachHoverPopup(spider, [place], () => place);
+
+        spider.on("click", (event) => {
+          L.DomEvent.stopPropagation(event);
           showPopup(place);
         });
-        popupEl.addEventListener("mouseout", scheduleHide);
+
+        map.addLayer(spider);
+        spiders.push(spider);
+      });
+
+      expandedStackRef.current = { parent, group, spiders };
+      markerByPlaceIdRef.current = markerByPlaceId;
+    };
+
+    for (const [, group] of groups) {
+      const representative = group[0];
+      const marker = L.marker([representative.lat, representative.lng], {
+        icon: createPlaceMarkerIcon(representative, false, {
+          stackCount: group.length,
+        }),
+      }) as ClusterMarker;
+
+      marker.__placeGroup = group;
+
+      bindMarkerPopup(marker, representative);
+
+      for (const place of group) {
+        markerByPlaceId.set(place.id, marker);
+      }
+
+      const { showPopup } = attachHoverPopup(marker, group, () => {
+        const currentHover = useExploreStore.getState().hoveredId;
+        return group.find((place) => place.id === currentHover) ?? representative;
+      });
+
+      marker.on("click", (event) => {
+        L.DomEvent.stopPropagation(event);
+        if (group.length > 1) {
+          if (expandedStackRef.current?.parent === marker) {
+            collapseExpandedStack();
+          } else {
+            expandStack(marker, group);
+          }
+          return;
+        }
+        showPopup(representative);
       });
 
       cluster.addLayer(marker);
@@ -241,7 +313,14 @@ export function PlaceMarkerCluster({ places }: { places: Place[] }) {
     markerByPlaceIdRef.current = markerByPlaceId;
     map.addLayer(cluster);
 
+    const onMapBackgroundClick = () => collapseExpandedStack();
+    map.on("click", onMapBackgroundClick);
+    map.on("zoomstart", collapseExpandedStack);
+
     return () => {
+      map.off("click", onMapBackgroundClick);
+      map.off("zoomstart", collapseExpandedStack);
+      collapseExpandedStack();
       cancelHoverClose(hideTimerRef);
       clusterRef.current = null;
       closeFloatingPopup(map, floatingPopupRef.current);
@@ -284,7 +363,7 @@ export function PlaceMarkerCluster({ places }: { places: Place[] }) {
 
       marker.setIcon(
         createPlaceMarkerIcon(activePlace, isActive, {
-          stackCount: group.length,
+          stackCount: group.length > 1 ? group.length : undefined,
         }),
       );
 
