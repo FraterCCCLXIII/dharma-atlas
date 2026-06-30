@@ -19,7 +19,6 @@ declare global {
 }
 
 function getDb(): Db {
-  if (process.env.NODE_ENV === "production") return createDb();
   return (globalThis.__db ??= createDb());
 }
 
