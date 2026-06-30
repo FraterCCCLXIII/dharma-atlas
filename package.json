@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 --webpack",
+    "predev": "bash -c 'set -a; [ -f .env.local ] && source .env.local; set +a; drizzle-kit migrate'",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

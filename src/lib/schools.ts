@@ -16,6 +16,10 @@ export function getActiveOntologySnapshot(): OntologySnapshot {
   return activeSnapshot;
 }
 
+export function getTraditionDefaultImage(tradition: string): string | null {
+  return activeSnapshot.traditionDefaultImages[tradition] ?? null;
+}
+
 function getLineageSchools(): LineageSchoolDef[] {
   return activeSnapshot.lineageSchools;
 }

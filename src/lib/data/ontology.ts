@@ -19,6 +19,7 @@ function rowToNode(row: OntologyNodeRow): OntologyNode {
     inferPattern: row.inferPattern,
     appliesToLocations: row.appliesToLocations,
     appliesToPeople: row.appliesToPeople,
+    defaultImagePath: row.defaultImagePath,
   };
 }
 
@@ -34,6 +35,7 @@ function nodeToRow(node: OntologyNode) {
     inferPattern: node.inferPattern,
     appliesToLocations: node.appliesToLocations,
     appliesToPeople: node.appliesToPeople,
+    defaultImagePath: node.defaultImagePath,
   };
 }
 

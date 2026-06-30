@@ -1,5 +1,6 @@
 import type { OntologyNode, OntologySnapshot } from "@/types/ontology";
 import { buildOntologySnapshot } from "./build-snapshot";
+import { defaultImagePathForNodeSlug } from "./tradition-default-images";
 
 export const BUDDHIST_FILTER_ID = "Buddhist";
 /** Default slug for the Buddhism node in seed data only — not special at runtime. */
@@ -236,6 +237,7 @@ export function buildDefaultOntologyNodes(): OntologyNode[] {
       inferPattern: null,
       appliesToLocations: true,
       appliesToPeople: true,
+      defaultImagePath: defaultImagePathForNodeSlug(DEFAULT_BUDDHISM_SLUG),
     },
   ];
 
@@ -251,6 +253,7 @@ export function buildDefaultOntologyNodes(): OntologyNode[] {
       inferPattern: null,
       appliesToLocations: true,
       appliesToPeople: true,
+      defaultImagePath: defaultImagePathForNodeSlug(lineage.slug),
     });
   });
 
@@ -266,6 +269,7 @@ export function buildDefaultOntologyNodes(): OntologyNode[] {
       inferPattern: subschool.pattern,
       appliesToLocations: true,
       appliesToPeople: true,
+      defaultImagePath: null,
     });
   });
 
@@ -281,6 +285,7 @@ export function buildDefaultOntologyNodes(): OntologyNode[] {
       inferPattern: null,
       appliesToLocations: true,
       appliesToPeople: true,
+      defaultImagePath: defaultImagePathForNodeSlug(tradition.slug),
     });
   });
 

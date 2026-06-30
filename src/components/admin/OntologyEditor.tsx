@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CaretRight, DotsSixVertical } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
+import { OntologyTraditionImageField } from "@/components/admin/OntologyTraditionImageField";
 import { fieldClassName, FormField } from "@/components/forms/FormField";
 import {
   resetOntologyAction,
@@ -328,6 +329,7 @@ export function OntologyEditor({ initialNodes }: OntologyEditorProps) {
       inferPattern: null,
       appliesToLocations: true,
       appliesToPeople: true,
+      defaultImagePath: null,
     };
     setNodes((current) => syncOntologyNodeTypes([...current, next]));
     if (parent) {
@@ -541,6 +543,16 @@ export function OntologyEditor({ initialNodes }: OntologyEditorProps) {
                   className={fieldClassName}
                 />
               </FormField>
+
+              {selected.appliesToLocations ? (
+                <OntologyTraditionImageField
+                  slug={selected.slug}
+                  value={selected.defaultImagePath}
+                  onChange={(path) =>
+                    updateNode(selected.slug, { defaultImagePath: path })
+                  }
+                />
+              ) : null}
 
               {showPlaceTraditions && (
                 <FormField id="place-traditions" label="Location tradition values">

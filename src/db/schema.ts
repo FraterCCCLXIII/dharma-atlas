@@ -178,6 +178,7 @@ export const ontologyNodes = pgTable("ontology_nodes", {
   inferPattern: text("infer_pattern"),
   appliesToLocations: boolean("applies_to_locations").notNull().default(true),
   appliesToPeople: boolean("applies_to_people").notNull().default(true),
+  defaultImagePath: text("default_image_path"),
 });
 
 export type OntologyNodeRow = typeof ontologyNodes.$inferSelect;

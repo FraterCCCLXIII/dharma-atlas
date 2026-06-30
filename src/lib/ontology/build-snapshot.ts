@@ -1,5 +1,6 @@
 import { findBranchHeadSlug, findBuddhismNode, isRootNode } from "@/lib/ontology/sync-node-types";
 import { BUDDHIST_FILTER_ID } from "@/lib/ontology/defaults";
+import { buildTraditionDefaultImages } from "@/lib/ontology/tradition-default-images";
 import type { OntologyNode, OntologySnapshot, PlaceTraditionPickerOption } from "@/types/ontology";
 
 function buildPlaceTraditionPickerOptions(
@@ -89,6 +90,7 @@ export function buildOntologySnapshot(nodes: OntologyNode[]): OntologySnapshot {
   ];
 
   const placeTraditionPickerOptions = buildPlaceTraditionPickerOptions(nodes, buddhismNode);
+  const traditionDefaultImages = buildTraditionDefaultImages(nodes);
 
   return {
     buddhistRoot: {
@@ -102,6 +104,7 @@ export function buildOntologySnapshot(nodes: OntologyNode[]): OntologySnapshot {
     otherTraditions,
     buddhistPlaceTraditions,
     placeTraditionPickerOptions,
+    traditionDefaultImages,
   };
 }
 
@@ -121,6 +124,7 @@ export function serializeOntologySnapshot(snapshot: OntologySnapshot) {
     otherTraditions: snapshot.otherTraditions,
     buddhistPlaceTraditions: snapshot.buddhistPlaceTraditions,
     placeTraditionPickerOptions: snapshot.placeTraditionPickerOptions,
+    traditionDefaultImages: snapshot.traditionDefaultImages,
   };
 }
 

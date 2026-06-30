@@ -11,6 +11,7 @@ export type OntologyNode = {
   inferPattern: string | null;
   appliesToLocations: boolean;
   appliesToPeople: boolean;
+  defaultImagePath: string | null;
 };
 
 export type LineageSchoolDef = {
@@ -52,6 +53,7 @@ export type OntologySnapshot = {
   otherTraditions: OtherTraditionDef[];
   buddhistPlaceTraditions: string[];
   placeTraditionPickerOptions: PlaceTraditionPickerOption[];
+  traditionDefaultImages: Record<string, string>;
 };
 
 export type OntologyNodeInput = Omit<OntologyNode, "sortOrder"> & {

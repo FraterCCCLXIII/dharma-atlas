@@ -46,7 +46,7 @@ export const useExploreStore = create<ExploreState>((set) => ({
   types: [],
   faiths: [],
   mobileView: "list",
-  filtersOpen: true,
+  filtersOpen: false,
   setHoveredId: (id) => set({ hoveredId: id }),
   setPinnedPopupId: (id) =>
     set(id ? { pinnedPopupId: id, hoveredId: id } : { pinnedPopupId: null }),

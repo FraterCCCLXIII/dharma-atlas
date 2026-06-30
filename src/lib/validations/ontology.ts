@@ -21,6 +21,7 @@ export const ontologyNodeSchema = z.object({
   inferPattern: z.string().nullable(),
   appliesToLocations: z.boolean(),
   appliesToPeople: z.boolean(),
+  defaultImagePath: z.string().nullable(),
 });
 
 export const ontologyInputSchema = z.object({
