@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { ArrowLeft } from "@phosphor-icons/react";
-import { DetailNav } from "@/components/layout/SiteHeader";
 
 export default function PlaceNotFound() {
   return (
-    <div className="flex min-h-dvh flex-col bg-surface">
-      <DetailNav />
+    <div className="flex min-h-[calc(100dvh-var(--site-nav-height))] flex-col bg-surface">
       <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <p className="text-xs font-semibold uppercase tracking-wide text-brand">
           Not found

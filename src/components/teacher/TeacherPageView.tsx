@@ -22,7 +22,6 @@ import {
   type Relation,
   type Teacher,
 } from "@/types/teacher";
-import { DetailNav } from "@/components/layout/SiteHeader";
 import { SimilarTeachers } from "@/components/teacher/SimilarTeachers";
 
 interface TeacherPageViewProps {
@@ -130,8 +129,6 @@ export function TeacherPageView({
 
   return (
     <div className="min-h-dvh bg-surface">
-      <DetailNav />
-
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <Link
           href="/"
@@ -143,28 +140,15 @@ export function TeacherPageView({
         </Link>
 
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0 space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent">
-                {teacher.lineage}
-              </span>
-              <span className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-ink-secondary">
-                {teacher.tradition}
-              </span>
-              <span className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-medium text-ink-secondary">
-                {deceased ? "Historical figure" : "Living"}
-              </span>
-            </div>
-            <div className="space-y-2">
-              <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-                {teacher.name}
-              </h1>
-              <p className="text-sm text-ink-secondary">
-                {lifespan
-                  ? `${lifespan} · ${teacher.location}`
-                  : teacher.location}
-              </p>
-            </div>
+          <div className="min-w-0 space-y-2">
+            <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+              {teacher.name}
+            </h1>
+            <p className="text-sm text-ink-secondary">
+              {lifespan
+                ? `${lifespan} · ${teacher.location}`
+                : teacher.location}
+            </p>
           </div>
 
           <DetailPageActions

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { DM_Sans } from "next/font/google";
 import { BetaWelcomeModal } from "@/components/layout/BetaWelcomeModal";
+import { PublicSiteShell } from "@/components/layout/PublicSiteShell";
 import "./globals.css";
 
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
@@ -32,7 +33,7 @@ export default function RootLayout({
       className={`${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        {children}
+        <PublicSiteShell>{children}</PublicSiteShell>
         <BetaWelcomeModal />
         {gaMeasurementId ? <GoogleAnalytics gaId={gaMeasurementId} /> : null}
       </body>

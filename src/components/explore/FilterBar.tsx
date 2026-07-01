@@ -15,6 +15,11 @@ import {
   type LineageSchoolNode,
 } from "@/lib/schools";
 import { getUniqueValues, traditionMarkerColor } from "@/lib/places";
+import { PEOPLE_SORT_LABELS, type PeopleSortOrder } from "@/lib/teacher-groups";
+import {
+  PEOPLE_LIFE_ERA_LABELS,
+  PEOPLE_LIFE_ERA_ORDER,
+} from "@/lib/teacher-life-era";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import type { Place, PlaceType } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
@@ -247,6 +252,10 @@ export function FilterBar({
   const toggleType = useExploreStore((s) => s.toggleType);
   const clearFilters = useExploreStore((s) => s.clearFilters);
   const query = useExploreStore((s) => s.query);
+  const peopleSort = useExploreStore((s) => s.peopleSort);
+  const setPeopleSort = useExploreStore((s) => s.setPeopleSort);
+  const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
+  const setPeopleLifeEra = useExploreStore((s) => s.setPeopleLifeEra);
 
   const lineageState = useMemo(
     () => ({ traditions, schools }),
@@ -304,9 +313,11 @@ export function FilterBar({
   };
 
   const showPlaceTypes = entityFilter !== "people";
+  const showPeopleSort = entityFilter === "people";
   const activeFilterCount =
     countLineageFilterSelections(lineageState) +
     (showPlaceTypes ? types.length : 0) +
+    (showPeopleSort && peopleLifeEra !== "all" ? 1 : 0) +
     (query.length > 0 ? 1 : 0);
 
   const showBuddhismTree =
@@ -346,6 +357,32 @@ export function FilterBar({
       </div>
 
       <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-4 py-4">
+        {showPeopleSort && (
+          <>
+            <FilterSection title="Era">
+              {PEOPLE_LIFE_ERA_ORDER.map((era) => (
+                <FilterChip
+                  key={era}
+                  label={PEOPLE_LIFE_ERA_LABELS[era]}
+                  active={peopleLifeEra === era}
+                  onClick={() => setPeopleLifeEra(era)}
+                />
+              ))}
+            </FilterSection>
+
+            <FilterSection title="Sort by">
+              {(Object.keys(PEOPLE_SORT_LABELS) as PeopleSortOrder[]).map((sort) => (
+                <FilterChip
+                  key={sort}
+                  label={PEOPLE_SORT_LABELS[sort]}
+                  active={peopleSort === sort}
+                  onClick={() => setPeopleSort(sort)}
+                />
+              ))}
+            </FilterSection>
+          </>
+        )}
+
         {showPlaceTypes && placeOptions.types.length > 0 && (
           <FilterSection title="Type">
             {placeOptions.types.map((type) => (
@@ -394,11 +431,13 @@ export function useActiveFilterCount() {
   const schools = useExploreStore((s) => s.schools);
   const types = useExploreStore((s) => s.types);
   const query = useExploreStore((s) => s.query);
+  const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const showPlaceTypes = entityFilter !== "people";
   return (
     countLineageFilterSelections({ traditions, schools }) +
     (showPlaceTypes ? types.length : 0) +
+    (entityFilter === "people" && peopleLifeEra !== "all" ? 1 : 0) +
     (query.length > 0 ? 1 : 0)
   );
 }

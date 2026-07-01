@@ -1,10 +1,15 @@
 import { inferTeacherSchools, teacherMatchesTradition } from "@/lib/schools";
+import {
+  teacherMatchesLifeEra,
+  type PeopleLifeEra,
+} from "@/lib/teacher-life-era";
 import type { Teacher } from "@/types/teacher";
 
 export interface TeacherFilters {
   query: string;
   traditions: string[];
   schools: string[];
+  lifeEra: PeopleLifeEra;
 }
 
 export function filterTeachers(
@@ -38,6 +43,9 @@ export function filterTeachers(
       if (!filters.schools.some((school) => teacherSchools.includes(school))) {
         return false;
       }
+    }
+    if (!teacherMatchesLifeEra(teacher, filters.lifeEra)) {
+      return false;
     }
     return true;
   });

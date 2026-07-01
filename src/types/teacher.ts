@@ -55,9 +55,8 @@ export interface TeachersDataset {
 }
 
 export function formatLifespan(teacher: Teacher): string | null {
-  if (teacher.birthYear == null) return null;
-  if (teacher.deathYear != null) return `${teacher.birthYear}–${teacher.deathYear}`;
-  return `${teacher.birthYear}–`;
+  if (teacher.birthYear == null || teacher.deathYear == null) return null;
+  return `${teacher.birthYear}–${teacher.deathYear}`;
 }
 
 export function isDeceased(teacher: Teacher): boolean {

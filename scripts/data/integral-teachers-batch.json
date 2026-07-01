@@ -1,0 +1,289 @@
+[
+  {
+    "slug": "ken-wilber",
+    "name": "Ken Wilber",
+    "tradition": "Non-Dualism",
+    "lineage": "Integral Theory",
+    "location": "Denver, Colorado",
+    "yearsTeaching": 50,
+    "birthYear": 1949,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Ken Wilber is the founder of Integral Institute and author of Integral Spirituality, and the primary architect of Integral Theory—a framework that maps human knowledge and experience across multiple dimensions.",
+    "biography": [
+      "Kenneth Earl Wilber Jr. was born in Oklahoma City in 1949. After studying pre-med and psychology at Duke and the University of Nebraska, he left academia to pursue an independent study of Eastern and Western psychology, philosophy, and mysticism.",
+      "Wilber's Integral Theory organizes reality into quadrants, levels, lines, states, and types. His books include A Brief History of Everything, Sex Ecology Spirituality, and Integral Spirituality. In 2000 he founded Integral Institute; in 2007 he co-founded Integral Life."
+    ],
+    "topics": ["Integral Theory", "Transpersonal psychology", "Spirituality", "Consciousness", "Development"],
+    "website": "https://kenwilber.com",
+    "socials": [{ "label": "Integral Life", "url": "https://integrallife.com" }],
+    "bibliography": [
+      { "title": "Integral Spirituality", "year": 2006, "publisher": "Shambhala" },
+      { "title": "A Brief History of Everything", "year": 1996, "publisher": "Shambhala" },
+      { "title": "Sex, Ecology, Spirituality", "year": 1995, "publisher": "Shambhala" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "Ken Wilber"
+  },
+  {
+    "slug": "jeff-salzman",
+    "name": "Jeff Salzman",
+    "tradition": "Non-Dualism",
+    "lineage": "Integral Theory",
+    "location": "Boulder, Colorado",
+    "yearsTeaching": 30,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Jeff Salzman is a longtime integral teacher and host of The Daily Evolver podcast, interpreting politics and culture through Integral Theory and developmental philosophy.",
+    "biography": [
+      "Jeff Salzman co-founded CareerTrack Training, an international professional development company, before working alongside Ken Wilber for three years to develop the Integral Institute in the mid-2000s.",
+      "He later co-founded Boulder Integral and created The Daily Evolver, a podcast exploring current events through integral and evolutionary lenses. He holds a master's degree in Indo-Tibetan Buddhism from Naropa University."
+    ],
+    "topics": ["Integral Theory", "Developmental psychology", "Politics", "Evolution", "Meditation"],
+    "website": "https://www.dailyevolver.com",
+    "socials": [{ "label": "Daily Evolver", "url": "https://www.dailyevolver.com" }],
+    "bibliography": [],
+    "retreats": []
+  },
+  {
+    "slug": "nomali-perera",
+    "name": "Nomali Perera",
+    "tradition": "Non-Dualism",
+    "lineage": "Integral Theory",
+    "location": "Boulder, Colorado",
+    "yearsTeaching": 17,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Nomali Perera is an integral teacher and executive coach specializing in adult development, Integral Theory applications, and organizational transformation.",
+    "biography": [
+      "Nomali Perera is a Professional Certified Coach (ICF) and Integral Master Coach through Integral Coaching Canada. She was an early staff member of Ken Wilber's Integral Institute and co-founded the Boulder Integral Center.",
+      "She has led people development programs for Natura Cosméticos in Brazil and Mexico and facilitates using Immunity to Change, Polarity Management, and the AQAL map in corporate and nonprofit settings through her practice Practical Integral."
+    ],
+    "topics": ["Coaching", "Adult development", "Integral Theory", "Leadership", "Organizational change"],
+    "website": "https://www.practicalintegral.com",
+    "socials": [{ "label": "Practical Integral", "url": "https://www.practicalintegral.com" }],
+    "bibliography": [],
+    "retreats": [],
+    "photoUrl": "https://appliedmetatheory.org/wp-content/uploads/2025/04/cropped-NomaliNGA-1-1-200x200.jpg"
+  },
+  {
+    "slug": "diane-musho-hamilton",
+    "name": "Diane Musho Hamilton",
+    "tradition": "Buddhist",
+    "lineage": "Soto Zen / Integral Facilitator",
+    "location": "Salt Lake City, Utah",
+    "yearsTeaching": 35,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Diane Musho Hamilton is a Zen teacher and integral facilitator who merges meditation with conflict resolution, dialogue, and integral psychology.",
+    "biography": [
+      "Diane Musho Hamilton Roshi began studying Buddhism with Chögyam Trungpa at Naropa University and later trained in Soto Zen with Dennis Genpo Merzel, receiving dharma transmission in 2006. She co-founded Two Arrows Zen with her husband Michael Zimmerman.",
+      "She served as the first director of Utah's Office of Alternative Dispute Resolution and has worked with Ken Wilber and the Integral Institute since 2004. She co-founded Integral Facilitator training and authored Everything Is Workable and Waking Up and Growing Up."
+    ],
+    "topics": ["Zen", "Conflict resolution", "Facilitation", "Integral Theory", "Dialogue"],
+    "website": "https://www.twosarrowzen.org",
+    "socials": [],
+    "bibliography": [
+      { "title": "Everything Is Workable", "year": 2013, "publisher": "Shambhala" },
+      { "title": "Waking Up and Growing Up", "year": 2024, "publisher": "Shambhala" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "Diane Musho Hamilton"
+  },
+  {
+    "slug": "keith-witt",
+    "name": "Keith Witt",
+    "tradition": "Non-Dualism",
+    "lineage": "Integral Psychotherapy",
+    "location": "Santa Barbara, California",
+    "yearsTeaching": 52,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Keith Witt is a licensed psychologist and author who blends neuroscience, Integral theory, and psychotherapy through his School of Love teaching platform.",
+    "biography": [
+      "Dr. Keith Witt has practiced psychotherapy in Santa Barbara since 1973 and holds a Ph.D. in clinical psychology from The Fielding Institute. His work weaves neuroscience, wisdom traditions, and multiple psychotherapy modalities into an integrally informed approach to healing.",
+      "He has conducted over 75,000 therapy sessions and published books including Waking Up, Sessions, Integral Mindfulness, and Loving Completely. He teaches internationally on relationships, shadow work, and integral psychotherapy."
+    ],
+    "topics": ["Psychotherapy", "Integral Theory", "Relationships", "Neuroscience", "Shadow work"],
+    "website": "https://drkeithwitt.com",
+    "socials": [{ "label": "School of Love", "url": "https://drkeithwitt.com" }],
+    "bibliography": [
+      { "title": "Integral Mindfulness", "year": 2015, "publisher": "Integral Life Press" },
+      { "title": "Waking Up", "year": 2010, "publisher": "Integral Life Press" },
+      { "title": "Loving Completely", "year": 2016, "publisher": "Integral Life Press" }
+    ],
+    "retreats": []
+  },
+  {
+    "slug": "andrew-cohen",
+    "name": "Andrew Cohen",
+    "tradition": "Non-Dualism",
+    "lineage": "Evolutionary Enlightenment",
+    "location": "New York City",
+    "yearsTeaching": 38,
+    "birthYear": 1955,
+    "deathYear": 2025,
+    "languages": ["English"],
+    "shortBio": "Andrew Cohen was an American spiritual teacher and founder of Evolutionary Enlightenment, known for teaching an evolutionary approach to awakening and cultural transformation.",
+    "biography": [
+      "Raised in a secular Jewish family in New York City, Cohen had a spontaneous experience of cosmic consciousness at sixteen. After years of practice in the United States and India, he met H.W.L. Poonja in 1986 and soon began teaching.",
+      "He founded EnlightenNext magazine and developed Evolutionary Enlightenment—a path emphasizing not only personal awakening but conscious participation in the evolution of culture. He taught internationally for decades before his death in Tiruvannamalai, India in 2025."
+    ],
+    "topics": ["Evolutionary spirituality", "Non-duality", "Awakening", "Cultural evolution", "Meditation"],
+    "website": "https://andrewcohen.com",
+    "socials": [],
+    "bibliography": [
+      { "title": "Evolutionary Enlightenment", "year": 2011, "publisher": "SelectBooks" },
+      { "title": "My Master Is My Self", "year": 1992, "publisher": "Are Press" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "Andrew Cohen (spiritual teacher)"
+  },
+  {
+    "slug": "craig-hamilton",
+    "name": "Craig Hamilton",
+    "tradition": "Non-Dualism",
+    "lineage": "Evolutionary Spirituality",
+    "location": "United States",
+    "yearsTeaching": 25,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Craig Hamilton is a pioneer in evolutionary spirituality and founding member of the Integral Institute, offering online courses through Integral Enlightenment.",
+    "biography": [
+      "Craig Hamilton began his spiritual journey in ashrams and monasteries in the East before becoming a key figure in contemporary consciousness research in the West, including eight years as Senior Editor of What Is Enlightenment? magazine.",
+      "A founding member of Ken Wilber's Integral Institute and the Evolutionary Leaders Forum, he has logged over 18,000 hours of meditation. His Integral Enlightenment courses have reached graduates in more than 85 countries."
+    ],
+    "topics": ["Evolutionary spirituality", "Meditation", "Awakening", "Integral Theory", "Conscious evolution"],
+    "website": "https://craighamiltonglobal.com",
+    "socials": [{ "label": "Integral Enlightenment", "url": "https://craighamiltonglobal.com" }],
+    "bibliography": [],
+    "retreats": []
+  },
+  {
+    "slug": "jeff-carreira",
+    "name": "Jeff Carreira",
+    "tradition": "Non-Dualism",
+    "lineage": "The Practice of No Problem",
+    "location": "United States",
+    "yearsTeaching": 25,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "Jeff Carreira is a meditation teacher and philosopher known for The Practice of No Problem and his work on transdimensional spirituality and non-dual awakening.",
+    "biography": [
+      "Jeff Carreira studied physics and education before spending twenty years in intensive spiritual practice in a community rooted in Advaita Vedanta. He later traveled worldwide teaching meditation and mystical philosophy.",
+      "He founded The Mystery School, co-created the Evolutionary Collective with Patricia Albere, and partnered with Craig Hamilton on the Opening to the Infinite program. His books include The Miracle of Meditation and The Practice of No Problem."
+    ],
+    "topics": ["Meditation", "Non-duality", "Awakening", "Philosophy", "Spiritual evolution"],
+    "website": "https://jeffcarreira.com",
+    "socials": [{ "label": "Mystery School", "url": "https://jeffcarreira.com" }],
+    "bibliography": [
+      { "title": "The Practice of No Problem", "year": 2016, "publisher": "Emergence Education" },
+      { "title": "The Miracle of Meditation", "year": 2017, "publisher": "Emergence Education" }
+    ],
+    "retreats": []
+  },
+  {
+    "slug": "john-vervaeke",
+    "name": "John Vervaeke",
+    "tradition": "Buddhist",
+    "lineage": "Meaning Crisis / Cognitive Science",
+    "location": "Toronto, Canada",
+    "yearsTeaching": 30,
+    "birthYear": null,
+    "deathYear": null,
+    "languages": ["English"],
+    "shortBio": "John Vervaeke is a cognitive scientist and philosopher at the University of Toronto, known for the Awakening from the Meaning Crisis lecture series.",
+    "biography": [
+      "John Vervaeke is an award-winning lecturer in psychology, cognitive science, and Buddhist psychology at the University of Toronto, where he directs the Cognitive Science program and the Consciousness and Wisdom Studies Laboratory.",
+      "His research spans relevance realization, wisdom, mindfulness, and rationality. His public lecture series Awakening from the Meaning Crisis synthesizes cognitive science, philosophy, and contemplative traditions to address the modern meaning crisis."
+    ],
+    "topics": ["Meaning crisis", "Cognitive science", "Wisdom", "Buddhist psychology", "Philosophy"],
+    "website": "https://johnvervaeke.com",
+    "socials": [{ "label": "YouTube", "url": "https://www.youtube.com/@JohnVervaeke" }],
+    "bibliography": [
+      { "title": "Zombies in Western Culture", "year": 2016, "publisher": "Imprint Academic" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "John Vervaeke"
+  },
+  {
+    "slug": "shinzen-young",
+    "name": "Shinzen Young",
+    "tradition": "Buddhist",
+    "lineage": "Unified Mindfulness",
+    "location": "United States",
+    "yearsTeaching": 45,
+    "birthYear": 1944,
+    "deathYear": null,
+    "languages": ["English", "Japanese"],
+    "shortBio": "Shinzen Young is an American mindfulness teacher who developed Unified Mindfulness, a systematic approach blending Vipassana, Zen, and scientific inquiry.",
+    "biography": [
+      "Born in Los Angeles in 1944, Shinzen Young studied Asian languages at UCLA and Buddhist Studies at the University of Wisconsin. He was ordained as a Shingon monk at Mount Kōya, Japan in 1970, receiving the name Shinzen.",
+      "He synthesizes Burmese Vipassana, Japanese Zen, and comparative mysticism into Unified Mindfulness, taught worldwide and used in neuroscience research. He collaborates with institutions studying the scientific benefits of contemplative practice."
+    ],
+    "topics": ["Mindfulness", "Vipassana", "Meditation", "Neuroscience", "Unified Mindfulness"],
+    "website": "https://www.shinzen.org",
+    "socials": [{ "label": "Unified Mindfulness", "url": "https://www.unifiedmindfulness.com" }],
+    "bibliography": [
+      { "title": "The Science of Enlightenment", "year": 2016, "publisher": "Sounds True" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "Shinzen Young"
+  },
+  {
+    "slug": "pd-ouspensky",
+    "name": "P. D. Ouspensky",
+    "tradition": "Contemplative Christian",
+    "lineage": "Fourth Way",
+    "location": "London, England",
+    "yearsTeaching": 25,
+    "birthYear": 1878,
+    "deathYear": 1947,
+    "languages": ["Russian", "English"],
+    "shortBio": "P. D. Ouspensky was a Russian philosopher and author who taught the Fourth Way—a path of inner development for ordinary life, based on the work of G. I. Gurdjieff.",
+    "biography": [
+      "Pyotr Demianovich Ouspensky was born in Moscow in 1878. A journalist and esoteric seeker, he met George Gurdjieff in 1915 and became the principal expositor of the Fourth Way in the West after separating from Gurdjieff in 1924.",
+      "His books In Search of the Miraculous and The Fourth Way document a practical psychology of self-remembering and conscious evolution that can be pursued while living an ordinary worldly life."
+    ],
+    "topics": ["Fourth Way", "Self-remembering", "Conscious evolution", "Esoteric Christianity", "Psychology"],
+    "website": null,
+    "socials": [],
+    "bibliography": [
+      { "title": "In Search of the Miraculous", "year": 1949, "publisher": "Harcourt Brace" },
+      { "title": "The Fourth Way", "year": 1957, "publisher": "Knopf" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "P. D. Ouspensky"
+  },
+  {
+    "slug": "brad-warner",
+    "name": "Brad Warner",
+    "tradition": "Buddhist",
+    "lineage": "Soto Zen",
+    "location": "United States",
+    "yearsTeaching": 25,
+    "birthYear": 1964,
+    "deathYear": null,
+    "languages": ["English", "Japanese"],
+    "shortBio": "Brad Warner is an American Soto Zen teacher, author, and punk rock musician known for his direct, irreverent approach to Buddhist practice.",
+    "biography": [
+      "Brad Warner was born in Ohio in 1964 and played bass in hardcore punk bands including Zero Defex before becoming a serious student of Zen under Tim McCarthy and Gyomay Kubose.",
+      "While working in Japan on tokusatsu television, he studied with Gudo Wafu Nishijima, who ordained him as a priest and named him dharma heir in 2000. His books include Hardcore Zen and Sit Down and Shut Up."
+    ],
+    "topics": ["Soto Zen", "Dogen", "Meditation", "Buddhism", "Ethics"],
+    "website": "https://hardcorezen.info",
+    "socials": [{ "label": "Hardcore Zen", "url": "https://hardcorezen.info" }],
+    "bibliography": [
+      { "title": "Hardcore Zen", "year": 2003, "publisher": "Wisdom Publications" },
+      { "title": "Sit Down and Shut Up", "year": 2007, "publisher": "New World Library" }
+    ],
+    "retreats": [],
+    "wikipediaTitle": "Brad Warner"
+  }
+]

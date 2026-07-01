@@ -16,6 +16,7 @@ import { NavBarLogoContext } from "@/components/layout/NavBarLogoContext";
 import { SiteLogo, SiteLogoWordmarkMeasure } from "@/components/layout/SiteLogo";
 import { SiteMenu } from "@/components/layout/SiteMenu";
 import { useNavLogoCompact } from "@/hooks/useNavLogoCompact";
+import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import {
   EntityToggle,
   getSearchPlaceholder,
@@ -175,78 +176,23 @@ function FilterToggleButton({
   );
 }
 
-interface ExploreNavProps {
-  activeFilterCount: number;
-}
-
-export function ExploreNav({ activeFilterCount }: ExploreNavProps) {
+export function PublicNav() {
+  useExploreRouteSync();
+  const router = useRouter();
+  const pathname = usePathname();
   const mobileView = useExploreStore((s) => s.mobileView);
   const setMobileView = useExploreStore((s) => s.setMobileView);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const entityFilter = useExploreStore((s) => s.entityFilter);
-  const showMapToggle = entityFilter !== "people";
-
-  return (
-    <SiteHeader>
-      <NavBarLayout
-        center={
-          <>
-            <EntityToggle />
-            <SearchField />
-            <FilterToggleButton
-              filtersOpen={filtersOpen}
-              activeFilterCount={activeFilterCount}
-              onToggle={toggleFilters}
-            />
-            <div
-              className={`flex shrink-0 rounded-full border border-border p-0.5 lg:hidden ${showMapToggle ? "" : "hidden"}`}
-            >
-              <button
-                type="button"
-                onClick={() => setMobileView("list")}
-                aria-pressed={mobileView === "list"}
-                aria-label="Show list"
-                className={`rounded-full p-2 transition ${
-                  mobileView === "list"
-                    ? "bg-brand text-brand-foreground"
-                    : "text-ink-secondary hover:text-ink"
-                }`}
-              >
-                <ListBullets size={18} weight="bold" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setMobileView("map")}
-                aria-pressed={mobileView === "map"}
-                aria-label="Show map"
-                className={`rounded-full p-2 transition ${
-                  mobileView === "map"
-                    ? "bg-brand text-brand-foreground"
-                    : "text-ink-secondary hover:text-ink"
-                }`}
-              >
-                <MapTrifold size={18} weight="bold" />
-              </button>
-            </div>
-          </>
-        }
-      />
-    </SiteHeader>
-  );
-}
-
-export function DetailNav() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const filtersOpen = useExploreStore((s) => s.filtersOpen);
-  const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const activeFilterCount = useActiveFilterCount();
 
+  const onExplore = isExplorePath(pathname);
   const explorePath = pathFromEntityFilter(entityFilterFromPath(pathname));
+  const showMapToggle = onExplore && entityFilter !== "people";
 
   const handleFilterToggle = () => {
-    if (isExplorePath(pathname)) {
+    if (onExplore) {
       toggleFilters();
       return;
     }
@@ -259,23 +205,59 @@ export function DetailNav() {
     <SiteHeader sticky>
       <NavBarLayout
         leading={
-          <Link
-            href={explorePath}
-            className="mr-2 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
-            aria-label="Back to map"
-          >
-            <ArrowLeft size={16} weight="bold" />
-          </Link>
+          onExplore ? undefined : (
+            <Link
+              href={explorePath}
+              className="mr-2 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
+              aria-label="Back to map"
+            >
+              <ArrowLeft size={16} weight="bold" />
+            </Link>
+          )
         }
         center={
           <>
             <EntityToggle />
-            <SearchField onNavigateHome={() => router.push(explorePath)} />
+            <SearchField
+              onNavigateHome={
+                onExplore ? undefined : () => router.push(explorePath)
+              }
+            />
             <FilterToggleButton
               filtersOpen={filtersOpen}
               activeFilterCount={activeFilterCount}
               onToggle={handleFilterToggle}
             />
+            {showMapToggle ? (
+              <div className="flex shrink-0 rounded-full border border-border p-0.5 lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setMobileView("list")}
+                  aria-pressed={mobileView === "list"}
+                  aria-label="Show list"
+                  className={`rounded-full p-2 transition ${
+                    mobileView === "list"
+                      ? "bg-brand text-brand-foreground"
+                      : "text-ink-secondary hover:text-ink"
+                  }`}
+                >
+                  <ListBullets size={18} weight="bold" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileView("map")}
+                  aria-pressed={mobileView === "map"}
+                  aria-label="Show map"
+                  className={`rounded-full p-2 transition ${
+                    mobileView === "map"
+                      ? "bg-brand text-brand-foreground"
+                      : "text-ink-secondary hover:text-ink"
+                  }`}
+                >
+                  <MapTrifold size={18} weight="bold" />
+                </button>
+              </div>
+            ) : null}
           </>
         }
       />

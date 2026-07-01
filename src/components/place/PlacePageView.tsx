@@ -17,7 +17,6 @@ import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import type { Place } from "@/types/place";
-import { DetailNav } from "@/components/layout/SiteHeader";
 import { PlaceContactDetails } from "@/components/place/PlaceContactDetails";
 import { PlaceHours } from "@/components/place/PlaceHours";
 import { SimilarPlaces } from "./SimilarPlaces";
@@ -51,8 +50,6 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
 
   return (
     <div className="min-h-dvh bg-surface">
-      <DetailNav />
-
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <div className="relative mb-10">
           <Link

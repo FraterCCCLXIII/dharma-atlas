@@ -2,16 +2,15 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import { ExploreNav } from "@/components/layout/SiteHeader";
 import { buildDirectoryEntries } from "@/lib/directory";
 import { isPlaceInMapBounds } from "@/lib/coords";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
-import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import type { Place } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 import { DirectoryList } from "./DirectoryList";
 import { AllFeaturePage } from "./AllFeaturePage";
-import { FilterBar, useActiveFilterCount } from "./FilterBar";
+import { FilterBar } from "./FilterBar";
+import { PeopleCarousels } from "./PeopleCarousels";
 import { PlaceList } from "./PlaceList";
 import { TeacherList } from "./TeacherList";
 
@@ -88,8 +87,6 @@ export function ExplorePageClient({
   places: Place[];
   teachers: Teacher[];
 }) {
-  useExploreRouteSync();
-
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const query = useExploreStore((s) => s.query);
   const traditions = useExploreStore((s) => s.traditions);
@@ -99,8 +96,9 @@ export function ExplorePageClient({
   const mobileView = useExploreStore((s) => s.mobileView);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const mapBounds = useExploreStore((s) => s.mapBounds);
+  const peopleSort = useExploreStore((s) => s.peopleSort);
+  const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
-  const activeFilterCount = useActiveFilterCount();
   const syncListToMap = useSyncListToMap();
 
   const placeFilters = useMemo(
@@ -108,8 +106,8 @@ export function ExplorePageClient({
     [query, traditions, schools, types, faiths],
   );
   const teacherFilters = useMemo(
-    () => ({ query, traditions, schools }),
-    [query, traditions, schools],
+    () => ({ query, traditions, schools, lifeEra: peopleLifeEra }),
+    [query, traditions, schools, peopleLifeEra],
   );
 
   const directoryEntries = useMemo(
@@ -144,7 +142,13 @@ export function ExplorePageClient({
     schools.length > 0 ||
     types.length > 0 ||
     faiths.length > 0;
+  const hasActivePeopleBrowse =
+    query.trim().length > 0 ||
+    traditions.length > 0 ||
+    schools.length > 0 ||
+    peopleLifeEra !== "all";
   const showAllFeature = isAllBrowse && !hasActiveBrowse;
+  const showLuminaries = isPeopleBrowse && !hasActivePeopleBrowse;
   const useScrollLayout = isPeopleBrowse || isAllBrowse;
 
   const listPlaces = useMemo(() => {
@@ -163,16 +167,18 @@ export function ExplorePageClient({
         <DirectoryList entries={directoryEntries} />
       ) : null
     ) : entityFilter === "people" ? (
-      <TeacherList teachers={filteredTeachers} variant="tile" />
+      <TeacherList
+        teachers={filteredTeachers}
+        variant="tile"
+        sortOrder={peopleSort}
+      />
     ) : (
       <PlaceList places={listPlaces} emptyReason={listEmptyReason} />
     );
 
   if (useScrollLayout) {
     return (
-      <div className="flex h-dvh flex-col overflow-hidden bg-surface-elevated">
-        <ExploreNav activeFilterCount={activeFilterCount} />
-
+      <div className="flex h-[calc(100dvh-var(--site-nav-height))] flex-col overflow-hidden bg-surface-elevated">
         <div className="relative flex min-h-0 flex-1">
           <FilterSidebar
             entityFilter={entityFilter}
@@ -187,6 +193,7 @@ export function ExplorePageClient({
               <AllFeaturePage places={places} teachers={teachers} />
             ) : isPeopleBrowse ? (
               <div className="mx-auto w-full max-w-[1600px] px-4 pb-16 sm:px-6 lg:px-8">
+                {showLuminaries && <PeopleCarousels teachers={teachers} />}
                 {listContent}
               </div>
             ) : (
@@ -199,9 +206,7 @@ export function ExplorePageClient({
   }
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-surface-elevated">
-      <ExploreNav activeFilterCount={activeFilterCount} />
-
+    <div className="flex h-[calc(100dvh-var(--site-nav-height))] flex-col overflow-hidden bg-surface-elevated">
       <div className="relative flex min-h-0 flex-1">
         <FilterSidebar
           entityFilter={entityFilter}

@@ -1,4 +1,6 @@
 import type { MapBounds } from "@/lib/coords";
+import type { PeopleSortOrder } from "@/lib/teacher-groups";
+import type { PeopleLifeEra } from "@/lib/teacher-life-era";
 import {
   toggleBuddhismRoot as applyBuddhismRootToggle,
   toggleLineageSchoolSelection,
@@ -20,6 +22,8 @@ interface ExploreState {
   types: PlaceType[];
   faiths: string[];
   mobileView: MobileView;
+  peopleSort: PeopleSortOrder;
+  peopleLifeEra: PeopleLifeEra;
   filtersOpen: boolean;
   mapBounds: MapBounds | null;
   setHoveredId: (id: string | null) => void;
@@ -35,6 +39,8 @@ interface ExploreState {
   toggleFaith: (faith: string) => void;
   clearFilters: () => void;
   setMobileView: (view: MobileView) => void;
+  setPeopleSort: (sort: PeopleSortOrder) => void;
+  setPeopleLifeEra: (era: PeopleLifeEra) => void;
   toggleFilters: () => void;
   setMapBounds: (bounds: MapBounds | null) => void;
 }
@@ -49,6 +55,8 @@ export const useExploreStore = create<ExploreState>((set) => ({
   types: [],
   faiths: [],
   mobileView: "list",
+  peopleSort: "tradition-school",
+  peopleLifeEra: "all",
   filtersOpen: false,
   mapBounds: null,
   setHoveredId: (id) => set({ hoveredId: id }),
@@ -111,8 +119,17 @@ export const useExploreStore = create<ExploreState>((set) => ({
         : [...s.faiths, faith],
     })),
   clearFilters: () =>
-    set({ query: "", traditions: [], schools: [], types: [], faiths: [] }),
+    set({
+      query: "",
+      traditions: [],
+      schools: [],
+      types: [],
+      faiths: [],
+      peopleLifeEra: "all",
+    }),
   setMobileView: (view) => set({ mobileView: view }),
+  setPeopleSort: (peopleSort) => set({ peopleSort }),
+  setPeopleLifeEra: (peopleLifeEra) => set({ peopleLifeEra }),
   toggleFilters: () => set((s) => ({ filtersOpen: !s.filtersOpen })),
   setMapBounds: (mapBounds) => set({ mapBounds }),
 }));

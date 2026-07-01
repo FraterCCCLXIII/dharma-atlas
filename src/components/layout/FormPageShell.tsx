@@ -3,7 +3,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowLeft } from "@phosphor-icons/react";
-import { DetailNav } from "@/components/layout/SiteHeader";
 
 interface FormPageShellProps {
   title: string;
@@ -14,8 +13,6 @@ interface FormPageShellProps {
 export function FormPageShell({ title, description, children }: FormPageShellProps) {
   return (
     <div className="min-h-dvh bg-surface">
-      <DetailNav />
-
       <main className="mx-auto max-w-2xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <Link
           href="/"
