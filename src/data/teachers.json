@@ -539,20 +539,21 @@
     },
     {
       "slug": "al-zolnas",
-      "name": "Al Zolnas",
+      "name": "Al Zolynas",
       "tradition": "Buddhist",
       "lineage": "Soto Zen / White Plum Asanga",
-      "location": "San Diego, CA",
-      "base": "Zen Center of San Diego",
-      "yearsTeaching": 0,
-      "birthYear": null,
+      "location": "Escondido, CA",
+      "base": "Freeway Zen",
+      "yearsTeaching": 46,
+      "birthYear": 1945,
       "deathYear": null,
       "languages": [
         "English"
       ],
-      "shortBio": "Al Zolnas is a Zen teacher at Zen Center of San Diego in San Diego, CA.",
+      "shortBio": "Al Zolynas is a poet and Zen teacher authorized by Ezra Bayda and Elizabeth Hamilton of the Zen Center of San Diego, with roots in Charlotte Joko Beck's Ordinary Mind lineage.",
       "biography": [
-        "Al Zolnas is a Zen teacher at Zen Center of San Diego in San Diego, CA."
+        "Al Zolynas was born at the end of World War II in Austria to Lithuanian parents and was raised in Sydney and Chicago. He earned a BA from the University of Illinois and an MA and PhD from the University of Utah, and taught English and writing for many years before retiring in 2010.",
+        "He began Zen training at the Zen Center of Los Angeles in 1979, became a student of Charlotte Joko Beck, and worked with her closely in Los Angeles and San Diego until 2006. He was authorized to teach by Ezra Bayda and Elizabeth Hamilton of the Zen Center of San Diego in 2012 and is recognized as a Zen teacher by the White Plum Asanga and the Ordinary Mind Zen School. He leads Freeway Zen in Escondido, California, and continues to write and publish poetry."
       ],
       "topics": [
         "Meditation",
@@ -562,11 +563,11 @@
       ],
       "photo": "/people/al-zolnas.jpg",
       "heroPhoto": "/people/al-zolnas.jpg",
-      "website": "http://www.zencentersandiego.org/",
+      "website": "https://www.freewayzen.org/",
       "socials": [
         {
-          "label": "Zen Center of San Diego",
-          "url": "http://www.zencentersandiego.org/"
+          "label": "Freeway Zen",
+          "url": "https://www.freewayzen.org/"
         }
       ],
       "bibliography": [],
@@ -1350,8 +1351,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/anna-christensen.jpg",
-      "heroPhoto": "/people/anna-christensen.jpg",
+      "photo": "",
       "website": "http://www.ordinarymind.com/",
       "socials": [
         {
@@ -1939,8 +1939,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/barry-briggs.jpg",
-      "heroPhoto": "/people/barry-briggs.jpg",
+      "photo": "",
       "website": "http://www.cochisezencenter.org",
       "socials": [
         {
@@ -3928,8 +3927,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/chris-fortin.jpg",
-      "heroPhoto": "/people/chris-fortin.jpg",
+      "photo": "",
       "website": "https://www.dharmaheartzen.com/",
       "socials": [
         {
@@ -4116,8 +4114,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/claude-dalenberg.jpg",
-      "heroPhoto": "/people/claude-dalenberg.jpg",
+      "photo": "",
       "website": null,
       "socials": [],
       "bibliography": [],
@@ -5236,8 +5233,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/do-on-robert-thomas.jpg",
-      "heroPhoto": "/people/do-on-robert-thomas.jpg",
+      "photo": "",
       "website": "http://www.sfzc.org",
       "socials": [
         {
@@ -5932,8 +5928,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/ed-russell.jpg",
-      "heroPhoto": "/people/ed-russell.jpg",
+      "photo": "",
       "website": "http://www.prairiezen.org/",
       "socials": [
         {
@@ -7278,8 +7273,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/george-bowman.webp",
-      "heroPhoto": "/people/george-bowman.webp",
+      "photo": "",
       "website": null,
       "socials": [],
       "bibliography": [],
@@ -8566,8 +8560,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/hogen-bays.jpg",
-      "heroPhoto": "/people/hogen-bays.jpg",
+      "photo": "",
       "website": "http://www.zendust.org/",
       "socials": [
         {
@@ -9364,8 +9357,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/jack-duffy.jpg",
-      "heroPhoto": "/people/jack-duffy.jpg",
+      "photo": "",
       "website": "http://www.three-treasures-sangha.org&quot;",
       "socials": [
         {
@@ -10295,8 +10287,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/jintei-harold-little.webp",
-      "heroPhoto": "/people/jintei-harold-little.webp",
+      "photo": "",
       "website": "http://www.ashlandzencenter.org",
       "socials": [
         {
@@ -11778,8 +11769,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/kathy-ratliffe.jpg",
-      "heroPhoto": "/people/kathy-ratliffe.jpg",
+      "photo": "",
       "website": "https://diamondsangha.org/",
       "socials": [
         {
@@ -12508,8 +12498,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/kim-mosley.jpg",
-      "heroPhoto": "/people/kim-mosley.jpg",
+      "photo": "",
       "website": "https://appamada.org/",
       "socials": [
         {
@@ -12927,8 +12916,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/kristen-larson.jpg",
-      "heroPhoto": "/people/kristen-larson.jpg",
+      "photo": "",
       "website": null,
       "socials": [],
       "bibliography": [],
@@ -16644,8 +16632,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/nona-strong.jpg",
-      "heroPhoto": "/people/nona-strong.jpg",
+      "photo": "",
       "website": null,
       "socials": [],
       "bibliography": [],
@@ -17379,8 +17366,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/peggy-sheehan.jpg",
-      "heroPhoto": "/people/peggy-sheehan.jpg",
+      "photo": "",
       "website": "http://www.zencenterofdenver.org",
       "socials": [
         {
@@ -17579,8 +17565,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/peter-schneider.jpg",
-      "heroPhoto": "/people/peter-schneider.jpg",
+      "photo": "",
       "website": "http://www.beginnersmindzencenter.org",
       "socials": [
         {
@@ -18485,8 +18470,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/richard-collins.jpg",
-      "heroPhoto": "/people/richard-collins.jpg",
+      "photo": "",
       "website": "https://www.neworleanszentemple.org/home",
       "socials": [
         {
@@ -18571,8 +18555,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/rick-spencer.jpg",
-      "heroPhoto": "/people/rick-spencer.jpg",
+      "photo": "",
       "website": null,
       "socials": [],
       "bibliography": [],
@@ -18805,8 +18788,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/robert-kennedy.jpg",
-      "heroPhoto": "/people/robert-kennedy.jpg",
+      "photo": "",
       "website": "http://www.kennedyzen.tripod.com/",
       "socials": [
         {
@@ -18869,8 +18851,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/robert-moore.webp",
-      "heroPhoto": "/people/robert-moore.webp",
+      "photo": "",
       "website": "http://www.goldenwindzen.com/",
       "socials": [
         {
@@ -22715,8 +22696,7 @@
         "Compassion",
         "Liberation"
       ],
-      "photo": "/people/thomas-pastor.jpg",
-      "heroPhoto": "/people/thomas-pastor.jpg",
+      "photo": "",
       "website": "https://zenlasvegas.org",
       "socials": [
         {

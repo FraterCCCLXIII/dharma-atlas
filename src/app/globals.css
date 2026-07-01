@@ -310,3 +310,29 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Carousel: scrollbar hidden until hover or scroll, then fades out. */
+.carousel-track {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.carousel-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+  transition: background 0.35s ease;
+}
+
+.carousel-track.is-scrollbar-visible {
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+.carousel-track.is-scrollbar-visible::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+}

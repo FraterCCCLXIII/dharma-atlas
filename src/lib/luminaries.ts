@@ -18,6 +18,15 @@ export const FEATURED_LUMINARY_SLUGS = [
   "robert-thurman",
 ] as const;
 
+export const REMEMBERING_CAROUSEL_LIMIT = 36;
+
+/** Shown in carousels only after other eligible teachers. */
+export const CAROUSEL_DEPRIORITIZED_SLUGS = new Set(["andrew-cohen"]);
+
+function carouselRank(teacher: Teacher): number {
+  return CAROUSEL_DEPRIORITIZED_SLUGS.has(teacher.slug) ? 1 : 0;
+}
+
 function lineageScore(teacher: Teacher): number {
   const deathYear = teacher.deathYear ?? 0;
   const hasBio = teacher.shortBio.trim().length > 0 ? 1 : 0;
@@ -29,14 +38,18 @@ function isEligibleLuminary(teacher: Teacher): boolean {
   return Boolean(teacher.photo) && !teacher.isDraft;
 }
 
-export function getLuminaries(teachers: Teacher[], limit = 18): Teacher[] {
+export function getLuminaries(
+  teachers: Teacher[],
+  limit = 18,
+  excludeSlugs: ReadonlySet<string> = new Set(),
+): Teacher[] {
   const bySlug = new Map(teachers.map((teacher) => [teacher.slug, teacher]));
   const picked: Teacher[] = [];
   const seenSlugs = new Set<string>();
   const seenGroups = new Set<string>();
 
   const addTeacher = (teacher: Teacher) => {
-    if (seenSlugs.has(teacher.slug)) return false;
+    if (seenSlugs.has(teacher.slug) || excludeSlugs.has(teacher.slug)) return false;
     seenSlugs.add(teacher.slug);
     seenGroups.add(getTeacherBrowseGroupId(teacher));
     picked.push(teacher);
@@ -54,10 +67,12 @@ export function getLuminaries(teachers: Teacher[], limit = 18): Teacher[] {
       (teacher) =>
         isEligibleLuminary(teacher) &&
         !seenSlugs.has(teacher.slug) &&
+        !excludeSlugs.has(teacher.slug) &&
         classifyTeacherLifeEra(teacher) === "lineage",
     )
     .sort(
       (a, b) =>
+        carouselRank(a) - carouselRank(b) ||
         lineageScore(b) - lineageScore(a) ||
         a.name.localeCompare(b.name, "en"),
     );
@@ -87,16 +102,14 @@ export function isRecentlyPassed(
 
 export function getRecentlyPassedTeachers(
   teachers: Teacher[],
-  limit = 24,
+  limit = REMEMBERING_CAROUSEL_LIMIT,
   now = new Date(),
-  excludeSlugs: ReadonlySet<string> = new Set(),
 ): Teacher[] {
   return teachers
     .filter(
       (teacher) =>
         teacher.photo &&
         !teacher.isDraft &&
-        !excludeSlugs.has(teacher.slug) &&
         isRecentlyPassed(teacher, now),
     )
     .sort(
@@ -111,14 +124,9 @@ export function getPeoplePageCarousels(
   teachers: Teacher[],
   now = new Date(),
 ): { luminaries: Teacher[]; remembering: Teacher[] } {
-  const luminaries = getLuminaries(teachers);
-  const luminarySlugs = new Set(luminaries.map((teacher) => teacher.slug));
-  const remembering = getRecentlyPassedTeachers(
-    teachers,
-    24,
-    now,
-    luminarySlugs,
-  );
+  const remembering = getRecentlyPassedTeachers(teachers, REMEMBERING_CAROUSEL_LIMIT, now);
+  const rememberingSlugs = new Set(remembering.map((teacher) => teacher.slug));
+  const luminaries = getLuminaries(teachers, 18, rememberingSlugs);
 
   return { luminaries, remembering };
 }

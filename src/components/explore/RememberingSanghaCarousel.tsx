@@ -16,7 +16,7 @@ export function RememberingSanghaCarousel({
       ariaLabel="Remembering the Sangha"
       eyebrow="In memoriam"
       title="Remembering the Sangha"
-      description="Teachers and friends of the path who passed within the last five years."
+      description="We honor the lives of the world's teachers"
     />
   );
 }
