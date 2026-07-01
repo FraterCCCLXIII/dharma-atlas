@@ -24,6 +24,7 @@ function usage() {
   npm run cloud -- create-place <jsonPath>
   npm run cloud -- delete-place <placeId>
   npm run cloud -- upload-teacher-photo <slug> <filePath> [--hero]
+  npm run cloud -- sync-people-photos
   npm run cloud -- revalidate [--all] [path...]
 
 Env (in .env.local):
@@ -118,6 +119,21 @@ async function main() {
       const result = await client.uploadTeacherPhoto(slug, filePath, hero ? "hero" : "portrait");
       console.log(JSON.stringify(result, null, 2));
       break;
+    }
+
+    case "sync-people-photos": {
+      const result = await client.syncPeoplePhotos();
+      console.log(JSON.stringify(result, null, 2));
+      break;
+    }
+
+    case "sync-teacher-photos": {
+      const { spawnSync } = await import("node:child_process");
+      const child = spawnSync("tsx", ["scripts/sync-teacher-photos-cloud.ts", ...args], {
+        stdio: "inherit",
+        env: process.env,
+      });
+      process.exit(child.status ?? 1);
     }
 
     case "revalidate": {
