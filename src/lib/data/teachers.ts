@@ -234,7 +234,8 @@ export async function searchTeachers(options: {
   };
 }
 
-export async function getTeachersAtPlace(placeName: string, tradition: string, limit = 6) {
+/** Teachers with a recorded affiliation (e.g. retreat at this place). No tradition fallback. */
+export async function getTeachersAtPlace(placeName: string, limit = 6) {
   const retreatRows = await db
     .select({ teacherSlug: teacherRetreats.teacherSlug })
     .from(teacherRetreats)
@@ -242,15 +243,13 @@ export async function getTeachersAtPlace(placeName: string, tradition: string, l
     .limit(limit * 2);
 
   const slugs = [...new Set(retreatRows.map((r) => r.teacherSlug))].slice(0, limit);
-  if (slugs.length > 0) {
-    const rows = await db
-      .select()
-      .from(teachers)
-      .where(and(publishedOnly, inArray(teachers.slug, slugs)));
-    return assembleTeachersFromRows(rows);
-  }
+  if (slugs.length === 0) return [];
 
-  return getTeachersByTradition(tradition, limit);
+  const rows = await db
+    .select()
+    .from(teachers)
+    .where(and(publishedOnly, inArray(teachers.slug, slugs)));
+  return assembleTeachersFromRows(rows);
 }
 
 export async function getSimilarTeachers(teacher: Teacher, limit = 4): Promise<Teacher[]> {

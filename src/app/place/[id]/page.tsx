@@ -44,7 +44,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
   }
 
   const similar = await getSimilarPlaces(place);
-  const linkedTeachers = await getTeachersAtPlace(place.name, place.tradition);
+  const linkedTeachers = await getTeachersAtPlace(place.name);
 
   return <PlacePageView place={place} similar={similar} teachers={linkedTeachers} />;
 }
