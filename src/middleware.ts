@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SESSION_COOKIE = "better-auth.session_token";
+/** Better Auth uses `__Secure-` prefix on HTTPS; plain name on HTTP (local). */
+function hasSessionCookie(request: NextRequest): boolean {
+  return Boolean(
+    request.cookies.get("better-auth.session_token")?.value ||
+      request.cookies.get("__Secure-better-auth.session_token")?.value,
+  );
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasSession = Boolean(request.cookies.get(SESSION_COOKIE)?.value);
+  const hasSession = hasSessionCookie(request);
 
   if (pathname.startsWith("/manage")) {
     if (!hasSession) {
