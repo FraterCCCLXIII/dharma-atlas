@@ -19,22 +19,31 @@ interface PlaceCardProps {
   place: Place;
   index: number;
   showKindBadge?: boolean;
+  /** Off for virtualized lists — remount animations fight absolute row positioning. */
+  animateEntrance?: boolean;
 }
 
-export function PlaceCard({ place, index, showKindBadge }: PlaceCardProps) {
-  const hoveredId = useExploreStore((s) => s.hoveredId);
+export function PlaceCard({
+  place,
+  index,
+  showKindBadge,
+  animateEntrance = true,
+}: PlaceCardProps) {
+  const isHovered = useExploreStore((s) => s.hoveredId === place.id);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
 
-  const isHovered = hoveredId === place.id;
   const schools = getSchools(place);
   const photos = getPlaceDisplayPhotos(place);
 
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0, y: 12 }}
+      initial={animateEntrance ? { opacity: 0, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, delay: Math.min(index * 0.02, 0.2) }}
+      transition={
+        animateEntrance
+          ? { duration: 0.25, delay: Math.min(index * 0.02, 0.2) }
+          : { duration: 0 }
+      }
       onMouseEnter={() => {
         if (isValidCoord(place.lat, place.lng)) {
           setHoveredId(place.id);

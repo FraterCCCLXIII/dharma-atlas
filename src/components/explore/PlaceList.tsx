@@ -32,6 +32,14 @@ function useColumnCount() {
   return columnCount;
 }
 
+function rowKey(places: Place[], index: number, columnCount: number) {
+  const startIndex = index * columnCount;
+  return places
+    .slice(startIndex, startIndex + columnCount)
+    .map((place) => place.id)
+    .join("|");
+}
+
 export function PlaceList({
   places,
   emptyReason = "filters",
@@ -45,14 +53,24 @@ export function PlaceList({
     getScrollElement: () => parentRef.current,
     estimateSize: () => 300,
     overscan: 4,
-    measureElement: (element) => element?.getBoundingClientRect().height ?? 300,
+    getItemKey: (index) => rowKey(places, index, columnCount),
   });
+
+  const placesKey = places.map((place) => place.id).join(",");
+
+  // Map-bounds filtering reshuffles rows; drop stale height cache so rows
+  // don't overlap and intercept clicks meant for the card underneath.
+  useEffect(() => {
+    virtualizer.measure();
+  }, [placesKey, columnCount, virtualizer]);
 
   if (places.length === 0) {
     return (
-      <div ref={parentRef} className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
-        <PlaceListHeader count={0} />
-        <div className="flex flex-col items-center justify-center px-2 py-16 text-center">
+      <div className="flex min-h-0 flex-1 flex-col">
+        <div className="px-4 pt-4 sm:px-6 sm:pt-6">
+          <PlaceListHeader count={0} />
+        </div>
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 pb-4 text-center sm:px-6 sm:pb-6">
           <p className="font-display text-lg font-semibold text-ink">
             {emptyReason === "map" ? "No places in this map area" : "No places found"}
           </p>
@@ -67,12 +85,15 @@ export function PlaceList({
   }
 
   return (
-    <div ref={parentRef} className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
-      <PlaceListHeader count={places.length} />
-      <div
-        className="relative w-full"
-        style={{ height: `${virtualizer.getTotalSize()}px` }}
-      >
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="shrink-0 px-4 pt-4 sm:px-6 sm:pt-6">
+        <PlaceListHeader count={places.length} />
+      </div>
+      <div ref={parentRef} className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6">
+        <div
+          className="relative w-full"
+          style={{ height: `${virtualizer.getTotalSize()}px` }}
+        >
           {virtualizer.getVirtualItems().map((virtualRow) => {
             const startIndex = virtualRow.index * columnCount;
             const rowPlaces = places.slice(startIndex, startIndex + columnCount);
@@ -95,12 +116,14 @@ export function PlaceList({
                       key={place.id}
                       place={place}
                       index={startIndex + offset}
+                      animateEntrance={false}
                     />
                   ))}
                 </div>
               </div>
             );
           })}
+        </div>
       </div>
     </div>
   );
