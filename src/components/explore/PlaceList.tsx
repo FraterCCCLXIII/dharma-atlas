@@ -178,8 +178,12 @@ export function PlaceList({
       syncListToMap,
     });
 
-    setLoading(true);
+    // Keep prior results visible while map-bounds sync refetches.
+    if (places.length === 0) setLoading(true);
     setError(null);
+
+    // Debounce map-pan refetches; search typing already needs a short delay.
+    const delayMs = query.trim() ? 200 : syncListToMap && mapBounds ? 150 : 0;
 
     const timer = window.setTimeout(() => {
       fetch(`/api/explore/places?${params.toString()}`, {
@@ -205,7 +209,7 @@ export function PlaceList({
           setTotal(0);
           setLoading(false);
         });
-    }, query.trim() ? 200 : 0);
+    }, delayMs);
 
     return () => {
       controller.abort();

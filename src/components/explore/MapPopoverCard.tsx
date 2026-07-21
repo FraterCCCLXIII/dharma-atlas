@@ -7,12 +7,13 @@ import type { PlaceMarker } from "@/types/place";
 
 interface MapPopoverCardProps {
   place: PlaceMarker;
-  onViewDetails: () => void;
 }
 
-export function MapPopoverCard({ place, onViewDetails }: MapPopoverCardProps) {
+export function MapPopoverCard({ place }: MapPopoverCardProps) {
   const address = place.address?.trim();
   const photos = getPlaceDisplayPhotos(place);
+  // Plain anchor: cluster popups mount via createRoot outside the Next.js tree.
+  const href = `/place/${place.id}`;
 
   return (
     <div className="map-popover-card">
@@ -50,14 +51,13 @@ export function MapPopoverCard({ place, onViewDetails }: MapPopoverCardProps) {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={onViewDetails}
+        <a
+          href={href}
           className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand px-3 py-2 text-xs font-semibold text-brand-foreground transition hover:bg-brand-hover"
         >
           View details
           <ArrowRight size={12} weight="bold" />
-        </button>
+        </a>
       </div>
     </div>
   );

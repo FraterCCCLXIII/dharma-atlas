@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { useRouter } from "next/navigation";
 import L from "leaflet";
 import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -70,7 +69,6 @@ function showFloatingPopup(
   map: L.Map,
   refs: FloatingPopupRefs,
   place: PlaceMarker,
-  onViewDetails: () => void,
 ) {
   if (!refs.container) {
     refs.container = document.createElement("div");
@@ -87,7 +85,7 @@ function showFloatingPopup(
 
   renderPopupRoot(
     refs.root!,
-    <MapPopoverCard place={place} onViewDetails={onViewDetails} />,
+    <MapPopoverCard place={place} />,
     () => refreshPopupLayout(refs.popup ?? undefined),
   );
 
@@ -103,11 +101,7 @@ type ClusterMarker = L.Marker & {
   __popupRoot?: Root;
 };
 
-function mountPopoverCard(
-  marker: ClusterMarker,
-  place: PlaceMarker,
-  onViewDetails: () => void,
-) {
+function mountPopoverCard(marker: ClusterMarker, place: PlaceMarker) {
   if (!marker.__popupContainer) {
     marker.__popupContainer = document.createElement("div");
     marker.__popupRoot = createRoot(marker.__popupContainer);
@@ -116,14 +110,13 @@ function mountPopoverCard(
 
   renderPopupRoot(
     marker.__popupRoot!,
-    <MapPopoverCard place={place} onViewDetails={onViewDetails} />,
+    <MapPopoverCard place={place} />,
     () => refreshPopupLayout(marker.getPopup()),
   );
 }
 
 export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
   const map = useMap();
-  const router = useRouter();
   const hoveredId = useExploreStore((s) => s.hoveredId);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
 
@@ -192,7 +185,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
           className: "map-place-popup",
         });
       }
-      mountPopoverCard(marker, place, () => router.push(`/place/${place.id}`));
+      mountPopoverCard(marker, place);
     };
 
     const attachHoverPopup = (
@@ -205,11 +198,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
         setHoveredId(place.id);
 
         const open = () =>
-          openMarkerPopupNow(marker, () =>
-            mountPopoverCard(marker, place, () =>
-              router.push(`/place/${place.id}`),
-            ),
-          );
+          openMarkerPopupNow(marker, () => mountPopoverCard(marker, place));
 
         if (markerIsVisible(marker)) {
           open();
@@ -332,7 +321,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       map.removeLayer(cluster);
       markerByPlaceIdRef.current = new Map();
     };
-  }, [map, places, router, setHoveredId]);
+  }, [map, places, setHoveredId]);
 
   useEffect(() => {
     cancelOpenRef.current?.();
@@ -378,9 +367,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
 
     const mountActiveCard = () => {
       if (openGen !== openGenRef.current) return;
-      mountPopoverCard(activeMarker, activePlace, () =>
-        router.push(`/place/${activePlace.id}`),
-      );
+      mountPopoverCard(activeMarker, activePlace);
     };
 
     if (markerIsVisible(activeMarker)) {
@@ -404,15 +391,13 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
 
     if (openGen !== openGenRef.current) return;
 
-    showFloatingPopup(map, floating, activePlace, () =>
-      router.push(`/place/${activePlace.id}`),
-    );
+    showFloatingPopup(map, floating, activePlace);
 
     return () => {
       cancelOpenRef.current?.();
       cancelOpenRef.current = null;
     };
-  }, [hoveredId, map, router]);
+  }, [hoveredId, map]);
 
   useEffect(() => () => cancelHoverClose(hideTimerRef), []);
 

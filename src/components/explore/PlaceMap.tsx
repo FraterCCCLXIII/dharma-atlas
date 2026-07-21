@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
 import L from "leaflet";
 import {
   MapContainer,
@@ -240,11 +239,9 @@ function MapBoundsSync() {
 function ExploreMapPin({
   place,
   isActive,
-  onViewDetails,
 }: {
   place: PlaceMarker;
   isActive: boolean;
-  onViewDetails: () => void;
 }) {
   const map = useMap();
   const markerRef = useRef<L.Marker>(null);
@@ -308,14 +305,13 @@ function ExploreMapPin({
           mouseout: scheduleHide,
         }}
       >
-        <MapPopoverCard place={place} onViewDetails={onViewDetails} />
+        <MapPopoverCard place={place} />
       </Popup>
     </Marker>
   );
 }
 
 export function PlaceMap({ places }: PlaceMapProps) {
-  const router = useRouter();
   const hoveredId = useExploreStore((s) => s.hoveredId);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
 
@@ -351,7 +347,6 @@ export function PlaceMap({ places }: PlaceMapProps) {
             key={place.id}
             place={place}
             isActive={hoveredId === place.id}
-            onViewDetails={() => router.push(`/place/${place.id}`)}
           />
         ))
       )}

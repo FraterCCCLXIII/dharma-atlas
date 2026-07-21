@@ -4,12 +4,18 @@ import { getAllTeachers } from "@/lib/data/teachers";
 import { getOntologySnapshot } from "@/lib/data/ontology";
 import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 import { setOntologySnapshot } from "@/lib/schools";
+import type { EntityFilter } from "@/store/explore-store";
 
 export const dynamic = "force-dynamic";
 
-export async function ExplorePage() {
+type ExplorePageProps = {
+  /** Places browse doesn't need the full teacher payload (~teachers inflate HTML). */
+  mode?: Exclude<EntityFilter, "all"> | "all";
+};
+
+export async function ExplorePage({ mode = "all" }: ExplorePageProps) {
   const [teachers, ontology] = await Promise.all([
-    getAllTeachers(),
+    mode === "locations" ? Promise.resolve([]) : getAllTeachers(),
     getOntologySnapshot(),
   ]);
 

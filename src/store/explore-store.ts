@@ -69,7 +69,9 @@ export const useExploreStore = create<ExploreState>((set) => ({
   mobileView: "list",
   peopleSort: "tradition-school",
   peopleLifeEra: "all",
-  filtersOpen: true,
+  // Closed by default so mobile list/map clicks aren't covered by the drawer.
+  // Desktop explore opens filters on route entry (see ExplorePageClient).
+  filtersOpen: false,
   mapBounds: null,
   locationFilter: null,
   setHoveredId: (id) => set({ hoveredId: id }),

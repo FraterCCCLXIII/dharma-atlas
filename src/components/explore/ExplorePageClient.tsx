@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ListBullets, MapTrifold } from "@phosphor-icons/react";
 import { buildDirectoryEntries } from "@/lib/directory";
 import { fetchExploreMarkers } from "@/lib/explore-markers-client";
@@ -16,6 +17,18 @@ import { FilterBar } from "./FilterBar";
 import { PeopleCarousels } from "./PeopleCarousels";
 import { PlaceList } from "./PlaceList";
 import { TeacherList } from "./TeacherList";
+
+/**
+ * Desktop: filter rail open. Mobile: closed so the drawer doesn't cover place cards.
+ * Re-applied on explore route changes because Zustand keeps filtersOpen across navigations.
+ */
+function useResponsiveFiltersOpen() {
+  const pathname = usePathname();
+  useLayoutEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)").matches;
+    useExploreStore.setState({ filtersOpen: desktop });
+  }, [pathname]);
+}
 
 const PlaceMap = dynamic(() => import("./PlaceMap").then((m) => m.PlaceMap), {
   ssr: false,
@@ -51,10 +64,10 @@ function FilterSidebar({
       )}
 
       <aside
-        className={`flex shrink-0 flex-col overflow-hidden border-r border-border bg-surface-elevated transition-[width,transform] duration-200 ease-out max-lg:absolute max-lg:inset-y-0 max-lg:left-0 max-lg:z-20 max-lg:w-[min(100%,18rem)] max-lg:shadow-[var(--shadow-card)] lg:relative lg:z-auto ${
+        className={`flex shrink-0 flex-col overflow-hidden border-r border-border bg-surface-elevated transition-[width] duration-200 ease-out max-lg:absolute max-lg:inset-y-0 max-lg:left-0 max-lg:z-20 max-lg:w-[min(100%,18rem)] max-lg:shadow-[var(--shadow-card)] lg:relative lg:z-auto ${
           filtersOpen
-            ? "max-lg:translate-x-0 lg:w-72"
-            : "max-lg:pointer-events-none max-lg:-translate-x-full lg:w-0 lg:border-r-0"
+            ? "lg:w-72"
+            : "max-lg:hidden lg:w-0 lg:border-r-0"
         }`}
         aria-hidden={!filtersOpen}
       >
@@ -144,6 +157,7 @@ function useExploreMarkers(enabled: boolean) {
 }
 
 export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
+  useResponsiveFiltersOpen();
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const query = useExploreStore((s) => s.query);
   const traditions = useExploreStore((s) => s.traditions);
