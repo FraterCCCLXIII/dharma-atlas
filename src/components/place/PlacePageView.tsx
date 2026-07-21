@@ -1,9 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import {
-  ArrowLeft,
   ArrowSquareOut,
   Compass,
   FlowerLotus,
@@ -52,15 +50,6 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
     <div className="min-h-dvh bg-surface">
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <div className="relative mb-10">
-          <Link
-            href="/"
-            className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink sm:absolute sm:left-0 sm:top-1 sm:mb-0 sm:-translate-x-[calc(100%+0.75rem)] lg:-translate-x-[calc(100%+1rem)]"
-            aria-label="Back to explore"
-          >
-            <ArrowLeft size={18} weight="bold" />
-            <span className="hidden sm:inline">Back</span>
-          </Link>
-
           {showPhotoGrid ? (
             <div className="grid h-[240px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-2xl sm:h-[360px] sm:gap-3 lg:h-[420px]">
               <div className={`relative col-span-2 row-span-2 bg-gradient-to-br ${gradient}`}>

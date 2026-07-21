@@ -4,17 +4,34 @@ import type { Teacher } from "@/types/teacher";
 
 export const RECENT_PASSING_YEARS = 5;
 
-/** Widely recognized teachers shown prominently in the Luminaries carousel. */
+/** Widely recognized teachers shown prominently in Featured people / Luminaries. */
 export const FEATURED_LUMINARY_SLUGS = [
+  // Living Buddhists preferred by the homepage featured rail (order + lineage diversity)
   "tenzin-gyatso",
-  "eckhart-tolle",
-  "yongey-mingyur-rinpoche",
-  "adyashanti",
-  "jack-kornfield",
-  "sharon-salzberg",
   "pema-chodron",
+  "jack-kornfield",
+  "tara-brach",
+  "joan-halifax",
+  "jon-kabat-zinn",
+  "yongey-mingyur-rinpoche",
+  "ajahn-brahm",
+  "joseph-goldstein",
+  "sharon-salzberg",
+  "tenzin-palmo",
+  "tsoknyi-rinpoche",
+  "bhikkhu-bodhi",
+  "stephen-batchelor",
+  "dzongsar-jamyang-khyentse",
+  "thubten-chodron",
+  // Cross-tradition and lineage luminaries (people-page carousel)
   "thich-nhat-hanh",
+  "eckhart-tolle",
+  "adyashanti",
   "ram-dass",
+  "shunryu-suzuki",
+  "chogyam-trungpa",
+  "s-n-goenka",
+  "ajahn-chah",
   "robert-thurman",
 ] as const;
 

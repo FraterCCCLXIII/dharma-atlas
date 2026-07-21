@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-  ArrowLeft,
   ArrowSquareOut,
   BookOpen,
   CalendarBlank,
@@ -130,15 +129,6 @@ export function TeacherPageView({
   return (
     <div className="min-h-dvh bg-surface">
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
-          aria-label="Back to directory"
-        >
-          <ArrowLeft size={18} weight="bold" />
-          <span className="hidden sm:inline">Back</span>
-        </Link>
-
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-2">
             <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">

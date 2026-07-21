@@ -362,19 +362,14 @@ function normalizeForMatch(text: string): string {
   return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
 
-function teacherHaystack(teacher: TeacherSchoolFields): string {
-  return [
-    teacher.name,
-    teacher.lineage,
-    teacher.shortBio,
-    ...teacher.topics,
-    ...(teacher.biography ?? []),
-  ].join(" ");
+/** Name + lineage + topics only — bios often mention teachers/centers of other schools. */
+function teacherClassificationHaystack(teacher: TeacherSchoolFields): string {
+  return [teacher.name, teacher.lineage, ...teacher.topics].join(" ");
 }
 
 /** Infer subschool slugs from teacher text fields. */
 export function inferTeacherSchools(teacher: TeacherSchoolFields): string[] {
-  const haystack = teacherHaystack(teacher);
+  const haystack = teacherClassificationHaystack(teacher);
   const subschools = new Set<string>();
 
   for (const rule of getSubschoolRules()) {
@@ -394,7 +389,7 @@ function sortLineageSchoolIds(ids: string[]): string[] {
 
 /** Infer major school ids (Theravada, Zen, Tibetan, …) from teacher text fields. */
 export function inferTeacherLineageSchoolIds(teacher: TeacherSchoolFields): string[] {
-  const haystack = normalizeForMatch(teacherHaystack(teacher));
+  const haystack = normalizeForMatch(teacherClassificationHaystack(teacher));
   const fromLabels = new Set<string>();
 
   for (const school of getLineageSchools()) {
@@ -462,7 +457,7 @@ function teacherMatchesLineageSchool(
   teacher: TeacherSchoolFields,
   school: LineageSchoolDef,
 ): boolean {
-  const haystack = teacherHaystack(teacher).toLowerCase();
+  const haystack = teacherClassificationHaystack(teacher).toLowerCase();
   if (haystack.includes(school.label.toLowerCase())) return true;
 
   const schoolSubschools = getSubschoolSlugsForLineageSchool(school.slug);

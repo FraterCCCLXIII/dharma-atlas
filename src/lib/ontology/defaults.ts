@@ -85,7 +85,8 @@ const SUBSCHOOL_DEFS: SubschoolDef[] = [
     label: "Soto",
     lineage: "zen",
     placeTraditions: ["Zen"],
-    pattern: "soto|sfzc|san francisco zen center|zen center of los angeles|zcla\\b",
+    pattern:
+      "soto|sfzc|san francisco zen center|zen center of los angeles|zcla\\b|white plum|maezumi|suzuki roshi|shunryu suzuki|dharma cloud",
   },
   {
     slug: "rinzai",
@@ -107,28 +108,31 @@ const SUBSCHOOL_DEFS: SubschoolDef[] = [
     lineage: "zen",
     placeTraditions: ["Zen", "Chinese"],
     pattern:
-      "chan (center|monastery|temple)|chung tai|dharma drum|ddmba|fo guang|foguang|dharma realm|city of ten thousand buddhas|cttb\\b",
+      "chan (center|monastery|temple)|chung tai|dharma drum|ddmba|fo guang|foguang|dharma realm|city of ten thousand buddhas|cttb\\b|\\bchan\\b",
   },
   {
     slug: "son",
     label: "Son (Korean)",
     lineage: "zen",
     placeTraditions: ["Zen"],
-    pattern: "\\bson\\b|kwan um|seung sahn|korean zen|bo hyun sa|hwagyesa|musangsa",
+    pattern:
+      "\\bson\\b|kwan um|seung sahn|korean zen|korean chogye|bo hyun sa|hwagyesa|musangsa",
   },
   {
     slug: "thien",
     label: "Thiền (Vietnamese)",
     lineage: "zen",
     placeTraditions: ["Zen", "Vietnamese"],
-    pattern: "thien (that|tam|vien)|thien that|thien tam|thien vien",
+    pattern:
+      "thien (that|tam|vien)|thien that|thien tam|thien vien|order of interbeing|\\binterbeing\\b",
   },
   {
     slug: "sanbo-zen",
     label: "Sanbo Zen",
     lineage: "zen",
     placeTraditions: ["Zen"],
-    pattern: "sanbo zen|san-un|san un",
+    pattern:
+      "sanbo zen|sanbo kyodan|sanbō kyōdan|sambo kyodan|san-un|san un|diamond sangha|kapleau|harada.?yasutani",
   },
   {
     slug: "dharma-drum",
