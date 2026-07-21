@@ -11,6 +11,9 @@ export function OntologyRuntimeProvider({
   ontology: SerializedOntologySnapshot;
   children: React.ReactNode;
 }) {
+  // Keep the client snapshot in sync during render so filters never flash stale labels.
+  setOntologySnapshot(deserializeOntologySnapshot(ontology));
+
   useLayoutEffect(() => {
     setOntologySnapshot(deserializeOntologySnapshot(ontology));
   }, [ontology]);

@@ -250,12 +250,15 @@ export function FilterBar({
   const toggleLineageSchool = useExploreStore((s) => s.toggleLineageSchool);
   const toggleSubschool = useExploreStore((s) => s.toggleSubschool);
   const toggleType = useExploreStore((s) => s.toggleType);
+  const clearTypes = useExploreStore((s) => s.clearTypes);
+  const clearTraditions = useExploreStore((s) => s.clearTraditions);
   const clearFilters = useExploreStore((s) => s.clearFilters);
   const query = useExploreStore((s) => s.query);
   const peopleSort = useExploreStore((s) => s.peopleSort);
   const setPeopleSort = useExploreStore((s) => s.setPeopleSort);
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const setPeopleLifeEra = useExploreStore((s) => s.setPeopleLifeEra);
+  const locationFilter = useExploreStore((s) => s.locationFilter);
 
   const lineageState = useMemo(
     () => ({ traditions, schools }),
@@ -318,7 +321,8 @@ export function FilterBar({
     countLineageFilterSelections(lineageState) +
     (showPlaceTypes ? types.length : 0) +
     (showPeopleSort && peopleLifeEra !== "all" ? 1 : 0) +
-    (query.length > 0 ? 1 : 0);
+    (query.length > 0 ? 1 : 0) +
+    (locationFilter ? 1 : 0);
 
   const showBuddhismTree =
     entityFilter !== "people" ||
@@ -385,6 +389,11 @@ export function FilterBar({
 
         {showPlaceTypes && placeOptions.types.length > 0 && (
           <FilterSection title="Type">
+            <FilterChip
+              label="All"
+              active={types.length === 0}
+              onClick={clearTypes}
+            />
             {placeOptions.types.map((type) => (
               <FilterChip
                 key={type}
@@ -398,6 +407,11 @@ export function FilterBar({
 
         {(showBuddhismTree || lineageTree.otherTraditions.length > 0) && (
           <FilterSection title="Tradition">
+            <FilterChip
+              label="All"
+              active={traditions.length === 0 && schools.length === 0}
+              onClick={clearTraditions}
+            />
             {showBuddhismTree && (
               <BuddhismFilterTree
                 schools={lineageTree.buddhism.schools}
@@ -433,11 +447,13 @@ export function useActiveFilterCount() {
   const query = useExploreStore((s) => s.query);
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const entityFilter = useExploreStore((s) => s.entityFilter);
+  const locationFilter = useExploreStore((s) => s.locationFilter);
   const showPlaceTypes = entityFilter !== "people";
   return (
     countLineageFilterSelections({ traditions, schools }) +
     (showPlaceTypes ? types.length : 0) +
     (entityFilter === "people" && peopleLifeEra !== "all" ? 1 : 0) +
-    (query.length > 0 ? 1 : 0)
+    (query.length > 0 ? 1 : 0) +
+    (locationFilter ? 1 : 0)
   );
 }

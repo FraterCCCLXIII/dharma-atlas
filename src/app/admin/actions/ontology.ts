@@ -14,7 +14,7 @@ export async function saveOntologyAction(input: unknown) {
   await replaceOntologyNodes(syncOntologyNodeTypes(data.nodes));
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/ontology");
   redirect("/admin/ontology");
@@ -26,7 +26,7 @@ export async function resetOntologyAction() {
   await replaceOntologyNodes(buildDefaultOntologyNodes());
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/ontology");
   redirect("/admin/ontology");

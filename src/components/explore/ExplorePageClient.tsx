@@ -2,13 +2,14 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
+import { ListBullets, MapTrifold } from "@phosphor-icons/react";
 import { buildDirectoryEntries } from "@/lib/directory";
 import { isPlaceInMapBounds } from "@/lib/coords";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import type { Place } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
-import { DirectoryList } from "./DirectoryList";
 import { AllFeaturePage } from "./AllFeaturePage";
+import { DirectoryList } from "./DirectoryList";
 import { FilterBar } from "./FilterBar";
 import { PeopleCarousels } from "./PeopleCarousels";
 import { PlaceList } from "./PlaceList";
@@ -80,6 +81,30 @@ function useSyncListToMap() {
   return syncListToMap;
 }
 
+function MobileMapToggle() {
+  const mobileView = useExploreStore((s) => s.mobileView);
+  const setMobileView = useExploreStore((s) => s.setMobileView);
+  const showingMap = mobileView === "map";
+
+  return (
+    <button
+      type="button"
+      aria-pressed={showingMap}
+      aria-label={showingMap ? "Show list" : "Show map"}
+      onClick={() => setMobileView(showingMap ? "list" : "map")}
+      className={`absolute top-5 right-5 z-30 rounded-full border border-border bg-surface-elevated p-2.5 shadow-[var(--shadow-float)] transition hover:bg-surface-muted lg:hidden ${
+        showingMap ? "text-brand" : "text-ink-secondary hover:text-ink"
+      }`}
+    >
+      {showingMap ? (
+        <ListBullets size={18} weight="bold" />
+      ) : (
+        <MapTrifold size={18} weight="bold" />
+      )}
+    </button>
+  );
+}
+
 export function ExplorePageClient({
   places,
   teachers,
@@ -96,18 +121,23 @@ export function ExplorePageClient({
   const mobileView = useExploreStore((s) => s.mobileView);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const mapBounds = useExploreStore((s) => s.mapBounds);
+  const locationFilter = useExploreStore((s) => s.locationFilter);
   const peopleSort = useExploreStore((s) => s.peopleSort);
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const syncListToMap = useSyncListToMap();
 
+  // Search text only applies to the active entity (locations vs people).
+  const placeQuery = entityFilter === "locations" ? query : "";
+  const teacherQuery = entityFilter === "people" ? query : "";
+
   const placeFilters = useMemo(
-    () => ({ query, traditions, schools, types, faiths }),
-    [query, traditions, schools, types, faiths],
+    () => ({ query: placeQuery, traditions, schools, types, faiths }),
+    [placeQuery, traditions, schools, types, faiths],
   );
   const teacherFilters = useMemo(
-    () => ({ query, traditions, schools, lifeEra: peopleLifeEra }),
-    [query, traditions, schools, peopleLifeEra],
+    () => ({ query: teacherQuery, traditions, schools, lifeEra: peopleLifeEra }),
+    [teacherQuery, traditions, schools, peopleLifeEra],
   );
 
   const directoryEntries = useMemo(
@@ -122,10 +152,15 @@ export function ExplorePageClient({
     [places, teachers, entityFilter, placeFilters, teacherFilters],
   );
 
-  const filteredPlaces = useMemo(
-    () => directoryEntries.filter((e) => e.kind === "place").map((e) => e.data),
-    [directoryEntries],
-  );
+  const filteredPlaces = useMemo(() => {
+    const placesFromDirectory = directoryEntries
+      .filter((e) => e.kind === "place")
+      .map((e) => e.data);
+    if (!locationFilter) return placesFromDirectory;
+    return placesFromDirectory.filter((place) =>
+      isPlaceInMapBounds(place.lat, place.lng, locationFilter.bounds),
+    );
+  }, [directoryEntries, locationFilter]);
 
   const filteredTeachers = useMemo(
     () =>
@@ -133,17 +168,18 @@ export function ExplorePageClient({
     [directoryEntries],
   );
 
-  const showMap = entityFilter !== "people";
+  const showMap = entityFilter === "locations";
   const isPeopleBrowse = entityFilter === "people";
   const isAllBrowse = entityFilter === "all";
   const hasActiveBrowse =
-    query.trim().length > 0 ||
+    placeQuery.trim().length > 0 ||
     traditions.length > 0 ||
     schools.length > 0 ||
     types.length > 0 ||
-    faiths.length > 0;
+    faiths.length > 0 ||
+    locationFilter != null;
   const hasActivePeopleBrowse =
-    query.trim().length > 0 ||
+    teacherQuery.trim().length > 0 ||
     traditions.length > 0 ||
     schools.length > 0 ||
     peopleLifeEra !== "all";
@@ -152,11 +188,12 @@ export function ExplorePageClient({
   const useScrollLayout = isPeopleBrowse || isAllBrowse;
 
   const listPlaces = useMemo(() => {
+    if (locationFilter) return filteredPlaces;
     if (!showMap || !syncListToMap || !mapBounds) return filteredPlaces;
     return filteredPlaces.filter((place) =>
       isPlaceInMapBounds(place.lat, place.lng, mapBounds),
     );
-  }, [filteredPlaces, showMap, syncListToMap, mapBounds]);
+  }, [filteredPlaces, showMap, syncListToMap, mapBounds, locationFilter]);
 
   const listEmptyReason =
     listPlaces.length === 0 && filteredPlaces.length > 0 ? "map" : "filters";
@@ -178,7 +215,7 @@ export function ExplorePageClient({
 
   if (useScrollLayout) {
     return (
-      <div className="flex h-[calc(100dvh-var(--site-nav-height))] flex-col overflow-hidden bg-surface-elevated">
+      <div className="flex h-full flex-col overflow-hidden bg-surface-elevated">
         <div className="relative flex min-h-0 flex-1">
           <FilterSidebar
             entityFilter={entityFilter}
@@ -206,7 +243,7 @@ export function ExplorePageClient({
   }
 
   return (
-    <div className="flex h-[calc(100dvh-var(--site-nav-height))] flex-col overflow-hidden bg-surface-elevated">
+    <div className="flex h-full flex-col overflow-hidden bg-surface-elevated">
       <div className="relative flex min-h-0 flex-1">
         <FilterSidebar
           entityFilter={entityFilter}
@@ -216,7 +253,7 @@ export function ExplorePageClient({
           teachers={teachers}
         />
 
-        <div className="flex min-h-0 min-w-0 flex-1">
+        <div className="relative flex min-h-0 min-w-0 flex-1">
           <section
             className={`flex min-h-0 w-full flex-col ${
               showMap ? "lg:w-[52%] xl:w-[48%]" : ""
@@ -241,6 +278,8 @@ export function ExplorePageClient({
               {showMap ? <PlaceMap places={filteredPlaces} /> : null}
             </div>
           </section>
+
+          {showMap ? <MobileMapToggle /> : null}
         </div>
       </div>
     </div>

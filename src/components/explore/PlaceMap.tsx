@@ -38,10 +38,15 @@ interface PlaceMapProps {
 
 function MapAutoControl({ places }: { places: Place[] }) {
   const map = useMap();
+  const locationFilter = useExploreStore((s) => s.locationFilter);
   const userInteractedRef = useRef(false);
   const programmaticRef = useRef(false);
+  const lastLocationKeyRef = useRef<string | null>(null);
 
   const placesKey = useMemo(() => places.map((p) => p.id).join(","), [places]);
+  const locationKey = locationFilter
+    ? `${locationFilter.label}:${locationFilter.bounds.south}:${locationFilter.bounds.north}:${locationFilter.bounds.west}:${locationFilter.bounds.east}`
+    : null;
 
   useEffect(() => {
     const markUserInteraction = () => {
@@ -70,6 +75,37 @@ function MapAutoControl({ places }: { places: Place[] }) {
   };
 
   useEffect(() => {
+    if (!locationKey || !locationFilter) {
+      lastLocationKeyRef.current = null;
+      return;
+    }
+    if (lastLocationKeyRef.current === locationKey) return;
+    lastLocationKeyRef.current = locationKey;
+
+    userInteractedRef.current = false;
+    let cancelled = false;
+    const { bounds } = locationFilter;
+
+    map.whenReady(() => {
+      if (cancelled) return;
+      runProgrammatic(() =>
+        map.fitBounds(
+          L.latLngBounds(
+            [bounds.south, bounds.west],
+            [bounds.north, bounds.east],
+          ),
+          { padding: [48, 48], maxZoom: 12 },
+        ),
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [locationKey, locationFilter, map]);
+
+  useEffect(() => {
+    if (locationFilter) return;
     if (userInteractedRef.current) return;
 
     if (places.length === 0) {
@@ -111,7 +147,7 @@ function MapAutoControl({ places }: { places: Place[] }) {
     return () => {
       cancelled = true;
     };
-  }, [placesKey, map, places.length]);
+  }, [placesKey, map, places.length, locationFilter]);
 
   return null;
 }

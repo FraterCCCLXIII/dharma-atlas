@@ -6,9 +6,11 @@ export function personProfilePath(slug: string): string {
   return `/person/${slug}`;
 }
 
+export const PLACES_LIST_PATH = "/places";
+
 const EXPLORE_PATHS: Record<EntityFilter, string> = {
   all: "/",
-  locations: "/locations",
+  locations: PLACES_LIST_PATH,
   people: PEOPLE_LIST_PATH,
 };
 
@@ -17,7 +19,7 @@ export function pathFromEntityFilter(filter: EntityFilter): string {
 }
 
 export function entityFilterFromPath(pathname: string): EntityFilter {
-  if (pathname === "/locations" || pathname.startsWith("/place/")) {
+  if (pathname === PLACES_LIST_PATH || pathname.startsWith("/place/")) {
     return "locations";
   }
   if (
@@ -34,7 +36,7 @@ export function isExplorePath(pathname: string): boolean {
   return (
     pathname === "/" ||
     pathname === "/all" ||
-    pathname === "/locations" ||
+    pathname === PLACES_LIST_PATH ||
     pathname === PEOPLE_LIST_PATH
   );
 }

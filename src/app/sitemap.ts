@@ -7,7 +7,7 @@ const baseUrl = process.env.BETTER_AUTH_URL ?? "https://dharmaatlas.com";
 export const revalidate = 3600;
 
 function staticSitemapEntries(): MetadataRoute.Sitemap {
-  return ["", "/locations", "/people", "/about", "/submit", "/claim"].map(
+  return ["", "/places", "/people", "/about", "/submit", "/claim"].map(
     (path) => ({
       url: `${baseUrl}${path}`,
       changeFrequency: "weekly" as const,

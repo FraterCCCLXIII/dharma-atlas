@@ -579,6 +579,32 @@ export function getLineageFilterTree(
     includeTeachers,
   );
 
+  const otherTraditionLabels = new Map(
+    getOtherTraditionDefs().map((tradition) => [tradition.filterId, tradition.label]),
+  );
+  // Legacy filter IDs that may still appear on records before migrations catch up.
+  for (const [legacyId, label] of [
+    ["Non-Dualism", "Nonduality"],
+    ["Non-dualism", "Nonduality"],
+    ["Contemplative Christian", "Contemplative Christianity"],
+  ] as const) {
+    if (!otherTraditionLabels.has(legacyId)) {
+      otherTraditionLabels.set(legacyId, label);
+    }
+  }
+
+  const canonicalOtherId = (tradition: string) => {
+    if (tradition === "Non-Dualism" || tradition === "Non-dualism") {
+      return otherTraditionLabels.has("Nonduality") ? "Nonduality" : tradition;
+    }
+    if (tradition === "Contemplative Christian") {
+      return otherTraditionLabels.has("Contemplative Christianity")
+        ? "Contemplative Christianity"
+        : tradition;
+    }
+    return tradition;
+  };
+
   const otherTraditionIds = new Set<string>(
     getOtherTraditionDefs().map((tradition) => tradition.filterId),
   );
@@ -586,7 +612,7 @@ export function getLineageFilterTree(
   if (includeTeachers) {
     for (const teacher of teachers) {
       if (!isBuddhistTeacherTradition(teacher.tradition)) {
-        otherTraditionIds.add(teacher.tradition);
+        otherTraditionIds.add(canonicalOtherId(teacher.tradition));
       }
     }
   }
@@ -594,14 +620,10 @@ export function getLineageFilterTree(
   if (includePlaces) {
     for (const place of places) {
       if (!isBuddhistPlaceTradition(place.tradition)) {
-        otherTraditionIds.add(place.tradition);
+        otherTraditionIds.add(canonicalOtherId(place.tradition));
       }
     }
   }
-
-  const otherTraditionLabels = new Map(
-    getOtherTraditionDefs().map((tradition) => [tradition.filterId, tradition.label]),
-  );
 
   return {
     buddhism: {

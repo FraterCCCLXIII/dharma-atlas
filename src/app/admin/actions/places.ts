@@ -63,7 +63,7 @@ export async function verifyPlaceFieldAction(placeId: string, field: string) {
     .where(eq(places.id, placeId));
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(`/place/${placeId}`);
   revalidatePath("/admin/places");
 }
@@ -75,7 +75,7 @@ export async function createPlaceAction(input: PlaceInput) {
   await db.insert(places).values(placeRow(data));
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(`/place/${data.id}`);
   revalidatePath("/admin/places");
   redirect(`/admin/places/${data.id}/edit`);
@@ -88,7 +88,7 @@ export async function updatePlaceAction(originalId: string, input: PlaceInput) {
   await db.update(places).set(placeRow(data)).where(eq(places.id, originalId));
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(`/place/${originalId}`);
   revalidatePath(`/place/${data.id}`);
   revalidatePath("/admin/places");
@@ -100,7 +100,7 @@ export async function deletePlaceAction(id: string) {
   await db.delete(places).where(eq(places.id, id));
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath("/admin/places");
   redirect("/admin/places");
 }

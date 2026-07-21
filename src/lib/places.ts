@@ -13,7 +13,10 @@ export function filterPlaces(places: Place[], filters: PlaceFilters): Place[] {
   const q = filters.query.trim().toLowerCase();
 
   return places.filter((place) => {
-    if (q && !place.name.toLowerCase().includes(q)) return false;
+    if (q) {
+      const haystack = `${place.name} ${place.address}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
     if (filters.traditions.length) {
       const matchesTradition = filters.traditions.some((tradition) =>
         placeMatchesTraditionFilter(place, tradition),
@@ -51,20 +54,41 @@ export function traditionGradient(tradition: string): string {
     "Southeast Asian": "from-yellow-700 via-amber-600 to-orange-900",
     "Pure Land": "from-violet-700 via-purple-600 to-indigo-900",
     "Won Buddhism": "from-sky-700 via-blue-600 to-indigo-900",
+    Mahayana: "from-sky-700 via-cyan-600 to-blue-900",
+    "Advaita Vedanta": "from-indigo-700 via-violet-600 to-purple-900",
+    "Contemplative Christianity": "from-rose-800 via-pink-700 to-red-900",
+    "Contemplative Christian": "from-rose-800 via-pink-700 to-red-900",
+    Hindu: "from-orange-600 via-amber-500 to-red-800",
+    Nonduality: "from-cyan-600 via-sky-500 to-teal-800",
+    "Non-Dualism": "from-cyan-600 via-sky-500 to-teal-800",
+    Sufi: "from-green-700 via-emerald-600 to-teal-900",
+    "Indigenous Wisdom": "from-amber-800 via-yellow-700 to-stone-900",
   };
   return gradients[tradition] ?? "from-teal-700 via-emerald-800 to-stone-900";
 }
 
+/** Marker / filter swatch colors — one distinct hue per tradition. */
 export const TRADITION_COLORS: Record<string, string> = {
+  // Buddhist root + lineages
+  Buddhist: "#475569",
   Theravada: "#0f766e",
   Tibetan: "#b45309",
   Zen: "#57534e",
-  Buddhist: "#475569",
   Vietnamese: "#be123c",
   Chinese: "#b91c1c",
-  "Southeast Asian": "#d97706",
+  "Southeast Asian": "#ca8a04",
   "Pure Land": "#7c3aed",
   "Won Buddhism": "#2563eb",
+  Mahayana: "#0284c7",
+  // Other root traditions
+  "Advaita Vedanta": "#4f46e5",
+  "Contemplative Christianity": "#9f1239",
+  "Contemplative Christian": "#9f1239",
+  Hindu: "#ea580c",
+  Nonduality: "#0891b2",
+  "Non-Dualism": "#0891b2",
+  Sufi: "#15803d",
+  "Indigenous Wisdom": "#92400e",
 };
 
 export function traditionMarkerColor(tradition: string): string {

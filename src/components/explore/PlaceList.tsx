@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import type { Place } from "@/types/place";
 import { PlaceCard } from "./PlaceCard";
+
+const PAGE_SIZE = 20;
 
 interface PlaceListProps {
   places: Place[];
@@ -18,26 +19,105 @@ function PlaceListHeader({ count }: { count: number }) {
   );
 }
 
-function useColumnCount() {
-  const [columnCount, setColumnCount] = useState(1);
+/** Build a compact page rail like: 1 … 4 5 6 … 20 */
+function getPageRail(page: number, totalPages: number): (number | "ellipsis")[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
 
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 640px)");
-    const update = () => setColumnCount(media.matches ? 2 : 1);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
+  const pages = new Set<number>([1, totalPages, page]);
+  for (const n of [page - 1, page + 1]) {
+    if (n >= 1 && n <= totalPages) pages.add(n);
+  }
+  // Keep a bit more context near the ends so the rail doesn't collapse oddly.
+  if (page <= 3) {
+    for (const n of [2, 3, 4]) {
+      if (n <= totalPages) pages.add(n);
+    }
+  }
+  if (page >= totalPages - 2) {
+    for (const n of [totalPages - 1, totalPages - 2, totalPages - 3]) {
+      if (n >= 1) pages.add(n);
+    }
+  }
 
-  return columnCount;
+  const sorted = [...pages].sort((a, b) => a - b);
+  const rail: (number | "ellipsis")[] = [];
+  for (const n of sorted) {
+    const prev = rail[rail.length - 1];
+    if (typeof prev === "number" && n - prev > 1) {
+      rail.push("ellipsis");
+    }
+    rail.push(n);
+  }
+  return rail;
 }
 
-function rowKey(places: Place[], index: number, columnCount: number) {
-  const startIndex = index * columnCount;
-  return places
-    .slice(startIndex, startIndex + columnCount)
-    .map((place) => place.id)
-    .join("|");
+function PlaceListPagination({
+  page,
+  totalPages,
+  onPageChange,
+}: {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+
+  const rail = getPageRail(page, totalPages);
+
+  return (
+    <nav
+      aria-label="Locations pagination"
+      className="flex shrink-0 items-center justify-between gap-2 border-t border-border px-4 py-3 sm:px-6"
+    >
+      <button
+        type="button"
+        disabled={page <= 1}
+        onClick={() => onPageChange(page - 1)}
+        className="shrink-0 rounded-full border border-border px-3 py-2 text-sm disabled:opacity-40 sm:px-4"
+      >
+        Previous
+      </button>
+      <ol className="flex min-w-0 items-center justify-center gap-1 overflow-x-auto">
+        {rail.map((item, index) =>
+          item === "ellipsis" ? (
+            <li
+              key={`ellipsis-${index}`}
+              aria-hidden
+              className="px-1 text-sm text-ink-muted"
+            >
+              …
+            </li>
+          ) : (
+            <li key={item}>
+              <button
+                type="button"
+                onClick={() => onPageChange(item)}
+                aria-label={`Page ${item}`}
+                aria-current={item === page ? "page" : undefined}
+                className={`flex h-9 min-w-9 items-center justify-center rounded-full px-2 text-sm tabular-nums transition-colors ${
+                  item === page
+                    ? "bg-brand text-brand-foreground"
+                    : "text-ink-secondary hover:bg-surface-muted"
+                }`}
+              >
+                {item}
+              </button>
+            </li>
+          ),
+        )}
+      </ol>
+      <button
+        type="button"
+        disabled={page >= totalPages}
+        onClick={() => onPageChange(page + 1)}
+        className="shrink-0 rounded-full border border-border px-3 py-2 text-sm disabled:opacity-40 sm:px-4"
+      >
+        Next
+      </button>
+    </nav>
+  );
 }
 
 export function PlaceList({
@@ -45,24 +125,26 @@ export function PlaceList({
   emptyReason = "filters",
 }: PlaceListProps) {
   const parentRef = useRef<HTMLDivElement>(null);
-  const columnCount = useColumnCount();
-  const rowCount = Math.ceil(places.length / columnCount);
-
-  const virtualizer = useVirtualizer({
-    count: rowCount,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 300,
-    overscan: 4,
-    getItemKey: (index) => rowKey(places, index, columnCount),
-  });
+  const [page, setPage] = useState(1);
 
   const placesKey = places.map((place) => place.id).join(",");
+  const totalPages = Math.max(1, Math.ceil(places.length / PAGE_SIZE));
 
-  // Map-bounds filtering reshuffles rows; drop stale height cache so rows
-  // don't overlap and intercept clicks meant for the card underneath.
+  // Reset to the first page when the filtered set changes (filters / map bounds).
   useEffect(() => {
-    virtualizer.measure();
-  }, [placesKey, columnCount, virtualizer]);
+    setPage(1);
+    parentRef.current?.scrollTo({ top: 0 });
+  }, [placesKey]);
+
+  const safePage = Math.min(page, totalPages);
+  const start = (safePage - 1) * PAGE_SIZE;
+  const pagePlaces = places.slice(start, start + PAGE_SIZE);
+
+  function goToPage(nextPage: number) {
+    const clamped = Math.min(Math.max(1, nextPage), totalPages);
+    setPage(clamped);
+    parentRef.current?.scrollTo({ top: 0 });
+  }
 
   if (places.length === 0) {
     return (
@@ -89,42 +171,21 @@ export function PlaceList({
       <div className="shrink-0 px-4 pt-4 sm:px-6 sm:pt-6">
         <PlaceListHeader count={places.length} />
       </div>
-      <div ref={parentRef} className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6">
-        <div
-          className="relative w-full"
-          style={{ height: `${virtualizer.getTotalSize()}px` }}
-        >
-          {virtualizer.getVirtualItems().map((virtualRow) => {
-            const startIndex = virtualRow.index * columnCount;
-            const rowPlaces = places.slice(startIndex, startIndex + columnCount);
-
-            return (
-              <div
-                key={virtualRow.key}
-                data-index={virtualRow.index}
-                ref={virtualizer.measureElement}
-                className="absolute left-0 top-0 w-full pb-6"
-                style={{ transform: `translateY(${virtualRow.start}px)` }}
-              >
-                <div
-                  className={`grid gap-x-4 gap-y-6 ${
-                    columnCount === 2 ? "grid-cols-2" : "grid-cols-1"
-                  }`}
-                >
-                  {rowPlaces.map((place, offset) => (
-                    <PlaceCard
-                      key={place.id}
-                      place={place}
-                      index={startIndex + offset}
-                      animateEntrance={false}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+      <div
+        ref={parentRef}
+        className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6"
+      >
+        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+          {pagePlaces.map((place, index) => (
+            <PlaceCard key={place.id} place={place} index={index} />
+          ))}
         </div>
       </div>
+      <PlaceListPagination
+        page={safePage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+      />
     </div>
   );
 }

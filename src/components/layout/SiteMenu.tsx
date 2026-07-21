@@ -1,12 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { authClient } from "@/lib/auth-client";
+import {
+  entityFilterFromPath,
+  pathFromEntityFilter,
+} from "@/lib/explore-routes";
 import { isAdminRole } from "@/lib/permissions";
 
+const EXPLORE_MENU_LINKS = [
+  { value: "people" as const, label: "People" },
+  { value: "locations" as const, label: "Places" },
+];
+
 export function SiteMenu() {
+  const pathname = usePathname();
   const { data: session } = authClient.useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -15,6 +26,7 @@ export function SiteMenu() {
 
   const isLoggedIn = Boolean(session?.user);
   const isAdmin = isAdminRole(session?.user.role);
+  const entityFilter = entityFilterFromPath(pathname);
 
   const updateMenuPosition = useCallback(() => {
     const button = buttonRef.current;
@@ -75,6 +87,26 @@ export function SiteMenu() {
         className="z-[1000] flex min-w-[11rem] flex-col overflow-hidden rounded-xl border border-border bg-surface-elevated shadow-[var(--shadow-float)]"
       >
         <div className="py-1">
+          <div className="md:hidden">
+            {EXPLORE_MENU_LINKS.map(({ value, label }) => {
+              const isActive = entityFilter === value;
+              return (
+                <Link
+                  key={value}
+                  href={pathFromEntityFilter(value)}
+                  role="menuitem"
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block w-full px-4 py-2.5 text-left text-sm font-medium transition hover:bg-surface-muted ${
+                    isActive ? "bg-surface-muted text-ink" : "text-ink"
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+            <div className="my-1 border-t border-border" />
+          </div>
           {isLoggedIn ? (
             <>
               <p className="truncate px-4 py-2 text-xs text-ink-muted">

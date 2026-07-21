@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import { ExplorePage } from "@/components/explore/ExplorePage";
-
-export const metadata: Metadata = {
-  title: "All | Dharma Atlas",
-  description:
-    "Browse the full Dharma Atlas directory of locations and teachers across spiritual traditions.",
-};
+import { redirect } from "next/navigation";
 
 export default function AllPage() {
-  return <ExplorePage />;
+  redirect("/");
 }

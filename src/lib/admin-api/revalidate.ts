@@ -3,7 +3,7 @@ import { PEOPLE_LIST_PATH, personProfilePath } from "@/lib/explore-routes";
 
 export function revalidatePlacePaths(placeId: string) {
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(`/place/${placeId}`);
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${placeId}/edit`);
@@ -23,7 +23,7 @@ export function revalidateTeacherPaths(slug: string, previousSlug?: string) {
 
 export function revalidateAllContentPaths() {
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/places");
   revalidatePath("/admin/teachers");

@@ -124,7 +124,7 @@ export async function updateOwnerPlaceAction(placeId: string, input: OwnerPlaceE
     .where(eq(places.id, placeId));
 
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath(`/place/${placeId}`);
   revalidatePath("/manage");
   revalidatePath(`/manage/places/${placeId}/edit`);

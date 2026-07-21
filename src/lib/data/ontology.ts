@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { asc } from "drizzle-orm";
 import { db } from "@/db/client";
 import { ontologyNodes, type OntologyNodeRow } from "@/db/schema";
@@ -39,10 +40,8 @@ function nodeToRow(node: OntologyNode) {
   };
 }
 
-let cachedSnapshot: OntologySnapshot | null = null;
-
 export function invalidateOntologyCache() {
-  cachedSnapshot = null;
+  // Request-scoped via React cache(); kept for callers after writes.
 }
 
 export async function getAllOntologyNodes(): Promise<OntologyNode[]> {
@@ -53,18 +52,14 @@ export async function getAllOntologyNodes(): Promise<OntologyNode[]> {
   return rows.map(rowToNode);
 }
 
-export async function getOntologySnapshot(): Promise<OntologySnapshot> {
-  if (cachedSnapshot) return cachedSnapshot;
-
+export const getOntologySnapshot = cache(async (): Promise<OntologySnapshot> => {
   const nodes = await getAllOntologyNodes();
   if (nodes.length === 0) {
-    cachedSnapshot = buildDefaultOntologySnapshot();
-    return cachedSnapshot;
+    return buildDefaultOntologySnapshot();
   }
 
-  cachedSnapshot = buildOntologySnapshot(nodes);
-  return cachedSnapshot;
-}
+  return buildOntologySnapshot(nodes);
+});
 
 export async function replaceOntologyNodes(nodes: OntologyNode[]) {
   buildOntologySnapshot(nodes);

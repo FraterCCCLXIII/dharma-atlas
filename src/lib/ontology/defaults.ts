@@ -217,10 +217,10 @@ const SUBSCHOOL_DEFS: SubschoolDef[] = [
 ];
 
 const OTHER_TRADITION_DEFS = [
-  { slug: "non-dualism", filterId: "Non-Dualism", label: "Non-Dualism" },
+  { slug: "non-dualism", filterId: "Nonduality", label: "Nonduality" },
   { slug: "advaita-vedanta", filterId: "Advaita Vedanta", label: "Advaita Vedanta" },
   { slug: "sufi", filterId: "Sufi", label: "Sufi" },
-  { slug: "contemplative-christian", filterId: "Contemplative Christian", label: "Contemplative Christian" },
+  { slug: "contemplative-christian", filterId: "Contemplative Christianity", label: "Contemplative Christianity" },
   { slug: "hindu", filterId: "Hindu", label: "Hindu" },
 ] as const;
 

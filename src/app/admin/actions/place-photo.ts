@@ -83,7 +83,7 @@ export async function uploadPlacePhotoAction(placeId: string, formData: FormData
 
   revalidatePath(`/place/${normalizedId}`);
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${normalizedId}/edit`);
   revalidatePath(`/manage/places/${normalizedId}/edit`);
@@ -120,7 +120,7 @@ export async function deletePlacePhotoAction(placeId: string, photoId: number) {
 
   revalidatePath(`/place/${placeId}`);
   revalidatePath("/");
-  revalidatePath("/locations");
+  revalidatePath("/places");
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${placeId}/edit`);
   revalidatePath(`/manage/places/${placeId}/edit`);

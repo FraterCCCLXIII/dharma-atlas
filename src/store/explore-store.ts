@@ -12,6 +12,13 @@ import type { PlaceType } from "@/types/place";
 export type MobileView = "list" | "map";
 export type EntityFilter = "all" | "locations" | "people";
 
+export type LocationFilter = {
+  label: string;
+  lat: number;
+  lng: number;
+  bounds: MapBounds;
+};
+
 interface ExploreState {
   hoveredId: string | null;
   pinnedPopupId: string | null;
@@ -26,6 +33,7 @@ interface ExploreState {
   peopleLifeEra: PeopleLifeEra;
   filtersOpen: boolean;
   mapBounds: MapBounds | null;
+  locationFilter: LocationFilter | null;
   setHoveredId: (id: string | null) => void;
   setPinnedPopupId: (id: string | null) => void;
   setEntityFilter: (filter: EntityFilter) => void;
@@ -36,6 +44,8 @@ interface ExploreState {
   toggleLineageSchool: (schoolId: string) => void;
   toggleSubschool: (subschool: string) => void;
   toggleType: (type: PlaceType) => void;
+  clearTypes: () => void;
+  clearTraditions: () => void;
   toggleFaith: (faith: string) => void;
   clearFilters: () => void;
   setMobileView: (view: MobileView) => void;
@@ -43,6 +53,7 @@ interface ExploreState {
   setPeopleLifeEra: (era: PeopleLifeEra) => void;
   toggleFilters: () => void;
   setMapBounds: (bounds: MapBounds | null) => void;
+  setLocationFilter: (filter: LocationFilter | null) => void;
 }
 
 export const useExploreStore = create<ExploreState>((set) => ({
@@ -57,8 +68,9 @@ export const useExploreStore = create<ExploreState>((set) => ({
   mobileView: "list",
   peopleSort: "tradition-school",
   peopleLifeEra: "all",
-  filtersOpen: false,
+  filtersOpen: true,
   mapBounds: null,
+  locationFilter: null,
   setHoveredId: (id) => set({ hoveredId: id }),
   setPinnedPopupId: (id) =>
     set(id ? { pinnedPopupId: id, hoveredId: id } : { pinnedPopupId: null }),
@@ -112,6 +124,8 @@ export const useExploreStore = create<ExploreState>((set) => ({
         ? s.types.filter((t) => t !== type)
         : [...s.types, type],
     })),
+  clearTypes: () => set({ types: [] }),
+  clearTraditions: () => set({ traditions: [], schools: [] }),
   toggleFaith: (faith) =>
     set((s) => ({
       faiths: s.faiths.includes(faith)
@@ -126,10 +140,12 @@ export const useExploreStore = create<ExploreState>((set) => ({
       types: [],
       faiths: [],
       peopleLifeEra: "all",
+      locationFilter: null,
     }),
   setMobileView: (view) => set({ mobileView: view }),
   setPeopleSort: (peopleSort) => set({ peopleSort }),
   setPeopleLifeEra: (peopleLifeEra) => set({ peopleLifeEra }),
   toggleFilters: () => set((s) => ({ filtersOpen: !s.filtersOpen })),
   setMapBounds: (mapBounds) => set({ mapBounds }),
+  setLocationFilter: (locationFilter) => set({ locationFilter }),
 }));

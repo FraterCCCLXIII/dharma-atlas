@@ -134,8 +134,8 @@ export function ClaimLocationPageView({
       >
         <div className="space-y-4 rounded-2xl border border-border bg-surface-elevated p-6">
           <p className="text-sm text-ink-secondary">
-            Like Yelp or Airbnb, we verify affiliation before granting edit access. Create a free
-            account to start a claim request.
+            We verify affiliation before granting edit access. Create a free account to start a
+            claim request.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link href="/signup?redirect=/claim" className={submitButtonClassName}>

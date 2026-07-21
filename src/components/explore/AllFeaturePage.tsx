@@ -102,7 +102,7 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
       <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pt-10">
         <section className="grid gap-4 md:grid-cols-2">
         <BrowseCard
-          href="/locations"
+          href="/places"
           title="Explore locations"
           description="Browse temples, monasteries, and meditation centers on an interactive map."
           icon={MapTrifold}
@@ -131,7 +131,7 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
               </h2>
             </div>
             <Link
-              href="/locations"
+              href="/places"
               className="hidden items-center gap-1 text-sm font-medium text-brand hover:underline sm:inline-flex"
             >
               View all locations
@@ -204,7 +204,7 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
               </h2>
             </div>
             <Link
-              href="/locations"
+              href="/places"
               className="inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline"
             >
               Open the map
