@@ -1,0 +1,1 @@
+CREATE INDEX "places_draft_name_idx" ON "places" USING btree ("is_draft","name");
