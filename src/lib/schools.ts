@@ -339,7 +339,9 @@ export function getSchools(place: Pick<Place, "name" | "tradition" | "schools">)
   return [...subschools].sort((a, b) => subschoolLabel(a).localeCompare(subschoolLabel(b)));
 }
 
-export function getSchoolsForPlaces(places: Place[]): string[] {
+export function getSchoolsForPlaces(
+  places: Pick<Place, "name" | "tradition" | "schools">[],
+): string[] {
   const subschools = new Set<string>();
   for (const place of places) {
     for (const subschool of getSchools(place)) subschools.add(subschool);
@@ -500,7 +502,7 @@ function addSubschoolToLineageSchool(
 }
 
 function buildLineageSchoolNodes(
-  places: Place[],
+  places: Pick<Place, "name" | "tradition" | "schools">[],
   teachers: TeacherSchoolFields[],
   includePlaces: boolean,
   includeTeachers: boolean,
@@ -561,7 +563,7 @@ function buildLineageSchoolNodes(
 }
 
 export function getLineageFilterTree(
-  places: Place[],
+  places: Pick<Place, "name" | "tradition" | "schools">[],
   teachers: TeacherSchoolFields[],
   entityFilter: EntityScope,
 ): LineageFilterTree {
@@ -639,7 +641,7 @@ export function getLineageFilterTree(
 
 /** @deprecated Use getLineageFilterTree */
 export function getTraditionFilterGroups(
-  places: Place[],
+  places: Pick<Place, "name" | "tradition" | "schools">[],
   teachers: TeacherSchoolFields[],
   entityFilter: EntityScope,
   selectedTraditions: string[],
@@ -653,7 +655,7 @@ export function getTraditionFilterGroups(
 
 /** @deprecated Use getLineageFilterTree */
 export function getSchoolOptions(
-  places: Place[],
+  places: Pick<Place, "name" | "tradition" | "schools">[],
   selectedTraditions: string[],
 ): TraditionFilterGroup[] {
   return getTraditionFilterGroups(places, [], "locations", selectedTraditions);

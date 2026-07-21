@@ -1,5 +1,34 @@
 import type { places } from "@/db/schema";
-import type { Place, Faith, PlaceType } from "@/types/place";
+import type { Place, PlaceMarker, Faith, PlaceType } from "@/types/place";
+
+type PlaceMarkerRow = Pick<
+  typeof places.$inferSelect,
+  | "id"
+  | "name"
+  | "lat"
+  | "lng"
+  | "tradition"
+  | "faith"
+  | "type"
+  | "address"
+  | "photo"
+  | "schools"
+>;
+
+export function rowToPlaceMarker(row: PlaceMarkerRow): PlaceMarker {
+  return {
+    id: row.id,
+    name: row.name,
+    lat: row.lat,
+    lng: row.lng,
+    tradition: row.tradition,
+    faith: row.faith as Faith,
+    type: row.type as PlaceType,
+    address: row.address,
+    photo: row.photo ?? undefined,
+    schools: row.schools.length ? row.schools : undefined,
+  };
+}
 
 export function rowToPlace(row: typeof places.$inferSelect): Place {
   return {

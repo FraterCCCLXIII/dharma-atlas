@@ -4,9 +4,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { ListBullets, MapTrifold } from "@phosphor-icons/react";
 import { buildDirectoryEntries } from "@/lib/directory";
-import { isPlaceInMapBounds } from "@/lib/coords";
+import { fetchExploreMarkers } from "@/lib/explore-markers-client";
+import { placeMatchesLocationFilter } from "@/lib/location-filter";
+import { filterPlaces } from "@/lib/places";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
-import type { Place } from "@/types/place";
+import type { PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 import { AllFeaturePage } from "./AllFeaturePage";
 import { DirectoryList } from "./DirectoryList";
@@ -34,7 +36,7 @@ function FilterSidebar({
   entityFilter: EntityFilter;
   filtersOpen: boolean;
   onClose: () => void;
-  places: Place[];
+  places: PlaceMarker[];
   teachers: Teacher[];
 }) {
   return (
@@ -105,13 +107,43 @@ function MobileMapToggle() {
   );
 }
 
-export function ExplorePageClient({
-  places,
-  teachers,
-}: {
-  places: Place[];
-  teachers: Teacher[];
-}) {
+function useExploreMarkers(enabled: boolean) {
+  const [markers, setMarkers] = useState<PlaceMarker[]>([]);
+  const [loading, setLoading] = useState(enabled);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    fetchExploreMarkers()
+      .then((data) => {
+        if (cancelled) return;
+        setMarkers(data);
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : "Failed to load places");
+        setMarkers([]);
+        setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [enabled]);
+
+  return { markers, loading, error };
+}
+
+export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const query = useExploreStore((s) => s.query);
   const traditions = useExploreStore((s) => s.traditions);
@@ -120,14 +152,24 @@ export function ExplorePageClient({
   const faiths = useExploreStore((s) => s.faiths);
   const mobileView = useExploreStore((s) => s.mobileView);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
-  const mapBounds = useExploreStore((s) => s.mapBounds);
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const peopleSort = useExploreStore((s) => s.peopleSort);
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const syncListToMap = useSyncListToMap();
 
-  // Search text only applies to the active entity (locations vs people).
+  const needsMarkers =
+    entityFilter === "locations" ||
+    entityFilter === "all" ||
+    traditions.length > 0 ||
+    schools.length > 0 ||
+    types.length > 0 ||
+    faiths.length > 0 ||
+    locationFilter != null;
+
+  const { markers, loading: markersLoading, error: markersError } =
+    useExploreMarkers(needsMarkers);
+
   const placeQuery = entityFilter === "locations" ? query : "";
   const teacherQuery = entityFilter === "people" ? query : "";
 
@@ -140,27 +182,30 @@ export function ExplorePageClient({
     [teacherQuery, traditions, schools, peopleLifeEra],
   );
 
+  const filteredPlaces = useMemo(() => {
+    const byFilters = filterPlaces(markers, placeFilters);
+    if (!locationFilter) return byFilters;
+    return byFilters.filter((place) =>
+      placeMatchesLocationFilter(
+        place.lat,
+        place.lng,
+        place.address,
+        locationFilter,
+      ),
+    );
+  }, [markers, placeFilters, locationFilter]);
+
   const directoryEntries = useMemo(
     () =>
       buildDirectoryEntries(
-        places,
+        markers,
         teachers,
         entityFilter,
         placeFilters,
         teacherFilters,
       ),
-    [places, teachers, entityFilter, placeFilters, teacherFilters],
+    [markers, teachers, entityFilter, placeFilters, teacherFilters],
   );
-
-  const filteredPlaces = useMemo(() => {
-    const placesFromDirectory = directoryEntries
-      .filter((e) => e.kind === "place")
-      .map((e) => e.data);
-    if (!locationFilter) return placesFromDirectory;
-    return placesFromDirectory.filter((place) =>
-      isPlaceInMapBounds(place.lat, place.lng, locationFilter.bounds),
-    );
-  }, [directoryEntries, locationFilter]);
 
   const filteredTeachers = useMemo(
     () =>
@@ -187,21 +232,16 @@ export function ExplorePageClient({
   const showLuminaries = isPeopleBrowse && !hasActivePeopleBrowse;
   const useScrollLayout = isPeopleBrowse || isAllBrowse;
 
-  const listPlaces = useMemo(() => {
-    if (locationFilter) return filteredPlaces;
-    if (!showMap || !syncListToMap || !mapBounds) return filteredPlaces;
-    return filteredPlaces.filter((place) =>
-      isPlaceInMapBounds(place.lat, place.lng, mapBounds),
-    );
-  }, [filteredPlaces, showMap, syncListToMap, mapBounds, locationFilter]);
-
-  const listEmptyReason =
-    listPlaces.length === 0 && filteredPlaces.length > 0 ? "map" : "filters";
-
   const listContent =
     isAllBrowse ? (
       hasActiveBrowse ? (
-        <DirectoryList entries={directoryEntries} />
+        markersLoading ? (
+          <div className="flex min-h-[40vh] items-center justify-center text-sm text-ink-muted">
+            Loading directory…
+          </div>
+        ) : (
+          <DirectoryList entries={directoryEntries} />
+        )
       ) : null
     ) : entityFilter === "people" ? (
       <TeacherList
@@ -209,8 +249,18 @@ export function ExplorePageClient({
         variant="tile"
         sortOrder={peopleSort}
       />
+    ) : markersError ? (
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-center">
+        <p className="font-display text-lg font-semibold text-ink">
+          Couldn’t load locations
+        </p>
+        <p className="mt-2 max-w-sm text-sm text-ink-muted">{markersError}</p>
+      </div>
     ) : (
-      <PlaceList places={listPlaces} emptyReason={listEmptyReason} />
+      <PlaceList
+        syncListToMap={syncListToMap}
+        filteredMarkerCount={filteredPlaces.length}
+      />
     );
 
   if (useScrollLayout) {
@@ -222,14 +272,20 @@ export function ExplorePageClient({
               entityFilter={entityFilter}
               filtersOpen={filtersOpen}
               onClose={toggleFilters}
-              places={places}
+              places={markers}
               teachers={teachers}
             />
           )}
 
           <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">
             {showAllFeature ? (
-              <AllFeaturePage places={places} teachers={teachers} />
+              markersLoading ? (
+                <div className="flex min-h-[50vh] items-center justify-center text-sm text-ink-muted">
+                  Loading…
+                </div>
+              ) : (
+                <AllFeaturePage places={markers} teachers={teachers} />
+              )
             ) : isPeopleBrowse ? (
               <div className="mx-auto w-full max-w-[1600px] px-4 pb-16 sm:px-6 lg:px-8">
                 {showLuminaries && <PeopleCarousels teachers={teachers} />}
@@ -251,7 +307,7 @@ export function ExplorePageClient({
           entityFilter={entityFilter}
           filtersOpen={filtersOpen}
           onClose={toggleFilters}
-          places={places}
+          places={markers}
           teachers={teachers}
         />
 
@@ -277,7 +333,15 @@ export function ExplorePageClient({
             }`}
           >
             <div className="map-panel h-full overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-              {showMap ? <PlaceMap places={filteredPlaces} /> : null}
+              {showMap ? (
+                markersLoading ? (
+                  <div className="flex h-full items-center justify-center text-sm text-ink-muted">
+                    Loading map…
+                  </div>
+                ) : (
+                  <PlaceMap places={filteredPlaces} />
+                )
+              ) : null}
             </div>
           </section>
 

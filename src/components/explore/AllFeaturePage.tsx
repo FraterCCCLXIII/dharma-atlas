@@ -17,14 +17,30 @@ import {
 } from "@/lib/feature-page";
 import { traditionMarkerColor } from "@/lib/places";
 import { useExploreStore } from "@/store/explore-store";
-import type { Place } from "@/types/place";
+import type { PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 import { HomeHero } from "./HomeHero";
 import { PlaceCard } from "./PlaceCard";
 import { TeacherCard } from "./TeacherCard";
 
+function activatePeopleTradition(tradition: string) {
+  useExploreStore.setState({
+    entityFilter: "people",
+    query: "",
+    traditions: [tradition],
+    schools: [],
+    types: [],
+    faiths: [],
+    peopleLifeEra: "all",
+    locationFilter: null,
+    hoveredId: null,
+    pinnedPopupId: null,
+    mapBounds: null,
+  });
+}
+
 interface AllFeaturePageProps {
-  places: Place[];
+  places: PlaceMarker[];
   teachers: Teacher[];
 }
 
@@ -85,16 +101,6 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
   const featuredPlaces = getFeaturedPlaces(places);
   const topTraditions = getTopTraditions(places, teachers);
 
-  const exploreTradition = (tradition: string) => {
-    useExploreStore.setState({
-      query: "",
-      traditions: [tradition],
-      schools: [],
-      types: [],
-      faiths: [],
-    });
-  };
-
   return (
     <>
       <HomeHero stats={stats} />
@@ -131,20 +137,20 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
               </h2>
             </div>
             <Link
-              href="/places"
+              href={PEOPLE_LIST_PATH}
               className="hidden items-center gap-1 text-sm font-medium text-brand hover:underline sm:inline-flex"
             >
-              View all locations
+              View all people
               <ArrowRight size={14} weight="bold" />
             </Link>
           </div>
 
           <div className="flex flex-wrap gap-2">
             {topTraditions.map((tradition) => (
-              <button
+              <Link
                 key={tradition}
-                type="button"
-                onClick={() => exploreTradition(tradition)}
+                href={PEOPLE_LIST_PATH}
+                onClick={() => activatePeopleTradition(tradition)}
                 className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:text-ink"
               >
                 <span
@@ -153,7 +159,7 @@ export function AllFeaturePage({ places, teachers }: AllFeaturePageProps) {
                   aria-hidden
                 />
                 {tradition}
-              </button>
+              </Link>
             ))}
           </div>
         </section>

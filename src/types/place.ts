@@ -32,6 +32,21 @@ export interface PlacePhoto {
   sortOrder: number;
 }
 
+/** Slim place row for explore map markers and list cards. */
+export interface PlaceMarker {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  tradition: string;
+  /** Manually curated school slugs when lineage is not in the place name. */
+  schools?: string[];
+  faith: Faith;
+  type: PlaceType;
+  address: string;
+  photo?: string;
+}
+
 export interface Place {
   id: string;
   name: string;

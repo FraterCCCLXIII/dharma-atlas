@@ -10,7 +10,7 @@ import L from "leaflet";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { Icon } from "@phosphor-icons/react";
-import type { Place, PlaceType } from "@/types/place";
+import type { PlaceMarker, PlaceType } from "@/types/place";
 import { traditionMarkerColor } from "@/lib/places";
 
 const FULL_MARKER_ZOOM = 12;
@@ -46,7 +46,7 @@ const TYPE_ICONS: Record<PlaceType, Icon> = {
 };
 
 export function createPlaceMarkerIcon(
-  place: Place,
+  place: Pick<PlaceMarker, "type" | "tradition">,
   active: boolean,
   options?: { stackCount?: number },
 ): L.DivIcon {

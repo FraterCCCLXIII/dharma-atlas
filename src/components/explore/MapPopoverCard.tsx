@@ -3,10 +3,10 @@
 import { ArrowRight, MapPin, Sparkle } from "@phosphor-icons/react";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
-import type { Place } from "@/types/place";
+import type { PlaceMarker } from "@/types/place";
 
 interface MapPopoverCardProps {
-  place: Place;
+  place: PlaceMarker;
   onViewDetails: () => void;
 }
 

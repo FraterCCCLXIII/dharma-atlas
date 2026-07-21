@@ -1,15 +1,15 @@
 import { filterPlaces, type PlaceFilters } from "@/lib/places";
 import { filterTeachers, type TeacherFilters } from "@/lib/teachers";
-import type { Place } from "@/types/place";
+import type { PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 import type { EntityFilter } from "@/store/explore-store";
 
 export type DirectoryEntry =
-  | { kind: "place"; id: string; data: Place }
+  | { kind: "place"; id: string; data: PlaceMarker }
   | { kind: "teacher"; id: string; data: Teacher };
 
 export function buildDirectoryEntries(
-  places: Place[],
+  places: PlaceMarker[],
   teachers: Teacher[],
   entityFilter: EntityFilter,
   placeFilters: PlaceFilters,
@@ -55,7 +55,7 @@ function getEntryName(entry: DirectoryEntry): string {
 }
 
 export function countDirectoryResults(
-  places: Place[],
+  places: PlaceMarker[],
   teachers: Teacher[],
   entityFilter: EntityFilter,
   placeFilters: PlaceFilters,

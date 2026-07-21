@@ -21,6 +21,7 @@ export interface LocationSearchResult {
   bounds: MapBounds;
   type: string;
   className: string;
+  matchTerms: string[];
 }
 
 type NominatimHit = {
@@ -30,6 +31,14 @@ type NominatimHit = {
   class?: string;
   type?: string;
   boundingbox?: [string, string, string, string];
+  address?: {
+    state?: string;
+    country?: string;
+    city?: string;
+    town?: string;
+    village?: string;
+    "ISO3166-2-lvl4"?: string;
+  };
 };
 
 type CacheEntry = {
@@ -116,14 +125,44 @@ function shortenLabel(displayName: string): string {
   return parts.slice(0, 3).join(", ");
 }
 
-function scoreLocation(result: Pick<LocationSearchResult, "type" | "className">): number {
+function boundsArea(bounds: MapBounds): number {
+  return Math.max(0, bounds.north - bounds.south) * Math.max(0, bounds.east - bounds.west);
+}
+
+function scoreLocation(result: LocationSearchResult): number {
   let score = 0;
   if (PREFERRED_TYPES.has(result.type)) score += 10;
-  if (result.className === "place") score += 5;
-  if (result.className === "boundary") score += 3;
+  if (result.className === "boundary") score += 8;
+  if (result.className === "place") score += 4;
+  if (result.type === "state" || result.type === "country") score += 20;
+  if (result.type === "administrative") score += 6;
   if (result.type === "city" || result.type === "town") score += 4;
-  if (result.type === "administrative") score += 2;
+  // Prefer large regions (states) over same-named towns/counties.
+  score += Math.min(40, Math.log10(boundsArea(result.bounds) * 1000 + 1) * 8);
   return score;
+}
+
+function matchTermsFromHit(hit: NominatimHit, label: string): string[] {
+  const terms = new Set<string>();
+  const primary = label.split(",")[0]?.trim();
+  if (primary) terms.add(primary);
+
+  const state = hit.address?.state?.trim();
+  if (state) terms.add(state);
+
+  const iso = hit.address?.["ISO3166-2-lvl4"];
+  if (iso?.includes("-")) {
+    const code = iso.split("-")[1]?.trim();
+    if (code) terms.add(code);
+  }
+
+  const locality =
+    hit.address?.city?.trim() ||
+    hit.address?.town?.trim() ||
+    hit.address?.village?.trim();
+  if (locality) terms.add(locality);
+
+  return [...terms];
 }
 
 function toLocationResult(hit: NominatimHit): LocationSearchResult | null {
@@ -131,13 +170,15 @@ function toLocationResult(hit: NominatimHit): LocationSearchResult | null {
   const lng = Number(hit.lon);
   if (!hasValidCoords(lat, lng)) return null;
 
+  const label = shortenLabel(hit.display_name);
   return {
-    label: shortenLabel(hit.display_name),
+    label,
     lat,
     lng,
     bounds: boundsFromNominatim(hit, lat, lng),
     type: hit.type ?? "",
     className: hit.class ?? "",
+    matchTerms: matchTermsFromHit(hit, label),
   };
 }
 

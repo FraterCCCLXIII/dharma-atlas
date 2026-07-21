@@ -1,5 +1,5 @@
 import { getSchools, placeMatchesTraditionFilter } from "@/lib/schools";
-import type { Place, PlaceType } from "@/types/place";
+import type { PlaceMarker, PlaceType } from "@/types/place";
 
 export interface PlaceFilters {
   query: string;
@@ -9,7 +9,10 @@ export interface PlaceFilters {
   faiths: string[];
 }
 
-export function filterPlaces(places: Place[], filters: PlaceFilters): Place[] {
+export function filterPlaces<T extends PlaceMarker>(
+  places: T[],
+  filters: PlaceFilters,
+): T[] {
   const q = filters.query.trim().toLowerCase();
 
   return places.filter((place) => {
@@ -33,7 +36,7 @@ export function filterPlaces(places: Place[], filters: PlaceFilters): Place[] {
   });
 }
 
-export function getUniqueValues(places: Place[]) {
+export function getUniqueValues(places: PlaceMarker[]) {
   return {
     traditions: [...new Set(places.map((p) => p.tradition))].sort(),
     types: [...new Set(places.map((p) => p.type))].sort() as PlaceType[],

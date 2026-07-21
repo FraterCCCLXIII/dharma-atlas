@@ -17,6 +17,7 @@ export type LocationFilter = {
   lat: number;
   lng: number;
   bounds: MapBounds;
+  matchTerms?: string[];
 };
 
 interface ExploreState {
@@ -147,5 +148,10 @@ export const useExploreStore = create<ExploreState>((set) => ({
   setPeopleLifeEra: (peopleLifeEra) => set({ peopleLifeEra }),
   toggleFilters: () => set((s) => ({ filtersOpen: !s.filtersOpen })),
   setMapBounds: (mapBounds) => set({ mapBounds }),
-  setLocationFilter: (locationFilter) => set({ locationFilter }),
+  setLocationFilter: (locationFilter) =>
+    set(
+      locationFilter
+        ? { locationFilter, filtersOpen: true }
+        : { locationFilter: null },
+    ),
 }));

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CaretRight, X } from "@phosphor-icons/react";
+import { CaretRight, MapPin, X } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import {
   BUDDHIST_TRADITION_ID,
@@ -21,11 +21,11 @@ import {
   PEOPLE_LIFE_ERA_ORDER,
 } from "@/lib/teacher-life-era";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
-import type { Place, PlaceType } from "@/types/place";
+import type { PlaceMarker, PlaceType } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 
 interface FilterBarProps {
-  places: Place[];
+  places: PlaceMarker[];
   teachers: Teacher[];
   entityFilter: EntityFilter;
   onClose?: () => void;
@@ -259,6 +259,7 @@ export function FilterBar({
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const setPeopleLifeEra = useExploreStore((s) => s.setPeopleLifeEra);
   const locationFilter = useExploreStore((s) => s.locationFilter);
+  const setLocationFilter = useExploreStore((s) => s.setLocationFilter);
 
   const lineageState = useMemo(
     () => ({ traditions, schools }),
@@ -361,6 +362,23 @@ export function FilterBar({
       </div>
 
       <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-4 py-4">
+        {locationFilter && (
+          <FilterSection title="Location">
+            <span className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full border border-border bg-surface-muted px-2.5 py-1 text-xs font-medium text-ink">
+              <MapPin size={12} weight="bold" className="shrink-0 text-brand" />
+              <span className="truncate">Near {locationFilter.label}</span>
+              <button
+                type="button"
+                onClick={() => setLocationFilter(null)}
+                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-ink-muted transition hover:bg-surface hover:text-ink"
+                aria-label={`Clear near ${locationFilter.label}`}
+              >
+                <X size={10} weight="bold" />
+              </button>
+            </span>
+          </FilterSection>
+        )}
+
         {showPeopleSort && (
           <>
             <FilterSection title="Era">

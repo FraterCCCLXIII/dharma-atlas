@@ -16,6 +16,11 @@ import {
   personProfilePath,
 } from "@/lib/explore-routes";
 import type { MapBounds } from "@/lib/coords";
+import {
+  expandBounds,
+  matchTermsForLocationLabel,
+  queryMatchesLocationLabel,
+} from "@/lib/location-filter";
 import { useExploreStore, type LocationFilter } from "@/store/explore-store";
 
 type PlaceSuggestion = {
@@ -38,6 +43,7 @@ type LocationSuggestion = {
   lat: number;
   lng: number;
   bounds: MapBounds;
+  matchTerms?: string[];
 };
 
 type Suggestion =
@@ -60,7 +66,6 @@ export function ExploreSearchField() {
   const listId = useId();
   const query = useExploreStore((s) => s.query);
   const setQuery = useExploreStore((s) => s.setQuery);
-  const locationFilter = useExploreStore((s) => s.locationFilter);
   const setLocationFilter = useExploreStore((s) => s.setLocationFilter);
   const setMobileView = useExploreStore((s) => s.setMobileView);
   const { scope, setScope } = useSearchScope();
@@ -208,14 +213,34 @@ export function ExploreSearchField() {
     return () => controller.abort();
   }, [debouncedDraft, scope]);
 
-  const suggestions: Suggestion[] = [
-    ...placeSuggestions.map((place) => ({ kind: "place" as const, place })),
-    ...personSuggestions.map((person) => ({ kind: "person" as const, person })),
-    ...locationSuggestions.map((location) => ({
-      kind: "location" as const,
-      location,
-    })),
-  ];
+  const matchingLocation = locationSuggestions.find((location) =>
+    queryMatchesLocationLabel(draft, location.label),
+  );
+  // When the query is clearly a place name ("California"), lead with Near
+  // so Enter doesn't land on a partial place-name text match.
+  const suggestions: Suggestion[] = matchingLocation
+    ? [
+        ...locationSuggestions.map((location) => ({
+          kind: "location" as const,
+          location,
+        })),
+        ...placeSuggestions.map((place) => ({ kind: "place" as const, place })),
+        ...personSuggestions.map((person) => ({
+          kind: "person" as const,
+          person,
+        })),
+      ]
+    : [
+        ...placeSuggestions.map((place) => ({ kind: "place" as const, place })),
+        ...personSuggestions.map((person) => ({
+          kind: "person" as const,
+          person,
+        })),
+        ...locationSuggestions.map((location) => ({
+          kind: "location" as const,
+          location,
+        })),
+      ];
 
   useEffect(() => {
     setHighlight(0);
@@ -233,7 +258,11 @@ export function ExploreSearchField() {
       label: location.label,
       lat: location.lat,
       lng: location.lng,
-      bounds: location.bounds,
+      bounds: expandBounds(location.bounds, 0.04),
+      matchTerms:
+        location.matchTerms?.length
+          ? location.matchTerms
+          : matchTermsForLocationLabel(location.label),
     };
     setLocationFilter(next);
     setDraft("");
@@ -245,8 +274,21 @@ export function ExploreSearchField() {
   };
 
   const submitSearch = () => {
-    const selected = suggestions[highlight];
-    if (menuOpen && selected) {
+    const selected = menuOpen ? suggestions[highlight] : undefined;
+
+    // Prefer geo for locality queries ("California"), unless the user has
+    // explicitly moved the highlight onto a place/person row.
+    if (
+      matchingLocation &&
+      (!selected || selected.kind === "location")
+    ) {
+      applyLocation(
+        selected?.kind === "location" ? selected.location : matchingLocation,
+      );
+      return;
+    }
+
+    if (selected) {
       if (selected.kind === "location") {
         applyLocation(selected.location);
         return;
@@ -258,6 +300,11 @@ export function ExploreSearchField() {
       }
       setMenuOpen(false);
       router.push(personProfilePath(selected.person.slug));
+      return;
+    }
+
+    if (matchingLocation) {
+      applyLocation(matchingLocation);
       return;
     }
 
@@ -302,6 +349,31 @@ export function ExploreSearchField() {
   const showMenu =
     menuOpen && draft.trim().length >= 2 && suggestions.length > 0;
 
+  const suggestionGroups = (() => {
+    const groups: { label: string; items: { suggestion: Suggestion; index: number }[] }[] =
+      [];
+    const ensureGroup = (label: string) => {
+      let group = groups.find((entry) => entry.label === label);
+      if (!group) {
+        group = { label, items: [] };
+        groups.push(group);
+      }
+      return group;
+    };
+
+    suggestions.forEach((suggestion, index) => {
+      if (suggestion.kind === "location") {
+        ensureGroup("Near").items.push({ suggestion, index });
+      } else if (suggestion.kind === "place") {
+        ensureGroup("Places").items.push({ suggestion, index });
+      } else {
+        ensureGroup("People").items.push({ suggestion, index });
+      }
+    });
+
+    return groups;
+  })();
+
   const dropdown =
     showMenu &&
     createPortal(
@@ -318,37 +390,51 @@ export function ExploreSearchField() {
         }}
         className="z-[1000] max-h-[min(24rem,70vh)] overflow-y-auto rounded-xl border border-border bg-surface-elevated shadow-[var(--shadow-float)]"
       >
-        {placeSuggestions.length > 0 && (
-          <SuggestionGroup label="Places">
-            {placeSuggestions.map((place, index) => (
-              <SuggestionButton
-                key={place.id}
-                active={highlight === index}
-                label={place.name}
-                detail={[place.type, place.address].filter(Boolean).join(" · ")}
-                onMouseEnter={() => setHighlight(index)}
-                onClick={() => {
-                  setMenuOpen(false);
-                  router.push(`/place/${place.id}`);
-                }}
-              />
-            ))}
-          </SuggestionGroup>
-        )}
-
-        {personSuggestions.length > 0 && (
-          <SuggestionGroup label="People">
-            {personSuggestions.map((person, index) => {
-              const flatIndex = placeSuggestions.length + index;
+        {suggestionGroups.map((group) => (
+          <SuggestionGroup key={group.label} label={group.label}>
+            {group.items.map(({ suggestion, index }) => {
+              if (suggestion.kind === "location") {
+                const { location } = suggestion;
+                return (
+                  <SuggestionButton
+                    key={`${location.label}-${location.lat}-${location.lng}`}
+                    active={highlight === index}
+                    label={location.label}
+                    detail="Show map near here"
+                    icon={<MapPin size={16} weight="bold" />}
+                    onMouseEnter={() => setHighlight(index)}
+                    onClick={() => applyLocation(location)}
+                  />
+                );
+              }
+              if (suggestion.kind === "place") {
+                const { place } = suggestion;
+                return (
+                  <SuggestionButton
+                    key={place.id}
+                    active={highlight === index}
+                    label={place.name}
+                    detail={[place.type, place.address]
+                      .filter(Boolean)
+                      .join(" · ")}
+                    onMouseEnter={() => setHighlight(index)}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      router.push(`/place/${place.id}`);
+                    }}
+                  />
+                );
+              }
+              const { person } = suggestion;
               return (
                 <SuggestionButton
                   key={person.slug}
-                  active={highlight === flatIndex}
+                  active={highlight === index}
                   label={person.name}
                   detail={[person.tradition, person.location]
                     .filter(Boolean)
                     .join(" · ")}
-                  onMouseEnter={() => setHighlight(flatIndex)}
+                  onMouseEnter={() => setHighlight(index)}
                   onClick={() => {
                     setMenuOpen(false);
                     router.push(personProfilePath(person.slug));
@@ -357,33 +443,13 @@ export function ExploreSearchField() {
               );
             })}
           </SuggestionGroup>
-        )}
-
-        {locationSuggestions.length > 0 && (
-          <SuggestionGroup label="Near">
-            {locationSuggestions.map((location, index) => {
-              const flatIndex =
-                placeSuggestions.length + personSuggestions.length + index;
-              return (
-                <SuggestionButton
-                  key={`${location.label}-${location.lat}-${location.lng}`}
-                  active={highlight === flatIndex}
-                  label={location.label}
-                  detail="Show map near here"
-                  icon={<MapPin size={16} weight="bold" />}
-                  onMouseEnter={() => setHighlight(flatIndex)}
-                  onClick={() => applyLocation(location)}
-                />
-              );
-            })}
-          </SuggestionGroup>
-        )}
+        ))}
       </div>,
       document.body,
     );
 
   return (
-    <div ref={rootRef} className="flex w-full min-w-0 flex-col gap-1.5">
+    <div ref={rootRef} className="w-full min-w-0">
       <div className="flex w-full min-w-0 items-stretch rounded-full border border-border bg-surface shadow-[var(--shadow-card)] transition focus-within:border-brand focus-within:shadow-[0_0_0_3px_rgba(209,127,40,0.15)] hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)]">
         <SearchScopeDropdown value={scope} onChange={setScope} />
         <span className="my-2 w-px shrink-0 bg-border" aria-hidden />
@@ -426,23 +492,6 @@ export function ExploreSearchField() {
           )}
         </label>
       </div>
-
-      {locationFilter && (
-        <div className="flex min-w-0 items-center gap-2 px-1">
-          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-border bg-surface-muted px-2.5 py-1 text-xs font-medium text-ink">
-            <MapPin size={12} weight="bold" className="shrink-0 text-brand" />
-            <span className="truncate">Near {locationFilter.label}</span>
-            <button
-              type="button"
-              onClick={() => setLocationFilter(null)}
-              className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-ink-muted transition hover:bg-surface hover:text-ink"
-              aria-label={`Clear near ${locationFilter.label}`}
-            >
-              <X size={10} weight="bold" />
-            </button>
-          </span>
-        </div>
-      )}
 
       {dropdown}
     </div>

@@ -1,5 +1,10 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { EXPLORE_MARKERS_CACHE_TAG } from "@/lib/data/places";
 import { PEOPLE_LIST_PATH, personProfilePath } from "@/lib/explore-routes";
+
+export function revalidateExploreMarkers() {
+  revalidateTag(EXPLORE_MARKERS_CACHE_TAG, "max");
+}
 
 export function revalidatePlacePaths(placeId: string) {
   revalidatePath("/");
@@ -8,6 +13,7 @@ export function revalidatePlacePaths(placeId: string) {
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${placeId}/edit`);
   revalidatePath(`/manage/places/${placeId}/edit`);
+  revalidateExploreMarkers();
 }
 
 export function revalidateTeacherPaths(slug: string, previousSlug?: string) {
@@ -27,4 +33,5 @@ export function revalidateAllContentPaths() {
   revalidatePath(PEOPLE_LIST_PATH);
   revalidatePath("/admin/places");
   revalidatePath("/admin/teachers");
+  revalidateExploreMarkers();
 }

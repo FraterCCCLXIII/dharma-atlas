@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useNavLinksCollapsed } from "@/components/layout/NavBarLogoContext";
 import { authClient } from "@/lib/auth-client";
 import {
   entityFilterFromPath,
@@ -19,6 +20,7 @@ const EXPLORE_MENU_LINKS = [
 export function SiteMenu() {
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
+  const navLinksCollapsed = useNavLinksCollapsed();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -27,6 +29,7 @@ export function SiteMenu() {
   const isLoggedIn = Boolean(session?.user);
   const isAdmin = isAdminRole(session?.user.role);
   const entityFilter = entityFilterFromPath(pathname);
+  const showExploreInMenu = navLinksCollapsed !== false;
 
   const updateMenuPosition = useCallback(() => {
     const button = buttonRef.current;
@@ -87,26 +90,28 @@ export function SiteMenu() {
         className="z-[1000] flex min-w-[11rem] flex-col overflow-hidden rounded-xl border border-border bg-surface-elevated shadow-[var(--shadow-float)]"
       >
         <div className="py-1">
-          <div className="md:hidden">
-            {EXPLORE_MENU_LINKS.map(({ value, label }) => {
-              const isActive = entityFilter === value;
-              return (
-                <Link
-                  key={value}
-                  href={pathFromEntityFilter(value)}
-                  role="menuitem"
-                  aria-current={isActive ? "page" : undefined}
-                  onClick={() => setMenuOpen(false)}
-                  className={`block w-full px-4 py-2.5 text-left text-sm font-medium transition hover:bg-surface-muted ${
-                    isActive ? "bg-surface-muted text-ink" : "text-ink"
-                  }`}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-            <div className="my-1 border-t border-border" />
-          </div>
+          {showExploreInMenu ? (
+            <div className={navLinksCollapsed === null ? "md:hidden" : undefined}>
+              {EXPLORE_MENU_LINKS.map(({ value, label }) => {
+                const isActive = entityFilter === value;
+                return (
+                  <Link
+                    key={value}
+                    href={pathFromEntityFilter(value)}
+                    role="menuitem"
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block w-full px-4 py-2.5 text-left text-sm font-medium transition hover:bg-surface-muted ${
+                      isActive ? "bg-surface-muted text-ink" : "text-ink"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+              <div className="my-1 border-t border-border" />
+            </div>
+          ) : null}
           {isLoggedIn ? (
             <>
               <p className="truncate px-4 py-2 text-xs text-ink-muted">

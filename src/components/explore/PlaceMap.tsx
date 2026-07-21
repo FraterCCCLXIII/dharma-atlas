@@ -27,16 +27,16 @@ import {
 } from "@/lib/map-popup";
 import { isValidCoord, toLatLng } from "@/lib/coords";
 import { useExploreStore } from "@/store/explore-store";
-import type { Place } from "@/types/place";
+import type { PlaceMarker } from "@/types/place";
 
 const DEFAULT_CENTER: [number, number] = [39.8283, -98.5795];
 const DEFAULT_ZOOM = 4;
 
 interface PlaceMapProps {
-  places: Place[];
+  places: PlaceMarker[];
 }
 
-function MapAutoControl({ places }: { places: Place[] }) {
+function MapAutoControl({ places }: { places: PlaceMarker[] }) {
   const map = useMap();
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const userInteractedRef = useRef(false);
@@ -79,15 +79,37 @@ function MapAutoControl({ places }: { places: Place[] }) {
       lastLocationKeyRef.current = null;
       return;
     }
-    if (lastLocationKeyRef.current === locationKey) return;
-    lastLocationKeyRef.current = locationKey;
+
+    // Refit when the location changes or when matches for that location arrive.
+    const fitKey = `${locationKey}:${placesKey}`;
+    if (lastLocationKeyRef.current === fitKey) return;
+    lastLocationKeyRef.current = fitKey;
 
     userInteractedRef.current = false;
     let cancelled = false;
     const { bounds } = locationFilter;
+    const points = places
+      .map((p) => toLatLng(p.lat, p.lng))
+      .filter((point): point is [number, number] => point !== null);
 
     map.whenReady(() => {
       if (cancelled) return;
+
+      if (points.length === 1) {
+        runProgrammatic(() => map.setView(points[0], 12));
+        return;
+      }
+
+      if (points.length > 1) {
+        runProgrammatic(() =>
+          map.fitBounds(L.latLngBounds(points), {
+            padding: [56, 56],
+            maxZoom: 13,
+          }),
+        );
+        return;
+      }
+
       runProgrammatic(() =>
         map.fitBounds(
           L.latLngBounds(
@@ -102,7 +124,7 @@ function MapAutoControl({ places }: { places: Place[] }) {
     return () => {
       cancelled = true;
     };
-  }, [locationKey, locationFilter, map]);
+  }, [locationKey, locationFilter, map, placesKey, places]);
 
   useEffect(() => {
     if (locationFilter) return;
@@ -215,12 +237,12 @@ function MapBoundsSync() {
   return null;
 }
 
-function PlaceMarker({
+function ExploreMapPin({
   place,
   isActive,
   onViewDetails,
 }: {
-  place: Place;
+  place: PlaceMarker;
   isActive: boolean;
   onViewDetails: () => void;
 }) {
@@ -325,7 +347,7 @@ export function PlaceMap({ places }: PlaceMapProps) {
         <PlaceMarkerCluster places={validPlaces} />
       ) : (
         validPlaces.map((place) => (
-          <PlaceMarker
+          <ExploreMapPin
             key={place.id}
             place={place}
             isActive={hoveredId === place.id}

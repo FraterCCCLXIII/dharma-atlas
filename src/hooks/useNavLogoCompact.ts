@@ -6,37 +6,62 @@ import {
   type RefObject,
 } from "react";
 
-const LOGO_COLLISION_GAP_PX = 12;
+const NAV_COLLISION_GAP_PX = 12;
+
+export type NavBarCollisionState = {
+  logoCompact: boolean;
+  navLinksCollapsed: boolean;
+};
 
 export function useNavLogoCompact(
   navRowRef: RefObject<HTMLElement | null>,
   logoRef: RefObject<HTMLElement | null>,
   centerRef: RefObject<HTMLElement | null>,
   wordmarkMeasureRef: RefObject<HTMLElement | null>,
-  leftClusterRef?: RefObject<HTMLElement | null>,
-) {
-  const [compact, setCompact] = useState(true);
+  leftClusterRef: RefObject<HTMLElement | null> | undefined,
+  navLinksRef: RefObject<HTMLElement | null>,
+): NavBarCollisionState {
+  const [state, setState] = useState<NavBarCollisionState>({
+    logoCompact: true,
+    navLinksCollapsed: true,
+  });
 
   useLayoutEffect(() => {
     const row = navRowRef.current;
     const logo = logoRef.current;
     const center = centerRef.current;
     const measure = wordmarkMeasureRef.current;
-    if (!row || !logo || !center || !measure) return;
+    const navLinks = navLinksRef.current;
+    const cluster = leftClusterRef?.current;
+    if (!row || !logo || !center || !measure || !navLinks) return;
 
     const check = () => {
-      const logoLeft = logo.getBoundingClientRect().left;
-      const logoRight = logo.getBoundingClientRect().right;
+      const logoRect = logo.getBoundingClientRect();
       const centerLeft = center.getBoundingClientRect().left;
-      const cluster = leftClusterRef?.current;
-      const afterLogoWidth = cluster
-        ? Math.max(0, cluster.getBoundingClientRect().right - logoRight)
+      const linksWidth = navLinks.getBoundingClientRect().width;
+      const clusterGap = cluster
+        ? Number.parseFloat(getComputedStyle(cluster).columnGap || "0") || 0
         : 0;
-      const availableWidth =
-        centerLeft - logoLeft - afterLogoWidth - LOGO_COLLISION_GAP_PX;
-      const wordmarkWidth = measure.getBoundingClientRect().width;
 
-      setCompact(wordmarkWidth > availableWidth);
+      // Decide from intrinsic link width so show/hide does not oscillate.
+      const navLinksCollapsed =
+        logoRect.right + NAV_COLLISION_GAP_PX + linksWidth > centerLeft;
+
+      const afterLogoWidth = navLinksCollapsed ? 0 : linksWidth + clusterGap;
+      const availableWidth =
+        centerLeft - logoRect.left - afterLogoWidth - NAV_COLLISION_GAP_PX;
+      const wordmarkWidth = measure.getBoundingClientRect().width;
+      const logoCompact = wordmarkWidth > availableWidth;
+
+      setState((prev) => {
+        if (
+          prev.logoCompact === logoCompact &&
+          prev.navLinksCollapsed === navLinksCollapsed
+        ) {
+          return prev;
+        }
+        return { logoCompact, navLinksCollapsed };
+      });
     };
 
     check();
@@ -46,7 +71,7 @@ export function useNavLogoCompact(
     observer.observe(logo);
     observer.observe(center);
     observer.observe(measure);
-    const cluster = leftClusterRef?.current;
+    observer.observe(navLinks);
     if (cluster) observer.observe(cluster);
 
     window.addEventListener("resize", check);
@@ -55,7 +80,14 @@ export function useNavLogoCompact(
       observer.disconnect();
       window.removeEventListener("resize", check);
     };
-  }, [navRowRef, logoRef, centerRef, wordmarkMeasureRef, leftClusterRef]);
+  }, [
+    navRowRef,
+    logoRef,
+    centerRef,
+    wordmarkMeasureRef,
+    leftClusterRef,
+    navLinksRef,
+  ]);
 
-  return compact;
+  return state;
 }

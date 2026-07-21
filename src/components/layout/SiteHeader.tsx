@@ -60,16 +60,18 @@ function NavBarLayout({
   const leftClusterRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
   const wordmarkMeasureRef = useRef<HTMLImageElement>(null);
-  const compact = useNavLogoCompact(
+  const navLinksRef = useRef<HTMLElement>(null);
+  const collision = useNavLogoCompact(
     navRowRef,
     logoRef,
     centerRef,
     wordmarkMeasureRef,
     leftClusterRef,
+    navLinksRef,
   );
 
   return (
-    <NavBarLogoContext.Provider value={compact}>
+    <NavBarLogoContext.Provider value={collision}>
       <div
         ref={navRowRef}
         className="relative flex w-full min-w-0 items-center gap-2 sm:gap-3"
@@ -82,7 +84,7 @@ function NavBarLayout({
         >
           <SiteLogoWordmarkMeasure measureRef={wordmarkMeasureRef} />
           <SiteLogo logoRef={logoRef} />
-          <ExploreNavLinks />
+          <ExploreNavLinks linksRef={navLinksRef} />
         </div>
 
         <div

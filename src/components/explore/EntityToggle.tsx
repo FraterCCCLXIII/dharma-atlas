@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 import { CaretDown } from "@phosphor-icons/react";
+import { useNavLinksCollapsed } from "@/components/layout/NavBarLogoContext";
 import { entityFilterFromPath, pathFromEntityFilter } from "@/lib/explore-routes";
 import type { EntityFilter } from "@/store/explore-store";
 
@@ -19,14 +26,30 @@ function exploreEntityFromFilter(filter: EntityFilter): ExploreEntity {
   return filter === "people" ? "people" : "locations";
 }
 
-export function ExploreNavLinks() {
+export function ExploreNavLinks({
+  linksRef,
+}: {
+  linksRef?: RefObject<HTMLElement | null>;
+}) {
   const pathname = usePathname();
   const entityFilter = entityFilterFromPath(pathname);
+  const collapsed = useNavLinksCollapsed();
+
+  // Keep links measurable when collapsed (invisible + absolute) so collision
+  // detection can decide to show them again without oscillating.
+  const visibilityClass =
+    collapsed === false
+      ? "relative flex"
+      : collapsed === true
+        ? "pointer-events-none invisible absolute flex w-max"
+        : "hidden md:flex";
 
   return (
     <nav
+      ref={linksRef}
       aria-label="Explore"
-      className="hidden shrink-0 items-center gap-1 sm:gap-2 md:flex"
+      aria-hidden={collapsed === true ? true : undefined}
+      className={`${visibilityClass} shrink-0 items-center gap-1 sm:gap-2`}
     >
       {OPTIONS.map(({ value, label }) => {
         const isActive = entityFilter === value;
@@ -34,6 +57,7 @@ export function ExploreNavLinks() {
           <Link
             key={value}
             href={pathFromEntityFilter(value)}
+            tabIndex={collapsed === true ? -1 : undefined}
             aria-current={isActive ? "page" : undefined}
             className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-semibold transition sm:px-3 ${
               isActive

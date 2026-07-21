@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db/client";
 import { places } from "@/db/schema";
+import { revalidateExploreMarkers } from "@/lib/admin-api/revalidate";
 import { requirePermission } from "@/lib/auth-server";
 import { placeInputSchema, type PlaceInput } from "@/lib/validations/place";
 
@@ -66,6 +67,7 @@ export async function verifyPlaceFieldAction(placeId: string, field: string) {
   revalidatePath("/places");
   revalidatePath(`/place/${placeId}`);
   revalidatePath("/admin/places");
+  revalidateExploreMarkers();
 }
 
 export async function createPlaceAction(input: PlaceInput) {
@@ -78,6 +80,7 @@ export async function createPlaceAction(input: PlaceInput) {
   revalidatePath("/places");
   revalidatePath(`/place/${data.id}`);
   revalidatePath("/admin/places");
+  revalidateExploreMarkers();
   redirect(`/admin/places/${data.id}/edit`);
 }
 
@@ -92,6 +95,7 @@ export async function updatePlaceAction(originalId: string, input: PlaceInput) {
   revalidatePath(`/place/${originalId}`);
   revalidatePath(`/place/${data.id}`);
   revalidatePath("/admin/places");
+  revalidateExploreMarkers();
   redirect("/admin/places");
 }
 
@@ -102,5 +106,6 @@ export async function deletePlaceAction(id: string) {
   revalidatePath("/");
   revalidatePath("/places");
   revalidatePath("/admin/places");
+  revalidateExploreMarkers();
   redirect("/admin/places");
 }

@@ -5,6 +5,7 @@ import { count, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/client";
 import { placePhotos } from "@/db/schema";
+import { revalidateExploreMarkers } from "@/lib/admin-api/revalidate";
 import { requireSession } from "@/lib/auth-server";
 import { getPlacePhotos, syncPlaceCoverPhoto } from "@/lib/data/place-photos";
 import { MAX_PLACE_PHOTOS, type PlacePhoto } from "@/types/place";
@@ -87,6 +88,7 @@ export async function uploadPlacePhotoAction(placeId: string, formData: FormData
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${normalizedId}/edit`);
   revalidatePath(`/manage/places/${normalizedId}/edit`);
+  revalidateExploreMarkers();
 
   return {
     photo: {
@@ -124,6 +126,7 @@ export async function deletePlacePhotoAction(placeId: string, photoId: number) {
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${placeId}/edit`);
   revalidatePath(`/manage/places/${placeId}/edit`);
+  revalidateExploreMarkers();
 
   return { ok: true };
 }

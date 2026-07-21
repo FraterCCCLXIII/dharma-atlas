@@ -13,10 +13,10 @@ import { isValidCoord } from "@/lib/coords";
 import { getSchools, traditionGradient } from "@/lib/places";
 import { schoolLabel } from "@/lib/schools";
 import { useExploreStore } from "@/store/explore-store";
-import type { Place } from "@/types/place";
+import type { PlaceMarker } from "@/types/place";
 
 interface PlaceCardProps {
-  place: Place;
+  place: PlaceMarker;
   index: number;
   showKindBadge?: boolean;
   /** Off for virtualized lists — remount animations fight absolute row positioning. */
