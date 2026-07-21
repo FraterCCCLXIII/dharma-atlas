@@ -16,7 +16,10 @@ import {
   mergeQualityFlag,
   withoutQualityFlag,
 } from "@/lib/geocode";
+import { revalidateExploreMarkers } from "@/lib/admin-api/revalidate";
+import { getSubschoolLabelMap } from "@/lib/schools";
 import {
+  filterKnownSchools,
   memberCreatePlaceSchema,
   ownerPlaceEditSchema,
   type MemberCreatePlaceInput,
@@ -41,6 +44,9 @@ export async function createMemberPlaceAction(input: MemberCreatePlaceInput) {
   const { lat, lng } = await resolveCoords(data.address ?? "", data.city ?? "");
   const qualityFlags = hasValidCoords(lat, lng) ? [] : ["missing_coords"];
 
+  const schools = filterKnownSchools(data.schools ?? []);
+  const hoursText = data.hoursText?.trim();
+
   await db.insert(places).values({
     id: placeId,
     name: data.name,
@@ -51,9 +57,18 @@ export async function createMemberPlaceAction(input: MemberCreatePlaceInput) {
     type: data.type,
     folder: "Member submissions",
     address: fullAddress,
+    phone: data.phone ?? null,
     website: data.website ?? null,
     description: data.description ?? null,
-    schools: [],
+    schools,
+    openingHours: hoursText
+      ? JSON.stringify({
+          weekdayDescriptions: hoursText
+            .split("\n")
+            .map((line) => line.trim())
+            .filter(Boolean),
+        })
+      : null,
     isDraft: true,
     dataSource: "member_created",
     qualityFlags,
@@ -93,16 +108,23 @@ export async function updateOwnerPlaceAction(placeId: string, input: OwnerPlaceE
     }
   }
 
+  const schools = filterKnownSchools(data.schools ?? []);
+  const knownSlugs = new Set(Object.keys(getSubschoolLabelMap()));
+  // Preserve admin-only custom school slugs members cannot select.
+  const customSlugs = (existing.schools ?? []).filter((slug) => !knownSlugs.has(slug));
+
   await db
     .update(places)
     .set({
       name: data.name,
       type: data.type,
+      faith: data.faith,
       tradition: data.tradition,
       address: data.address,
       phone: data.phone ?? null,
       website: data.website ?? null,
       description: data.description ?? null,
+      schools: [...schools, ...customSlugs].sort(),
       ...(data.hoursText !== undefined
         ? {
             openingHours: data.hoursText?.trim()
@@ -138,5 +160,24 @@ export async function requestPublishAction(placeId: string) {
     .set({ publishRequestedAt: new Date(), updatedAt: new Date() })
     .where(eq(places.id, placeId));
   revalidatePath("/manage");
+  redirect("/manage");
+}
+
+/** Soft-delete: hides from public/manage; admin can restore or permanently delete. */
+export async function deleteMemberPlaceAction(placeId: string) {
+  await requirePlaceAccess(placeId);
+
+  await db
+    .update(places)
+    .set({ deletedAt: new Date(), updatedAt: new Date() })
+    .where(eq(places.id, placeId));
+
+  revalidatePath("/");
+  revalidatePath("/places");
+  revalidatePath(`/place/${placeId}`);
+  revalidatePath("/manage");
+  revalidatePath("/admin/places");
+  revalidatePath("/admin/location-reviews");
+  revalidateExploreMarkers();
   redirect("/manage");
 }

@@ -13,6 +13,8 @@ interface SiteLogoProps {
    * wordmark: full logo at all sizes. icon: globe mark only.
    */
   variant?: "auto" | "wordmark" | "icon";
+  /** sm: compact mark for narrow sidebars; md: default header size. */
+  size?: "sm" | "md";
 }
 
 const logoImageClassName = "shrink-0 object-contain";
@@ -20,6 +22,7 @@ const logoImageClassName = "shrink-0 object-contain";
 export function SiteLogo({
   className = "",
   variant = "auto",
+  size = "md",
   logoRef,
 }: SiteLogoProps) {
   const navCompact = useNavBarLogoCompact();
@@ -34,13 +37,17 @@ export function SiteLogo({
 
   const useBreakpointFallback = variant === "auto" && navCompact === null;
 
+  const iconSizeClass = size === "sm" ? "h-6 w-6" : "h-8 w-8";
+  const wordmarkSizeClass =
+    size === "sm" ? "h-5 w-auto max-w-[9.5rem]" : "h-8 w-auto sm:h-9";
+
   return (
     <div className={`relative inline-flex shrink-0 items-start ${className}`}>
       <Link
         ref={logoRef}
         href="/"
         aria-label="Dharma Atlas home"
-        className="group inline-flex shrink-0 items-center overflow-visible rounded-lg transition hover:opacity-80"
+        className="group inline-flex max-w-full shrink-0 items-center overflow-visible rounded-lg transition hover:opacity-80"
       >
         {showIconOnly || useBreakpointFallback ? (
           <Image
@@ -53,8 +60,8 @@ export function SiteLogo({
             unoptimized
             className={
               showIconOnly
-                ? `h-8 w-8 ${logoImageClassName}`
-                : `h-8 w-8 sm:hidden ${logoImageClassName}`
+                ? `${iconSizeClass} ${logoImageClassName}`
+                : `${iconSizeClass} sm:hidden ${logoImageClassName}`
             }
           />
         ) : null}
@@ -69,8 +76,8 @@ export function SiteLogo({
             unoptimized
             className={
               showWordmarkOnly
-                ? `h-8 w-auto sm:h-9 ${logoImageClassName}`
-                : `hidden h-8 w-auto sm:block sm:h-9 ${logoImageClassName}`
+                ? `${wordmarkSizeClass} ${logoImageClassName}`
+                : `hidden ${wordmarkSizeClass} sm:block ${logoImageClassName}`
             }
           />
         ) : null}

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { db } from "@/db/client";
 import { placeMemberships, places } from "@/db/schema";
 import { rowToPlace } from "@/lib/place-row";
@@ -55,7 +55,7 @@ export async function getPlacesForUser(userId: string): Promise<Place[]> {
     .select({ place: places })
     .from(placeMemberships)
     .innerJoin(places, eq(placeMemberships.placeId, places.id))
-    .where(eq(placeMemberships.userId, userId))
+    .where(and(eq(placeMemberships.userId, userId), isNull(places.deletedAt)))
     .orderBy(places.name);
 
   return rows.map((row) => rowToPlace(row.place));

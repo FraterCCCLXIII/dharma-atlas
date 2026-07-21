@@ -5,8 +5,12 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { OntologyRuntimeProvider } from "@/components/explore/OntologyRuntimeProvider";
 import { getSession } from "@/lib/auth-server";
 import { getPendingClaimsCount } from "@/lib/data/claims";
+import { getDraftPlacesCount } from "@/lib/data/places";
 import { getPendingReportsCount } from "@/lib/data/reports";
-import { getPendingSubmissionsCount } from "@/lib/data/submissions";
+import {
+  getPendingLocationSubmissionsCount,
+  getPendingSubmissionsCount,
+} from "@/lib/data/submissions";
 import { getOntologySnapshot } from "@/lib/data/ontology";
 import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 import { isAdminRole } from "@/lib/permissions";
@@ -38,13 +42,21 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
-  const [pendingSubmissions, pendingClaims, pendingReports, ontology] =
-    await Promise.all([
-      getPendingSubmissionsCount(),
-      getPendingClaimsCount(),
-      getPendingReportsCount(),
-      getOntologySnapshot(),
-    ]);
+  const [
+    pendingSubmissions,
+    pendingClaims,
+    pendingReports,
+    draftPlaces,
+    pendingLocationSuggestions,
+    ontology,
+  ] = await Promise.all([
+    getPendingSubmissionsCount(),
+    getPendingClaimsCount(),
+    getPendingReportsCount(),
+    getDraftPlacesCount(),
+    getPendingLocationSubmissionsCount(),
+    getOntologySnapshot(),
+  ]);
 
   return (
     <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
@@ -52,6 +64,7 @@ export default async function AdminLayout({
         pendingSubmissions={pendingSubmissions}
         pendingClaims={pendingClaims}
         pendingReports={pendingReports}
+        pendingLocationReviews={draftPlaces + pendingLocationSuggestions}
         userEmail={session.user.email}
         isOwner={session.user.role === "owner"}
       >

@@ -80,6 +80,10 @@ export interface Place {
   businessStatus?: string;
   googlePrimaryType?: string;
   isDraft?: boolean;
+  /** Set when a member requests admin publish for a draft listing. */
+  publishRequestedAt?: string;
+  /** Soft-delete timestamp; present when owner removed the listing. */
+  deletedAt?: string;
 }
 
 export interface PlacesDataset {

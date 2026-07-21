@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
 import { FormPageShell } from "@/components/layout/FormPageShell";
 import { authClient } from "@/lib/auth-client";
@@ -17,11 +17,14 @@ interface SearchPlace {
 interface ClaimLocationPageViewProps {
   initialPlaceId?: string;
   initialPlaceName?: string;
+  /** Render inside Manage shell with back to Place Listings. */
+  embedded?: boolean;
 }
 
 export function ClaimLocationPageView({
   initialPlaceId,
   initialPlaceName,
+  embedded = false,
 }: ClaimLocationPageViewProps) {
   const { data: session, isPending } = authClient.useSession();
   const [query, setQuery] = useState(initialPlaceName ?? "");
@@ -43,6 +46,24 @@ export function ClaimLocationPageView({
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const claimPath = initialPlaceId
+    ? `${embedded ? "/manage/claim" : "/claim"}?place=${encodeURIComponent(initialPlaceId)}`
+    : embedded
+      ? "/manage/claim"
+      : "/claim";
+
+  const wrap = (title: string, description: string | undefined, children: ReactNode) => (
+    <FormPageShell
+      title={title}
+      description={description}
+      embedded={embedded}
+      backHref={embedded ? "/manage" : "/"}
+      backLabel={embedded ? "Back to Place Listings" : "Back to explore"}
+    >
+      {children}
+    </FormPageShell>
+  );
 
   const runSearch = useCallback(async (value: string, page = 1, append = false) => {
     const trimmed = value.trim();
@@ -119,185 +140,187 @@ export function ClaimLocationPageView({
   };
 
   if (isPending) {
-    return (
-      <FormPageShell title="Claim a location" description="Loading…">
-        <p className="text-ink-secondary">Loading…</p>
-      </FormPageShell>
-    );
+    return wrap("Claim a location", "Loading…", <p className="text-ink-secondary">Loading…</p>);
   }
 
   if (!session) {
-    return (
-      <FormPageShell
-        title="Claim a location"
-        description="Sign in or create an account to manage a listing you represent."
-      >
-        <div className="space-y-4 rounded-2xl border border-border bg-surface-elevated p-6">
-          <p className="text-sm text-ink-secondary">
-            We verify affiliation before granting edit access. Create a free account to start a
-            claim request.
+    const authRedirect = encodeURIComponent(claimPath);
+
+    return wrap(
+      "Claim a location",
+      "Create an account first, then tell us how you’re affiliated. We verify before granting edit access.",
+      <div className="space-y-4 rounded-2xl border border-border bg-surface-elevated p-6">
+        {initialPlaceName && (
+          <p className="text-sm font-medium text-ink">
+            Claiming: <span className="text-ink-secondary">{initialPlaceName}</span>
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/signup?redirect=/claim" className={submitButtonClassName}>
-              Create account
-            </Link>
-            <Link
-              href="/login?redirect=/claim"
-              className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted"
-            >
-              Sign in
-            </Link>
-          </div>
+        )}
+        <p className="text-sm text-ink-secondary">
+          Already in the directory? Claim it after you sign in. Not listed yet? You can{" "}
+          <Link
+            href={`/signup?redirect=${encodeURIComponent("/manage/places/new")}`}
+            className="font-medium text-brand hover:underline"
+          >
+            add a new location
+          </Link>{" "}
+          instead.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link href={`/signup?redirect=${authRedirect}`} className={submitButtonClassName}>
+            Create account
+          </Link>
+          <Link
+            href={`/login?redirect=${authRedirect}`}
+            className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted"
+          >
+            Sign in
+          </Link>
         </div>
-      </FormPageShell>
+      </div>,
     );
   }
 
   if (submitted) {
-    return (
-      <FormPageShell
-        title="Claim submitted"
-        description="We’ll review your request and email you when it’s approved."
-      >
+    return wrap(
+      "Claim submitted",
+      "We’ll review your request and email you when it’s approved.",
+      <>
         <p className="text-base leading-relaxed text-ink-secondary">
           Thank you. Once verified, you&apos;ll be able to edit{" "}
-          <strong className="font-medium text-ink">{selected?.name}</strong> from your dashboard.
+          <strong className="font-medium text-ink">{selected?.name}</strong> from Place Listings.
         </p>
         <Link href="/manage" className={`${submitButtonClassName} mt-6 inline-flex`}>
-          Go to dashboard
+          Back to Place Listings
         </Link>
-      </FormPageShell>
+      </>,
     );
   }
 
-  return (
-    <FormPageShell
-      title="Claim a location"
-      description="Search for your center, then tell us about your role. We verify affiliation before granting edit access."
-    >
-      <form className="space-y-6" onSubmit={handleSubmit}>
-        <section className="space-y-3">
-          <FormField id="claim-search" label="Find your location">
-            <input
-              id="claim-search"
-              type="search"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
+  return wrap(
+    "Claim a location",
+    "Search for a listing that’s already in the directory. If yours isn’t listed, add a new location instead.",
+    <form className="space-y-6" onSubmit={handleSubmit}>
+      <section className="space-y-3">
+        <FormField id="claim-search" label="Find your location">
+          <input
+            id="claim-search"
+            type="search"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelected(null);
+            }}
+            className={fieldClassName}
+            placeholder="Search by name, city, or address"
+            autoComplete="off"
+          />
+        </FormField>
+
+        {searching && <p className="text-sm text-ink-muted">Searching…</p>}
+
+        {!searching && results.length > 0 && !selected && (
+          <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface-elevated">
+            {results.map((place) => (
+              <li key={place.id}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelected(place);
+                    setQuery(place.name);
+                    setResults([]);
+                  }}
+                  className="block w-full px-4 py-3 text-left transition hover:bg-surface-muted"
+                >
+                  <p className="font-medium text-ink">{place.name}</p>
+                  <p className="mt-0.5 text-sm text-ink-muted">
+                    {[place.type, place.tradition, place.address].filter(Boolean).join(" · ")}
+                  </p>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {!selected && results.length < searchTotal && !searching && (
+          <button
+            type="button"
+            onClick={() => void runSearch(query, searchPage + 1, true)}
+            className="text-sm font-medium text-brand hover:underline"
+          >
+            Load more results ({results.length} of {searchTotal})
+          </button>
+        )}
+
+        {selected && (
+          <div className="flex items-start justify-between gap-3 rounded-xl border border-brand/30 bg-brand/5 px-4 py-3">
+            <div>
+              <p className="text-sm font-medium text-ink">{selected.name}</p>
+              {selected.address && (
+                <p className="mt-0.5 text-sm text-ink-muted">{selected.address}</p>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
                 setSelected(null);
+                setQuery("");
               }}
+              className="text-sm font-medium text-brand hover:underline"
+            >
+              Change
+            </button>
+          </div>
+        )}
+
+        {!selected && query.trim().length >= 2 && !searching && results.length === 0 && (
+          <div className="rounded-xl border border-border bg-surface-muted/50 px-4 py-3 text-sm text-ink-secondary">
+            No match found.{" "}
+            <Link href="/manage/places/new" className="font-medium text-brand hover:underline">
+              Add a new location
+            </Link>{" "}
+            instead.
+          </div>
+        )}
+      </section>
+
+      {selected && (
+        <>
+          <FormField id="claim-role" label="Your role">
+            <input
+              id="claim-role"
+              name="affiliationRole"
+              type="text"
+              required
               className={fieldClassName}
-              placeholder="Search by name, city, or address"
-              autoComplete="off"
+              placeholder="Director, resident, authorized teacher, etc."
             />
           </FormField>
 
-          {searching && <p className="text-sm text-ink-muted">Searching…</p>}
+          <FormField id="claim-message" label="How are you affiliated?">
+            <textarea
+              id="claim-message"
+              name="message"
+              rows={4}
+              required
+              minLength={10}
+              className={`${fieldClassName} resize-y`}
+              placeholder="Tell us about your connection to this place — we use this to verify your claim."
+            />
+          </FormField>
+        </>
+      )}
 
-          {!searching && results.length > 0 && !selected && (
-            <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface-elevated">
-              {results.map((place) => (
-                <li key={place.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelected(place);
-                      setQuery(place.name);
-                      setResults([]);
-                    }}
-                    className="block w-full px-4 py-3 text-left transition hover:bg-surface-muted"
-                  >
-                    <p className="font-medium text-ink">{place.name}</p>
-                    <p className="mt-0.5 text-sm text-ink-muted">
-                      {[place.type, place.tradition, place.address].filter(Boolean).join(" · ")}
-                    </p>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+      {error && (
+        <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
 
-          {!selected && results.length < searchTotal && !searching && (
-            <button
-              type="button"
-              onClick={() => void runSearch(query, searchPage + 1, true)}
-              className="text-sm font-medium text-brand hover:underline"
-            >
-              Load more results ({results.length} of {searchTotal})
-            </button>
-          )}
-
-          {selected && (
-            <div className="flex items-start justify-between gap-3 rounded-xl border border-brand/30 bg-brand/5 px-4 py-3">
-              <div>
-                <p className="text-sm font-medium text-ink">{selected.name}</p>
-                {selected.address && (
-                  <p className="mt-0.5 text-sm text-ink-muted">{selected.address}</p>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelected(null);
-                  setQuery("");
-                }}
-                className="text-sm font-medium text-brand hover:underline"
-              >
-                Change
-              </button>
-            </div>
-          )}
-
-          {!selected && query.trim().length >= 2 && !searching && results.length === 0 && (
-            <div className="rounded-xl border border-border bg-surface-muted/50 px-4 py-3 text-sm text-ink-secondary">
-              No match found.{" "}
-              <Link href="/manage/places/new" className="font-medium text-brand hover:underline">
-                Add a new location
-              </Link>{" "}
-              instead.
-            </div>
-          )}
-        </section>
-
-        {selected && (
-          <>
-            <FormField id="claim-role" label="Your role">
-              <input
-                id="claim-role"
-                name="affiliationRole"
-                type="text"
-                required
-                className={fieldClassName}
-                placeholder="Director, resident, authorized teacher, etc."
-              />
-            </FormField>
-
-            <FormField id="claim-message" label="How are you affiliated?">
-              <textarea
-                id="claim-message"
-                name="message"
-                rows={4}
-                required
-                minLength={10}
-                className={`${fieldClassName} resize-y`}
-                placeholder="Tell us about your connection to this place — we use this to verify your claim."
-              />
-            </FormField>
-          </>
-        )}
-
-        {error && (
-          <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {error}
-          </p>
-        )}
-
-        {selected && (
-          <button type="submit" disabled={submitting} className={submitButtonClassName}>
-            {submitting ? "Submitting…" : "Submit claim request"}
-          </button>
-        )}
-      </form>
-    </FormPageShell>
+      {selected && (
+        <button type="submit" disabled={submitting} className={submitButtonClassName}>
+          {submitting ? "Submitting…" : "Submit claim request"}
+        </button>
+      )}
+    </form>,
   );
 }

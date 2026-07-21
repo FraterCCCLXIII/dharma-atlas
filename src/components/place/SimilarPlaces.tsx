@@ -52,7 +52,8 @@ export function SimilarPlaces({
                       src={photos[0]}
                       alt=""
                       fill
-                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      quality={65}
+                      sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 92vw"
                       className="rounded-xl object-cover"
                     />
                   ) : null}

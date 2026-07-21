@@ -9,8 +9,15 @@ export default async function EditPlacePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const place = await getPlaceById(id, { includeDrafts: true });
+  const place = await getPlaceById(id, { includeDrafts: true, includeDeleted: true });
   if (!place) notFound();
 
-  return <PlaceForm mode="edit" initial={placeToInput(place)} initialPhotos={place.photos ?? []} />;
+  return (
+    <PlaceForm
+      mode="edit"
+      initial={placeToInput(place)}
+      initialPhotos={place.photos ?? []}
+      isDeleted={Boolean(place.deletedAt)}
+    />
+  );
 }

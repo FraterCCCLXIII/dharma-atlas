@@ -120,6 +120,13 @@
       "when": 1784652974821,
       "tag": "0016_places_draft_name_idx",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1784700000000,
+      "tag": "0017_places_soft_delete",
+      "breakpoints": true
     }
   ]
 }

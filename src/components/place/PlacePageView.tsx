@@ -13,8 +13,8 @@ import { DetailPageActions } from "@/components/report/ReportEntryModal";
 import { placeDisplayDescription } from "@/lib/place-description";
 import { getPlaceMapsUrls } from "@/lib/place-maps";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
-import { getSchools, traditionGradient } from "@/lib/places";
-import { schoolLabel } from "@/lib/schools";
+import { traditionGradient } from "@/lib/places";
+import { getPlaceDisplayTags } from "@/lib/schools";
 import type { Place } from "@/types/place";
 import { PlaceContactDetails } from "@/components/place/PlaceContactDetails";
 import { PlaceHours } from "@/components/place/PlaceHours";
@@ -49,7 +49,7 @@ export function PlacePageView({
 }: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
   const gradient = traditionGradient(place.tradition);
-  const schools = getSchools(place);
+  const displayTags = getPlaceDisplayTags(place);
   const aboutText = placeDisplayDescription(place);
   const photos = getPlaceDisplayPhotos(place, traditionDefaultImages);
   const showPhotoGrid = photos.length > 1;
@@ -66,7 +66,8 @@ export function PlacePageView({
                   alt={place.name}
                   fill
                   priority
-                  sizes="(min-width: 1024px) 40vw, 50vw"
+                  quality={65}
+                  sizes="(min-width: 1152px) 560px, 50vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
@@ -85,7 +86,8 @@ export function PlacePageView({
                       src={photos[index]}
                       alt={`${place.name} photo ${index + 1}`}
                       fill
-                      sizes="(min-width: 1024px) 20vw, 25vw"
+                      quality={65}
+                      sizes="(min-width: 1152px) 280px, 25vw"
                       className="object-cover"
                     />
                   </div>
@@ -110,7 +112,8 @@ export function PlacePageView({
                   alt={place.name}
                   fill
                   priority
-                  sizes="(min-width: 1024px) 80vw, 100vw"
+                  quality={65}
+                  sizes="(min-width: 1152px) 1100px, 100vw"
                   className="object-cover"
                 />
               ) : null}
@@ -126,24 +129,19 @@ export function PlacePageView({
         <div className="mb-6 flex items-start justify-between gap-4">
           <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent">
-              {place.type}
-            </span>
-            <span className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-ink-secondary">
-              {place.tradition}
-            </span>
-            {schools.map((school) => (
-              <span
-                key={school}
-                className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-medium text-ink-secondary"
-              >
-                {schoolLabel(school)}
-              </span>
-            ))}
-            <span className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-ink-secondary">
-              {place.faith}
-            </span>
-          </div>
+              {displayTags.map((tag) => (
+                <span
+                  key={tag.key}
+                  className={
+                    tag.kind === "type"
+                      ? "rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent"
+                      : "rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-ink-secondary"
+                  }
+                >
+                  {tag.label}
+                </span>
+              ))}
+            </div>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {place.name}
           </h1>

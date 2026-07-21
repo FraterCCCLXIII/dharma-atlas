@@ -69,7 +69,10 @@ export async function deleteAdminPlace(id: string) {
     throw new Error("Place not found");
   }
 
-  await db.delete(places).where(eq(places.id, id));
+  await db
+    .update(places)
+    .set({ deletedAt: new Date(), updatedAt: new Date() })
+    .where(eq(places.id, id));
   return { id, deleted: true };
 }
 

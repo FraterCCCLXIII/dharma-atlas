@@ -1,6 +1,6 @@
 import "server-only";
 
-import { count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import { db } from "@/db/client";
 import { submissions } from "@/db/schema";
 
@@ -45,6 +45,27 @@ export async function getPendingSubmissionsCount() {
     .from(submissions)
     .where(eq(submissions.status, "pending"));
   return row?.count ?? 0;
+}
+
+export async function getPendingLocationSubmissionsCount() {
+  const [row] = await db
+    .select({ count: count() })
+    .from(submissions)
+    .where(
+      and(eq(submissions.status, "pending"), eq(submissions.entryType, "location")),
+    );
+  return row?.count ?? 0;
+}
+
+export async function getPendingLocationSubmissions(): Promise<Submission[]> {
+  const rows = await db
+    .select()
+    .from(submissions)
+    .where(
+      and(eq(submissions.status, "pending"), eq(submissions.entryType, "location")),
+    )
+    .orderBy(desc(submissions.createdAt));
+  return rows.map(rowToSubmission);
 }
 
 export async function getSubmissions(status?: SubmissionStatus): Promise<Submission[]> {

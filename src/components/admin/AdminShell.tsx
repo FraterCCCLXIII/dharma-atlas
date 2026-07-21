@@ -11,6 +11,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard", exact: true },
   { href: "/admin/teachers", label: "Teachers" },
   { href: "/admin/places", label: "Locations" },
+  { href: "/admin/location-reviews", label: "Location reviews" },
   { href: "/admin/ontology", label: "Ontology" },
   { href: "/admin/submissions", label: "Submissions" },
   { href: "/admin/claims", label: "Claims" },
@@ -23,6 +24,7 @@ export function AdminShell({
   pendingSubmissions,
   pendingClaims,
   pendingReports,
+  pendingLocationReviews = 0,
   userEmail,
   isOwner = false,
 }: {
@@ -30,6 +32,7 @@ export function AdminShell({
   pendingSubmissions: number;
   pendingClaims: number;
   pendingReports: number;
+  pendingLocationReviews?: number;
   userEmail: string;
   isOwner?: boolean;
 }) {
@@ -52,7 +55,7 @@ export function AdminShell({
         }`}
       >
         <div className="mb-8 px-2">
-          <SiteLogo variant="wordmark" />
+          <SiteLogo variant="wordmark" size="sm" />
           <p className="mt-3 font-display text-lg font-semibold">Admin</p>
         </div>
 
@@ -62,6 +65,11 @@ export function AdminShell({
             .map((item) => (
               <AdminNavLink key={item.href} href={item.href} exact={item.exact}>
                 {item.label}
+                {item.href === "/admin/location-reviews" && pendingLocationReviews > 0 && (
+                  <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[11px] font-semibold text-brand-foreground">
+                    {pendingLocationReviews}
+                  </span>
+                )}
                 {item.href === "/admin/submissions" && pendingSubmissions > 0 && (
                   <span className="ml-auto rounded-full bg-brand px-2 py-0.5 text-[11px] font-semibold text-brand-foreground">
                     {pendingSubmissions}

@@ -2,9 +2,9 @@ import "server-only";
 
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
-import { count, eq, ilike, or, and, sql, type SQL } from "drizzle-orm";
+import { count, desc, eq, ilike, isNotNull, isNull, or, and, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
-import { places } from "@/db/schema";
+import { placeMemberships, places, user } from "@/db/schema";
 import { isPlaceInMapBounds, type MapBounds } from "@/lib/coords";
 import { getOntologySnapshot } from "@/lib/data/ontology";
 import { attachPhotosToPlace } from "@/lib/data/place-photos";
@@ -14,12 +14,13 @@ import { rowToPlace, rowToPlaceMarker } from "@/lib/place-row";
 import { setOntologySnapshot } from "@/lib/schools";
 import type { Faith, Place, PlaceMarker, PlaceType } from "@/types/place";
 
-const publishedOnly = eq(places.isDraft, false);
+const notDeleted = isNull(places.deletedAt);
+const publishedOnly = and(eq(places.isDraft, false), notDeleted)!;
 
 export const EXPLORE_MARKERS_CACHE_TAG = "explore-markers";
 
 export async function getPlacesCount() {
-  const [row] = await db.select({ count: count() }).from(places);
+  const [row] = await db.select({ count: count() }).from(places).where(notDeleted);
   return row?.count ?? 0;
 }
 
@@ -67,7 +68,7 @@ export const getCachedPlaceMarkers = unstable_cache(
 );
 
 export async function getAllPlacesForAdmin(): Promise<Place[]> {
-  const rows = await db.select().from(places).orderBy(places.name);
+  const rows = await db.select().from(places).where(notDeleted).orderBy(places.name);
   return rows.map(rowToPlace);
 }
 
@@ -83,10 +84,11 @@ export async function getAllPlaceIds(): Promise<string[]> {
 // a single fetch (and its photo join) within one request instead of running it twice.
 export const getPlaceById = cache(async (
   id: string,
-  options?: { includeDrafts?: boolean },
+  options?: { includeDrafts?: boolean; includeDeleted?: boolean },
 ): Promise<Place | null> => {
   const [row] = await db.select().from(places).where(eq(places.id, id)).limit(1);
   if (!row) return null;
+  if (row.deletedAt && !options?.includeDeleted) return null;
   if (row.isDraft && !options?.includeDrafts) return null;
   return attachPhotosToPlace(rowToPlace(row));
 });
@@ -97,6 +99,8 @@ export async function searchPlaces(options: {
   pageSize?: number;
   publishedOnly?: boolean;
   qualityFlag?: string;
+  /** When true, only soft-deleted places. Default excludes deleted. */
+  deletedOnly?: boolean;
 }) {
   const page = options.page ?? 1;
   const pageSize = options.pageSize ?? 50;
@@ -104,7 +108,9 @@ export async function searchPlaces(options: {
   const q = options.query?.trim();
 
   const filters: SQL[] = [];
-  if (options.publishedOnly) filters.push(publishedOnly);
+  if (options.deletedOnly) filters.push(isNotNull(places.deletedAt));
+  else filters.push(notDeleted);
+  if (options.publishedOnly) filters.push(eq(places.isDraft, false));
   if (options.qualityFlag?.trim()) {
     filters.push(sql`${places.qualityFlags} @> ARRAY[${options.qualityFlag.trim()}]::text[]`);
   }
@@ -211,8 +217,93 @@ export async function getPublishRequestedCount() {
   const [row] = await db
     .select({ count: count() })
     .from(places)
-    .where(sql`${places.publishRequestedAt} IS NOT NULL AND ${places.isDraft} = true`);
+    .where(
+      and(
+        notDeleted,
+        sql`${places.publishRequestedAt} IS NOT NULL AND ${places.isDraft} = true`,
+      ),
+    );
   return row?.count ?? 0;
+}
+
+export async function getDraftPlacesCount() {
+  const [row] = await db
+    .select({ count: count() })
+    .from(places)
+    .where(and(eq(places.isDraft, true), notDeleted));
+  return row?.count ?? 0;
+}
+
+export async function getDeletedPlacesCount() {
+  const [row] = await db
+    .select({ count: count() })
+    .from(places)
+    .where(isNotNull(places.deletedAt));
+  return row?.count ?? 0;
+}
+
+export type DraftPlaceReview = Place & {
+  ownerEmail: string | null;
+  ownerName: string | null;
+  createdAt: string;
+};
+
+function mapPlaceReviews(
+  rows: {
+    place: typeof places.$inferSelect;
+    ownerEmail: string | null;
+    ownerName: string | null;
+  }[],
+): DraftPlaceReview[] {
+  const byId = new Map<string, DraftPlaceReview>();
+  for (const row of rows) {
+    if (byId.has(row.place.id)) continue;
+    byId.set(row.place.id, {
+      ...rowToPlace(row.place),
+      ownerEmail: row.ownerEmail,
+      ownerName: row.ownerName,
+      createdAt: row.place.createdAt.toISOString(),
+    });
+  }
+  return [...byId.values()];
+}
+
+/** Draft listings awaiting admin review / publish, newest and publish-requested first. */
+export async function getDraftPlacesForReview(): Promise<DraftPlaceReview[]> {
+  const rows = await db
+    .select({
+      place: places,
+      ownerEmail: user.email,
+      ownerName: user.name,
+    })
+    .from(places)
+    .leftJoin(placeMemberships, eq(placeMemberships.placeId, places.id))
+    .leftJoin(user, eq(user.id, placeMemberships.userId))
+    .where(and(eq(places.isDraft, true), notDeleted))
+    .orderBy(
+      sql`CASE WHEN ${places.publishRequestedAt} IS NULL THEN 1 ELSE 0 END`,
+      desc(places.publishRequestedAt),
+      desc(places.createdAt),
+    );
+
+  return mapPlaceReviews(rows);
+}
+
+/** Soft-deleted listings retained for admin restore or permanent delete. */
+export async function getDeletedPlacesForReview(): Promise<DraftPlaceReview[]> {
+  const rows = await db
+    .select({
+      place: places,
+      ownerEmail: user.email,
+      ownerName: user.name,
+    })
+    .from(places)
+    .leftJoin(placeMemberships, eq(placeMemberships.placeId, places.id))
+    .leftJoin(user, eq(user.id, placeMemberships.userId))
+    .where(isNotNull(places.deletedAt))
+    .orderBy(desc(places.deletedAt));
+
+  return mapPlaceReviews(rows);
 }
 
 export async function getSimilarPlaces(place: Place, limit = 4): Promise<Place[]> {

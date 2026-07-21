@@ -26,7 +26,7 @@ export default async function LoginPage({
             Sign in
           </h1>
           <p className="mt-2 text-sm text-ink-secondary">
-            Manage your center&apos;s listing or continue a claim request.
+            Continue a claim, add a new location, or edit listings you manage.
           </p>
         </div>
         <AuthForm

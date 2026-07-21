@@ -47,10 +47,15 @@ export const places = pgTable(
     googlePrimaryType: text("google_primary_type"),
     isDraft: boolean("is_draft").notNull().default(false),
     publishRequestedAt: timestamp("publish_requested_at", { withTimezone: true }),
+    /** Soft-delete timestamp; null means active. */
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [index("places_draft_name_idx").on(table.isDraft, table.name)],
+  (table) => [
+    index("places_draft_name_idx").on(table.isDraft, table.name),
+    index("places_deleted_at_idx").on(table.deletedAt),
+  ],
 );
 
 export const placePhotos = pgTable(

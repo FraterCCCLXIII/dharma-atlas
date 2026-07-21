@@ -1,24 +1,42 @@
 import Link from "next/link";
-import { getPlacesCount, getPublishRequestedCount } from "@/lib/data/places";
+import { getDraftPlacesCount, getPlacesCount } from "@/lib/data/places";
 import { getTeachersCount } from "@/lib/data/teachers";
 import { getPendingClaimsCount } from "@/lib/data/claims";
 import { getPendingReportsCount } from "@/lib/data/reports";
-import { getPendingSubmissionsCount } from "@/lib/data/submissions";
+import {
+  getPendingLocationSubmissionsCount,
+  getPendingSubmissionsCount,
+} from "@/lib/data/submissions";
 
 export default async function AdminDashboardPage() {
-  const [teacherCount, placeCount, pendingSubmissions, pendingClaims, pendingReports, publishRequests] =
-    await Promise.all([
+  const [
+    teacherCount,
+    placeCount,
+    pendingSubmissions,
+    pendingClaims,
+    pendingReports,
+    draftPlaces,
+    pendingLocationSuggestions,
+  ] = await Promise.all([
     getTeachersCount(),
     getPlacesCount(),
     getPendingSubmissionsCount(),
     getPendingClaimsCount(),
     getPendingReportsCount(),
-    getPublishRequestedCount(),
+    getDraftPlacesCount(),
+    getPendingLocationSubmissionsCount(),
   ]);
+
+  const locationReviews = draftPlaces + pendingLocationSuggestions;
 
   const cards = [
     { label: "Teachers", count: teacherCount, href: "/admin/teachers" },
     { label: "Locations", count: placeCount, href: "/admin/places" },
+    {
+      label: "Location reviews",
+      count: locationReviews,
+      href: "/admin/location-reviews",
+    },
     {
       label: "Pending submissions",
       count: pendingSubmissions,
@@ -28,11 +46,6 @@ export default async function AdminDashboardPage() {
       label: "Pending claims",
       count: pendingClaims,
       href: "/admin/claims",
-    },
-    {
-      label: "Publish requests",
-      count: publishRequests,
-      href: "/admin/places?draft=1",
     },
     {
       label: "Pending reports",

@@ -99,13 +99,88 @@ export async function updatePlaceAction(originalId: string, input: PlaceInput) {
   redirect("/admin/places");
 }
 
+/** Soft-delete from admin edit — retained for restore or permanent delete. */
 export async function deletePlaceAction(id: string) {
+  await requirePermission("place", "delete");
+  await db
+    .update(places)
+    .set({ deletedAt: new Date(), updatedAt: new Date() })
+    .where(eq(places.id, id));
+
+  revalidatePath("/");
+  revalidatePath("/places");
+  revalidatePath(`/place/${id}`);
+  revalidatePath("/admin/places");
+  revalidatePath("/admin/location-reviews");
+  revalidatePath("/manage");
+  revalidateExploreMarkers();
+  redirect("/admin/location-reviews");
+}
+
+export async function restorePlaceAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) throw new Error("Invalid place id");
+
+  await requirePermission("place", "update");
+  await db
+    .update(places)
+    .set({ deletedAt: null, updatedAt: new Date() })
+    .where(eq(places.id, id));
+
+  revalidatePath("/");
+  revalidatePath("/places");
+  revalidatePath(`/place/${id}`);
+  revalidatePath("/admin/places");
+  revalidatePath("/admin/location-reviews");
+  revalidatePath("/manage");
+  revalidateExploreMarkers();
+  redirect("/admin/location-reviews");
+}
+
+/** Irreversible hard delete. */
+export async function permanentlyDeletePlaceAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) throw new Error("Invalid place id");
+
   await requirePermission("place", "delete");
   await db.delete(places).where(eq(places.id, id));
 
   revalidatePath("/");
   revalidatePath("/places");
+  revalidatePath(`/place/${id}`);
   revalidatePath("/admin/places");
+  revalidatePath("/admin/location-reviews");
+  revalidatePath("/manage");
   revalidateExploreMarkers();
-  redirect("/admin/places");
+  redirect("/admin/location-reviews");
+}
+
+export async function publishDraftPlaceAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) throw new Error("Invalid place id");
+
+  await requirePermission("place", "update");
+  const [row] = await db.select().from(places).where(eq(places.id, id)).limit(1);
+  if (!row) throw new Error("Place not found");
+  if (row.deletedAt || !row.isDraft) {
+    redirect("/admin/location-reviews");
+  }
+
+  await db
+    .update(places)
+    .set({
+      isDraft: false,
+      publishRequestedAt: null,
+      updatedAt: new Date(),
+    })
+    .where(eq(places.id, id));
+
+  revalidatePath("/");
+  revalidatePath("/places");
+  revalidatePath(`/place/${id}`);
+  revalidatePath("/admin/places");
+  revalidatePath("/admin/location-reviews");
+  revalidatePath("/manage");
+  revalidateExploreMarkers();
+  redirect("/admin/location-reviews");
 }

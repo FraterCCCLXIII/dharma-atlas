@@ -1,4 +1,4 @@
-import type { Place } from "@/types/place";
+import type { Faith, Place } from "@/types/place";
 import type { LineageSchoolDef, OntologySnapshot, PlaceTraditionPickerOption } from "@/types/ontology";
 import { DEFAULT_ONTOLOGY_SNAPSHOT } from "@/lib/ontology/defaults";
 
@@ -111,6 +111,462 @@ export function isKnownPlaceTradition(value: string): boolean {
   return getActiveOntologySnapshot().placeTraditionPickerOptions.some(
     (option) => option.value === trimmed,
   );
+}
+
+/** Place listing lineage fields driven by the consolidated picker. */
+export type PlaceLineageValue = {
+  faith: Faith;
+  tradition: string;
+  schools: string[];
+};
+
+export type PlaceLineagePickerOption = {
+  /** Stable select value, e.g. `subschool:nyingma`. */
+  key: string;
+  kind: "buddhist_root" | "lineage" | "subschool" | "other";
+  label: string;
+  /** Indent depth for hierarchical select rendering. */
+  depth: number;
+  value: PlaceLineageValue;
+};
+
+export type PlaceLineageChip = {
+  key: string;
+  label: string;
+};
+
+/** Faith for non-Buddhist ontology roots (app only has Buddhist | Hindu). */
+function faithForOtherTradition(filterId: string): Faith {
+  return filterId === "Buddhist" ? "Buddhist" : "Hindu";
+}
+
+/** Full ontology tree for place lineage picking (not filtered by entity presence). */
+export function getPlaceLineagePickerOptions(): PlaceLineagePickerOption[] {
+  const snapshot = getActiveOntologySnapshot();
+  const options: PlaceLineagePickerOption[] = [];
+
+  options.push({
+    key: `buddhist_root:${snapshot.buddhistRoot.filterId}`,
+    kind: "buddhist_root",
+    label: snapshot.buddhistRoot.label,
+    depth: 0,
+    value: {
+      faith: "Buddhist",
+      tradition: snapshot.buddhistRoot.filterId,
+      schools: [],
+    },
+  });
+
+  for (const school of snapshot.lineageSchools) {
+    const tradition =
+      school.placeTraditions[0]?.trim() || school.id || school.label;
+    options.push({
+      key: `lineage:${school.id}`,
+      kind: "lineage",
+      label: school.label,
+      depth: 1,
+      value: {
+        faith: "Buddhist",
+        tradition,
+        schools: [],
+      },
+    });
+
+    const subschools = getSubschoolSlugsForLineageSchool(school.slug).sort((a, b) =>
+      subschoolLabel(a).localeCompare(subschoolLabel(b)),
+    );
+    for (const slug of subschools) {
+      options.push({
+        key: `subschool:${slug}`,
+        kind: "subschool",
+        label: subschoolLabel(slug),
+        depth: 2,
+        value: {
+          faith: "Buddhist",
+          tradition,
+          schools: [slug],
+        },
+      });
+    }
+  }
+
+  for (const other of snapshot.otherTraditions) {
+    options.push({
+      key: `other:${other.filterId}`,
+      kind: "other",
+      label: other.label,
+      depth: 0,
+      value: {
+        faith: faithForOtherTradition(other.filterId),
+        tradition: other.filterId,
+        schools: [],
+      },
+    });
+  }
+
+  return options;
+}
+
+export type PlaceLineageSelectionChip = PlaceLineageChip & {
+  /** Full upstream path label, e.g. "Buddhism › Tibetan › Nyingma". */
+  pathLabel: string;
+};
+
+function lineageSchoolForTradition(tradition: string): LineageSchoolDef | undefined {
+  const snapshot = getActiveOntologySnapshot();
+  return (
+    getLineageSchoolById(tradition) ??
+    snapshot.lineageSchools.find((school) =>
+      school.placeTraditions.some(
+        (placeTradition) => placeTradition.toLowerCase() === tradition.toLowerCase(),
+      ),
+    )
+  );
+}
+
+function pathLabelForKeys(keys: string[]): string {
+  const options = getPlaceLineagePickerOptions();
+  return keys
+    .map((key) => options.find((option) => option.key === key)?.label ?? key)
+    .join(" › ");
+}
+
+/**
+ * One removable chip per selected leaf (subschool, lineage-only, other, or custom).
+ * Upstream parents are included in the path label.
+ */
+export function getPlaceLineageSelectionChips(
+  value: PlaceLineageValue,
+): PlaceLineageSelectionChip[] {
+  const snapshot = getActiveOntologySnapshot();
+  const chips: PlaceLineageSelectionChip[] = [];
+  const tradition = value.tradition.trim();
+  const schools = [...new Set(value.schools ?? [])];
+  const buddhistRootKey = `buddhist_root:${snapshot.buddhistRoot.filterId}`;
+
+  for (const slug of schools) {
+    const parentId = getSubschoolParentSchoolId(slug);
+    const lineage = parentId ? getLineageSchoolById(parentId) : undefined;
+    const keys = [buddhistRootKey];
+    if (lineage) keys.push(`lineage:${lineage.id}`);
+    keys.push(`subschool:${slug}`);
+    chips.push({
+      key: `subschool:${slug}`,
+      label: subschoolLabel(slug),
+      pathLabel: pathLabelForKeys(keys),
+    });
+  }
+
+  const lineage = lineageSchoolForTradition(tradition);
+  const schoolsCoverLineage =
+    lineage &&
+    schools.some((slug) => getSubschoolParentSchoolId(slug) === lineage.id);
+
+  if (
+    lineage &&
+    !schoolsCoverLineage &&
+    tradition &&
+    tradition !== snapshot.buddhistRoot.filterId
+  ) {
+    const keys = [buddhistRootKey, `lineage:${lineage.id}`];
+    chips.push({
+      key: `lineage:${lineage.id}`,
+      label: lineage.label,
+      pathLabel: pathLabelForKeys(keys),
+    });
+  }
+
+  if (
+    tradition &&
+    tradition !== snapshot.buddhistRoot.filterId &&
+    !lineage &&
+    schools.length === 0
+  ) {
+    const other = snapshot.otherTraditions.find((entry) => entry.filterId === tradition);
+    chips.push({
+      key: other ? `other:${other.filterId}` : `custom:${tradition}`,
+      label: other?.label ?? tradition,
+      pathLabel: other?.label ?? tradition,
+    });
+  }
+
+  if (
+    chips.length === 0 &&
+    tradition === snapshot.buddhistRoot.filterId
+  ) {
+    chips.push({
+      key: buddhistRootKey,
+      label: snapshot.buddhistRoot.label,
+      pathLabel: snapshot.buddhistRoot.label,
+    });
+  }
+
+  return chips;
+}
+
+/** @deprecated Use getPlaceLineageSelectionChips */
+export function getPlaceLineageChips(value: PlaceLineageValue): PlaceLineageChip[] {
+  return getPlaceLineageSelectionChips(value).map(({ key, label }) => ({ key, label }));
+}
+
+/** Keys already represented in the current value (disabled in the add list). */
+export function getSelectedPlaceLineageKeys(value: PlaceLineageValue): string[] {
+  const snapshot = getActiveOntologySnapshot();
+  const keys = new Set(getPlaceLineageSelectionChips(value).map((chip) => chip.key));
+
+  for (const slug of value.schools ?? []) {
+    keys.add(`subschool:${slug}`);
+    const parentId = getSubschoolParentSchoolId(slug);
+    if (parentId) keys.add(`lineage:${parentId}`);
+    keys.add(`buddhist_root:${snapshot.buddhistRoot.filterId}`);
+  }
+
+  const lineage = lineageSchoolForTradition(value.tradition);
+  if (lineage) {
+    keys.add(`lineage:${lineage.id}`);
+    keys.add(`buddhist_root:${snapshot.buddhistRoot.filterId}`);
+  }
+
+  if (value.tradition === snapshot.buddhistRoot.filterId) {
+    keys.add(`buddhist_root:${snapshot.buddhistRoot.filterId}`);
+  }
+
+  return [...keys];
+}
+
+/** Merge a picker option into the current multi-selection. */
+export function addPlaceLineageSelection(
+  current: PlaceLineageValue,
+  option: PlaceLineagePickerOption,
+): PlaceLineageValue {
+  const schools = new Set(current.schools ?? []);
+
+  if (option.kind === "subschool") {
+    for (const slug of option.value.schools) schools.add(slug);
+    const nextTradition =
+      current.tradition.trim() && current.tradition !== getActiveOntologySnapshot().buddhistRoot.filterId
+        ? current.tradition
+        : option.value.tradition;
+    return {
+      faith: "Buddhist",
+      tradition: nextTradition || option.value.tradition,
+      schools: [...schools].sort(),
+    };
+  }
+
+  if (option.kind === "lineage") {
+    // Already covered by a selected subschool under this lineage — no-op.
+    const lineageId = option.key.replace(/^lineage:/, "");
+    const covered = [...schools].some(
+      (slug) => getSubschoolParentSchoolId(slug) === lineageId,
+    );
+    if (covered) return current;
+
+    if (!current.tradition.trim() || current.tradition === getActiveOntologySnapshot().buddhistRoot.filterId) {
+      return {
+        faith: "Buddhist",
+        tradition: option.value.tradition,
+        schools: [...schools].sort(),
+      };
+    }
+
+    // Keep primary tradition; lineage-only extras aren't stored beyond schools.
+    // If primary was an other/custom, prefer Buddhist lineage as primary when adding one.
+    if (!isBuddhistPlaceTradition(current.tradition) && current.faith !== "Buddhist") {
+      return {
+        faith: "Buddhist",
+        tradition: option.value.tradition,
+        schools: [...schools].sort(),
+      };
+    }
+
+    return current;
+  }
+
+  if (option.kind === "buddhist_root") {
+    if (current.tradition.trim() || schools.size > 0) return current;
+    return option.value;
+  }
+
+  // other / treated as primary tradition when empty; otherwise ignore duplicate
+  if (!current.tradition.trim() && schools.size === 0) {
+    return option.value;
+  }
+  if (current.tradition === option.value.tradition) return current;
+  // Second non-Buddhist tradition: keep schools, switch primary only if no Buddhist schools
+  if (schools.size === 0 && !isBuddhistPlaceTradition(current.tradition)) {
+    return option.value;
+  }
+  return current;
+}
+
+export function removePlaceLineageSelection(
+  current: PlaceLineageValue,
+  key: string,
+): PlaceLineageValue {
+  const snapshot = getActiveOntologySnapshot();
+
+  if (key.startsWith("subschool:")) {
+    const slug = key.slice("subschool:".length);
+    const schools = (current.schools ?? []).filter((entry) => entry !== slug);
+    if (schools.length > 0) {
+      const parentId = getSubschoolParentSchoolId(schools[0]!);
+      const lineage = parentId ? getLineageSchoolById(parentId) : undefined;
+      return {
+        faith: "Buddhist",
+        tradition:
+          lineage?.placeTraditions[0] ??
+          lineage?.id ??
+          current.tradition,
+        schools,
+      };
+    }
+    if (
+      current.tradition &&
+      current.tradition !== snapshot.buddhistRoot.filterId &&
+      lineageSchoolForTradition(current.tradition)
+    ) {
+      return {
+        faith: "Buddhist",
+        tradition: current.tradition,
+        schools: [],
+      };
+    }
+    return { faith: current.faith, tradition: "", schools: [] };
+  }
+
+  if (key.startsWith("lineage:")) {
+    const lineageId = key.slice("lineage:".length);
+    const schools = (current.schools ?? []).filter(
+      (slug) => getSubschoolParentSchoolId(slug) !== lineageId,
+    );
+    if (schools.length > 0) {
+      const parentId = getSubschoolParentSchoolId(schools[0]!);
+      const lineage = parentId ? getLineageSchoolById(parentId) : undefined;
+      return {
+        faith: "Buddhist",
+        tradition: lineage?.placeTraditions[0] ?? lineage?.id ?? "Buddhist",
+        schools,
+      };
+    }
+    return { faith: current.faith, tradition: "", schools: [] };
+  }
+
+  if (key.startsWith("other:") || key.startsWith("custom:")) {
+    return { faith: current.faith, tradition: "", schools: current.schools ?? [] };
+  }
+
+  if (key.startsWith("buddhist_root:")) {
+    return { faith: "Buddhist", tradition: "", schools: [] };
+  }
+
+  return current;
+}
+
+export function addCustomPlaceLineageSelection(
+  current: PlaceLineageValue,
+  tradition: string,
+): PlaceLineageValue {
+  const trimmed = tradition.trim();
+  if (!trimmed) return current;
+  const next = placeLineageFromCustomTradition(trimmed, current.faith);
+  if (!current.tradition.trim() && (current.schools ?? []).length === 0) {
+    return next;
+  }
+  // Already have selections — custom becomes primary only when no schools yet
+  if ((current.schools ?? []).length === 0 && !isBuddhistPlaceTradition(current.tradition)) {
+    return next;
+  }
+  return current;
+}
+
+export function placeLineageFromCustomTradition(
+  tradition: string,
+  previousFaith: Faith = "Buddhist",
+): PlaceLineageValue {
+  const trimmed = tradition.trim();
+  if (!trimmed) {
+    return { faith: previousFaith, tradition: "", schools: [] };
+  }
+  if (isBuddhistPlaceTradition(trimmed)) {
+    return { faith: "Buddhist", tradition: trimmed, schools: [] };
+  }
+  return {
+    faith: faithForOtherTradition(trimmed),
+    tradition: trimmed,
+    schools: [],
+  };
+}
+
+export type PlaceDisplayTag = {
+  key: string;
+  label: string;
+  kind: "faith" | "lineage" | "school" | "type";
+};
+
+/**
+ * Public place tags in ontology order:
+ * faith → each lineage with its schools → other tradition → place type.
+ * Example: Buddhist, Tibetan, Kagyu, Zen, Sanbo Zen, Center
+ */
+export function getPlaceDisplayTags(
+  place: Pick<Place, "faith" | "tradition" | "schools" | "type" | "name">,
+): PlaceDisplayTag[] {
+  const tags: PlaceDisplayTag[] = [];
+  const seen = new Set<string>();
+
+  function push(key: string, label: string, kind: PlaceDisplayTag["kind"]) {
+    if (!label.trim() || seen.has(key)) return;
+    seen.add(key);
+    tags.push({ key, label, kind });
+  }
+
+  if (place.faith) {
+    push(`faith:${place.faith}`, place.faith, "faith");
+  }
+
+  const schoolSlugs = getSchools(place);
+  const selectedLineageIds = new Set<string>();
+
+  const traditionLineage = lineageSchoolForTradition(place.tradition);
+  if (traditionLineage) selectedLineageIds.add(traditionLineage.id);
+
+  for (const slug of schoolSlugs) {
+    const parentId = getSubschoolParentSchoolId(slug);
+    if (parentId) selectedLineageIds.add(parentId);
+  }
+
+  for (const lineage of getLineageSchools()) {
+    if (!selectedLineageIds.has(lineage.id)) continue;
+    push(`lineage:${lineage.id}`, lineage.label, "lineage");
+
+    const childSchools = schoolSlugs
+      .filter((slug) => getSubschoolParentSchoolId(slug) === lineage.id)
+      .sort((a, b) => subschoolLabel(a).localeCompare(subschoolLabel(b)));
+
+    for (const slug of childSchools) {
+      push(`school:${slug}`, subschoolLabel(slug), "school");
+    }
+  }
+
+  for (const slug of schoolSlugs) {
+    push(`school:${slug}`, subschoolLabel(slug), "school");
+  }
+
+  if (
+    place.tradition.trim() &&
+    place.tradition !== BUDDHIST_TRADITION_ID &&
+    !traditionLineage &&
+    place.tradition !== place.faith
+  ) {
+    push(`tradition:${place.tradition}`, place.tradition, "lineage");
+  }
+
+  if (place.type) {
+    push(`type:${place.type}`, place.type, "type");
+  }
+
+  return tags;
 }
 
 export function subschoolLabel(slug: string): string {

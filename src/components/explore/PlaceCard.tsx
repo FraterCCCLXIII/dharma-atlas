@@ -9,8 +9,8 @@ import {
 } from "@/lib/card-styles";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { isValidCoord } from "@/lib/coords";
-import { getSchools, traditionGradient } from "@/lib/places";
-import { schoolLabel } from "@/lib/schools";
+import { traditionGradient } from "@/lib/places";
+import { getPlaceDisplayTags } from "@/lib/schools";
 import { useExploreStore } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
 
@@ -31,7 +31,7 @@ export function PlaceCard({
   const isHovered = useExploreStore((s) => s.hoveredId === place.id);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
 
-  const schools = getSchools(place);
+  const displayTags = getPlaceDisplayTags(place).filter((tag) => tag.kind !== "type");
   const photos = getPlaceDisplayPhotos(place);
 
   return (
@@ -93,15 +93,12 @@ export function PlaceCard({
             </span>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
-            <span className="rounded-md bg-surface-muted px-2 py-0.5 font-medium">
-              {place.tradition}
-            </span>
-            {schools.map((school) => (
+            {displayTags.map((tag) => (
               <span
-                key={school}
-                className="rounded-md border border-border px-2 py-0.5 font-medium text-ink-muted"
+                key={tag.key}
+                className="rounded-md bg-surface-muted px-2 py-0.5 font-medium"
               >
-                {schoolLabel(school)}
+                {tag.label}
               </span>
             ))}
           </div>

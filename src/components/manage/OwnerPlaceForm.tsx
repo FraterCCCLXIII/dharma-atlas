@@ -3,22 +3,30 @@
 import Link from "next/link";
 import { useState } from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
-import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
+import { PlaceLineageField } from "@/components/forms/PlaceLineageField";
+import { getKnownSchoolSlugs } from "@/components/forms/SchoolTagsField";
 import {
   createMemberPlaceAction,
+  deleteMemberPlaceAction,
   requestPublishAction,
   updateOwnerPlaceAction,
 } from "@/app/manage/actions/places";
-import { faiths, placeTypes } from "@/lib/validations/place";
+import { placeTypes } from "@/lib/validations/place";
 import type { OwnerPlaceEditInput } from "@/lib/validations/owner-place";
+import type { PlaceLineageValue } from "@/lib/schools";
 import { PlacePhotosField } from "@/components/admin/PlacePhotosField";
 import type { Place } from "@/types/place";
 
 export function MemberCreatePlaceForm() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
-  const [faith, setFaith] = useState<(typeof faiths)[number]>("Buddhist");
-  const [tradition, setTradition] = useState("Buddhist");
+  const [name, setName] = useState("");
+  const [lineage, setLineage] = useState<PlaceLineageValue>({
+    faith: "Buddhist",
+    tradition: "Buddhist",
+    schools: [],
+  });
+  const [hoursText, setHoursText] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,17 +34,25 @@ export function MemberCreatePlaceForm() {
     setError("");
 
     const formData = new FormData(event.currentTarget);
+    if (!lineage.tradition.trim()) {
+      setError("Choose a tradition or school from the list, or add a custom tradition.");
+      setSaving(false);
+      return;
+    }
 
     try {
       await createMemberPlaceAction({
         name: String(formData.get("name")),
         type: String(formData.get("type")) as (typeof placeTypes)[number],
-        faith: String(formData.get("faith")) as (typeof faiths)[number],
-        tradition: String(formData.get("tradition") || "Buddhist"),
+        faith: lineage.faith,
+        tradition: lineage.tradition,
         address: String(formData.get("address")),
         city: String(formData.get("city")),
+        phone: String(formData.get("phone") || "") || null,
         website: String(formData.get("website") || "") || null,
         description: String(formData.get("description") || "") || null,
+        hoursText: hoursText.trim() || null,
+        schools: lineage.schools,
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not create listing");
@@ -47,12 +63,19 @@ export function MemberCreatePlaceForm() {
   return (
     <form onSubmit={handleSubmit} className="max-w-xl space-y-4">
       <p className="text-sm text-ink-secondary">
-        New listings start as drafts. Our team reviews them before they appear in the public
-        directory.
+        New listings start as drafts. Fill in as much as you can now — you can add photos after
+        create, then request publish when ready.
       </p>
 
       <FormField id="name" label="Place name">
-        <input id="name" name="name" required className={fieldClassName} />
+        <input
+          id="name"
+          name="name"
+          required
+          className={fieldClassName}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </FormField>
 
       <FormField id="type" label="Place type">
@@ -65,41 +88,8 @@ export function MemberCreatePlaceForm() {
         </select>
       </FormField>
 
-      <FormField id="faith" label="Faith tradition">
-        <select
-          id="faith"
-          name="faith"
-          required
-          className={fieldClassName}
-          value={faith}
-          onChange={(event) => {
-            const nextFaith = event.target.value as (typeof faiths)[number];
-            setFaith(nextFaith);
-            if (nextFaith === "Hindu" && tradition === "Buddhist") {
-              setTradition("Hindu");
-            }
-            if (nextFaith === "Buddhist" && tradition === "Hindu") {
-              setTradition("Buddhist");
-            }
-          }}
-        >
-          {faiths.map((faithOption) => (
-            <option key={faithOption} value={faithOption}>
-              {faithOption}
-            </option>
-          ))}
-        </select>
-      </FormField>
-
-      <FormField id="tradition" label="Tradition / lineage">
-        <TraditionPickerField
-          id="tradition"
-          name="tradition"
-          value={tradition}
-          onChange={setTradition}
-          faith={faith}
-          placeholder="e.g. Zen, Tibetan, Advaita Vedanta"
-        />
+      <FormField id="lineage" label="Tradition / school">
+        <PlaceLineageField id="lineage" value={lineage} onChange={setLineage} />
       </FormField>
 
       <FormField id="address" label="Street address">
@@ -108,6 +98,10 @@ export function MemberCreatePlaceForm() {
 
       <FormField id="city" label="City / region">
         <input id="city" name="city" required className={fieldClassName} />
+      </FormField>
+
+      <FormField id="phone" label="Phone">
+        <input id="phone" name="phone" type="tel" className={fieldClassName} />
       </FormField>
 
       <FormField id="website" label="Website">
@@ -122,6 +116,18 @@ export function MemberCreatePlaceForm() {
           className={`${fieldClassName} resize-y`}
           placeholder="Programs, visiting teachers, community focus…"
         />
+      </FormField>
+
+      <FormField id="hours" label="Opening hours">
+        <textarea
+          id="hours"
+          rows={4}
+          value={hoursText}
+          onChange={(e) => setHoursText(e.target.value)}
+          className={`${fieldClassName} resize-y`}
+          placeholder={"Monday: 9am – 5pm\nTuesday: 9am – 5pm\nWednesday: Closed"}
+        />
+        <p className="mt-1 text-xs text-ink-muted">One day per line.</p>
       </FormField>
 
       {error && (
@@ -147,24 +153,40 @@ export function MemberCreatePlaceForm() {
 
 export function OwnerPlaceForm({ place }: { place: Place }) {
   const hoursLines = place.openingHours?.weekdayDescriptions?.join("\n") ?? "";
+  const knownSlugs = getKnownSchoolSlugs();
   const [form, setForm] = useState<OwnerPlaceEditInput>({
     name: place.name,
     type: place.type,
+    faith: place.faith,
     tradition: place.tradition,
     address: place.address,
     phone: place.phone ?? null,
     website: place.website ?? null,
     description: place.description ?? null,
     hoursText: hoursLines || null,
+    schools: (place.schools ?? []).filter((slug) => knownSlugs.includes(slug)),
   });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [requestingPublish, setRequestingPublish] = useState(false);
+
+  const lineageValue: PlaceLineageValue = {
+    faith: form.faith,
+    tradition: form.tradition,
+    schools: form.schools ?? [],
+  };
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setSaving(true);
     setError("");
+
+    if (!form.tradition.trim()) {
+      setError("Choose a tradition or school from the list, or add a custom tradition.");
+      setSaving(false);
+      return;
+    }
 
     try {
       await updateOwnerPlaceAction(place.id, form);
@@ -174,12 +196,36 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
     }
   }
 
+  async function handleDelete() {
+    if (
+      !confirm(
+        `Delete “${place.name}”? It will be removed from your dashboard${
+          place.isDraft ? "" : " and the public directory"
+        }. An admin can restore it if needed.`,
+      )
+    ) {
+      return;
+    }
+
+    setDeleting(true);
+    setError("");
+    try {
+      await deleteMemberPlaceAction(place.id);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not delete listing");
+      setDeleting(false);
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit} className="max-w-xl space-y-4">
       {place.isDraft && (
         <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           This listing is still a draft and is not visible in the public directory until our team
           publishes it.
+          {place.publishRequestedAt
+            ? " Publish has been requested — we’ll review it soon."
+            : " When you’re ready, request publish below."}
         </p>
       )}
 
@@ -210,11 +256,18 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
         </select>
       </FormField>
 
-      <FormField id="tradition" label="Tradition">
-        <TraditionPickerField
-          id="tradition"
-          value={form.tradition}
-          onChange={(tradition) => setForm((f) => ({ ...f, tradition }))}
+      <FormField id="lineage" label="Tradition / school">
+        <PlaceLineageField
+          id="lineage"
+          value={lineageValue}
+          onChange={(next) =>
+            setForm((f) => ({
+              ...f,
+              faith: next.faith,
+              tradition: next.tradition,
+              schools: next.schools,
+            }))
+          }
         />
       </FormField>
 
@@ -268,8 +321,11 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
           value={form.hoursText ?? ""}
           onChange={(e) => setForm((f) => ({ ...f, hoursText: e.target.value || null }))}
           className={`${fieldClassName} resize-y`}
-          placeholder={"Monday: 9am – 5pm\nTuesday: 9am – 5pm"}
+          placeholder={"Monday: 9am – 5pm\nTuesday: 9am – 5pm\nWednesday: Closed"}
         />
+        <p className="mt-1 text-xs text-ink-muted">
+          One day per line. These appear on your public listing.
+        </p>
       </FormField>
 
       <PlacePhotosField placeId={place.id} initialPhotos={place.photos ?? []} />
@@ -296,7 +352,7 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
             Preview unavailable — draft
           </span>
         )}
-        {place.isDraft && (
+        {place.isDraft && !place.publishRequestedAt && (
           <button
             type="button"
             disabled={requestingPublish}
@@ -314,12 +370,25 @@ export function OwnerPlaceForm({ place }: { place: Place }) {
             {requestingPublish ? "Requesting…" : "Request publish"}
           </button>
         )}
+        {place.isDraft && place.publishRequestedAt && (
+          <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900">
+            Publish requested
+          </span>
+        )}
         <Link
           href="/manage"
           className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted"
         >
-          Back to dashboard
+          Back to Place Listings
         </Link>
+        <button
+          type="button"
+          disabled={deleting || saving}
+          onClick={() => void handleDelete()}
+          className="inline-flex items-center rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 disabled:opacity-50"
+        >
+          {deleting ? "Deleting…" : "Delete listing"}
+        </button>
       </div>
     </form>
   );

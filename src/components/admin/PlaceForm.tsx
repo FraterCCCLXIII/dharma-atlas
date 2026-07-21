@@ -1,21 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { fieldClassName, FormField } from "@/components/forms/FormField";
+import {
+  getKnownSchoolSlugs,
+  SchoolTagsField,
+} from "@/components/forms/SchoolTagsField";
 import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
 import { DraftStatusField } from "@/components/admin/DraftStatusField";
 import { PlacePhotosField } from "@/components/admin/PlacePhotosField";
-import {
-  getSubschoolLabelMap,
-  inferSchools,
-  subschoolLabel,
-} from "@/lib/schools";
 import { faiths, placeTypes, type PlaceInput } from "@/lib/validations/place";
 import type { PlacePhoto } from "@/types/place";
 import {
   createPlaceAction,
   deletePlaceAction,
+  permanentlyDeletePlaceAction,
+  restorePlaceAction,
   updatePlaceAction,
   verifyPlaceFieldAction,
 } from "@/app/admin/actions/places";
@@ -44,9 +45,6 @@ const emptyPlace = (): PlaceInput => ({
   isDraft: false,
 });
 
-const KNOWN_SCHOOL_SLUGS = Object.keys(getSubschoolLabelMap()).sort((a, b) =>
-  subschoolLabel(a).localeCompare(subschoolLabel(b)),
-);
 
 function FormSection({
   title,
@@ -74,30 +72,29 @@ interface PlaceFormProps {
   initial?: PlaceInput;
   initialPhotos?: PlacePhoto[];
   mode: "create" | "edit";
+  isDeleted?: boolean;
 }
 
-export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps) {
+export function PlaceForm({
+  initial,
+  initialPhotos = [],
+  mode,
+  isDeleted = false,
+}: PlaceFormProps) {
   const [place, setPlace] = useState<PlaceInput>(initial ?? emptyPlace());
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const originalId = initial?.id ?? "";
+  const knownSchoolSlugs = getKnownSchoolSlugs();
 
-  const customSchools = place.schools.filter((slug) => !KNOWN_SCHOOL_SLUGS.includes(slug));
-
-  const inferredSchools = useMemo(
-    () => inferSchools({ name: place.name, tradition: place.tradition }),
-    [place.name, place.tradition],
-  );
+  const customSchools = place.schools.filter((slug) => !knownSchoolSlugs.includes(slug));
 
   function set<K extends keyof PlaceInput>(key: K, value: PlaceInput[K]) {
     setPlace((p) => ({ ...p, [key]: value }));
   }
 
-  function toggleSchool(slug: string) {
-    const next = new Set(place.schools);
-    if (next.has(slug)) next.delete(slug);
-    else next.add(slug);
-    set("schools", [...next].sort());
+  function setKnownSchools(known: string[]) {
+    set("schools", [...new Set([...known, ...customSchools])].sort());
   }
 
   function setCustomSchools(raw: string) {
@@ -105,7 +102,7 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
-    const checked = place.schools.filter((slug) => KNOWN_SCHOOL_SLUGS.includes(slug));
+    const checked = place.schools.filter((slug) => knownSchoolSlugs.includes(slug));
     set("schools", [...new Set([...checked, ...customs])].sort());
   }
 
@@ -125,7 +122,14 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
   }
 
   async function handleDelete() {
-    if (!originalId || !confirm(`Delete ${place.name}?`)) return;
+    if (
+      !originalId ||
+      !confirm(
+        `Move “${place.name}” to deleted? It will be hidden from the directory and can be restored later.`,
+      )
+    ) {
+      return;
+    }
     setSaving(true);
     try {
       await deletePlaceAction(originalId);
@@ -146,7 +150,7 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
             {mode === "create" ? "Add location" : `Edit: ${place.name}`}
           </h1>
         </div>
-        {mode === "edit" && originalId && (
+        {mode === "edit" && originalId && !isDeleted && (
           <Link
             href={`/place/${originalId}`}
             className="shrink-0 text-xs font-medium text-brand hover:underline"
@@ -155,6 +159,45 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
           </Link>
         )}
       </div>
+
+      {isDeleted && originalId && (
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4">
+          <p className="text-sm font-medium text-rose-900">
+            This listing is deleted. It is hidden from the public directory and owner dashboard.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <form action={restorePlaceAction}>
+              <input type="hidden" name="id" value={originalId} />
+              <button
+                type="submit"
+                className="rounded-full bg-brand px-4 py-2 text-xs font-semibold text-brand-foreground transition hover:opacity-90"
+              >
+                Restore
+              </button>
+            </form>
+            <form
+              action={permanentlyDeletePlaceAction}
+              onSubmit={(e) => {
+                if (
+                  !confirm(
+                    `Permanently delete “${place.name}”? This cannot be undone.`,
+                  )
+                ) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              <input type="hidden" name="id" value={originalId} />
+              <button
+                type="submit"
+                className="rounded-full border border-rose-300 px-4 py-2 text-xs font-semibold text-rose-800 transition hover:bg-rose-100"
+              >
+                Permanently delete
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <FormSection title="Identity">
         <FormField id="id" label="ID">
@@ -326,33 +369,14 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
         </FormField>
       </FormSection>
 
-      <FormSection
-        title="Schools"
-        description="Optional subschool tags. When empty, schools may still be inferred from the name on the public site."
-      >
-        {inferredSchools.length > 0 && (
-          <p className="text-xs text-ink-muted">
-            Inferred from name:{" "}
-            {inferredSchools.map((slug) => subschoolLabel(slug)).join(", ")}
-          </p>
-        )}
-        <div className="grid gap-2 sm:grid-cols-2">
-          {KNOWN_SCHOOL_SLUGS.map((slug) => (
-            <label
-              key={slug}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition hover:bg-surface-muted"
-            >
-              <input
-                type="checkbox"
-                checked={place.schools.includes(slug)}
-                onChange={() => toggleSchool(slug)}
-                className="rounded border-border text-brand focus:ring-brand/30"
-              />
-              <span>{subschoolLabel(slug)}</span>
-              <span className="ml-auto font-mono text-[11px] text-ink-muted">{slug}</span>
-            </label>
-          ))}
-        </div>
+      <FormSection title="Schools">
+        <SchoolTagsField
+          name={place.name}
+          tradition={place.tradition}
+          value={place.schools.filter((slug) => knownSchoolSlugs.includes(slug))}
+          onChange={setKnownSchools}
+          showSlugs
+        />
         <FormField id="custom-schools" label="Additional school slugs">
           <input
             id="custom-schools"
@@ -386,7 +410,7 @@ export function PlaceForm({ initial, initialPhotos = [], mode }: PlaceFormProps)
         >
           {saving ? "Saving…" : "Save changes"}
         </button>
-        {mode === "edit" && (
+        {mode === "edit" && !isDeleted && (
           <button
             type="button"
             onClick={handleDelete}

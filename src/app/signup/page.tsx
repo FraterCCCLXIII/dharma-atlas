@@ -26,7 +26,7 @@ export default async function SignupPage({
             Create account
           </h1>
           <p className="mt-2 text-sm text-ink-secondary">
-            Free account to claim or add your center to the directory.
+            Claim an existing listing or add a new location to manage from your dashboard.
           </p>
         </div>
         <AuthForm
