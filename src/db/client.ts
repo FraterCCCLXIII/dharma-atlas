@@ -9,7 +9,11 @@ type Db = ReturnType<typeof drizzle<typeof schema>>;
 function createDb(): Db {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL environment variable is not set");
-  const client = postgres(url, { max: 1, connect_timeout: 10 });
+  // A single shared connection serializes every query across all concurrent
+  // requests. Size the pool to the app's concurrency (overridable per env /
+  // Postgres `max_connections`).
+  const max = Number(process.env.DATABASE_POOL_MAX) || 10;
+  const client = postgres(url, { max, connect_timeout: 10, idle_timeout: 20 });
   return drizzle(client, { schema });
 }
 

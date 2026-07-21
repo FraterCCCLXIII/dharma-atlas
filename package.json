@@ -25,6 +25,7 @@
     "discover-google-places": "bash -c 'set -a; [ -f .env.local ] && source .env.local; set +a; PYTHONUNBUFFERED=1 python3 scripts/discover-google-places.py \"$@\"' --",
     "export-places": "tsx scripts/export-places.ts",
     "download-place-photos": "tsx scripts/download-place-photos.ts",
+    "optimize-images": "tsx scripts/optimize-images.ts",
     "pipeline:places": "node scripts/pipeline-places.mjs",
     "pipeline:places:full": "node scripts/pipeline-places.mjs --full",
     "pipeline:continue": "bash scripts/pipeline-continue.sh",

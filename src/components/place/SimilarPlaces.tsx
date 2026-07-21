@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { MapPin } from "@phosphor-icons/react";
 import {
@@ -47,11 +48,12 @@ export function SimilarPlaces({
                   className={`relative h-32 bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(place.tradition)}`}
                 >
                   {photos.length > 0 ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={photos[0]}
                       alt=""
-                      className="absolute inset-0 h-full w-full rounded-xl object-cover"
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="rounded-xl object-cover"
                     />
                   ) : null}
                   <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />

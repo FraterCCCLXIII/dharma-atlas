@@ -18,6 +18,14 @@ interface PlacePageProps {
 
 export const revalidate = 3600;
 
+// Return [] so nothing is prerendered at build (the Docker build has no DB) but
+// the route still opts into the full-route cache: each place is rendered on its
+// first request and cached, then revalidated hourly. Without this, a dynamic
+// param route renders on every request and `revalidate` has no effect.
+export async function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({ params }: PlacePageProps): Promise<Metadata> {
   const { id } = await params;
   const place = await getPlaceById(id);

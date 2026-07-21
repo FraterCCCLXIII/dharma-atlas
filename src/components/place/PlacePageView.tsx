@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import {
   ArrowSquareOut,
@@ -60,11 +61,13 @@ export function PlacePageView({
           {showPhotoGrid ? (
             <div className="grid h-[240px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-2xl sm:h-[360px] sm:gap-3 lg:h-[420px]">
               <div className={`relative col-span-2 row-span-2 bg-gradient-to-br ${gradient}`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={photos[0]}
                   alt={place.name}
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 40vw, 50vw"
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
@@ -74,13 +77,18 @@ export function PlacePageView({
               </div>
               {[1, 2, 3, 4].map((index) =>
                 photos[index] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <div
                     key={index}
-                    src={photos[index]}
-                    alt={`${place.name} photo ${index + 1}`}
-                    className={`h-full w-full object-cover bg-gradient-to-br ${gradient}`}
-                  />
+                    className={`relative bg-gradient-to-br ${gradient}`}
+                  >
+                    <Image
+                      src={photos[index]}
+                      alt={`${place.name} photo ${index + 1}`}
+                      fill
+                      sizes="(min-width: 1024px) 20vw, 25vw"
+                      className="object-cover"
+                    />
+                  </div>
                 ) : (
                   <div
                     key={index}
@@ -97,11 +105,13 @@ export function PlacePageView({
               }`}
             >
               {photos.length === 1 ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={photos[0]}
                   alt={place.name}
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 80vw, 100vw"
+                  className="object-cover"
                 />
               ) : null}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { count, eq, ilike, or, and, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
@@ -78,15 +79,17 @@ export async function getAllPlaceIds(): Promise<string[]> {
   return rows.map((r) => r.id);
 }
 
-export async function getPlaceById(
+// Wrapped in React `cache()` so `generateMetadata` and the page component share
+// a single fetch (and its photo join) within one request instead of running it twice.
+export const getPlaceById = cache(async (
   id: string,
   options?: { includeDrafts?: boolean },
-): Promise<Place | null> {
+): Promise<Place | null> => {
   const [row] = await db.select().from(places).where(eq(places.id, id)).limit(1);
   if (!row) return null;
   if (row.isDraft && !options?.includeDrafts) return null;
   return attachPhotosToPlace(rowToPlace(row));
-}
+});
 
 export async function searchPlaces(options: {
   query?: string;
