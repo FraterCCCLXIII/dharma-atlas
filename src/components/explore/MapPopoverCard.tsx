@@ -53,7 +53,7 @@ export function MapPopoverCard({ place }: MapPopoverCardProps) {
 
         <a
           href={href}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand px-3 py-2 text-xs font-semibold text-brand-foreground transition hover:bg-brand-hover"
+          className="map-popover-cta inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand px-3 py-2 text-xs font-semibold text-brand-foreground transition hover:bg-brand-hover"
         >
           View details
           <ArrowRight size={12} weight="bold" />

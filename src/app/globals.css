@@ -217,6 +217,14 @@ body {
   min-height: 196px;
 }
 
+/* Leaflet ships an unlayered `.leaflet-container a { color: #0078A8 }`. Unlayered
+   rules outrank Tailwind's layered utilities, so `text-brand-foreground` loses
+   and the popup button renders blue. Re-assert it here. Scoped to our own CTA so
+   the map attribution link keeps looking like a link. */
+.leaflet-container .map-popover-cta {
+  color: var(--brand-foreground);
+}
+
 .map-marker-wrap {
   background: transparent !important;
   border: none !important;
