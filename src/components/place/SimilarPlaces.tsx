@@ -14,9 +14,13 @@ import type { Place } from "@/types/place";
 
 interface SimilarPlacesProps {
   places: Place[];
+  traditionDefaultImages: Record<string, string>;
 }
 
-export function SimilarPlaces({ places }: SimilarPlacesProps) {
+export function SimilarPlaces({
+  places,
+  traditionDefaultImages,
+}: SimilarPlacesProps) {
   return (
     <div className="space-y-6">
       <div>
@@ -30,7 +34,7 @@ export function SimilarPlaces({ places }: SimilarPlacesProps) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {places.map((place) => {
-          const photos = getPlaceDisplayPhotos(place);
+          const photos = getPlaceDisplayPhotos(place, traditionDefaultImages);
 
           return (
             <Link

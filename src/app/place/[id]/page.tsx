@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { OntologyRuntimeProvider } from "@/components/explore/OntologyRuntimeProvider";
 import { PlacePageView } from "@/components/place/PlacePageView";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { getOntologySnapshot } from "@/lib/data/ontology";
+import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 import { placeMetaDescription } from "@/lib/place-description";
 import {
   getPlaceById,
@@ -43,8 +45,20 @@ export default async function PlacePage({ params }: PlacePageProps) {
     notFound();
   }
 
-  const similar = await getSimilarPlaces(place);
-  const linkedTeachers = await getTeachersAtPlace(place.name);
+  const [similar, linkedTeachers, ontology] = await Promise.all([
+    getSimilarPlaces(place),
+    getTeachersAtPlace(place.name),
+    getOntologySnapshot(),
+  ]);
 
-  return <PlacePageView place={place} similar={similar} teachers={linkedTeachers} />;
+  return (
+    <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
+      <PlacePageView
+        place={place}
+        similar={similar}
+        teachers={linkedTeachers}
+        traditionDefaultImages={ontology.traditionDefaultImages}
+      />
+    </OntologyRuntimeProvider>
+  );
 }

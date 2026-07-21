@@ -228,6 +228,9 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
   );
 
   const showMap = entityFilter === "locations";
+  // Avoid mounting Leaflet while the map pane is hidden (mobile list). Unmounting
+  // thousands of markers on soft-nav to a place page freezes the main thread.
+  const mapMounted = showMap && (syncListToMap || mobileView === "map");
   const isPeopleBrowse = entityFilter === "people";
   const isAllBrowse = entityFilter === "all";
   const hasActiveBrowse =
@@ -337,7 +340,7 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
           </section>
 
           <section
-            aria-hidden={!showMap}
+            aria-hidden={!showMap || !mapMounted}
             className={`relative z-0 min-h-0 flex-1 p-3 sm:p-4 lg:p-5 ${
               !showMap
                 ? "hidden"
@@ -347,7 +350,7 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
             }`}
           >
             <div className="map-panel h-full overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-              {showMap ? (
+              {mapMounted ? (
                 markersLoading ? (
                   <div className="flex h-full items-center justify-center text-sm text-ink-muted">
                     Loading map…

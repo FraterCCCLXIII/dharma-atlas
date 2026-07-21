@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { MapPin, Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import {
@@ -51,7 +50,8 @@ export function PlaceCard({
       }}
       onMouseLeave={() => setHoveredId(null)}
     >
-      <Link
+      {/* Full document nav — soft-nav stalls while Leaflet unmounts thousands of markers. */}
+      <a
         href={`/place/${place.id}`}
         className={`group block rounded-2xl text-left ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
           isHovered ? "bg-surface-muted" : ""
@@ -104,7 +104,7 @@ export function PlaceCard({
             ))}
           </div>
         </div>
-      </Link>
+      </a>
     </motion.article>
   );
 }

@@ -295,7 +295,8 @@ export function ExploreSearchField() {
       }
       if (selected.kind === "place") {
         setMenuOpen(false);
-        router.push(`/place/${selected.place.id}`);
+        // Full navigation — soft-nav from explore can stall on Leaflet unmount.
+        window.location.assign(`/place/${selected.place.id}`);
         return;
       }
       setMenuOpen(false);
@@ -420,7 +421,7 @@ export function ExploreSearchField() {
                     onMouseEnter={() => setHighlight(index)}
                     onClick={() => {
                       setMenuOpen(false);
-                      router.push(`/place/${place.id}`);
+                      window.location.assign(`/place/${place.id}`);
                     }}
                   />
                 );

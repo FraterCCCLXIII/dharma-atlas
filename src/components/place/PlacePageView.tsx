@@ -36,14 +36,21 @@ interface PlacePageViewProps {
   place: Place;
   similar: Place[];
   teachers?: import("@/types/teacher").Teacher[];
+  /** From the server ontology snapshot — avoids SSR/client mismatch on placeholders. */
+  traditionDefaultImages: Record<string, string>;
 }
 
-export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewProps) {
+export function PlacePageView({
+  place,
+  similar,
+  teachers = [],
+  traditionDefaultImages,
+}: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
   const gradient = traditionGradient(place.tradition);
   const schools = getSchools(place);
   const aboutText = placeDisplayDescription(place);
-  const photos = getPlaceDisplayPhotos(place);
+  const photos = getPlaceDisplayPhotos(place, traditionDefaultImages);
   const showPhotoGrid = photos.length > 1;
 
   return (
@@ -253,7 +260,10 @@ export function PlacePageView({ place, similar, teachers = [] }: PlacePageViewPr
 
         {similar.length > 0 && (
           <section className="mt-16 border-t border-border pt-12">
-            <SimilarPlaces places={similar} />
+            <SimilarPlaces
+              places={similar}
+              traditionDefaultImages={traditionDefaultImages}
+            />
           </section>
         )}
       </main>
