@@ -144,6 +144,8 @@ export function PlaceList({
   const mapBounds = useExploreStore((s) => s.mapBounds);
   const locationFilter = useExploreStore((s) => s.locationFilter);
 
+  // Deliberately excludes map bounds: this key drives the reset-to-page-1 below,
+  // and that should follow user intent (search, filters, a chosen location) only.
   const filterKey = [
     query,
     traditions.join(","),
@@ -154,11 +156,20 @@ export function PlaceList({
     locationFilter
       ? `${locationFilter.bounds.south}:${locationFilter.bounds.north}:${locationFilter.bounds.west}:${locationFilter.bounds.east}`
       : "",
-    syncListToMap && !locationFilter && mapBounds
-      ? `${mapBounds.south}:${mapBounds.north}:${mapBounds.west}:${mapBounds.east}`
-      : "",
   ].join("|");
 
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  // Panning the map can shrink the result set past the current page. Derive the
+  // page we actually render and fetch, so we clamp to the last available page
+  // instead of requesting an out-of-range one.
+  const safePage = Math.min(page, totalPages);
+
+  // Map bounds are intentionally absent above. They still scope the results — the
+  // fetch effect below depends on `mapBounds` directly — but the map moves for
+  // reasons the user did not initiate: pans, zooms, and container resizes when the
+  // list's height changes and a scrollbar appears. Resetting the page on those
+  // snapped the list back to page 1 right after every page change, which made
+  // pagination look like it did nothing.
   useEffect(() => {
     setPage(1);
   }, [filterKey]);
@@ -171,7 +182,7 @@ export function PlaceList({
       schools,
       types,
       faiths,
-      page,
+      page: safePage,
       pageSize: PAGE_SIZE,
       mapBounds,
       locationFilter,
@@ -217,7 +228,7 @@ export function PlaceList({
     };
   }, [
     filterKey,
-    page,
+    safePage,
     query,
     traditions,
     schools,
@@ -227,9 +238,6 @@ export function PlaceList({
     locationFilter,
     syncListToMap,
   ]);
-
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const safePage = Math.min(page, totalPages);
 
   function goToPage(nextPage: number) {
     const clamped = Math.min(Math.max(1, nextPage), totalPages);
