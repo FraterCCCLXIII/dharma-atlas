@@ -210,15 +210,21 @@ function MapClickDismiss({ onDismiss }: { onDismiss: () => void }) {
 function MapBoundsSync() {
   const map = useMap();
   const setMapBounds = useExploreStore((s) => s.setMapBounds);
+  const lastKeyRef = useRef<string | null>(null);
 
   const reportBounds = useCallback(() => {
     const bounds = map.getBounds();
-    setMapBounds({
+    const next = {
       north: bounds.getNorth(),
       south: bounds.getSouth(),
       east: bounds.getEast(),
       west: bounds.getWest(),
-    });
+    };
+    // Ignore sub-pixel / float noise from layout so list pagination is not churned.
+    const key = `${next.south.toFixed(4)}:${next.north.toFixed(4)}:${next.west.toFixed(4)}:${next.east.toFixed(4)}`;
+    if (lastKeyRef.current === key) return;
+    lastKeyRef.current = key;
+    setMapBounds(next);
   }, [map, setMapBounds]);
 
   useEffect(() => {
@@ -229,6 +235,7 @@ function MapBoundsSync() {
     return () => {
       map.off("moveend", reportBounds);
       map.off("zoomend", reportBounds);
+      lastKeyRef.current = null;
       setMapBounds(null);
     };
   }, [map, reportBounds, setMapBounds]);

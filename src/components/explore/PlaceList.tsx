@@ -124,12 +124,24 @@ function PlaceListPagination({
   );
 }
 
+function boundsKey(
+  bounds: { south: number; north: number; west: number; east: number } | null,
+): string {
+  if (!bounds) return "";
+  // Quantize so sub-pixel Leaflet noise does not retrigger fetches.
+  const q = (n: number) => n.toFixed(4);
+  return `${q(bounds.south)}:${q(bounds.north)}:${q(bounds.west)}:${q(bounds.east)}`;
+}
+
 export function PlaceList({
   emptyReason = "filters",
   syncListToMap = false,
   filteredMarkerCount = 0,
 }: PlaceListProps) {
   const parentRef = useRef<HTMLDivElement>(null);
+  const requestIdRef = useRef(0);
+  const prevFilterKeyRef = useRef<string | null>(null);
+  const prevMapBoundsKeyRef = useRef<string | null>(null);
   const [page, setPage] = useState(1);
   const [places, setPlaces] = useState<PlaceMarker[]>([]);
   const [total, setTotal] = useState(0);
@@ -153,10 +165,11 @@ export function PlaceList({
     types.join(","),
     faiths.join(","),
     locationFilter?.label ?? "",
-    locationFilter
-      ? `${locationFilter.bounds.south}:${locationFilter.bounds.north}:${locationFilter.bounds.west}:${locationFilter.bounds.east}`
-      : "",
+    locationFilter ? boundsKey(locationFilter.bounds) : "",
   ].join("|");
+
+  const mapBoundsKey =
+    syncListToMap && !locationFilter ? boundsKey(mapBounds) : "";
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   // Panning the map can shrink the result set past the current page. Derive the
@@ -164,17 +177,19 @@ export function PlaceList({
   // instead of requesting an out-of-range one.
   const safePage = Math.min(page, totalPages);
 
-  // Map bounds are intentionally absent above. They still scope the results — the
-  // fetch effect below depends on `mapBounds` directly — but the map moves for
-  // reasons the user did not initiate: pans, zooms, and container resizes when the
-  // list's height changes and a scrollbar appears. Resetting the page on those
-  // snapped the list back to page 1 right after every page change, which made
-  // pagination look like it did nothing.
+  // Reset page on user-intent filter changes only (not on mount / map moves).
   useEffect(() => {
+    if (prevFilterKeyRef.current === null) {
+      prevFilterKeyRef.current = filterKey;
+      return;
+    }
+    if (prevFilterKeyRef.current === filterKey) return;
+    prevFilterKeyRef.current = filterKey;
     setPage(1);
   }, [filterKey]);
 
   useEffect(() => {
+    const requestId = ++requestIdRef.current;
     const controller = new AbortController();
     const params = buildExplorePlacesSearchParams({
       query,
@@ -189,12 +204,15 @@ export function PlaceList({
       syncListToMap,
     });
 
-    // Keep prior results visible while map-bounds sync refetches.
-    if (places.length === 0) setLoading(true);
+    // Initial state is loading; later refetches keep prior cards visible.
     setError(null);
 
-    // Debounce map-pan refetches; search typing already needs a short delay.
-    const delayMs = query.trim() ? 200 : syncListToMap && mapBounds ? 150 : 0;
+    // Debounce map-pan / search typing only. Page changes must fetch immediately —
+    // otherwise the rail shows the new page while stale cards linger, and a
+    // completed older response can win the race and look like pagination failed.
+    const boundsChanged = prevMapBoundsKeyRef.current !== mapBoundsKey;
+    prevMapBoundsKeyRef.current = mapBoundsKey;
+    const delayMs = query.trim() ? 200 : boundsChanged && mapBoundsKey ? 150 : 0;
 
     const timer = window.setTimeout(() => {
       fetch(`/api/explore/places?${params.toString()}`, {
@@ -208,13 +226,17 @@ export function PlaceList({
           }>;
         })
         .then((data) => {
+          // AbortController does not cancel already-resolved responses; ignore stale ones.
+          if (requestId !== requestIdRef.current) return;
           setPlaces(data.places);
           setTotal(data.total);
           setLoading(false);
           parentRef.current?.scrollTo({ top: 0 });
         })
         .catch((err: unknown) => {
-          if (controller.signal.aborted) return;
+          if (controller.signal.aborted || requestId !== requestIdRef.current) {
+            return;
+          }
           setError(err instanceof Error ? err.message : "Failed to load places");
           setPlaces([]);
           setTotal(0);
@@ -235,6 +257,7 @@ export function PlaceList({
     types,
     faiths,
     mapBounds,
+    mapBoundsKey,
     locationFilter,
     syncListToMap,
   ]);
