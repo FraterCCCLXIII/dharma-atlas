@@ -146,6 +146,12 @@ export function PublicNav() {
   const pathname = usePathname();
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
+  const entityFilter = useExploreStore((s) => s.entityFilter);
+  const traditions = useExploreStore((s) => s.traditions);
+  const schools = useExploreStore((s) => s.schools);
+  const types = useExploreStore((s) => s.types);
+  const faiths = useExploreStore((s) => s.faiths);
+  const locationFilter = useExploreStore((s) => s.locationFilter);
   const activeFilterCount = useActiveFilterCount();
 
   const onExplore = isExplorePath(pathname);
@@ -153,6 +159,14 @@ export function PublicNav() {
   const explorePath = pathFromEntityFilter(
     pathFilter === "people" ? "people" : "locations",
   );
+  // Home feature view has no filter sidebar — hide the toggle too.
+  const showHomeFeature =
+    entityFilter === "all" &&
+    traditions.length === 0 &&
+    schools.length === 0 &&
+    types.length === 0 &&
+    faiths.length === 0 &&
+    locationFilter == null;
 
   const handleFilterToggle = () => {
     if (onExplore) {
@@ -180,11 +194,13 @@ export function PublicNav() {
         }
         center={<ExploreSearchField />}
         trailing={
-          <FilterToggleButton
-            filtersOpen={filtersOpen}
-            activeFilterCount={activeFilterCount}
-            onToggle={handleFilterToggle}
-          />
+          showHomeFeature ? undefined : (
+            <FilterToggleButton
+              filtersOpen={filtersOpen}
+              activeFilterCount={activeFilterCount}
+              onToggle={handleFilterToggle}
+            />
+          )
         }
       />
     </SiteHeader>
