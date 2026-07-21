@@ -146,6 +146,7 @@ export function PlaceList({
   const [places, setPlaces] = useState<PlaceMarker[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [pageFetching, setPageFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const query = useExploreStore((s) => s.query);
@@ -206,6 +207,7 @@ export function PlaceList({
 
     // Initial state is loading; later refetches keep prior cards visible.
     setError(null);
+    setPageFetching(true);
 
     // Debounce map-pan / search typing only. Page changes must fetch immediately —
     // otherwise the rail shows the new page while stale cards linger, and a
@@ -217,7 +219,9 @@ export function PlaceList({
     const timer = window.setTimeout(() => {
       fetch(`/api/explore/places?${params.toString()}`, {
         signal: controller.signal,
-      })
+        // Prefer this over map popup photos competing for the same host.
+        priority: "high",
+      } as RequestInit)
         .then(async (res) => {
           if (!res.ok) throw new Error(`Failed to load places (${res.status})`);
           return res.json() as Promise<{
@@ -231,6 +235,7 @@ export function PlaceList({
           setPlaces(data.places);
           setTotal(data.total);
           setLoading(false);
+          setPageFetching(false);
           parentRef.current?.scrollTo({ top: 0 });
         })
         .catch((err: unknown) => {
@@ -241,6 +246,7 @@ export function PlaceList({
           setPlaces([]);
           setTotal(0);
           setLoading(false);
+          setPageFetching(false);
         });
     }, delayMs);
 
@@ -318,7 +324,10 @@ export function PlaceList({
       </div>
       <div
         ref={parentRef}
-        className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6"
+        className={`min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6 ${
+          pageFetching ? "opacity-60" : ""
+        }`}
+        aria-busy={pageFetching || undefined}
       >
         <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
           {places.map((place, index) => (

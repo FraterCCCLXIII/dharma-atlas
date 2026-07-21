@@ -66,6 +66,8 @@ export function PlaceCard({
               <img
                 src={photos[0]}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full rounded-xl object-cover"
               />
             ) : null}

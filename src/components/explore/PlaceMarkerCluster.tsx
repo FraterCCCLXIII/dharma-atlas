@@ -176,7 +176,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
     const groups = groupPlacesByCoord(places);
     const markerByPlaceId = new Map<string, ClusterMarker>();
 
-    const bindMarkerPopup = (marker: ClusterMarker, place: PlaceMarker) => {
+    const bindMarkerPopup = (marker: ClusterMarker, _place: PlaceMarker) => {
       if (!marker.getPopup()) {
         marker.bindPopup(document.createElement("div"), {
           closeButton: false,
@@ -185,7 +185,9 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
           className: "map-place-popup",
         });
       }
-      mountPopoverCard(marker, place);
+      // Do not mount MapPopoverCard (and its photo) until hover/open.
+      // Eagerly mounting every marker popup floods the network with image
+      // requests and can stall list pagination fetches for tens of seconds.
     };
 
     const attachHoverPopup = (

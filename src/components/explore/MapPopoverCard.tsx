@@ -25,8 +25,8 @@ export function MapPopoverCard({ place }: MapPopoverCardProps) {
           <img
             src={photos[0]}
             alt=""
-            loading="eager"
-            decoding="sync"
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : null}
