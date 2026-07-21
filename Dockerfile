@@ -51,6 +51,12 @@ RUN chmod +x /app/scripts/docker-entrypoint.sh \
   && mkdir -p /app/public/places /app/public/people \
   && chown -R nextjs:nodejs /app/public
 
+# next/image writes optimized images to .next/cache at runtime. Create it owned
+# by the app user so the server can write, and so a volume mounted here inherits
+# that ownership instead of coming up root-owned.
+RUN mkdir -p /app/.next/cache \
+  && chown -R nextjs:nodejs /app/.next
+
 USER nextjs
 EXPOSE 3000
 

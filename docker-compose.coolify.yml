@@ -24,6 +24,10 @@ services:
     volumes:
       - places_uploads:/app/public/places
       - people_uploads:/app/public/people
+      # next/image writes optimized AVIF/WebP here. Without this the whole
+      # optimized-image cache is discarded on every redeploy and every image
+      # is re-encoded from cold on first request.
+      - next_image_cache:/app/.next/cache
     depends_on:
       postgres:
         condition: service_healthy
@@ -47,3 +51,4 @@ volumes:
   postgres_data:
   places_uploads:
   people_uploads:
+  next_image_cache:
