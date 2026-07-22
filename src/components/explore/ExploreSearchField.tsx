@@ -4,7 +4,7 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
-import { MagnifyingGlass, MapPin, X } from "@phosphor-icons/react";
+import { CircleNotch, Crosshair, MagnifyingGlass, MapPin, X } from "@phosphor-icons/react";
 import {
   SearchScopeDropdown,
   getSearchPlaceholder,
@@ -21,6 +21,14 @@ import {
   matchTermsForLocationLabel,
   queryMatchesLocationLabel,
 } from "@/lib/location-filter";
+import {
+  isLocationNearYou,
+  loadStoredNearBounds,
+  NEAR_YOU_LABEL,
+  resolveNearBoundsForLabeling,
+  resolveUserLocation,
+  storeNearBounds,
+} from "@/lib/user-location";
 import { useExploreStore, type LocationFilter } from "@/store/explore-store";
 
 type PlaceSuggestion = {
@@ -29,6 +37,8 @@ type PlaceSuggestion = {
   address: string;
   tradition: string;
   type: string;
+  lat?: number;
+  lng?: number;
 };
 
 type PersonSuggestion = {
@@ -66,6 +76,7 @@ export function ExploreSearchField() {
   const listId = useId();
   const query = useExploreStore((s) => s.query);
   const setQuery = useExploreStore((s) => s.setQuery);
+  const locationFilter = useExploreStore((s) => s.locationFilter);
   const setLocationFilter = useExploreStore((s) => s.setLocationFilter);
   const setMobileView = useExploreStore((s) => s.setMobileView);
   const { scope, setScope } = useSearchScope();
@@ -73,6 +84,11 @@ export function ExploreSearchField() {
   const [draft, setDraft] = useState(query);
   const [menuOpen, setMenuOpen] = useState(false);
   const [highlight, setHighlight] = useState(0);
+  const [nearYouLoading, setNearYouLoading] = useState(false);
+  const [nearYouError, setNearYouError] = useState<string | null>(null);
+  /** Bounds used to badge “Near you” in search results — independent of filter. */
+  const [nearYouBounds, setNearYouBounds] = useState<MapBounds | null>(null);
+  const nearBoundsSourceRef = useRef<"browser" | "ip" | "stored" | null>(null);
   const [placeSuggestions, setPlaceSuggestions] = useState<PlaceSuggestion[]>(
     [],
   );
@@ -95,6 +111,54 @@ export function ExploreSearchField() {
   useEffect(() => {
     setDraft(query);
   }, [query]);
+
+  const rememberNearBounds = useCallback((bounds: MapBounds) => {
+    setNearYouBounds(bounds);
+    storeNearBounds(bounds);
+  }, []);
+
+  // Restore session bounds, then refresh for badges (works with filter off).
+  useEffect(() => {
+    const stored = loadStoredNearBounds();
+    if (stored) {
+      nearBoundsSourceRef.current = "stored";
+      setNearYouBounds(stored);
+    }
+
+    let cancelled = false;
+    void resolveNearBoundsForLabeling().then((resolved) => {
+      if (cancelled || !resolved) return;
+      const { bounds, source } = resolved;
+      setNearYouBounds((current) => {
+        // Active Near You filter owns bounds while pressed.
+        if (locationFilter?.label === NEAR_YOU_LABEL) return current;
+        // Upgrade stored/IP guess to GPS; otherwise keep what we have.
+        if (
+          current &&
+          source !== "browser" &&
+          nearBoundsSourceRef.current !== null
+        ) {
+          return current;
+        }
+        nearBoundsSourceRef.current = source;
+        storeNearBounds(bounds);
+        return bounds;
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+    // Intentionally once on mount for labeling; filter sync is separate.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only warm-up
+  }, []);
+
+  // When Near You filter is on, keep badge bounds in sync with it.
+  useEffect(() => {
+    if (locationFilter?.label === NEAR_YOU_LABEL) {
+      nearBoundsSourceRef.current = "browser";
+      rememberNearBounds(locationFilter.bounds);
+    }
+  }, [locationFilter, rememberNearBounds]);
 
   const updateMenuPosition = useCallback(() => {
     const root = rootRef.current;
@@ -181,7 +245,16 @@ export function ExploreSearchField() {
             }>;
           };
           if (scope === "locations") {
-            setPlaceSuggestions((data.places ?? []).slice(0, 5));
+            const places = data.places ?? [];
+            const sorted = nearYouBounds
+              ? [...places].sort((a, b) => {
+                  const aNear = isLocationNearYou(a.lat, a.lng, nearYouBounds);
+                  const bNear = isLocationNearYou(b.lat, b.lng, nearYouBounds);
+                  if (aNear === bNear) return 0;
+                  return aNear ? -1 : 1;
+                })
+              : places;
+            setPlaceSuggestions(sorted.slice(0, 5));
             setPersonSuggestions([]);
           } else {
             setPersonSuggestions(
@@ -211,7 +284,7 @@ export function ExploreSearchField() {
 
     void load();
     return () => controller.abort();
-  }, [debouncedDraft, scope]);
+  }, [debouncedDraft, scope, nearYouBounds]);
 
   const matchingLocation = locationSuggestions.find((location) =>
     queryMatchesLocationLabel(draft, location.label),
@@ -253,6 +326,16 @@ export function ExploreSearchField() {
     }
   };
 
+  const nearYouActive = locationFilter?.label === NEAR_YOU_LABEL;
+
+  /** Leaving Near You for any other search/result should clear the GPS filter. */
+  const clearNearYouIfActive = () => {
+    if (nearYouActive) {
+      setLocationFilter(null);
+      setNearYouError(null);
+    }
+  };
+
   const applyLocation = (location: LocationSuggestion) => {
     const next: LocationFilter = {
       label: location.label,
@@ -260,17 +343,66 @@ export function ExploreSearchField() {
       lng: location.lng,
       bounds: expandBounds(location.bounds, 0.04),
       matchTerms:
-        location.matchTerms?.length
+        location.matchTerms != null
           ? location.matchTerms
           : matchTermsForLocationLabel(location.label),
     };
     setLocationFilter(next);
     setDraft("");
     setQuery("");
+    setNearYouError(null);
     setScope("locations");
     setMobileView("map");
     navigateToScope("locations");
     setMenuOpen(false);
+  };
+
+  const openPlaceResult = (placeId: string) => {
+    clearNearYouIfActive();
+    setMenuOpen(false);
+    // Full navigation — soft-nav from explore can stall on Leaflet unmount.
+    window.location.assign(`/place/${placeId}`);
+  };
+
+  const openPersonResult = (slug: string) => {
+    clearNearYouIfActive();
+    setMenuOpen(false);
+    router.push(personProfilePath(slug));
+  };
+
+  const applyNearYou = async () => {
+    if (nearYouLoading) return;
+
+    if (nearYouActive) {
+      setLocationFilter(null);
+      setNearYouError(null);
+      return;
+    }
+
+    setNearYouLoading(true);
+    setNearYouError(null);
+    setMenuOpen(false);
+
+    try {
+      const location = await resolveUserLocation();
+      if (!location) {
+        setNearYouError("Couldn't find your location. Check permissions and try again.");
+        return;
+      }
+
+      nearBoundsSourceRef.current = location.source;
+      rememberNearBounds(location.bounds);
+      applyLocation({
+        label: NEAR_YOU_LABEL,
+        lat: location.lat,
+        lng: location.lng,
+        bounds: location.bounds,
+        // Bbox-only — avoid address token matches for the literal "you".
+        matchTerms: [],
+      });
+    } finally {
+      setNearYouLoading(false);
+    }
   };
 
   const submitSearch = () => {
@@ -294,13 +426,10 @@ export function ExploreSearchField() {
         return;
       }
       if (selected.kind === "place") {
-        setMenuOpen(false);
-        // Full navigation — soft-nav from explore can stall on Leaflet unmount.
-        window.location.assign(`/place/${selected.place.id}`);
+        openPlaceResult(selected.place.id);
         return;
       }
-      setMenuOpen(false);
-      router.push(personProfilePath(selected.person.slug));
+      openPersonResult(selected.person.slug);
       return;
     }
 
@@ -309,6 +438,7 @@ export function ExploreSearchField() {
       return;
     }
 
+    clearNearYouIfActive();
     setQuery(draft);
     navigateToScope();
     setMenuOpen(false);
@@ -364,7 +494,8 @@ export function ExploreSearchField() {
 
     suggestions.forEach((suggestion, index) => {
       if (suggestion.kind === "location") {
-        ensureGroup("Near").items.push({ suggestion, index });
+        // "Areas" — not "Near" — so this isn't confused with Near You.
+        ensureGroup("Areas").items.push({ suggestion, index });
       } else if (suggestion.kind === "place") {
         ensureGroup("Places").items.push({ suggestion, index });
       } else {
@@ -401,7 +532,7 @@ export function ExploreSearchField() {
                     key={`${location.label}-${location.lat}-${location.lng}`}
                     active={highlight === index}
                     label={location.label}
-                    detail="Show map near here"
+                    detail="Show places in this area"
                     icon={<MapPin size={16} weight="bold" />}
                     onMouseEnter={() => setHighlight(index)}
                     onClick={() => applyLocation(location)}
@@ -410,6 +541,11 @@ export function ExploreSearchField() {
               }
               if (suggestion.kind === "place") {
                 const { place } = suggestion;
+                const nearYou = isLocationNearYou(
+                  place.lat,
+                  place.lng,
+                  nearYouBounds,
+                );
                 return (
                   <SuggestionButton
                     key={place.id}
@@ -418,11 +554,9 @@ export function ExploreSearchField() {
                     detail={[place.type, place.address]
                       .filter(Boolean)
                       .join(" · ")}
+                    badge={nearYou ? "Near you" : undefined}
                     onMouseEnter={() => setHighlight(index)}
-                    onClick={() => {
-                      setMenuOpen(false);
-                      window.location.assign(`/place/${place.id}`);
-                    }}
+                    onClick={() => openPlaceResult(place.id)}
                   />
                 );
               }
@@ -436,10 +570,7 @@ export function ExploreSearchField() {
                     .filter(Boolean)
                     .join(" · ")}
                   onMouseEnter={() => setHighlight(index)}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    router.push(personProfilePath(person.slug));
-                  }}
+                  onClick={() => openPersonResult(person.slug)}
                 />
               );
             })}
@@ -476,23 +607,58 @@ export function ExploreSearchField() {
             onFocus={() => {
               setMenuOpen(true);
               updateMenuPosition();
+              // Upgrade badge location to GPS if permission was granted earlier.
+              if (nearBoundsSourceRef.current !== "browser") {
+                void resolveNearBoundsForLabeling().then((resolved) => {
+                  if (!resolved || resolved.source !== "browser") return;
+                  nearBoundsSourceRef.current = "browser";
+                  rememberNearBounds(resolved.bounds);
+                });
+              }
             }}
             onKeyDown={handleKeyDown}
             placeholder={getSearchPlaceholder(scope)}
-            className="w-full rounded-r-full bg-transparent py-2.5 pl-10 pr-10 text-sm text-ink outline-none placeholder:text-ink-muted [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+            className="w-full bg-transparent py-2.5 pl-10 pr-9 text-sm text-ink outline-none placeholder:text-ink-muted [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
           />
           {draft && (
             <button
               type="button"
               onClick={clearSearch}
-              className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition hover:bg-surface-muted hover:text-ink"
+              className="absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-ink-muted transition hover:bg-surface-muted hover:text-ink"
               aria-label="Clear search"
             >
               <X size={14} weight="bold" />
             </button>
           )}
         </label>
+        <span className="my-2 w-px shrink-0 bg-border" aria-hidden />
+        <button
+          type="button"
+          onClick={() => void applyNearYou()}
+          disabled={nearYouLoading}
+          aria-pressed={nearYouActive}
+          aria-label={nearYouActive ? "Clear near you filter" : "Show places near you"}
+          title={nearYouActive ? "Clear near you" : "Near You"}
+          className={`inline-flex shrink-0 items-center gap-1.5 rounded-r-full px-3 text-xs font-semibold transition sm:px-3.5 sm:text-sm ${
+            nearYouActive
+              ? "bg-brand/10 text-brand"
+              : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
+          } disabled:cursor-wait disabled:opacity-70`}
+        >
+          {nearYouLoading ? (
+            <CircleNotch size={16} weight="bold" className="animate-spin" />
+          ) : (
+            <Crosshair size={16} weight="bold" className="text-brand" />
+          )}
+          <span className="whitespace-nowrap">Near You</span>
+        </button>
       </div>
+
+      {nearYouError ? (
+        <p className="mt-1.5 px-1 text-xs text-red-700" role="status" aria-live="polite">
+          {nearYouError}
+        </p>
+      ) : null}
 
       {dropdown}
     </div>
@@ -519,6 +685,7 @@ function SuggestionGroup({
 function SuggestionButton({
   label,
   detail,
+  badge,
   active,
   icon,
   onClick,
@@ -526,6 +693,7 @@ function SuggestionButton({
 }: {
   label: string;
   detail?: string;
+  badge?: string;
   active: boolean;
   icon?: ReactNode;
   onClick: () => void;
@@ -546,8 +714,14 @@ function SuggestionButton({
     >
       {icon ? <span className="mt-0.5 shrink-0 text-brand">{icon}</span> : null}
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium text-ink">
-          {label}
+        <span className="flex min-w-0 items-center gap-2">
+          <span className="truncate text-sm font-medium text-ink">{label}</span>
+          {badge ? (
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand">
+              <Crosshair size={10} weight="bold" />
+              {badge}
+            </span>
+          ) : null}
         </span>
         {detail ? (
           <span className="mt-0.5 block truncate text-xs text-ink-muted">

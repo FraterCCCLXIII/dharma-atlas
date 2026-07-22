@@ -22,6 +22,25 @@ export type MapBounds = {
   west: number;
 };
 
+/** ~0.15° ≈ 10–16 mi; used for point geocodes without a bounding box. */
+export const DEFAULT_POINT_DELTA = 0.15;
+
+/** Wider radius for “Near you” so metro-area places stay in view. */
+export const NEAR_YOU_POINT_DELTA = 0.4;
+
+export function boundsFromPoint(
+  lat: number,
+  lng: number,
+  delta = DEFAULT_POINT_DELTA,
+): MapBounds {
+  return {
+    north: Math.min(90, lat + delta),
+    south: Math.max(-90, lat - delta),
+    east: Math.min(180, lng + delta),
+    west: Math.max(-180, lng - delta),
+  };
+}
+
 export function isPlaceInMapBounds(
   lat: unknown,
   lng: unknown,

@@ -29,6 +29,8 @@ export async function GET(request: Request) {
       address: place.address,
       tradition: place.tradition,
       type: place.type,
+      lat: place.lat,
+      lng: place.lng,
     })),
     total: result.total,
   });

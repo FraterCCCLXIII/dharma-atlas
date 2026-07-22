@@ -120,9 +120,11 @@ export function placeMatchesLocationFilter(
 ): boolean {
   if (isPlaceInMapBounds(lat, lng, filter.bounds)) return true;
 
-  const terms = filter.matchTerms?.length
-    ? filter.matchTerms
-    : matchTermsForLocationLabel(filter.label);
+  // Explicit empty matchTerms means bbox-only (e.g. Near you).
+  const terms =
+    filter.matchTerms != null
+      ? filter.matchTerms
+      : matchTermsForLocationLabel(filter.label);
 
   if (!address || terms.length === 0) return false;
 

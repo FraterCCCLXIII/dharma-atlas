@@ -1,11 +1,10 @@
 import "server-only";
 
-import type { MapBounds } from "@/lib/coords";
+import { boundsFromPoint, type MapBounds } from "@/lib/coords";
 
 const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
 const USER_AGENT = "DharmaAtlas/1.0 (contact@dharmaatlas.com)";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-const DEFAULT_POINT_DELTA = 0.15;
 
 let lastRequestAt = 0;
 
@@ -79,19 +78,6 @@ async function throttle() {
     await new Promise((resolve) => setTimeout(resolve, 1100 - elapsed));
   }
   lastRequestAt = Date.now();
-}
-
-function boundsFromPoint(
-  lat: number,
-  lng: number,
-  delta = DEFAULT_POINT_DELTA,
-): MapBounds {
-  return {
-    north: Math.min(90, lat + delta),
-    south: Math.max(-90, lat - delta),
-    east: Math.min(180, lng + delta),
-    west: Math.max(-180, lng - delta),
-  };
 }
 
 function boundsFromNominatim(
