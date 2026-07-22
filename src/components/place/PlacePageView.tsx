@@ -16,6 +16,7 @@ import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
 import { getPlaceDisplayTags } from "@/lib/schools";
 import type { Place } from "@/types/place";
+import { LoadingScreen } from "@/components/layout/LoadingScreen";
 import { PlaceContactDetails } from "@/components/place/PlaceContactDetails";
 import { PlaceHours } from "@/components/place/PlaceHours";
 import { SimilarPlaces } from "./SimilarPlaces";
@@ -26,9 +27,7 @@ const PlaceSingleMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-[320px] items-center justify-center rounded-2xl bg-surface-muted">
-        <p className="text-sm text-ink-muted">Loading map…</p>
-      </div>
+      <LoadingScreen variant="inline" minHeightClassName="min-h-[320px]" />
     ),
   },
 );

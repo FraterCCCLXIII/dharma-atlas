@@ -1,5 +1,7 @@
 import { LoadingScreen } from "@/components/layout/LoadingScreen";
 
 export default function AdminLoading() {
-  return <LoadingScreen message="Loading admin…" />;
+  return (
+    <LoadingScreen variant="inline" minHeightClassName="min-h-dvh" />
+  );
 }

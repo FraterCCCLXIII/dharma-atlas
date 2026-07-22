@@ -13,6 +13,11 @@ export type NavBarCollisionState = {
   navLinksCollapsed: boolean;
 };
 
+/**
+ * Measure whether the wordmark / explore links collide with the search field.
+ * Returns `null` until the first layout pass so consumers can use CSS breakpoint
+ * fallbacks — avoids flashing the compact (mobile) nav on desktop first paint.
+ */
 export function useNavLogoCompact(
   navRowRef: RefObject<HTMLElement | null>,
   logoRef: RefObject<HTMLElement | null>,
@@ -20,11 +25,8 @@ export function useNavLogoCompact(
   wordmarkMeasureRef: RefObject<HTMLElement | null>,
   leftClusterRef: RefObject<HTMLElement | null> | undefined,
   navLinksRef: RefObject<HTMLElement | null>,
-): NavBarCollisionState {
-  const [state, setState] = useState<NavBarCollisionState>({
-    logoCompact: true,
-    navLinksCollapsed: true,
-  });
+): NavBarCollisionState | null {
+  const [state, setState] = useState<NavBarCollisionState | null>(null);
 
   useLayoutEffect(() => {
     const row = navRowRef.current;
@@ -55,6 +57,7 @@ export function useNavLogoCompact(
 
       setState((prev) => {
         if (
+          prev &&
           prev.logoCompact === logoCompact &&
           prev.navLinksCollapsed === navLinksCollapsed
         ) {

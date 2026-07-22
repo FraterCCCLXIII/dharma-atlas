@@ -35,14 +35,16 @@ export function ExploreNavLinks({
   const entityFilter = entityFilterFromPath(pathname);
   const collapsed = useNavLinksCollapsed();
 
-  // Keep links measurable when collapsed (invisible + absolute) so collision
-  // detection can decide to show them again without oscillating.
+  // Keep links measurable when collapsed/unmeasured (invisible + absolute) so
+  // collision detection can decide without oscillating. Unmeasured uses the
+  // same measurable hide on small screens, then CSS shows them from md up
+  // until JS finishes — avoids flashing the compact mobile nav on desktop.
   const visibilityClass =
     collapsed === false
       ? "relative flex"
       : collapsed === true
         ? "pointer-events-none invisible absolute flex w-max"
-        : "hidden md:flex";
+        : "pointer-events-none invisible absolute flex w-max md:pointer-events-auto md:visible md:relative";
 
   return (
     <nav

@@ -11,6 +11,7 @@ import { filterPlaces } from "@/lib/places";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
+import { LoadingScreen } from "@/components/layout/LoadingScreen";
 import { AllFeaturePage } from "./AllFeaturePage";
 import { DirectoryList } from "./DirectoryList";
 import { FilterBar } from "./FilterBar";
@@ -33,9 +34,7 @@ function useResponsiveFiltersOpen() {
 const PlaceMap = dynamic(() => import("./PlaceMap").then((m) => m.PlaceMap), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full items-center justify-center rounded-2xl border border-border bg-surface-muted">
-      <p className="text-sm text-ink-muted">Loading map…</p>
-    </div>
+    <LoadingScreen variant="inline" minHeightClassName="min-h-full h-full" />
   ),
 });
 
@@ -253,9 +252,7 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
     isAllBrowse ? (
       hasActiveBrowse ? (
         markersLoading ? (
-          <div className="flex min-h-[40vh] items-center justify-center text-sm text-ink-muted">
-            Loading directory…
-          </div>
+          <LoadingScreen />
         ) : (
           <DirectoryList entries={directoryEntries} />
         )
@@ -297,9 +294,7 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
           <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">
             {showAllFeature ? (
               markersLoading ? (
-                <div className="flex min-h-[50vh] items-center justify-center text-sm text-ink-muted">
-                  Loading…
-                </div>
+                <LoadingScreen />
               ) : (
                 <AllFeaturePage places={markers} teachers={teachers} />
               )
@@ -352,9 +347,10 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
             <div className="map-panel h-full overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
               {mapMounted ? (
                 markersLoading ? (
-                  <div className="flex h-full items-center justify-center text-sm text-ink-muted">
-                    Loading map…
-                  </div>
+                  <LoadingScreen
+                    variant="inline"
+                    minHeightClassName="min-h-full h-full"
+                  />
                 ) : (
                   <PlaceMap places={filteredPlaces} />
                 )

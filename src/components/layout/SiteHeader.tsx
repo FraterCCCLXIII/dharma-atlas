@@ -35,10 +35,10 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   return (
     <header
-      className={`relative z-50 shrink-0 overflow-visible border-b border-border bg-surface-elevated/95 backdrop-blur-md ${sticky ? "sticky top-0" : ""} ${className}`}
+      className={`relative z-50 h-[var(--site-header-height)] shrink-0 overflow-visible border-b border-border bg-surface-elevated/95 backdrop-blur-md ${sticky ? "sticky top-0" : ""} ${className}`}
     >
       <div
-        className={`mx-auto flex items-center px-4 py-3 sm:px-6 lg:px-8 ${innerClassName}`}
+        className={`mx-auto flex h-full items-center px-4 sm:px-6 lg:px-8 ${innerClassName}`}
       >
         {children}
       </div>
