@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Docker/Coolify builds have no database — keep manage routes out of prerender.
+export const dynamic = "force-dynamic";
+
 export default async function ManageLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
 

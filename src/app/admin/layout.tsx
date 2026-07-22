@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Docker/Coolify builds have no database. Without this, Next tries to
+// prerender admin pages (e.g. /admin/location-reviews) against 127.0.0.1:5432.
+export const dynamic = "force-dynamic";
+
 export default async function AdminLayout({
   children,
 }: {
