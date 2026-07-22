@@ -7,6 +7,7 @@ export function personProfilePath(slug: string): string {
 }
 
 export const PLACES_LIST_PATH = "/places";
+export const BOOKS_LIST_PATH = "/books";
 
 const EXPLORE_PATHS: Record<EntityFilter, string> = {
   all: "/",
@@ -37,6 +38,8 @@ export function isExplorePath(pathname: string): boolean {
     pathname === "/" ||
     pathname === "/all" ||
     pathname === PLACES_LIST_PATH ||
-    pathname === PEOPLE_LIST_PATH
+    pathname === PEOPLE_LIST_PATH ||
+    pathname === BOOKS_LIST_PATH ||
+    pathname.startsWith(`${BOOKS_LIST_PATH}/`)
   );
 }

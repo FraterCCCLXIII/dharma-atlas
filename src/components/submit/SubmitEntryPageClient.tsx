@@ -6,12 +6,14 @@ import { SubmitEntryPageView } from "@/components/submit/SubmitEntryPageView";
 
 export function SubmitEntryPageClient({
   ontology,
+  initialEntryType,
 }: {
   ontology: SerializedOntologySnapshot;
+  initialEntryType?: "" | "location" | "teacher";
 }) {
   return (
     <OntologyRuntimeProvider ontology={ontology}>
-      <SubmitEntryPageView />
+      <SubmitEntryPageView initialEntryType={initialEntryType} />
     </OntologyRuntimeProvider>
   );
 }

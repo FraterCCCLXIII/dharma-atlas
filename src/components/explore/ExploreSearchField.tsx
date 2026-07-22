@@ -582,7 +582,7 @@ export function ExploreSearchField() {
 
   return (
     <div ref={rootRef} className="w-full min-w-0">
-      <div className="flex w-full min-w-0 items-stretch rounded-full border border-border bg-surface shadow-[var(--shadow-card)] transition focus-within:border-brand focus-within:shadow-[0_0_0_3px_rgba(209,127,40,0.15)] hover:shadow-[0_2px_12px_rgba(58,52,43,0.08)]">
+      <div className="flex h-10 w-full min-w-0 items-stretch rounded-full border border-border bg-surface transition focus-within:border-brand focus-within:shadow-[0_0_0_3px_rgba(209,127,40,0.15)]">
         <SearchScopeDropdown value={scope} onChange={setScope} />
         <span className="my-2 w-px shrink-0 bg-border" aria-hidden />
         <label className="group relative block min-w-0 flex-1">
@@ -618,7 +618,7 @@ export function ExploreSearchField() {
             }}
             onKeyDown={handleKeyDown}
             placeholder={getSearchPlaceholder(scope)}
-            className="w-full bg-transparent py-2.5 pl-10 pr-9 text-sm text-ink outline-none placeholder:text-ink-muted [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+            className="h-full w-full bg-transparent py-0 pl-10 pr-9 text-sm leading-none text-ink outline-none placeholder:text-ink-muted [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
           />
           {draft && (
             <button
@@ -639,7 +639,7 @@ export function ExploreSearchField() {
           aria-pressed={nearYouActive}
           aria-label={nearYouActive ? "Clear near you filter" : "Show places near you"}
           title={nearYouActive ? "Clear near you" : "Near You"}
-          className={`inline-flex shrink-0 items-center gap-1.5 rounded-r-full px-3 text-xs font-semibold transition sm:px-3.5 sm:text-sm ${
+          className={`inline-flex h-full shrink-0 items-center gap-1.5 rounded-r-full px-3 text-xs font-semibold leading-none transition sm:px-3.5 sm:text-sm ${
             nearYouActive
               ? "bg-brand/10 text-brand"
               : "text-ink-secondary hover:bg-surface-muted hover:text-ink"

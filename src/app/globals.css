@@ -29,8 +29,8 @@
   --scrollbar-thumb-hover: var(--brand);
   --scrollbar-size: 10px;
 
-  /* Stable public header height — keeps the page loader from shifting when nav chrome settles. */
-  --site-header-height: 4.25rem;
+  /* Public header height — JS updates this as the entity rail collapses. */
+  --site-header-height: 4.75rem;
 }
 
 @theme inline {

@@ -12,6 +12,24 @@ const nextConfig: NextConfig = {
     // Cap retina srcset so heroes never request 2048/3840 (sources are ≤1600px).
     deviceSizes: [640, 750, 828, 1080, 1200, 1600],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+      },
+      {
+        protocol: "https",
+        hostname: "ws-na.amazon-adsystem.com",
+      },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images-na.ssl-images-amazon.com",
+      },
+    ],
   },
   experimental: {
     serverActions: {

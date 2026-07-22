@@ -14,8 +14,20 @@ export const metadata: Metadata = {
     "Suggest a meditation center, monastery, or teacher for the Dharma Atlas directory.",
 };
 
-export default async function SubmitPage() {
+export default async function SubmitPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
   const ontology = await getOntologySnapshot();
+  const { type } = await searchParams;
+  const initialEntryType =
+    type === "location" || type === "teacher" ? type : undefined;
 
-  return <SubmitEntryPageClient ontology={serializeOntologySnapshot(ontology)} />;
+  return (
+    <SubmitEntryPageClient
+      ontology={serializeOntologySnapshot(ontology)}
+      initialEntryType={initialEntryType}
+    />
+  );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, SlidersHorizontal } from "@phosphor-icons/react";
+import { ArrowLeft, Plus, SlidersHorizontal } from "@phosphor-icons/react";
 import Link from "next/link";
 import { ExploreSearchField } from "@/components/explore/ExploreSearchField";
 import { ExploreNavLinks } from "@/components/explore/EntityToggle";
@@ -14,6 +14,7 @@ import { SiteMenu } from "@/components/layout/SiteMenu";
 import { useNavLogoCompact } from "@/hooks/useNavLogoCompact";
 import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import {
+  BOOKS_LIST_PATH,
   entityFilterFromPath,
   isExplorePath,
   pathFromEntityFilter,
@@ -25,6 +26,8 @@ interface SiteHeaderProps {
   className?: string;
   innerClassName?: string;
   sticky?: boolean;
+  headerRef?: React.RefObject<HTMLElement | null>;
+  onHoverChange?: (hovered: boolean) => void;
 }
 
 export function SiteHeader({
@@ -32,13 +35,18 @@ export function SiteHeader({
   className = "",
   innerClassName = "w-full",
   sticky = false,
+  headerRef,
+  onHoverChange,
 }: SiteHeaderProps) {
   return (
     <header
-      className={`relative z-50 h-[var(--site-header-height)] shrink-0 overflow-visible border-b border-border bg-surface-elevated/95 backdrop-blur-md ${sticky ? "sticky top-0" : ""} ${className}`}
+      ref={headerRef}
+      onMouseEnter={() => onHoverChange?.(true)}
+      onMouseLeave={() => onHoverChange?.(false)}
+      className={`relative z-50 shrink-0 overflow-visible border-b border-border bg-surface-elevated/95 backdrop-blur-md ${sticky ? "sticky top-0" : ""} ${className}`}
     >
       <div
-        className={`mx-auto flex h-full items-center px-4 sm:px-6 lg:px-8 ${innerClassName}`}
+        className={`mx-auto flex items-center px-4 sm:px-6 lg:px-8 ${innerClassName}`}
       >
         {children}
       </div>
@@ -50,53 +58,80 @@ function NavBarLayout({
   center,
   trailing,
   leading,
+  railVisible,
 }: {
   center: ReactNode;
   trailing?: ReactNode;
   leading?: ReactNode;
+  railVisible: boolean;
 }) {
   const navRowRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
   const leftClusterRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
   const wordmarkMeasureRef = useRef<HTMLImageElement>(null);
-  const navLinksRef = useRef<HTMLElement>(null);
   const collision = useNavLogoCompact(
     navRowRef,
     logoRef,
     centerRef,
     wordmarkMeasureRef,
     leftClusterRef,
-    navLinksRef,
   );
 
   return (
     <NavBarLogoContext.Provider value={collision}>
-      <div
-        ref={navRowRef}
-        className="relative flex w-full min-w-0 items-center gap-2 sm:gap-3"
-      >
-        {leading}
-
+      <div className="flex w-full min-w-0 flex-col py-2">
         <div
-          ref={leftClusterRef}
-          className="relative z-10 flex min-w-0 shrink-0 items-center gap-1 sm:gap-2"
+          ref={navRowRef}
+          className="relative flex h-10 w-full min-w-0 items-center gap-2 sm:gap-3"
         >
-          <SiteLogoWordmarkMeasure measureRef={wordmarkMeasureRef} />
-          <SiteLogo logoRef={logoRef} />
-          <ExploreNavLinks linksRef={navLinksRef} />
+          {leading}
+
+          <div
+            ref={leftClusterRef}
+            className="relative z-10 flex min-w-0 shrink-0 items-center gap-1 sm:gap-2"
+          >
+            <SiteLogoWordmarkMeasure measureRef={wordmarkMeasureRef} />
+            <SiteLogo logoRef={logoRef} />
+          </div>
+
+          <div
+            ref={centerRef}
+            className="pointer-events-none absolute left-1/2 z-0 flex w-[min(100%-8rem,28rem)] -translate-x-1/2 justify-center sm:w-[min(100%-12rem,32rem)]"
+          >
+            <div className="pointer-events-auto w-full min-w-0">{center}</div>
+          </div>
+
+          <div className="relative z-10 ml-auto flex h-10 shrink-0 items-center gap-2 sm:gap-3">
+            {trailing}
+            <Link
+              href="/add"
+              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-sm font-semibold leading-none text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink sm:px-3.5"
+            >
+              <Plus size={16} weight="bold" className="shrink-0" />
+              <span className="hidden sm:inline">Add a place</span>
+              <span className="sm:hidden">Add</span>
+            </Link>
+            <SiteMenu />
+          </div>
         </div>
 
         <div
-          ref={centerRef}
-          className="pointer-events-none absolute left-1/2 z-0 flex w-[min(100%-8rem,28rem)] -translate-x-1/2 justify-center sm:w-[min(100%-12rem,32rem)]"
+          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+            railVisible ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          }`}
+          aria-hidden={!railVisible}
+          {...(!railVisible ? ({ inert: "" } as Record<string, string>) : {})}
         >
-          <div className="pointer-events-auto w-full min-w-0">{center}</div>
-        </div>
-
-        <div className="relative z-10 ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-          {trailing}
-          <SiteMenu />
+          <div className="overflow-hidden">
+            <div
+              className={`flex justify-center pt-1.5 transition-opacity duration-300 ${
+                railVisible ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            >
+              <ExploreNavLinks />
+            </div>
+          </div>
         </div>
       </div>
     </NavBarLogoContext.Provider>
@@ -119,10 +154,10 @@ function FilterToggleButton({
       aria-expanded={filtersOpen}
       aria-controls="explore-filters"
       aria-label={filtersOpen ? "Hide filters" : "Show filters"}
-      className={`relative inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-sm font-medium transition ${
+      className={`relative inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 text-sm font-medium leading-none transition ${
         filtersOpen
           ? "border-accent bg-accent text-brand-foreground"
-          : "border-border text-ink-secondary hover:border-border-strong hover:bg-surface-muted hover:text-ink"
+          : "border-border bg-surface text-ink-secondary hover:border-border-strong hover:bg-surface-muted hover:text-ink"
       }`}
     >
       <SlidersHorizontal size={16} weight="bold" />
@@ -142,10 +177,17 @@ function FilterToggleButton({
   );
 }
 
-export function PublicNav() {
+export function PublicNav({
+  railVisible = true,
+  onHeaderHoverChange,
+}: {
+  railVisible?: boolean;
+  onHeaderHoverChange?: (hovered: boolean) => void;
+} = {}) {
   useExploreRouteSync();
   const router = useRouter();
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const entityFilter = useExploreStore((s) => s.entityFilter);
@@ -157,6 +199,9 @@ export function PublicNav() {
   const activeFilterCount = useActiveFilterCount();
 
   const onExplore = isExplorePath(pathname);
+  const onBooks =
+    pathname === BOOKS_LIST_PATH || pathname.startsWith(`${BOOKS_LIST_PATH}/`);
+  const showBackToMap = !onExplore && !onBooks;
   const pathFilter = entityFilterFromPath(pathname);
   const explorePath = pathFromEntityFilter(
     pathFilter === "people" ? "people" : "locations",
@@ -180,11 +225,37 @@ export function PublicNav() {
     router.push(explorePath);
   };
 
+  // Keep layout offsets in sync as the rail expands/collapses.
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const sync = () => {
+      document.documentElement.style.setProperty(
+        "--site-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+
+    sync();
+    const observer = new ResizeObserver(sync);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--site-header-height");
+    };
+  }, [railVisible]);
+
   return (
-    <SiteHeader sticky>
+    <SiteHeader
+      sticky
+      headerRef={headerRef}
+      onHoverChange={onHeaderHoverChange}
+    >
       <NavBarLayout
+        railVisible={railVisible}
         leading={
-          onExplore ? undefined : (
+          showBackToMap ? (
             <Link
               href={explorePath}
               className="relative z-10 mr-1 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
@@ -192,7 +263,7 @@ export function PublicNav() {
             >
               <ArrowLeft size={16} weight="bold" />
             </Link>
-          )
+          ) : undefined
         }
         center={<ExploreSearchField />}
         trailing={

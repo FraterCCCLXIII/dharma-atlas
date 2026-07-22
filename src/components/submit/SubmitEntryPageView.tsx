@@ -8,8 +8,12 @@ import { placeTypes } from "@/lib/validations/place";
 
 type EntryType = "" | "location" | "teacher";
 
-export function SubmitEntryPageView() {
-  const [entryType, setEntryType] = useState<EntryType>("");
+export function SubmitEntryPageView({
+  initialEntryType = "",
+}: {
+  initialEntryType?: EntryType;
+}) {
+  const [entryType, setEntryType] = useState<EntryType>(initialEntryType);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -95,7 +99,7 @@ export function SubmitEntryPageView() {
       title="Submit an entry"
       description={
         entryType === "location"
-          ? "Suggest a meditation center, monastery, temple, or other place for the directory."
+          ? "Suggest a meditation center, monastery, temple, or other place. This does not make you the listing admin."
           : entryType === "teacher"
             ? "Suggest a person, guide, or lineage holder for the directory."
             : "Suggest a meditation center, monastery, or person for the directory."

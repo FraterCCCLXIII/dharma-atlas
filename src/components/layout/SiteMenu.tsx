@@ -1,26 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useNavLinksCollapsed } from "@/components/layout/NavBarLogoContext";
 import { authClient } from "@/lib/auth-client";
-import {
-  entityFilterFromPath,
-  pathFromEntityFilter,
-} from "@/lib/explore-routes";
 import { isAdminRole } from "@/lib/permissions";
 
-const EXPLORE_MENU_LINKS = [
-  { value: "people" as const, label: "People" },
-  { value: "locations" as const, label: "Places" },
-];
-
 export function SiteMenu() {
-  const pathname = usePathname();
   const { data: session } = authClient.useSession();
-  const navLinksCollapsed = useNavLinksCollapsed();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -28,8 +15,6 @@ export function SiteMenu() {
 
   const isLoggedIn = Boolean(session?.user);
   const isAdmin = isAdminRole(session?.user.role);
-  const entityFilter = entityFilterFromPath(pathname);
-  const showExploreInMenu = navLinksCollapsed !== false;
 
   const updateMenuPosition = useCallback(() => {
     const button = buttonRef.current;
@@ -90,28 +75,6 @@ export function SiteMenu() {
         className="z-[1000] flex min-w-[11rem] flex-col overflow-hidden rounded-xl border border-border bg-surface-elevated shadow-[var(--shadow-float)]"
       >
         <div className="py-1">
-          {showExploreInMenu ? (
-            <div className={navLinksCollapsed === null ? "md:hidden" : undefined}>
-              {EXPLORE_MENU_LINKS.map(({ value, label }) => {
-                const isActive = entityFilter === value;
-                return (
-                  <Link
-                    key={value}
-                    href={pathFromEntityFilter(value)}
-                    role="menuitem"
-                    aria-current={isActive ? "page" : undefined}
-                    onClick={() => setMenuOpen(false)}
-                    className={`block w-full px-4 py-2.5 text-left text-sm font-medium transition hover:bg-surface-muted ${
-                      isActive ? "bg-surface-muted text-ink" : "text-ink"
-                    }`}
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-              <div className="my-1 border-t border-border" />
-            </div>
-          ) : null}
           {isLoggedIn ? (
             <>
               <p className="truncate px-4 py-2 text-xs text-ink-muted">
@@ -138,12 +101,20 @@ export function SiteMenu() {
             </>
           ) : null}
           <Link
+            href="/add"
+            role="menuitem"
+            onClick={() => setMenuOpen(false)}
+            className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+          >
+            Add a place
+          </Link>
+          <Link
             href="/submit"
             role="menuitem"
             onClick={() => setMenuOpen(false)}
             className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
           >
-            Submit entry
+            Suggest an entry
           </Link>
           <Link
             href="/claim"
@@ -194,7 +165,7 @@ export function SiteMenu() {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative inline-flex h-10 items-center leading-none">
         <button
           ref={buttonRef}
           type="button"
@@ -205,7 +176,7 @@ export function SiteMenu() {
           aria-expanded={menuOpen}
           aria-haspopup="menu"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
         >
           <span className="flex flex-col items-center justify-center gap-[5px]" aria-hidden>
             <span className="block h-0.5 w-[18px] rounded-full bg-current" />

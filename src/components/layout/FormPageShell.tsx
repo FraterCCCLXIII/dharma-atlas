@@ -8,7 +8,7 @@ interface FormPageShellProps {
   title: string;
   description?: string;
   children: ReactNode;
-  backHref?: string;
+  backHref?: string | null;
   backLabel?: string;
   /** Compact layout for embedding inside Manage / Admin shells. */
   embedded?: boolean;
@@ -18,19 +18,21 @@ export function FormPageShell({
   title,
   description,
   children,
-  backHref = "/",
+  backHref = null,
   backLabel = "Back to explore",
   embedded = false,
 }: FormPageShellProps) {
   const body = (
     <>
-      <Link
-        href={backHref}
-        className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
-      >
-        <ArrowLeft size={18} weight="bold" />
-        {backLabel}
-      </Link>
+      {backHref != null && (
+        <Link
+          href={backHref}
+          className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink"
+        >
+          <ArrowLeft size={18} weight="bold" />
+          {backLabel}
+        </Link>
+      )}
 
       <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
         {title}

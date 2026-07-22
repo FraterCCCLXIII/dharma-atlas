@@ -6,67 +6,76 @@ import {
   useEffect,
   useRef,
   useState,
-  type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
-import { CaretDown } from "@phosphor-icons/react";
-import { useNavLinksCollapsed } from "@/components/layout/NavBarLogoContext";
-import { entityFilterFromPath, pathFromEntityFilter } from "@/lib/explore-routes";
+import {
+  CaretDown,
+  MapPin,
+  UsersThree,
+  type Icon,
+} from "@phosphor-icons/react";
+import {
+  entityFilterFromPath,
+  pathFromEntityFilter,
+} from "@/lib/explore-routes";
 import type { EntityFilter } from "@/store/explore-store";
 
 export type ExploreEntity = "locations" | "people";
 
-const OPTIONS: { value: ExploreEntity; label: string }[] = [
-  { value: "people", label: "People" },
-  { value: "locations", label: "Places" },
+const SEARCH_OPTIONS: { value: ExploreEntity; label: string; icon: Icon }[] = [
+  { value: "people", label: "People", icon: UsersThree },
+  { value: "locations", label: "Places", icon: MapPin },
+];
+
+const NAV_LINKS: {
+  href: string;
+  label: string;
+  icon: Icon;
+  isActive: (pathname: string) => boolean;
+}[] = [
+  {
+    href: "/places",
+    label: "Places",
+    icon: MapPin,
+    isActive: (pathname) =>
+      pathname === "/places" || pathname.startsWith("/place/"),
+  },
+  {
+    href: "/people",
+    label: "People",
+    icon: UsersThree,
+    isActive: (pathname) =>
+      pathname === "/people" || pathname.startsWith("/person/"),
+  },
 ];
 
 function exploreEntityFromFilter(filter: EntityFilter): ExploreEntity {
   return filter === "people" ? "people" : "locations";
 }
 
-export function ExploreNavLinks({
-  linksRef,
-}: {
-  linksRef?: RefObject<HTMLElement | null>;
-}) {
+export function ExploreNavLinks() {
   const pathname = usePathname();
-  const entityFilter = entityFilterFromPath(pathname);
-  const collapsed = useNavLinksCollapsed();
-
-  // Keep links measurable when collapsed/unmeasured (invisible + absolute) so
-  // collision detection can decide without oscillating. Unmeasured uses the
-  // same measurable hide on small screens, then CSS shows them from md up
-  // until JS finishes — avoids flashing the compact mobile nav on desktop.
-  const visibilityClass =
-    collapsed === false
-      ? "relative flex"
-      : collapsed === true
-        ? "pointer-events-none invisible absolute flex w-max"
-        : "pointer-events-none invisible absolute flex w-max md:pointer-events-auto md:visible md:relative";
 
   return (
     <nav
-      ref={linksRef}
       aria-label="Explore"
-      aria-hidden={collapsed === true ? true : undefined}
-      className={`${visibilityClass} shrink-0 items-center gap-1 sm:gap-2`}
+      className="flex shrink-0 items-center justify-center gap-1"
     >
-      {OPTIONS.map(({ value, label }) => {
-        const isActive = entityFilter === value;
+      {NAV_LINKS.map(({ href, label, icon: IconComponent, isActive }) => {
+        const active = isActive(pathname);
         return (
           <Link
-            key={value}
-            href={pathFromEntityFilter(value)}
-            tabIndex={collapsed === true ? -1 : undefined}
-            aria-current={isActive ? "page" : undefined}
-            className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-semibold transition sm:px-3 ${
-              isActive
-                ? "text-ink"
+            key={href}
+            href={href}
+            aria-current={active ? "page" : undefined}
+            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-sm font-semibold transition ${
+              active
+                ? "bg-brand text-brand-foreground shadow-[0_1px_2px_rgba(58,52,43,0.12)]"
                 : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
             }`}
           >
+            <IconComponent size={15} weight="bold" className="shrink-0" />
             {label}
           </Link>
         );
@@ -82,8 +91,10 @@ export function SearchScopeDropdown({
   value: ExploreEntity;
   onChange: (value: ExploreEntity) => void;
 }) {
-  const selectedLabel =
-    OPTIONS.find((option) => option.value === value)?.label ?? "Places";
+  const selected =
+    SEARCH_OPTIONS.find((option) => option.value === value) ?? SEARCH_OPTIONS[1];
+  const selectedLabel = selected?.label ?? "Places";
+  const SelectedIcon = selected?.icon ?? MapPin;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -149,7 +160,7 @@ export function SearchScopeDropdown({
         className="z-[1000] flex min-w-[10rem] flex-col overflow-hidden rounded-xl border border-border bg-surface-elevated shadow-[var(--shadow-float)]"
       >
         <div className="py-1">
-          {OPTIONS.map(({ value: optionValue, label }) => {
+          {SEARCH_OPTIONS.map(({ value: optionValue, label, icon: IconComponent }) => {
             const active = value === optionValue;
             return (
               <button
@@ -161,10 +172,11 @@ export function SearchScopeDropdown({
                   onChange(optionValue);
                   setMenuOpen(false);
                 }}
-                className={`block w-full px-4 py-2.5 text-left text-sm font-medium transition hover:bg-surface-muted ${
+                className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium transition hover:bg-surface-muted ${
                   active ? "bg-surface-muted text-ink" : "text-ink-secondary"
                 }`}
               >
+                <IconComponent size={16} weight="bold" className="shrink-0" />
                 {label}
               </button>
             );
@@ -186,8 +198,9 @@ export function SearchScopeDropdown({
         aria-expanded={menuOpen}
         aria-haspopup="menu"
         aria-label={`Search in: ${selectedLabel}`}
-        className="inline-flex shrink-0 items-center gap-1 rounded-l-full py-2.5 pl-3.5 pr-2 text-sm font-semibold text-ink transition hover:bg-surface-muted"
+        className="inline-flex h-full shrink-0 items-center gap-1.5 rounded-l-full px-3.5 pr-2 text-sm font-semibold leading-none text-ink transition hover:bg-surface-muted"
       >
+        <SelectedIcon size={15} weight="bold" className="shrink-0" />
         <span className="whitespace-nowrap">{selectedLabel}</span>
         <CaretDown
           size={14}

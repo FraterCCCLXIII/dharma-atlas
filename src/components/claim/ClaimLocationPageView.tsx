@@ -58,8 +58,8 @@ export function ClaimLocationPageView({
       title={title}
       description={description}
       embedded={embedded}
-      backHref={embedded ? "/manage" : "/"}
-      backLabel={embedded ? "Back to Place Listings" : "Back to explore"}
+      backHref={embedded ? "/manage" : null}
+      backLabel="Back to Place Listings"
     >
       {children}
     </FormPageShell>
