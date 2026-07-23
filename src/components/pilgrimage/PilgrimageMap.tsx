@@ -84,7 +84,11 @@ function FitToPoints({
   focusKey: string;
 }) {
   const map = useMap();
-  const pointsKey = points.map((p) => p.join(",")).join("|");
+  // Sort so reordering the same stops (customize drag) does not re-fit.
+  const pointsKey = [...points]
+    .map((p) => p.join(","))
+    .sort()
+    .join("|");
 
   useEffect(() => {
     if (points.length === 0) return;
@@ -114,10 +118,13 @@ export type PilgrimageMapMarker = PilgrimageSite & {
 function PilgrimageMapPin({
   site,
   isActive,
+  isListHovered,
   onSelectSite,
 }: {
   site: PilgrimageMapMarker;
   isActive: boolean;
+  /** Hovered from the stop list — opens the same hovercard as marker hover. */
+  isListHovered: boolean;
   onSelectSite?: (slug: string) => void;
 }) {
   const map = useMap();
@@ -150,7 +157,8 @@ function PilgrimageMapPin({
   };
 
   useEffect(() => {
-    if (!isActive) {
+    const shouldShow = isActive || isListHovered;
+    if (!shouldShow) {
       if (!hovered) markerRef.current?.closePopup();
       return;
     }
@@ -159,7 +167,7 @@ function PilgrimageMapPin({
     if (!marker || marker.isPopupOpen()) return;
 
     return openMarkerPopupWhenReady(map, marker);
-  }, [isActive, hovered, map]);
+  }, [isActive, isListHovered, hovered, map]);
 
   useEffect(() => () => cancelHoverClose(hideTimerRef), []);
 
@@ -199,6 +207,7 @@ export function PilgrimageMap({
   routePoints,
   focusPoints,
   activeSlug,
+  hoveredSlug,
   focusKey,
   onSelectSite,
 }: {
@@ -207,6 +216,8 @@ export function PilgrimageMap({
   /** Optional override for fitBounds (e.g. a single selected site). */
   focusPoints?: [number, number][];
   activeSlug?: string | null;
+  /** Stop hovered in the list — shows that marker’s hovercard. */
+  hoveredSlug?: string | null;
   /** Change this to re-run fitBounds (e.g. selected route slug). */
   focusKey: string;
   onSelectSite?: (slug: string) => void;
@@ -264,6 +275,7 @@ export function PilgrimageMap({
           key={site.slug}
           site={site}
           isActive={activeSlug === site.slug}
+          isListHovered={hoveredSlug === site.slug}
           onSelectSite={onSelectSite}
         />
       ))}

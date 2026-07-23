@@ -374,3 +374,54 @@ export const placeFavorites = pgTable(
 );
 
 export type PlaceFavoriteRow = typeof placeFavorites.$inferSelect;
+
+/** Saved pilgrimage sites/routes (canonical catalog slugs; no FK to static data). */
+export const pilgrimageFavorites = pgTable(
+  "pilgrimage_favorites",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    /** `site` | `route` */
+    kind: text("kind").notNull(),
+    slug: text("slug").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("pilgrimage_favorites_user_kind_slug_idx").on(
+      table.userId,
+      table.kind,
+      table.slug,
+    ),
+    index("pilgrimage_favorites_user_idx").on(table.userId),
+  ],
+);
+
+export type PilgrimageFavoriteRow = typeof pilgrimageFavorites.$inferSelect;
+
+/** User-created or forked pilgrimage itineraries. */
+export const userPilgrimageRoutes = pgTable(
+  "user_pilgrimage_routes",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    /** Canonical route this was forked from, if any. */
+    baseRouteSlug: text("base_route_slug"),
+    stopSlugs: jsonb("stop_slugs").$type<string[]>().notNull(),
+    /** Unlisted public share token (`/pilgrimage/r/[shareId]`). */
+    shareId: text("share_id").notNull(),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("user_pilgrimage_routes_share_id_idx").on(table.shareId),
+    index("user_pilgrimage_routes_user_idx").on(table.userId),
+  ],
+);
+
+export type UserPilgrimageRouteRow = typeof userPilgrimageRoutes.$inferSelect;

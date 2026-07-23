@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { ArrowLeft, MapPin, Signpost } from "@phosphor-icons/react/dist/ssr";
+import { MapPin, Signpost } from "@phosphor-icons/react/dist/ssr";
 import {
   getPilgrimageImage,
   PILGRIMAGE_ROUTES,
   pilgrimageRoutePath,
   type PilgrimageSite,
 } from "@/data/pilgrimage";
-import { PILGRIMAGE_LIST_PATH } from "@/lib/explore-routes";
 import { traditionGradient } from "@/lib/places";
+import { PilgrimageSiteActions } from "./PilgrimageSiteActions";
 
 export function PilgrimageSiteView({ site }: { site: PilgrimageSite }) {
   const routes = PILGRIMAGE_ROUTES.filter((route) =>
@@ -19,15 +19,7 @@ export function PilgrimageSiteView({ site }: { site: PilgrimageSite }) {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
-      <Link
-        href={PILGRIMAGE_LIST_PATH}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-secondary transition hover:text-ink"
-      >
-        <ArrowLeft size={14} weight="bold" />
-        Pilgrimage
-      </Link>
-
-      <header className="mt-6">
+      <header>
         <div
           className={`relative mb-6 aspect-[16/9] overflow-hidden rounded-2xl border border-border bg-gradient-to-br shadow-[var(--shadow-card)] ${traditionGradient(site.tradition)}`}
         >
@@ -61,6 +53,11 @@ export function PilgrimageSiteView({ site }: { site: PilgrimageSite }) {
             {site.country}
           </span>
         </div>
+        <PilgrimageSiteActions
+          slug={site.slug}
+          name={site.name}
+          summary={site.summary}
+        />
       </header>
 
       <section className="mt-10 space-y-3">

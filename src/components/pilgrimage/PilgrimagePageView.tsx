@@ -26,6 +26,7 @@ import {
   usePilgrimageActiveFilterCount,
   usePilgrimageStore,
 } from "@/store/pilgrimage-store";
+import { PilgrimageFavoriteButton } from "./PilgrimageFavoriteButton";
 import { PilgrimageFilterBar } from "./PilgrimageFilterBar";
 import type { PilgrimageMapMarker } from "./PilgrimageMap";
 
@@ -81,7 +82,7 @@ function SiteCard({
   return (
     <li>
       <div
-        className={`flex h-full flex-col overflow-hidden rounded-2xl border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName} ${
+        className={`relative flex h-full flex-col overflow-hidden rounded-2xl border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName} ${
           selected
             ? "border-accent ring-2 ring-brand/25"
             : "border-border"
@@ -128,6 +129,13 @@ function SiteCard({
             </p>
           </div>
         </button>
+        <div className="absolute right-3 top-3 z-10">
+          <PilgrimageFavoriteButton
+            kind="site"
+            slug={site.slug}
+            variant="overlay"
+          />
+        </div>
         <div className="border-t border-border px-4 py-2.5">
           <Link
             href={pilgrimageSitePath(site.slug)}
@@ -156,7 +164,7 @@ function RouteCard({
   return (
     <li>
       <div
-        className={`flex h-full flex-col overflow-hidden rounded-2xl border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName} ${
+        className={`relative flex h-full flex-col overflow-hidden rounded-2xl border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName} ${
           selected
             ? "border-accent ring-2 ring-brand/25"
             : "border-border"
@@ -206,6 +214,13 @@ function RouteCard({
             </p>
           </div>
         </button>
+        <div className="absolute right-3 top-3 z-10">
+          <PilgrimageFavoriteButton
+            kind="route"
+            slug={route.slug}
+            variant="overlay"
+          />
+        </div>
         <div className="border-t border-border px-4 py-2.5">
           <Link
             href={pilgrimageRoutePath(route.slug)}
