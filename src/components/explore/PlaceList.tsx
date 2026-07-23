@@ -73,7 +73,7 @@ function PlaceListPagination({
   return (
     <nav
       aria-label="Locations pagination"
-      className="flex shrink-0 items-center justify-between gap-2 border-t border-border px-4 py-3 sm:px-6"
+      className="mt-4 flex items-center justify-between gap-2"
     >
       <button
         type="button"
@@ -83,7 +83,7 @@ function PlaceListPagination({
       >
         Previous
       </button>
-      <ol className="flex min-w-0 items-center justify-center gap-1 overflow-x-auto">
+      <ol className="flex min-w-0 flex-wrap items-center justify-center gap-1">
         {rail.map((item, index) =>
           item === "ellipsis" ? (
             <li
@@ -318,22 +318,18 @@ export function PlaceList({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <div className="shrink-0 px-4 pt-4 sm:px-6 sm:pt-6">
-        <PlaceListHeader count={total} />
-      </div>
-      <div
-        ref={parentRef}
-        className={`min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6 ${
-          pageFetching ? "opacity-60" : ""
-        }`}
-        aria-busy={pageFetching || undefined}
-      >
-        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-          {places.map((place, index) => (
-            <PlaceCard key={place.id} place={place} index={index} />
-          ))}
-        </div>
+    <div
+      ref={parentRef}
+      className={`min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4 sm:px-6 sm:pt-6 sm:pb-6 ${
+        pageFetching ? "opacity-60" : ""
+      }`}
+      aria-busy={pageFetching || undefined}
+    >
+      <PlaceListHeader count={total} />
+      <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+        {places.map((place, index) => (
+          <PlaceCard key={place.id} place={place} index={index} />
+        ))}
       </div>
       <PlaceListPagination
         page={safePage}

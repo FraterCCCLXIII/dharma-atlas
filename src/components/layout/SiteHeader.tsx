@@ -18,12 +18,17 @@ import {
   entityFilterFromPath,
   isExplorePath,
   pathFromEntityFilter,
+  PILGRIMAGE_LIST_PATH,
 } from "@/lib/explore-routes";
 import {
   useBooksActiveFilterCount,
   useBooksStore,
 } from "@/store/books-store";
 import { useExploreStore } from "@/store/explore-store";
+import {
+  usePilgrimageActiveFilterCount,
+  usePilgrimageStore,
+} from "@/store/pilgrimage-store";
 
 interface SiteHeaderProps {
   children: ReactNode;
@@ -198,6 +203,8 @@ export function PublicNav({
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const booksFiltersOpen = useBooksStore((s) => s.filtersOpen);
   const toggleBooksFilters = useBooksStore((s) => s.toggleFilters);
+  const pilgrimageFiltersOpen = usePilgrimageStore((s) => s.filtersOpen);
+  const togglePilgrimageFilters = usePilgrimageStore((s) => s.toggleFilters);
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const traditions = useExploreStore((s) => s.traditions);
   const schools = useExploreStore((s) => s.schools);
@@ -206,19 +213,24 @@ export function PublicNav({
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const exploreActiveFilterCount = useActiveFilterCount();
   const booksActiveFilterCount = useBooksActiveFilterCount();
+  const pilgrimageActiveFilterCount = usePilgrimageActiveFilterCount();
 
   const onExplore = isExplorePath(pathname);
   const onBooks =
     pathname === BOOKS_LIST_PATH || pathname.startsWith(`${BOOKS_LIST_PATH}/`);
-  const onExploreSurface = onExplore && !onBooks;
-  const showBackToMap = !onExplore && !onBooks;
+  const onPilgrimage =
+    pathname === PILGRIMAGE_LIST_PATH ||
+    pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`);
+  const onCatalogSurface = onBooks || onPilgrimage;
+  const onExploreSurface = onExplore && !onCatalogSurface;
+  const showBackToMap = !onExplore && !onCatalogSurface;
   const pathFilter = entityFilterFromPath(pathname);
   const explorePath = pathFromEntityFilter(
     pathFilter === "people" ? "people" : "locations",
   );
   // Home feature view has no filter sidebar — hide the toggle too.
   const showHomeFeature =
-    !onBooks &&
+    !onCatalogSurface &&
     entityFilter === "all" &&
     traditions.length === 0 &&
     schools.length === 0 &&
@@ -232,6 +244,11 @@ export function PublicNav({
       return;
     }
 
+    if (onPilgrimage) {
+      togglePilgrimageFilters();
+      return;
+    }
+
     if (onExploreSurface) {
       toggleFilters();
       return;
@@ -240,6 +257,25 @@ export function PublicNav({
     useExploreStore.setState({ filtersOpen: true });
     router.push(explorePath);
   };
+
+  const filterToggleOpen = onBooks
+    ? booksFiltersOpen
+    : onPilgrimage
+      ? pilgrimageFiltersOpen
+      : filtersOpen;
+  const filterToggleCount = onBooks
+    ? booksActiveFilterCount
+    : onPilgrimage
+      ? pilgrimageActiveFilterCount
+      : exploreActiveFilterCount;
+  const filterControlsId = onBooks
+    ? "books-filters"
+    : onPilgrimage
+      ? "pilgrimage-filters"
+      : "explore-filters";
+  // Detail pages for pilgrimage don't show the filter sidebar.
+  const showFilterToggle =
+    !showHomeFeature && !(onPilgrimage && pathname !== PILGRIMAGE_LIST_PATH);
 
   // Keep layout offsets in sync as the rail expands/collapses.
   useEffect(() => {
@@ -283,16 +319,14 @@ export function PublicNav({
         }
         center={<ExploreSearchField />}
         trailing={
-          showHomeFeature ? undefined : (
+          showFilterToggle ? (
             <FilterToggleButton
-              filtersOpen={onBooks ? booksFiltersOpen : filtersOpen}
-              activeFilterCount={
-                onBooks ? booksActiveFilterCount : exploreActiveFilterCount
-              }
+              filtersOpen={filterToggleOpen}
+              activeFilterCount={filterToggleCount}
               onToggle={handleFilterToggle}
-              controlsId={onBooks ? "books-filters" : "explore-filters"}
+              controlsId={filterControlsId}
             />
-          )
+          ) : undefined
         }
       />
     </SiteHeader>

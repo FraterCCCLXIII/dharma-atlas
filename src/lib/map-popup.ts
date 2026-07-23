@@ -1,6 +1,19 @@
 import type { Root } from "react-dom/client";
 import type { ReactNode } from "react";
 import type L from "leaflet";
+import { getMarkerPopupOffset } from "@/lib/map-markers";
+
+/** Pane hosted on `[data-map-shell]` so hovercards can clear the map chrome. */
+export const MAP_HOVER_POPUP_PANE = "hoverCardPane";
+
+/** Shared Leaflet popup options for map hovercards. */
+export const MAP_HOVER_POPUP_OPTIONS = {
+  closeButton: false,
+  autoPan: false,
+  offset: getMarkerPopupOffset(),
+  className: "map-place-popup",
+  pane: MAP_HOVER_POPUP_PANE,
+} as const;
 
 function isMapAnimating(map: L.Map): boolean {
   const internal = map as L.Map & {
@@ -11,6 +24,16 @@ function isMapAnimating(map: L.Map): boolean {
 }
 
 export const MAP_HOVER_CLOSE_MS = 150;
+
+/** True when the lat/lng projects inside the map container’s pixel box. */
+export function isLatLngInMapContainer(
+  map: L.Map,
+  latlng: L.LatLngExpression,
+): boolean {
+  const point = map.latLngToContainerPoint(latlng);
+  const size = map.getSize();
+  return point.x >= 0 && point.y >= 0 && point.x <= size.x && point.y <= size.y;
+}
 
 export function cancelHoverClose(
   timerRef: { current: ReturnType<typeof setTimeout> | null },

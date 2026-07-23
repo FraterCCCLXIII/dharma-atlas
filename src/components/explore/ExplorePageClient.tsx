@@ -9,6 +9,10 @@ import { fetchExploreMarkers } from "@/lib/explore-markers-client";
 import { fetchExploreTeachers } from "@/lib/explore-teachers-client";
 import { placeMatchesLocationFilter } from "@/lib/location-filter";
 import { filterPlaces } from "@/lib/places";
+import {
+  readPersistedSearchAsMapMoves,
+  useExplorePlacesPersist,
+} from "@/hooks/useExplorePlacesPersist";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
@@ -227,9 +231,12 @@ export function ExplorePageClient() {
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const isDesktop = useDesktopLayout();
-  const [searchAsMapMoves, setSearchAsMapMoves] = useState(true);
+  const [searchAsMapMoves, setSearchAsMapMoves] = useState(
+    readPersistedSearchAsMapMoves,
+  );
   // When on, the place list filters to the current map viewport (once bounds exist).
   const syncListToMap = searchAsMapMoves;
+  useExplorePlacesPersist({ searchAsMapMoves });
 
   const needsMarkers =
     entityFilter === "locations" ||
@@ -436,23 +443,25 @@ export function ExplorePageClient() {
                   : "block"
             }`}
           >
-            <div className="map-panel relative h-full overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-              {mapMounted ? (
-                markersLoading ? (
-                  <LoadingScreen
-                    variant="inline"
-                    minHeightClassName="min-h-full h-full"
+            <div className="relative h-full" data-map-shell>
+              <div className="map-panel absolute inset-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
+                {mapMounted ? (
+                  markersLoading ? (
+                    <LoadingScreen
+                      variant="inline"
+                      minHeightClassName="min-h-full h-full"
+                    />
+                  ) : (
+                    <PlaceMap places={filteredPlaces} />
+                  )
+                ) : null}
+                {mapMounted && !markersLoading ? (
+                  <SearchAsMapMovesControl
+                    checked={searchAsMapMoves}
+                    onChange={setSearchAsMapMoves}
                   />
-                ) : (
-                  <PlaceMap places={filteredPlaces} />
-                )
-              ) : null}
-              {mapMounted && !markersLoading ? (
-                <SearchAsMapMovesControl
-                  checked={searchAsMapMoves}
-                  onChange={setSearchAsMapMoves}
-                />
-              ) : null}
+                ) : null}
+              </div>
             </div>
           </section>
 

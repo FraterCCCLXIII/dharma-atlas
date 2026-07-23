@@ -118,7 +118,15 @@ body {
 
 .leaflet-container {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
-  background: var(--surface-muted);
+  /* Solid OSM Carto fills beyond the polar tile limit. `--map-world-top` is
+     the world north edge in container px (set by MapVerticalPanClamp). */
+  background: linear-gradient(
+    to bottom,
+    #aad3df 0,
+    #aad3df var(--map-world-top, 50%),
+    #f2efe9 var(--map-world-top, 50%),
+    #f2efe9 100%
+  );
 }
 
 .map-panel .leaflet-container {
@@ -206,6 +214,11 @@ body {
   box-shadow: none;
 }
 
+/* Hovercard pane lives on [data-map-shell], outside overflow-clipped map chrome. */
+.map-hover-popup-pane .leaflet-popup {
+  pointer-events: auto;
+}
+
 .map-place-popup.leaflet-popup {
   margin-bottom: 20px;
 }
@@ -224,7 +237,8 @@ body {
    rules outrank Tailwind's layered utilities, so `text-brand-foreground` loses
    and the popup button renders blue. Re-assert it here. Scoped to our own CTA so
    the map attribution link keeps looking like a link. */
-.leaflet-container .map-popover-cta {
+.leaflet-container .map-popover-cta,
+.map-hover-popup-pane .map-popover-cta {
   color: var(--brand-foreground);
 }
 

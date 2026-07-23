@@ -1,6 +1,7 @@
 /**
  * Public surface flags. Incomplete features stay in the codebase but off the live site.
- * Flip these when traditions / books are ready to ship.
+ * Flip these when traditions / books / pilgrimage are ready to ship.
  */
-export const SHOW_BOOKS = false;
-export const SHOW_TRADITIONS = false;
+export const SHOW_BOOKS = true;
+export const SHOW_TRADITIONS = true;
+export const SHOW_PILGRIMAGE = true;

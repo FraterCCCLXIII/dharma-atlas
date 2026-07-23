@@ -23,6 +23,18 @@ export function toLatLng(lat: unknown, lng: unknown): [number, number] | null {
   return isValidCoord(la, ln) ? [la, ln] : null;
 }
 
+/**
+ * How many world copies to paint on each side of the primary (−180…180) map.
+ * Leaflet tiles wrap indefinitely; markers do not, so we clone at ±360° steps.
+ */
+export const WORLD_WRAP_SIDE_COUNT = 3;
+
+/** Longitude offsets: …, -720, -360, 0, 360, 720, … */
+export const WORLD_LNG_OFFSETS: readonly number[] = Array.from(
+  { length: WORLD_WRAP_SIDE_COUNT * 2 + 1 },
+  (_, i) => (i - WORLD_WRAP_SIDE_COUNT) * 360,
+);
+
 export type MapBounds = {
   north: number;
   south: number;

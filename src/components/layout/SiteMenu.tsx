@@ -4,6 +4,11 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { authClient } from "@/lib/auth-client";
+import {
+  SHOW_BOOKS,
+  SHOW_PILGRIMAGE,
+  SHOW_TRADITIONS,
+} from "@/lib/feature-flags";
 import { isAdminRole } from "@/lib/permissions";
 
 export function SiteMenu() {
@@ -132,6 +137,36 @@ export function SiteMenu() {
           >
             Claim location
           </Link>
+          {SHOW_TRADITIONS ? (
+            <Link
+              href="/traditions"
+              role="menuitem"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+            >
+              Traditions
+            </Link>
+          ) : null}
+          {SHOW_BOOKS ? (
+            <Link
+              href="/books"
+              role="menuitem"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+            >
+              Books
+            </Link>
+          ) : null}
+          {SHOW_PILGRIMAGE ? (
+            <Link
+              href="/pilgrimage"
+              role="menuitem"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+            >
+              Pilgrimage
+            </Link>
+          ) : null}
           <Link
             href="/about"
             role="menuitem"

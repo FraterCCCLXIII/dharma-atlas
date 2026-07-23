@@ -9,6 +9,7 @@ export function personProfilePath(slug: string): string {
 export const PLACES_LIST_PATH = "/places";
 export const BOOKS_LIST_PATH = "/books";
 export const TRADITIONS_LIST_PATH = "/traditions";
+export const PILGRIMAGE_LIST_PATH = "/pilgrimage";
 
 export function traditionProfilePath(slug: string): string {
   return `/traditions/${slug}`;
@@ -50,6 +51,8 @@ export function isExplorePath(pathname: string): boolean {
     pathname === PLACES_LIST_PATH ||
     pathname === PEOPLE_LIST_PATH ||
     pathname === BOOKS_LIST_PATH ||
-    pathname.startsWith(`${BOOKS_LIST_PATH}/`)
+    pathname.startsWith(`${BOOKS_LIST_PATH}/`) ||
+    pathname === PILGRIMAGE_LIST_PATH ||
+    pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`)
   );
 }

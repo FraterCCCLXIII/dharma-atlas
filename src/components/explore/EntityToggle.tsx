@@ -10,15 +10,26 @@ import {
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  BookOpen,
   CaretDown,
+  CirclesThree,
   MapPin,
+  MapTrifold,
   UsersThree,
   type Icon,
 } from "@phosphor-icons/react";
 import {
+  BOOKS_LIST_PATH,
   entityFilterFromPath,
   pathFromEntityFilter,
+  PILGRIMAGE_LIST_PATH,
+  TRADITIONS_LIST_PATH,
 } from "@/lib/explore-routes";
+import {
+  SHOW_BOOKS,
+  SHOW_PILGRIMAGE,
+  SHOW_TRADITIONS,
+} from "@/lib/feature-flags";
 import type { EntityFilter } from "@/store/explore-store";
 
 export type ExploreEntity = "locations" | "people";
@@ -48,6 +59,42 @@ const NAV_LINKS: {
     isActive: (pathname) =>
       pathname === "/people" || pathname.startsWith("/person/"),
   },
+  ...(SHOW_TRADITIONS
+    ? [
+        {
+          href: TRADITIONS_LIST_PATH,
+          label: "Traditions",
+          icon: CirclesThree,
+          isActive: (pathname: string) =>
+            pathname === TRADITIONS_LIST_PATH ||
+            pathname.startsWith(`${TRADITIONS_LIST_PATH}/`),
+        },
+      ]
+    : []),
+  ...(SHOW_BOOKS
+    ? [
+        {
+          href: BOOKS_LIST_PATH,
+          label: "Books",
+          icon: BookOpen,
+          isActive: (pathname: string) =>
+            pathname === BOOKS_LIST_PATH ||
+            pathname.startsWith(`${BOOKS_LIST_PATH}/`),
+        },
+      ]
+    : []),
+  ...(SHOW_PILGRIMAGE
+    ? [
+        {
+          href: PILGRIMAGE_LIST_PATH,
+          label: "Pilgrimage",
+          icon: MapTrifold,
+          isActive: (pathname: string) =>
+            pathname === PILGRIMAGE_LIST_PATH ||
+            pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`),
+        },
+      ]
+    : []),
 ];
 
 function exploreEntityFromFilter(filter: EntityFilter): ExploreEntity {
