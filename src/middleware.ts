@@ -9,16 +9,25 @@ function hasSessionCookie(request: NextRequest): boolean {
   );
 }
 
+/** True for static files under a feature path (e.g. /traditions/zen.jpg). */
+function hasStaticFileExtension(pathname: string): boolean {
+  return /\.[a-z0-9]+$/i.test(pathname);
+}
+
 function isHiddenPublicSurface(pathname: string): boolean {
   if (
     !SHOW_BOOKS &&
-    (pathname === "/books" || pathname.startsWith("/books/"))
+    (pathname === "/books" || pathname.startsWith("/books/")) &&
+    !hasStaticFileExtension(pathname)
   ) {
     return true;
   }
+  // Gate traditions article routes only. Placeholder images live at
+  // /traditions/*.jpg and must stay public for place cards without photos.
   if (
     !SHOW_TRADITIONS &&
-    (pathname === "/traditions" || pathname.startsWith("/traditions/"))
+    (pathname === "/traditions" || pathname.startsWith("/traditions/")) &&
+    !hasStaticFileExtension(pathname)
   ) {
     return true;
   }
@@ -79,7 +88,11 @@ export const config = {
     "/manage/:path*",
     "/books",
     "/books/:path*",
+    /*
+     * Match traditions pages (/traditions, /traditions/zen) but not static
+     * assets (/traditions/zen.jpg) used as place photo fallbacks.
+     */
     "/traditions",
-    "/traditions/:path*",
+    "/traditions/:slug((?!.*\\.).*)",
   ],
 };
