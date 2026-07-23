@@ -3,10 +3,8 @@ import {
   publishDraftPlaceAction,
   restorePlaceAction,
 } from "@/app/admin/actions/places";
-import {
-  approveSubmissionAction,
-  rejectSubmissionAction,
-} from "@/app/admin/actions/submissions";
+import { rejectSubmissionAction } from "@/app/admin/actions/submissions";
+import { ApproveLocationSubmissionForm } from "@/components/admin/ApproveLocationSubmissionForm";
 import { PermanentDeleteForm } from "@/components/admin/PermanentDeleteForm";
 import type { DraftPlaceReview } from "@/lib/data/places";
 import type { Submission } from "@/lib/data/submissions";
@@ -137,16 +135,8 @@ export function LocationReviewsList({
                     {submission.notes}
                   </p>
                 )}
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <form action={approveSubmissionAction}>
-                    <input type="hidden" name="id" value={submission.id} />
-                    <button
-                      type="submit"
-                      className="rounded-full bg-brand px-4 py-2 text-xs font-semibold text-brand-foreground transition hover:opacity-90"
-                    >
-                      Approve & create draft
-                    </button>
-                  </form>
+                <div className="mt-4 flex flex-wrap items-end gap-3">
+                  <ApproveLocationSubmissionForm submissionId={submission.id} />
                   <form action={rejectSubmissionAction}>
                     <input type="hidden" name="id" value={submission.id} />
                     <button

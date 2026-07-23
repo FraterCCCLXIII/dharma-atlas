@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PlaceProfileOnboarding } from "@/components/manage/PlaceProfileOnboarding";
 import { getPlacesForUser } from "@/lib/data/memberships";
 import { getClaimsForUser } from "@/lib/data/claims";
+import { getPlaceEvents } from "@/lib/data/place-events";
+import { getPlaceSocials } from "@/lib/data/place-socials";
+import { getPlaceTeachers } from "@/lib/data/place-teachers";
+import { attachPhotosToPlace } from "@/lib/data/place-photos";
 import { getSubmissionsForEmail } from "@/lib/data/submissions";
 import { getSession } from "@/lib/auth-server";
+import { placeProfilePath } from "@/lib/explore-routes";
+import { getPlaceOnboardingStatus } from "@/lib/manage-place-onboarding";
 import { isAdminRole } from "@/lib/permissions";
 
 export const metadata: Metadata = {
@@ -45,10 +52,27 @@ export default async function ManageDashboardPage() {
 
   const places = await getPlacesForUser(session.user.id);
   const managedPlaceIds = new Set(places.map((place) => place.id));
-  const [userClaims, userSubmissions] = await Promise.all([
+  const [userClaims, userSubmissions, placesWithPhotos] = await Promise.all([
     getClaimsForUser(session.user.id),
     getSubmissionsForEmail(session.user.email),
+    Promise.all(places.map((place) => attachPhotosToPlace(place))),
   ]);
+
+  const onboardingStatuses = await Promise.all(
+    placesWithPhotos.map(async (place) => {
+      const [teachers, listings, socials] = await Promise.all([
+        getPlaceTeachers(place.id),
+        getPlaceEvents(place.id),
+        getPlaceSocials(place.id),
+      ]);
+      return getPlaceOnboardingStatus(place, {
+        teacherCount: teachers.length,
+        listingCount: listings.length,
+        socialCount: socials.length,
+      });
+    }),
+  );
+  const incompleteOnboarding = onboardingStatuses.filter((status) => !status.isComplete);
 
   return (
     <div>
@@ -68,18 +92,30 @@ export default async function ManageDashboardPage() {
         </p>
       )}
 
+      {incompleteOnboarding.length > 0 ? (
+        <section className="mt-6 space-y-3">
+          {incompleteOnboarding.map((status) => (
+            <PlaceProfileOnboarding
+              key={status.placeId}
+              status={status}
+              variant="dashboard"
+            />
+          ))}
+        </section>
+      ) : null}
+
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
-          href="/manage/claim"
+          href="/add"
           className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground transition hover:opacity-90"
         >
-          Claim existing listing
+          Add new location
         </Link>
         <Link
-          href="/manage/places/new"
+          href="/manage/claim"
           className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-ink-secondary transition hover:bg-surface-muted"
         >
-          Add new location
+          Claim existing listing
         </Link>
       </div>
 
@@ -116,7 +152,7 @@ export default async function ManageDashboardPage() {
                       </div>
                       {canEdit && claim.placeId && (
                         <Link
-                          href={`/manage/places/${claim.placeId}/edit`}
+                          href={`/manage/places/${claim.placeId}/edit/details`}
                           className="rounded-full bg-brand px-3 py-1.5 text-xs font-semibold text-brand-foreground transition hover:opacity-90"
                         >
                           Edit
@@ -156,9 +192,14 @@ export default async function ManageDashboardPage() {
           {places.map((place) => (
             <article
               key={place.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-surface-elevated p-5"
+              className="group relative flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-surface-elevated p-5 transition hover:border-brand/30 hover:bg-surface-muted/30"
             >
-              <div>
+              <Link
+                href={`/manage/places/${place.id}/edit/details`}
+                className="absolute inset-0 z-0 rounded-2xl"
+                aria-label={`Manage ${place.name}`}
+              />
+              <div className="relative z-10 pointer-events-none">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-display text-xl font-semibold">{place.name}</h3>
                   <PlaceStatusBadge
@@ -170,17 +211,14 @@ export default async function ManageDashboardPage() {
                   {[place.type, place.address].filter(Boolean).join(" · ")}
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Link
-                  href={`/manage/places/${place.id}/edit`}
-                  className="rounded-full bg-brand px-4 py-2 text-xs font-semibold text-brand-foreground transition hover:opacity-90"
-                >
-                  Edit
-                </Link>
+              <div className="relative z-10 flex gap-2 pointer-events-none">
+                <span className="rounded-full bg-brand px-4 py-2 text-xs font-semibold text-brand-foreground transition group-hover:opacity-90">
+                  Manage
+                </span>
                 {!place.isDraft && (
                   <Link
-                    href={`/place/${place.id}`}
-                    className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-ink-secondary transition hover:bg-surface-muted"
+                    href={placeProfilePath(place)}
+                    className="pointer-events-auto rounded-full border border-border px-4 py-2 text-xs font-semibold text-ink-secondary transition hover:bg-surface-muted"
                   >
                     View
                   </Link>
@@ -204,7 +242,7 @@ export default async function ManageDashboardPage() {
                   Claim a listing
                 </Link>
                 <Link
-                  href="/manage/places/new"
+                  href="/add"
                   className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-ink-secondary transition hover:bg-surface-muted"
                 >
                   Add new location

@@ -18,6 +18,8 @@ export const places = pgTable(
   "places",
   {
     id: text("id").primaryKey(),
+    /** Public URL segment (`/place/[slug]`). Stable id remains the PK. */
+    slug: text("slug").notNull(),
     name: text("name").notNull(),
     lat: doublePrecision("lat").notNull(),
     lng: doublePrecision("lng").notNull(),
@@ -29,8 +31,17 @@ export const places = pgTable(
     phone: text("phone"),
     website: text("website"),
     schools: text("schools").array().notNull().default([]),
+    /** Practice & visitor offerings shown on the public profile. */
+    offerings: text("offerings").array().notNull().default([]),
     description: text("description"),
     descriptionSource: text("description_source"),
+    /** Short visitor-facing notice shown above About on the public profile. */
+    notice: text("notice"),
+    /**
+     * How location is shown: venue (street + pin), area (city/region only),
+     * online (no map pin).
+     */
+    locationMode: text("location_mode").notNull().default("venue"),
     coordPrecision: text("coord_precision").notNull().default("unknown"),
     dataSource: text("data_source"),
     verifiedAt: timestamp("verified_at", { withTimezone: true }),
@@ -53,6 +64,7 @@ export const places = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    uniqueIndex("places_slug_uidx").on(table.slug),
     index("places_draft_name_idx").on(table.isDraft, table.name),
     index("places_deleted_at_idx").on(table.deletedAt),
   ],
@@ -138,6 +150,108 @@ export const teacherRelations = pgTable("teacher_relations", {
   note: text("note"),
   type: text("type").notNull(),
 });
+
+/** Social profile links for a place (YouTube, Instagram, Facebook, X, etc.). */
+export const placeSocials = pgTable(
+  "place_socials",
+  {
+    id: serial("id").primaryKey(),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    /** youtube | instagram | facebook | x | tiktok | linkedin | other */
+    platform: text("platform").notNull(),
+    url: text("url").notNull(),
+    /** Optional custom label when platform is "other". */
+    label: text("label"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("place_socials_place_idx").on(table.placeId)],
+);
+
+/** Guiding teachers shown on a place profile (stubs or linked full teacher profiles). */
+export const placeTeachers = pgTable(
+  "place_teachers",
+  {
+    id: serial("id").primaryKey(),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    displayName: text("display_name").notNull(),
+    title: text("title"),
+    bio: text("bio"),
+    imagePath: text("image_path"),
+    teacherSlug: text("teacher_slug").references(() => teachers.slug, {
+      onDelete: "set null",
+    }),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("place_teachers_place_idx").on(table.placeId),
+    index("place_teachers_teacher_idx").on(table.teacherSlug),
+  ],
+);
+
+/** One-time events and standing practice schedules owned by a place. */
+export const placeEvents = pgTable(
+  "place_events",
+  {
+    id: serial("id").primaryKey(),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    /** event = dated one-time; schedule = repeating day/time rule. */
+    kind: text("kind").notNull().default("event"),
+    title: text("title").notNull(),
+    description: text("description"),
+    /** Required for kind=event. */
+    startsAt: timestamp("starts_at", { withTimezone: true }),
+    endsAt: timestamp("ends_at", { withTimezone: true }),
+    /** Wall-clock HH:mm for kind=schedule. */
+    startTime: text("start_time"),
+    endTime: text("end_time"),
+    /** Structured recurrence for kind=schedule (weekly days / monthly nth weekday). */
+    rule: jsonb("rule"),
+    timezone: text("timezone").notNull().default("America/Los_Angeles"),
+    url: text("url"),
+    /** @deprecated Legacy simple recurrence; migrated into kind/rule. */
+    recurrence: text("recurrence"),
+    /** Stable id from ICS UID / CSV row hash for sync upserts. */
+    externalUid: text("external_uid"),
+    /** manual | ics | csv */
+    sourceType: text("source_type"),
+    isCancelled: boolean("is_cancelled").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("place_events_place_idx").on(table.placeId),
+    index("place_events_starts_at_idx").on(table.startsAt),
+  ],
+);
+
+/** External calendar feeds connected to a place (ICS for v1). */
+export const placeCalendarSources = pgTable(
+  "place_calendar_sources",
+  {
+    id: serial("id").primaryKey(),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    type: text("type").notNull().default("ics"),
+    url: text("url").notNull(),
+    label: text("label"),
+    lastSyncedAt: timestamp("last_synced_at", { withTimezone: true }),
+    lastError: text("last_error"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("place_calendar_sources_place_idx").on(table.placeId)],
+);
 
 export const submissions = pgTable("submissions", {
   id: serial("id").primaryKey(),
@@ -239,3 +353,24 @@ export const claims = pgTable(
 
 export type PlaceMembershipRow = typeof placeMemberships.$inferSelect;
 export type ClaimRow = typeof claims.$inferSelect;
+
+export const placeFavorites = pgTable(
+  "place_favorites",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("place_favorites_user_place_idx").on(table.userId, table.placeId),
+    index("place_favorites_user_idx").on(table.userId),
+    index("place_favorites_place_idx").on(table.placeId),
+  ],
+);
+
+export type PlaceFavoriteRow = typeof placeFavorites.$inferSelect;

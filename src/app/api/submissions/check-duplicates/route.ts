@@ -20,6 +20,7 @@ export async function GET(request: Request) {
   return NextResponse.json({
     matches: result.places.map((place) => ({
       id: place.id,
+      slug: place.slug,
       name: place.name,
       address: place.address,
       tradition: place.tradition,

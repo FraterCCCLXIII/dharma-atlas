@@ -5,6 +5,10 @@ import { useEffect, useState, type RefObject } from "react";
 /**
  * Hide a secondary nav rail when the user scrolls down; show it again on
  * scroll up or when near the top of the scroll container.
+ *
+ * Listens in the capture phase so nested overflow scrollers (explore list,
+ * feature page main, etc.) are observed even when the shell itself does not
+ * scroll.
  */
 export function useScrollRailVisibility(
   scrollRef: RefObject<HTMLElement | null>,
@@ -25,17 +29,24 @@ export function useScrollRailVisibility(
   }, [resetKey]);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const root = scrollRef.current;
+    if (!root) return;
 
-    let lastY = el.scrollTop;
+    const lastYByEl = new WeakMap<HTMLElement, number>();
     let frame = 0;
 
-    const onScroll = () => {
+    const onScroll = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (!root.contains(target)) return;
+
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
-        const y = el.scrollTop;
+        const y = target.scrollTop;
+        // Seed unknown scrollers at 0 so the first nested scroll delta is real
+        // (using `?? y` would always yield delta 0 on the first event).
+        const lastY = lastYByEl.get(target) ?? 0;
         const delta = y - lastY;
 
         if (y <= topRevealPx) {
@@ -46,13 +57,14 @@ export function useScrollRailVisibility(
           setCollapsed(false);
         }
 
-        lastY = y;
+        lastYByEl.set(target, y);
       });
     };
 
-    el.addEventListener("scroll", onScroll, { passive: true });
+    // Scroll does not bubble; capture so nested explore scrollers are seen.
+    root.addEventListener("scroll", onScroll, { passive: true, capture: true });
     return () => {
-      el.removeEventListener("scroll", onScroll);
+      root.removeEventListener("scroll", onScroll, { capture: true });
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, [scrollRef, topRevealPx, deltaPx]);

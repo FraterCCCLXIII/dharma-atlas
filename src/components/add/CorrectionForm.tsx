@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
-import { personProfilePath } from "@/lib/explore-routes";
+import { personProfilePath, placeProfilePath } from "@/lib/explore-routes";
 import {
   locationReportReasons,
   reportReasonLabel,
@@ -13,6 +13,7 @@ type EntityType = "location" | "teacher";
 
 interface PlaceResult {
   id: string;
+  slug?: string;
   name: string;
   address: string;
   tradition: string;
@@ -25,7 +26,7 @@ interface TeacherResult {
 }
 
 type SelectedEntity =
-  | { entityType: "location"; id: string; name: string; subtitle: string }
+  | { entityType: "location"; id: string; slug?: string; name: string; subtitle: string }
   | { entityType: "teacher"; id: string; name: string; subtitle: string };
 
 export function CorrectionForm() {
@@ -65,6 +66,7 @@ export function CorrectionForm() {
             (data.places ?? []).map((place) => ({
               entityType: "location" as const,
               id: place.id,
+              slug: place.slug,
               name: place.name,
               subtitle: [place.address, place.tradition].filter(Boolean).join(" · "),
             })),
@@ -111,7 +113,7 @@ export function CorrectionForm() {
 
     const entityPath =
       selected.entityType === "location"
-        ? `/place/${selected.id}`
+        ? placeProfilePath({ id: selected.id, slug: selected.slug })
         : personProfilePath(selected.id);
 
     try {

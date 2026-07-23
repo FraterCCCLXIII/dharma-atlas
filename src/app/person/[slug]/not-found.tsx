@@ -3,7 +3,7 @@ import { PEOPLE_LIST_PATH } from "@/lib/explore-routes";
 
 export default function PersonNotFound() {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-surface px-6 text-center">
+    <div className="flex min-h-full flex-1 flex-col items-center justify-center bg-surface px-6 py-12 text-center">
       <h1 className="font-display text-2xl font-semibold text-ink">
         Person not found
       </h1>

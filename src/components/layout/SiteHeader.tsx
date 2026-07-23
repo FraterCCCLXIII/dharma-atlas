@@ -19,6 +19,10 @@ import {
   isExplorePath,
   pathFromEntityFilter,
 } from "@/lib/explore-routes";
+import {
+  useBooksActiveFilterCount,
+  useBooksStore,
+} from "@/store/books-store";
 import { useExploreStore } from "@/store/explore-store";
 
 interface SiteHeaderProps {
@@ -121,7 +125,7 @@ function NavBarLayout({
             railVisible ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
           }`}
           aria-hidden={!railVisible}
-          {...(!railVisible ? ({ inert: "" } as Record<string, string>) : {})}
+          inert={!railVisible || undefined}
         >
           <div className="overflow-hidden">
             <div
@@ -142,17 +146,19 @@ function FilterToggleButton({
   filtersOpen,
   activeFilterCount,
   onToggle,
+  controlsId = "explore-filters",
 }: {
   filtersOpen: boolean;
   activeFilterCount: number;
   onToggle: () => void;
+  controlsId?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onToggle}
       aria-expanded={filtersOpen}
-      aria-controls="explore-filters"
+      aria-controls={controlsId}
       aria-label={filtersOpen ? "Hide filters" : "Show filters"}
       className={`relative inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 text-sm font-medium leading-none transition ${
         filtersOpen
@@ -190,17 +196,21 @@ export function PublicNav({
   const headerRef = useRef<HTMLElement>(null);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
+  const booksFiltersOpen = useBooksStore((s) => s.filtersOpen);
+  const toggleBooksFilters = useBooksStore((s) => s.toggleFilters);
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const traditions = useExploreStore((s) => s.traditions);
   const schools = useExploreStore((s) => s.schools);
   const types = useExploreStore((s) => s.types);
   const faiths = useExploreStore((s) => s.faiths);
   const locationFilter = useExploreStore((s) => s.locationFilter);
-  const activeFilterCount = useActiveFilterCount();
+  const exploreActiveFilterCount = useActiveFilterCount();
+  const booksActiveFilterCount = useBooksActiveFilterCount();
 
   const onExplore = isExplorePath(pathname);
   const onBooks =
     pathname === BOOKS_LIST_PATH || pathname.startsWith(`${BOOKS_LIST_PATH}/`);
+  const onExploreSurface = onExplore && !onBooks;
   const showBackToMap = !onExplore && !onBooks;
   const pathFilter = entityFilterFromPath(pathname);
   const explorePath = pathFromEntityFilter(
@@ -208,6 +218,7 @@ export function PublicNav({
   );
   // Home feature view has no filter sidebar — hide the toggle too.
   const showHomeFeature =
+    !onBooks &&
     entityFilter === "all" &&
     traditions.length === 0 &&
     schools.length === 0 &&
@@ -216,7 +227,12 @@ export function PublicNav({
     locationFilter == null;
 
   const handleFilterToggle = () => {
-    if (onExplore) {
+    if (onBooks) {
+      toggleBooksFilters();
+      return;
+    }
+
+    if (onExploreSurface) {
       toggleFilters();
       return;
     }
@@ -269,9 +285,12 @@ export function PublicNav({
         trailing={
           showHomeFeature ? undefined : (
             <FilterToggleButton
-              filtersOpen={filtersOpen}
-              activeFilterCount={activeFilterCount}
+              filtersOpen={onBooks ? booksFiltersOpen : filtersOpen}
+              activeFilterCount={
+                onBooks ? booksActiveFilterCount : exploreActiveFilterCount
+              }
               onToggle={handleFilterToggle}
+              controlsId={onBooks ? "books-filters" : "explore-filters"}
             />
           )
         }

@@ -16,7 +16,7 @@ export default async function LoginPage({
   const { redirect: redirectTo } = await searchParams;
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-surface px-6">
+    <div className="flex min-h-full flex-1 items-center justify-center bg-surface px-6 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <div className="flex justify-center">

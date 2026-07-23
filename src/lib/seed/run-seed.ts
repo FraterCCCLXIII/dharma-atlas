@@ -11,6 +11,7 @@ import {
   teacherSocials,
   teachers,
 } from "@/db/schema";
+import { allocateUniquePlaceSlug } from "@/lib/data/place-slugs";
 import { mergePlaceFields } from "@/lib/place-quality";
 import { rowToPlace } from "@/lib/place-row";
 import type { Place, PlacesDataset } from "@/types/place";
@@ -37,8 +38,13 @@ function openingHoursColumn(
   return JSON.stringify(hours);
 }
 
-function placeDbFields(merged: ReturnType<typeof mergePlaceFields>, incoming: Place) {
+function placeDbFields(
+  merged: ReturnType<typeof mergePlaceFields>,
+  incoming: Place,
+  slug: string,
+) {
   return {
+    slug,
     name: merged.name ?? incoming.name,
     lat: merged.lat ?? incoming.lat,
     lng: merged.lng ?? incoming.lng,
@@ -124,17 +130,31 @@ export async function seedPlacesFromList(list: Place[], forceFields: string[] = 
 
     const existing = existingRow ? rowToPlace(existingRow) : {};
     const merged = mergePlaceFields(existing, incoming, { forceFields });
+    const keepSlug =
+      existingRow?.slug && existingRow.slug !== existingRow.id
+        ? existingRow.slug
+        : incoming.slug && incoming.slug !== incoming.id
+          ? incoming.slug
+          : null;
+    const slug =
+      keepSlug ??
+      (await allocateUniquePlaceSlug({
+        name: merged.name ?? incoming.name,
+        address: merged.address ?? incoming.address,
+        fallbackId: incoming.id,
+        excludePlaceId: incoming.id,
+      }));
 
     await db
       .insert(places)
       .values({
         id: incoming.id,
-        ...placeDbFields(merged, incoming),
+        ...placeDbFields(merged, incoming, slug),
       })
       .onConflictDoUpdate({
         target: places.id,
         set: {
-          ...placeDbFields(merged, incoming),
+          ...placeDbFields(merged, incoming, slug),
           updatedAt: new Date(),
         },
       });

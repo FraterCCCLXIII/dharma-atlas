@@ -1,6 +1,8 @@
 import "server-only";
 
-import { boundsFromPoint, type MapBounds } from "@/lib/coords";
+import { boundsFromPoint, hasValidCoords, type MapBounds } from "@/lib/coords";
+
+export { hasValidCoords };
 
 const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
 const USER_AGENT = "DharmaAtlas/1.0 (contact@dharmaatlas.com)";
@@ -64,13 +66,6 @@ const PREFERRED_TYPES = new Set([
   "country",
   "administrative",
 ]);
-
-export function hasValidCoords(lat: number, lng: number): boolean {
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return false;
-  if (lat === 0 && lng === 0) return false;
-  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return false;
-  return true;
-}
 
 async function throttle() {
   const elapsed = Date.now() - lastRequestAt;

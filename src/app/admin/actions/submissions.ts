@@ -18,6 +18,8 @@ import {
 import {
   notifySubmissionReviewed,
 } from "@/lib/email";
+import { revalidateExploreMarkers } from "@/lib/admin-api/revalidate";
+import { allocateUniquePlaceSlug } from "@/lib/data/place-slugs";
 
 function slugify(name: string) {
   return name
@@ -91,6 +93,9 @@ export async function approveSubmissionAction(formData: FormData) {
   }
 
   const placeId = generatePlaceId();
+  // Default on: missing/unknown values publish; only explicit "0"/"false" creates a draft.
+  const autoPublishRaw = String(formData.get("autoPublish") ?? "1").toLowerCase();
+  const autoPublish = autoPublishRaw !== "0" && autoPublishRaw !== "false";
   const tradition =
     parsed.entryType === "location" && parsed.tradition?.trim()
       ? parsed.tradition.trim()
@@ -109,9 +114,16 @@ export async function approveSubmissionAction(formData: FormData) {
   const lat = geocoded?.lat ?? 0;
   const lng = geocoded?.lng ?? 0;
   const qualityFlags = hasValidCoords(lat, lng) ? [] : ["missing_coords"];
+  const slug = await allocateUniquePlaceSlug({
+    name: row.name,
+    address: fullAddress,
+    city: row.location,
+    fallbackId: placeId,
+  });
 
   await db.insert(places).values({
     id: placeId,
+    slug,
     name: row.name,
     lat,
     lng,
@@ -122,7 +134,8 @@ export async function approveSubmissionAction(formData: FormData) {
     address: fullAddress,
     website: row.website,
     schools: [],
-    isDraft: true,
+    offerings: [],
+    isDraft: !autoPublish,
     qualityFlags,
     coordPrecision: hasValidCoords(lat, lng) ? "address" : "unknown",
   });
@@ -143,6 +156,15 @@ export async function approveSubmissionAction(formData: FormData) {
   });
 
   revalidatePath("/admin/submissions");
+  revalidatePath("/admin/location-reviews");
+  revalidatePath("/admin/places");
+  if (autoPublish) {
+    revalidatePath("/");
+    revalidatePath("/places");
+    revalidatePath(`/place/${placeId}`);
+    revalidatePath(`/place/${slug}`);
+    revalidateExploreMarkers();
+  }
   redirect(`/admin/places/${placeId}/edit`);
 }
 

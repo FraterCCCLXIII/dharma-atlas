@@ -12,9 +12,20 @@ interface AuthFormProps {
   redirectTo: string;
   alternateHref: string;
   alternateLabel: string;
+  /** When set, alternate action stays in-place (e.g. modal mode switch). */
+  onAlternateClick?: () => void;
+  /** When set, called after successful auth instead of navigating away. */
+  onSuccess?: () => void | Promise<void>;
 }
 
-export function AuthForm({ mode, redirectTo, alternateHref, alternateLabel }: AuthFormProps) {
+export function AuthForm({
+  mode,
+  redirectTo,
+  alternateHref,
+  alternateLabel,
+  onAlternateClick,
+  onSuccess,
+}: AuthFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,6 +62,15 @@ export function AuthForm({ mode, redirectTo, alternateHref, alternateLabel }: Au
         setSubmitting(false);
         return;
       }
+    }
+
+    if (onSuccess) {
+      try {
+        await onSuccess();
+      } finally {
+        setSubmitting(false);
+      }
+      return;
     }
 
     window.location.assign(redirectTo);
@@ -114,9 +134,19 @@ export function AuthForm({ mode, redirectTo, alternateHref, alternateLabel }: Au
       </button>
 
       <p className="text-center text-sm text-ink-muted">
-        <Link href={alternateHref} className="font-medium text-brand hover:underline">
-          {alternateLabel}
-        </Link>
+        {onAlternateClick ? (
+          <button
+            type="button"
+            onClick={onAlternateClick}
+            className="font-medium text-brand hover:underline"
+          >
+            {alternateLabel}
+          </button>
+        ) : (
+          <Link href={alternateHref} className="font-medium text-brand hover:underline">
+            {alternateLabel}
+          </Link>
+        )}
       </p>
     </form>
   );

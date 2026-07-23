@@ -5,9 +5,11 @@ import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
 import { FormPageShell } from "@/components/layout/FormPageShell";
 import { authClient } from "@/lib/auth-client";
+import { placeProfilePath } from "@/lib/explore-routes";
 
 interface SearchPlace {
   id: string;
+  slug?: string;
   name: string;
   address: string;
   tradition: string;
@@ -122,7 +124,7 @@ export function ClaimLocationPageView({
         body: JSON.stringify({
           placeId: selected.id,
           placeName: selected.name,
-          listingUrl: window.location.origin + `/place/${selected.id}`,
+          listingUrl: window.location.origin + placeProfilePath(selected),
           affiliationRole: String(formData.get("affiliationRole")),
           message: String(formData.get("message")),
         }),

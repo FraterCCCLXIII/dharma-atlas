@@ -37,6 +37,7 @@ export function teacherToInput(teacher: Teacher): TeacherInput {
 export function placeToInput(place: Place): PlaceInput {
   return {
     id: place.id,
+    slug: place.slug || place.id,
     name: place.name,
     lat: place.lat,
     lng: place.lng,
@@ -49,6 +50,8 @@ export function placeToInput(place: Place): PlaceInput {
     website: place.website,
     description: place.description ?? null,
     descriptionSource: place.descriptionSource ?? null,
+    notice: place.notice ?? null,
+    locationMode: place.locationMode ?? "venue",
     coordPrecision: place.coordPrecision ?? "unknown",
     dataSource: place.dataSource ?? null,
     verifiedFields: place.verifiedFields ?? [],
@@ -56,6 +59,7 @@ export function placeToInput(place: Place): PlaceInput {
     photo: place.photo ?? null,
     photoSource: place.photoSource ?? null,
     schools: place.schools ?? [],
+    offerings: place.offerings ?? [],
     isDraft: place.isDraft ?? false,
   };
 }

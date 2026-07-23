@@ -9,6 +9,7 @@ import {
   cardImagePaddingClassName,
   cardLiftClassName,
 } from "@/lib/card-styles";
+import { placeProfilePath } from "@/lib/explore-routes";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
 import type { Place } from "@/types/place";
@@ -40,7 +41,7 @@ export function SimilarPlaces({
           return (
             <Link
               key={place.id}
-              href={`/place/${place.id}`}
+              href={placeProfilePath(place)}
               className={`group rounded-2xl ${cardLiftClassName}`}
             >
               <div className={cardImagePaddingClassName}>

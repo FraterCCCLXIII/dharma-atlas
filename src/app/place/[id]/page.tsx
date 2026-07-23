@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { OntologyRuntimeProvider } from "@/components/explore/OntologyRuntimeProvider";
 import { PlacePageView } from "@/components/place/PlacePageView";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { getOntologySnapshot } from "@/lib/data/ontology";
 import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 import { placeMetaDescription } from "@/lib/place-description";
-import {
-  getPlaceById,
-  getSimilarPlaces,
-} from "@/lib/dataset";
+import { getPlaceById, getPlaceBySlug, getSimilarPlaces } from "@/lib/dataset";
+import { placeHasManager } from "@/lib/data/memberships";
+import { getPlaceEvents } from "@/lib/data/place-events";
+import { getPlaceSocials } from "@/lib/data/place-socials";
+import { getPlaceTeachersForDisplay } from "@/lib/data/place-teachers";
 import { getTeachersAtPlace } from "@/lib/data/teachers";
+import { placeProfilePath } from "@/lib/explore-routes";
 
 interface PlacePageProps {
   params: Promise<{ id: string }>;
@@ -26,14 +28,26 @@ export async function generateStaticParams() {
   return [];
 }
 
+async function resolvePublicPlace(param: string) {
+  const bySlug = await getPlaceBySlug(param);
+  if (bySlug) return { place: bySlug, canonicalMismatch: false as const };
+
+  const byId = await getPlaceById(param);
+  if (!byId) return null;
+
+  const shouldRedirect = Boolean(byId.slug && byId.slug !== param);
+  return { place: byId, canonicalMismatch: shouldRedirect };
+}
+
 export async function generateMetadata({ params }: PlacePageProps): Promise<Metadata> {
   const { id } = await params;
-  const place = await getPlaceById(id);
+  const resolved = await resolvePublicPlace(id);
 
-  if (!place) {
+  if (!resolved) {
     return { title: "Place not found | Dharma Atlas" };
   }
 
+  const { place } = resolved;
   const { traditionDefaultImages } = await getOntologySnapshot();
   const heroPhotos = getPlaceDisplayPhotos(place, traditionDefaultImages);
 
@@ -42,30 +56,47 @@ export async function generateMetadata({ params }: PlacePageProps): Promise<Meta
     description: placeMetaDescription(place),
     openGraph:
       heroPhotos.length > 0 ? { images: heroPhotos.map((url) => ({ url })) } : undefined,
+    alternates: {
+      canonical: placeProfilePath(place),
+    },
   };
 }
 
 export default async function PlacePage({ params }: PlacePageProps) {
   const { id } = await params;
-  const place = await getPlaceById(id);
+  const resolved = await resolvePublicPlace(id);
 
-  if (!place) {
+  if (!resolved) {
     notFound();
   }
 
-  const [similar, linkedTeachers, ontology] = await Promise.all([
-    getSimilarPlaces(place),
-    getTeachersAtPlace(place.name),
-    getOntologySnapshot(),
-  ]);
+  const { place } = resolved;
+  if (resolved.canonicalMismatch) {
+    permanentRedirect(placeProfilePath(place));
+  }
+
+  const [similar, guidingTeachers, events, socials, linkedTeachers, ontology, hasManager] =
+    await Promise.all([
+      getSimilarPlaces(place),
+      getPlaceTeachersForDisplay(place.id),
+      getPlaceEvents(place.id),
+      getPlaceSocials(place.id),
+      getTeachersAtPlace(place.name),
+      getOntologySnapshot(),
+      placeHasManager(place.id),
+    ]);
 
   return (
     <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
       <PlacePageView
         place={place}
         similar={similar}
+        guidingTeachers={guidingTeachers}
+        events={events}
+        socials={socials}
         teachers={linkedTeachers}
         traditionDefaultImages={ontology.traditionDefaultImages}
+        showClaim={!hasManager}
       />
     </OntologyRuntimeProvider>
   );

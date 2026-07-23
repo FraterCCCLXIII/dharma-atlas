@@ -14,6 +14,7 @@ import {
 import {
   pathFromEntityFilter,
   personProfilePath,
+  placeProfilePath,
 } from "@/lib/explore-routes";
 import type { MapBounds } from "@/lib/coords";
 import {
@@ -357,11 +358,11 @@ export function ExploreSearchField() {
     setMenuOpen(false);
   };
 
-  const openPlaceResult = (placeId: string) => {
+  const openPlaceResult = (place: { id: string; slug?: string | null }) => {
     clearNearYouIfActive();
     setMenuOpen(false);
     // Full navigation — soft-nav from explore can stall on Leaflet unmount.
-    window.location.assign(`/place/${placeId}`);
+    window.location.assign(placeProfilePath(place));
   };
 
   const openPersonResult = (slug: string) => {
@@ -426,7 +427,7 @@ export function ExploreSearchField() {
         return;
       }
       if (selected.kind === "place") {
-        openPlaceResult(selected.place.id);
+        openPlaceResult(selected.place);
         return;
       }
       openPersonResult(selected.person.slug);
@@ -556,7 +557,7 @@ export function ExploreSearchField() {
                       .join(" · ")}
                     badge={nearYou ? "Near you" : undefined}
                     onMouseEnter={() => setHighlight(index)}
-                    onClick={() => openPlaceResult(place.id)}
+                    onClick={() => openPlaceResult(place)}
                   />
                 );
               }

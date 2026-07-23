@@ -7,9 +7,12 @@ const placeTypes = [
   "Meditation Center",
   "Institute",
   "Ashram",
+  "Sangha",
 ] as const;
 
 const faiths = ["Buddhist", "Hindu"] as const;
+
+const locationModes = ["venue", "area", "online"] as const;
 
 const coordPrecisions = ["pin", "address", "city", "region", "unknown"] as const;
 
@@ -24,6 +27,8 @@ const photoSources = [
 
 export const placeInputSchema = z.object({
   id: z.string().min(1),
+  /** Optional public URL slug; allocated from name/city when omitted. */
+  slug: z.string().optional().nullable(),
   name: z.string().min(1),
   lat: z.coerce.number(),
   lng: z.coerce.number(),
@@ -36,6 +41,14 @@ export const placeInputSchema = z.object({
   website: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   descriptionSource: z.string().optional().nullable(),
+  notice: z
+    .string()
+    .trim()
+    .max(500, "Notice must be 500 characters or fewer")
+    .optional()
+    .nullable()
+    .transform((value) => value?.trim() || null),
+  locationMode: z.enum(locationModes).default("venue"),
   coordPrecision: z.enum(coordPrecisions).default("unknown"),
   dataSource: z.string().optional().nullable(),
   verifiedFields: z.array(z.string()).default([]),
@@ -57,9 +70,10 @@ export const placeInputSchema = z.object({
   businessStatus: z.string().optional().nullable(),
   googlePrimaryType: z.string().optional().nullable(),
   schools: z.array(z.string()),
+  offerings: z.array(z.string()).default([]),
   isDraft: z.boolean().default(false),
 });
 
 export type PlaceInput = z.infer<typeof placeInputSchema>;
 
-export { placeTypes, faiths, coordPrecisions, photoSources };
+export { placeTypes, faiths, locationModes, coordPrecisions, photoSources };

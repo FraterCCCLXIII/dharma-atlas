@@ -1,30 +1,46 @@
 import type { MetadataRoute } from "next";
-import { getAllPlaceIds } from "@/lib/data/places";
+import { getAllTraditionArticleSlugs } from "@/content/traditions";
+import { getAllPlaceSlugs } from "@/lib/data/places";
 import { getAllTeacherSlugs } from "@/lib/data/teachers";
+import { SHOW_TRADITIONS } from "@/lib/feature-flags";
 
 const baseUrl = process.env.BETTER_AUTH_URL ?? "https://dharmaatlas.com";
 
 export const revalidate = 3600;
 
 function staticSitemapEntries(): MetadataRoute.Sitemap {
-  return ["", "/places", "/people", "/about", "/add", "/submit", "/claim"].map(
-    (path) => ({
-      url: `${baseUrl}${path}`,
-      changeFrequency: "weekly" as const,
-      priority: path === "" ? 1 : 0.8,
-    }),
-  );
+  const traditionRoutes = SHOW_TRADITIONS
+    ? [
+        "/traditions",
+        ...getAllTraditionArticleSlugs().map((slug) => `/traditions/${slug}`),
+      ]
+    : [];
+
+  return [
+    "",
+    "/places",
+    "/people",
+    "/about",
+    "/add",
+    "/submit",
+    "/claim",
+    ...traditionRoutes,
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    changeFrequency: "weekly" as const,
+    priority: path === "" ? 1 : path.startsWith("/traditions") ? 0.7 : 0.8,
+  }));
 }
 
 async function dynamicSitemapEntries(): Promise<MetadataRoute.Sitemap> {
   try {
-    const [placeIds, teacherSlugs] = await Promise.all([
-      getAllPlaceIds(),
+    const [placeSlugs, teacherSlugs] = await Promise.all([
+      getAllPlaceSlugs(),
       getAllTeacherSlugs(),
     ]);
 
-    const placeRoutes = placeIds.map((id) => ({
-      url: `${baseUrl}/place/${id}`,
+    const placeRoutes = placeSlugs.map((slug) => ({
+      url: `${baseUrl}/place/${slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.6,
     }));

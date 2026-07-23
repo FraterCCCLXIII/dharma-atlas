@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FormPageShell } from "@/components/layout/FormPageShell";
 import { MemberCreatePlaceForm } from "@/components/manage/OwnerPlaceForm";
 
 export const metadata: Metadata = {
@@ -8,16 +9,14 @@ export const metadata: Metadata = {
 
 export default function NewMemberPlacePage() {
   return (
-    <div>
-      <h1 className="font-display text-3xl font-semibold">
-        Add a location
-      </h1>
-      <p className="mt-2 text-sm text-ink-muted">
-        Tell us about your center. We&apos;ll review the listing before publishing.
-      </p>
-      <div className="mt-8">
-        <MemberCreatePlaceForm />
-      </div>
-    </div>
+    <FormPageShell
+      title="Add a location"
+      description="Tell us about your center. We'll review the listing before publishing."
+      embedded
+      backHref="/manage"
+      backLabel="Back to Place Listings"
+    >
+      <MemberCreatePlaceForm />
+    </FormPageShell>
   );
 }

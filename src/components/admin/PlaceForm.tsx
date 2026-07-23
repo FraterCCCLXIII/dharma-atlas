@@ -10,8 +10,29 @@ import {
 import { TraditionPickerField } from "@/components/forms/TraditionPickerField";
 import { DraftStatusField } from "@/components/admin/DraftStatusField";
 import { PlacePhotosField } from "@/components/admin/PlacePhotosField";
-import { faiths, placeTypes, type PlaceInput } from "@/lib/validations/place";
-import type { PlacePhoto } from "@/types/place";
+import { MarkdownRichTextEditor } from "@/components/forms/MarkdownRichTextEditor";
+import { PlaceEventsField } from "@/components/manage/PlaceEventsField";
+import { PlaceGuidingTeachersField } from "@/components/manage/PlaceGuidingTeachersField";
+import { PlaceSocialsField } from "@/components/manage/PlaceSocialsField";
+import { PlaceOfferingIcon } from "@/components/place/PlaceOfferingIcon";
+import {
+  PLACE_OFFERINGS,
+  filterKnownOfferings,
+  type PlaceOfferingId,
+} from "@/lib/place-offerings";
+import { placeProfilePath } from "@/lib/explore-routes";
+import {
+  LOCATION_MODE_HINTS,
+  LOCATION_MODE_LABELS,
+  coordPrecisionForMode,
+} from "@/lib/place-location";
+import {
+  faiths,
+  locationModes,
+  placeTypes,
+  type PlaceInput,
+} from "@/lib/validations/place";
+import type { PlaceEvent, PlacePhoto, PlaceSocial, PlaceTeacher } from "@/types/place";
 import {
   createPlaceAction,
   deletePlaceAction,
@@ -23,6 +44,7 @@ import {
 
 const emptyPlace = (): PlaceInput => ({
   id: "",
+  slug: "",
   name: "",
   lat: 0,
   lng: 0,
@@ -35,6 +57,8 @@ const emptyPlace = (): PlaceInput => ({
   website: null,
   description: null,
   descriptionSource: null,
+  notice: null,
+  locationMode: "venue",
   coordPrecision: "unknown",
   dataSource: null,
   verifiedFields: [],
@@ -42,6 +66,7 @@ const emptyPlace = (): PlaceInput => ({
   photo: null,
   photoSource: null,
   schools: [],
+  offerings: [],
   isDraft: false,
 });
 
@@ -71,6 +96,9 @@ function FormSection({
 interface PlaceFormProps {
   initial?: PlaceInput;
   initialPhotos?: PlacePhoto[];
+  initialTeachers?: PlaceTeacher[];
+  initialEvents?: PlaceEvent[];
+  initialSocials?: PlaceSocial[];
   mode: "create" | "edit";
   isDeleted?: boolean;
 }
@@ -78,6 +106,9 @@ interface PlaceFormProps {
 export function PlaceForm({
   initial,
   initialPhotos = [],
+  initialTeachers = [],
+  initialEvents = [],
+  initialSocials = [],
   mode,
   isDeleted = false,
 }: PlaceFormProps) {
@@ -152,7 +183,7 @@ export function PlaceForm({
         </div>
         {mode === "edit" && originalId && !isDeleted && (
           <Link
-            href={`/place/${originalId}`}
+            href={placeProfilePath({ id: originalId, slug: place.slug })}
             className="shrink-0 text-xs font-medium text-brand hover:underline"
           >
             View public profile →
@@ -217,6 +248,17 @@ export function PlaceForm({
             className={fieldClassName}
           />
         </FormField>
+        <FormField id="slug" label="Public URL slug">
+          <input
+            id="slug"
+            value={place.slug ?? ""}
+            onChange={(e) => set("slug", e.target.value)}
+            className={fieldClassName}
+            placeholder="Auto from name if left blank on create"
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </FormField>
         <FormField id="folder" label="Folder / source">
           <input
             id="folder"
@@ -272,49 +314,106 @@ export function PlaceForm({
 
       <FormSection
         title="Location"
-        description="Coordinates power the map; address is shown on the profile."
+        description="Choose how precisely visitors see where this group meets."
       >
-        <FormField id="address" label="Address">
+        <FormField id="locationMode" label="Location mode">
+          <select
+            id="locationMode"
+            value={place.locationMode}
+            onChange={(e) => {
+              const locationMode = e.target.value as PlaceInput["locationMode"];
+              setPlace((current) => ({
+                ...current,
+                locationMode,
+                coordPrecision: coordPrecisionForMode(locationMode),
+                ...(locationMode === "online" ? { lat: 0, lng: 0 } : {}),
+              }));
+            }}
+            className={fieldClassName}
+          >
+            {locationModes.map((mode) => (
+              <option key={mode} value={mode}>
+                {LOCATION_MODE_LABELS[mode]}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-ink-muted">
+            {LOCATION_MODE_HINTS[place.locationMode]}
+          </p>
+        </FormField>
+        <FormField
+          id="address"
+          label={
+            place.locationMode === "online"
+              ? "Service area (optional)"
+              : place.locationMode === "area"
+                ? "City / region"
+                : "Address"
+          }
+        >
           <textarea
             id="address"
             rows={2}
             value={place.address}
             onChange={(e) => set("address", e.target.value)}
             className={`${fieldClassName} resize-y`}
+            placeholder={
+              place.locationMode === "venue"
+                ? "Street address"
+                : place.locationMode === "area"
+                  ? "Berkeley, CA"
+                  : "Optional region this online group serves"
+            }
           />
         </FormField>
-        <div className="grid grid-cols-2 gap-4">
-          <FormField id="lat" label="Latitude">
-            <input
-              id="lat"
-              type="number"
-              step="any"
-              value={place.lat}
-              onChange={(e) => set("lat", Number(e.target.value))}
-              className={fieldClassName}
-            />
-          </FormField>
-          <FormField id="lng" label="Longitude">
-            <input
-              id="lng"
-              type="number"
-              step="any"
-              value={place.lng}
-              onChange={(e) => set("lng", Number(e.target.value))}
-              className={fieldClassName}
-            />
-          </FormField>
-        </div>
+        {place.locationMode !== "online" ? (
+          <div className="grid grid-cols-2 gap-4">
+            <FormField id="lat" label="Latitude">
+              <input
+                id="lat"
+                type="number"
+                step="any"
+                value={place.lat}
+                onChange={(e) => set("lat", Number(e.target.value))}
+                className={fieldClassName}
+              />
+            </FormField>
+            <FormField id="lng" label="Longitude">
+              <input
+                id="lng"
+                type="number"
+                step="any"
+                value={place.lng}
+                onChange={(e) => set("lng", Number(e.target.value))}
+                className={fieldClassName}
+              />
+            </FormField>
+          </div>
+        ) : (
+          <p className="text-xs text-ink-muted">
+            Online listings do not appear as map pins.
+          </p>
+        )}
       </FormSection>
 
       <FormSection title="Profile" description="Description and image shown on the public profile.">
-        <FormField id="description" label="Description">
+        <FormField id="notice" label="Visitor notice">
           <textarea
+            id="notice"
+            value={place.notice ?? ""}
+            onChange={(e) => set("notice", e.target.value || null)}
+            rows={3}
+            maxLength={500}
+            placeholder="Optional short notice shown above About (closures, schedule changes)…"
+            className={fieldClassName}
+          />
+        </FormField>
+        <FormField id="description" label="About this place">
+          <MarkdownRichTextEditor
             id="description"
-            rows={4}
             value={place.description ?? ""}
-            onChange={(e) => set("description", e.target.value || null)}
-            className={`${fieldClassName} resize-y`}
+            onChange={(next) => set("description", next || null)}
+            rows={8}
             placeholder="A short description of this center…"
           />
         </FormField>
@@ -347,6 +446,68 @@ export function PlaceForm({
         )}
       </FormSection>
 
+      <FormSection
+        title="Offerings"
+        description="Practice and visitor amenities shown as “What this place offers”."
+      >
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {PLACE_OFFERINGS.map((offering) => {
+            const checked = (place.offerings ?? []).includes(offering.id);
+            return (
+              <li key={offering.id}>
+                <label
+                  className={`flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-3 text-sm transition ${
+                    checked
+                      ? "border-brand/40 bg-brand/5 text-ink"
+                      : "border-border bg-surface-elevated text-ink-secondary hover:bg-surface-muted/50"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => {
+                      const current = filterKnownOfferings(place.offerings ?? []);
+                      const next = checked
+                        ? current.filter((id) => id !== offering.id)
+                        : [...current, offering.id as PlaceOfferingId];
+                      set("offerings", next);
+                    }}
+                    className="sr-only"
+                  />
+                  <PlaceOfferingIcon name={offering.icon} />
+                  <span className="font-medium">{offering.label}</span>
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+      </FormSection>
+
+      {mode === "edit" && originalId ? (
+        <>
+          <FormSection
+            title="Guiding teachers"
+            description="People who teach or guide practice at this location."
+          >
+            <PlaceGuidingTeachersField
+              placeId={originalId}
+              initialTeachers={initialTeachers}
+              showHeading={false}
+            />
+          </FormSection>
+          <FormSection
+            title="Recurring events & special events"
+            description="Recurring practice times and one-time special events."
+          >
+            <PlaceEventsField
+              placeId={originalId}
+              initialEvents={initialEvents}
+              showHeading={false}
+            />
+          </FormSection>
+        </>
+      ) : null}
+
       <FormSection title="Contact">
         <FormField id="phone" label="Phone">
           <input
@@ -367,6 +528,17 @@ export function PlaceForm({
             placeholder="https://"
           />
         </FormField>
+        {mode === "edit" && originalId ? (
+          <PlaceSocialsField
+            placeId={originalId}
+            initialSocials={initialSocials}
+            showHeading
+          />
+        ) : (
+          <p className="text-sm text-ink-muted">
+            Save the place first to add social links.
+          </p>
+        )}
       </FormSection>
 
       <FormSection title="Schools">

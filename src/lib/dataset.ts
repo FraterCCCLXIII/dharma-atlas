@@ -1,7 +1,9 @@
 export {
   getAllPlaces,
   getPlaceById,
+  getPlaceBySlug,
   getAllPlaceIds,
+  getAllPlaceSlugs,
   getSimilarPlaces,
   getPlacesCount,
 } from "@/lib/data/places";

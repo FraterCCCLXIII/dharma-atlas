@@ -13,9 +13,15 @@ import type { PlacePhoto } from "@/types/place";
 interface PlacePhotosFieldProps {
   placeId: string;
   initialPhotos: PlacePhoto[];
+  /** When false, parent supplies the section title/description. */
+  showHeading?: boolean;
 }
 
-export function PlacePhotosField({ placeId, initialPhotos }: PlacePhotosFieldProps) {
+export function PlacePhotosField({
+  placeId,
+  initialPhotos,
+  showHeading = true,
+}: PlacePhotosFieldProps) {
   const inputId = useId();
   const fileRef = useRef<HTMLInputElement>(null);
   const pasteRef = useRef<HTMLDivElement>(null);
@@ -82,12 +88,15 @@ export function PlacePhotosField({ placeId, initialPhotos }: PlacePhotosFieldPro
 
   return (
     <div className="space-y-4">
-      <div>
-        <p className="text-xs font-semibold text-ink-secondary">Photos</p>
-        <p className="mt-1 text-xs text-ink-muted">
-          Up to {MAX_PLACE_PHOTOS} images. The first photo is the cover shown in lists and on the map.
-        </p>
-      </div>
+      {showHeading ? (
+        <div>
+          <p className="text-xs font-semibold text-ink-secondary">Photos</p>
+          <p className="mt-1 text-xs text-ink-muted">
+            Up to {MAX_PLACE_PHOTOS} images. The first photo is the cover shown in lists and on
+            the map.
+          </p>
+        </div>
+      ) : null}
 
       {photos.length > 0 ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

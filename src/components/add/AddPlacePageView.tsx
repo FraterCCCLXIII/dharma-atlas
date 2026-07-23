@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Buildings, PaperPlaneTilt } from "@phosphor-icons/react";
+import { IdentificationCard, MapPinPlus } from "@phosphor-icons/react";
 import { CorrectionForm } from "@/components/add/CorrectionForm";
 import { submitButtonClassName } from "@/components/forms/FormField";
 import { FormPageShell } from "@/components/layout/FormPageShell";
@@ -10,6 +10,9 @@ import { authClient } from "@/lib/auth-client";
 
 const MANAGE_NEW_PATH = "/manage/places/new";
 const SUGGEST_PATH = "/submit?type=location";
+
+const optionIconClassName =
+  "mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand";
 
 export function AddPlacePageView() {
   const { data: session, isPending } = authClient.useSession();
@@ -83,8 +86,8 @@ export function AddPlacePageView() {
           onClick={() => setManaging(true)}
           className="flex w-full items-start gap-4 rounded-2xl border border-border bg-surface-elevated px-5 py-5 text-left transition hover:border-border-strong hover:bg-surface-muted"
         >
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
-            <Buildings size={22} weight="bold" />
+          <span className={optionIconClassName}>
+            <IdentificationCard size={22} weight="duotone" />
           </span>
           <span className="min-w-0">
             <span className="block font-display text-lg font-semibold text-ink">
@@ -101,8 +104,8 @@ export function AddPlacePageView() {
           role="listitem"
           className="flex w-full items-start gap-4 rounded-2xl border border-border bg-surface-elevated px-5 py-5 text-left transition hover:border-border-strong hover:bg-surface-muted"
         >
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-muted text-ink-secondary">
-            <PaperPlaneTilt size={22} weight="bold" />
+          <span className={optionIconClassName}>
+            <MapPinPlus size={22} weight="duotone" />
           </span>
           <span className="min-w-0">
             <span className="block font-display text-lg font-semibold text-ink">

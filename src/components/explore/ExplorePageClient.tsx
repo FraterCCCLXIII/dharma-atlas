@@ -6,6 +6,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ListBullets, MapTrifold } from "@phosphor-icons/react";
 import { buildDirectoryEntries } from "@/lib/directory";
 import { fetchExploreMarkers } from "@/lib/explore-markers-client";
+import { fetchExploreTeachers } from "@/lib/explore-teachers-client";
 import { placeMatchesLocationFilter } from "@/lib/location-filter";
 import { filterPlaces } from "@/lib/places";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
@@ -81,18 +82,18 @@ function FilterSidebar({
   );
 }
 
-function useSyncListToMap() {
-  const [syncListToMap, setSyncListToMap] = useState(false);
+function useDesktopLayout() {
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 1024px)");
-    const update = () => setSyncListToMap(media.matches);
+    const update = () => setIsDesktop(media.matches);
     update();
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
   }, []);
 
-  return syncListToMap;
+  return isDesktop;
 }
 
 function MobileMapToggle() {
@@ -116,6 +117,26 @@ function MobileMapToggle() {
         <MapTrifold size={18} weight="bold" />
       )}
     </button>
+  );
+}
+
+function SearchAsMapMovesControl({
+  checked,
+  onChange,
+}: {
+  checked: boolean;
+  onChange: (next: boolean) => void;
+}) {
+  return (
+    <label className="absolute top-3 left-1/2 z-[1100] flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-lg border border-border bg-[var(--map-overlay)] px-3 py-2 text-sm text-ink shadow-[var(--shadow-float)] backdrop-blur-sm transition hover:bg-surface-elevated">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="size-3.5 shrink-0 rounded border-border text-brand focus:ring-brand/30"
+      />
+      <span className="whitespace-nowrap font-medium">Search as map moves</span>
+    </label>
   );
 }
 
@@ -155,7 +176,43 @@ function useExploreMarkers(enabled: boolean) {
   return { markers, loading, error };
 }
 
-export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
+function useExploreTeachers(enabled: boolean) {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [loading, setLoading] = useState(enabled);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    fetchExploreTeachers()
+      .then((data) => {
+        if (cancelled) return;
+        setTeachers(data);
+        setLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : "Failed to load people");
+        setTeachers([]);
+        setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [enabled]);
+
+  return { teachers, loading, error };
+}
+
+export function ExplorePageClient() {
   useResponsiveFiltersOpen();
   const entityFilter = useExploreStore((s) => s.entityFilter);
   const query = useExploreStore((s) => s.query);
@@ -169,7 +226,10 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
   const peopleSort = useExploreStore((s) => s.peopleSort);
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
-  const syncListToMap = useSyncListToMap();
+  const isDesktop = useDesktopLayout();
+  const [searchAsMapMoves, setSearchAsMapMoves] = useState(true);
+  // When on, the place list filters to the current map viewport (once bounds exist).
+  const syncListToMap = searchAsMapMoves;
 
   const needsMarkers =
     entityFilter === "locations" ||
@@ -180,8 +240,13 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
     faiths.length > 0 ||
     locationFilter != null;
 
+  // People/home need the teacher directory; locations-only browse does not.
+  const needsTeachers = entityFilter === "people" || entityFilter === "all";
+
   const { markers, loading: markersLoading, error: markersError } =
     useExploreMarkers(needsMarkers);
+  const { teachers, loading: teachersLoading, error: teachersError } =
+    useExploreTeachers(needsTeachers);
 
   const placeQuery = entityFilter === "locations" ? query : "";
   const teacherQuery = entityFilter === "people" ? query : "";
@@ -229,7 +294,7 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
   const showMap = entityFilter === "locations";
   // Avoid mounting Leaflet while the map pane is hidden (mobile list). Unmounting
   // thousands of markers on soft-nav to a place page freezes the main thread.
-  const mapMounted = showMap && (syncListToMap || mobileView === "map");
+  const mapMounted = showMap && (isDesktop || mobileView === "map");
   const isPeopleBrowse = entityFilter === "people";
   const isAllBrowse = entityFilter === "all";
   const hasActiveBrowse =
@@ -251,18 +316,36 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
   const listContent =
     isAllBrowse ? (
       hasActiveBrowse ? (
-        markersLoading ? (
+        markersLoading || teachersLoading ? (
           <LoadingScreen />
+        ) : teachersError ? (
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-center">
+            <p className="font-display text-lg font-semibold text-ink">
+              Couldn’t load people
+            </p>
+            <p className="mt-2 max-w-sm text-sm text-ink-muted">{teachersError}</p>
+          </div>
         ) : (
           <DirectoryList entries={directoryEntries} />
         )
       ) : null
     ) : entityFilter === "people" ? (
-      <TeacherList
-        teachers={filteredTeachers}
-        variant="tile"
-        sortOrder={peopleSort}
-      />
+      teachersLoading ? (
+        <LoadingScreen />
+      ) : teachersError ? (
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-center">
+          <p className="font-display text-lg font-semibold text-ink">
+            Couldn’t load people
+          </p>
+          <p className="mt-2 max-w-sm text-sm text-ink-muted">{teachersError}</p>
+        </div>
+      ) : (
+        <TeacherList
+          teachers={filteredTeachers}
+          variant="tile"
+          sortOrder={peopleSort}
+        />
+      )
     ) : markersError ? (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-center">
         <p className="font-display text-lg font-semibold text-ink">
@@ -293,14 +376,23 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
 
           <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">
             {showAllFeature ? (
-              markersLoading ? (
+              markersLoading || teachersLoading ? (
                 <LoadingScreen />
+              ) : teachersError ? (
+                <div className="flex min-h-[40vh] flex-col items-center justify-center px-4 text-center">
+                  <p className="font-display text-lg font-semibold text-ink">
+                    Couldn’t load directory
+                  </p>
+                  <p className="mt-2 max-w-sm text-sm text-ink-muted">{teachersError}</p>
+                </div>
               ) : (
                 <AllFeaturePage places={markers} teachers={teachers} />
               )
             ) : isPeopleBrowse ? (
               <div className="mx-auto w-full max-w-[1600px] px-4 pb-16 sm:px-6 lg:px-8">
-                {showLuminaries && <PeopleCarousels teachers={teachers} />}
+                {showLuminaries && !teachersLoading && !teachersError ? (
+                  <PeopleCarousels teachers={teachers} />
+                ) : null}
                 {listContent}
               </div>
             ) : (
@@ -344,7 +436,7 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
                   : "block"
             }`}
           >
-            <div className="map-panel h-full overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
+            <div className="map-panel relative h-full overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
               {mapMounted ? (
                 markersLoading ? (
                   <LoadingScreen
@@ -354,6 +446,12 @@ export function ExplorePageClient({ teachers }: { teachers: Teacher[] }) {
                 ) : (
                   <PlaceMap places={filteredPlaces} />
                 )
+              ) : null}
+              {mapMounted && !markersLoading ? (
+                <SearchAsMapMovesControl
+                  checked={searchAsMapMoves}
+                  onChange={setSearchAsMapMoves}
+                />
               ) : null}
             </div>
           </section>

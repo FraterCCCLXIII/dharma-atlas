@@ -16,6 +16,14 @@ export function displayWebsite(website: string): string {
   return website.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
-export function hasContactInfo(place: Place): boolean {
-  return Boolean(place.address || place.phone || place.website);
+export function hasContactInfo(
+  place: Place,
+  options?: { socialCount?: number },
+): boolean {
+  return Boolean(
+    place.address ||
+      place.phone ||
+      place.website ||
+      (options?.socialCount ?? 0) > 0,
+  );
 }

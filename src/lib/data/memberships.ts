@@ -65,3 +65,13 @@ export async function userManagesPlace(userId: string, placeId: string) {
   const membership = await getMembership(userId, placeId);
   return Boolean(membership);
 }
+
+/** True when at least one user manages / has claimed this place. */
+export async function placeHasManager(placeId: string): Promise<boolean> {
+  const [row] = await db
+    .select({ id: placeMemberships.id })
+    .from(placeMemberships)
+    .where(eq(placeMemberships.placeId, placeId))
+    .limit(1);
+  return Boolean(row);
+}

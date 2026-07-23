@@ -47,11 +47,11 @@ export function FormPageShell({
   );
 
   if (embedded) {
-    return <div className="max-w-2xl">{body}</div>;
+    return <div className="mx-auto w-full max-w-2xl">{body}</div>;
   }
 
   return (
-    <div className="min-h-dvh bg-surface">
+    <div className="bg-surface">
       <main className="mx-auto max-w-2xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">{body}</main>
     </div>
   );

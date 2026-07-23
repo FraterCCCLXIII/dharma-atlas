@@ -5,6 +5,7 @@ import {
   House,
   Mountains,
   TreeEvergreen,
+  UsersThree,
 } from "@phosphor-icons/react";
 import L from "leaflet";
 import { createElement } from "react";
@@ -43,6 +44,7 @@ const TYPE_ICONS: Record<PlaceType, Icon> = {
   "Meditation Center": FlowerLotus,
   Institute: GraduationCap,
   Ashram: TreeEvergreen,
+  Sangha: UsersThree,
 };
 
 export function createPlaceMarkerIcon(

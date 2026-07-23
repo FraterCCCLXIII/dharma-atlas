@@ -9,6 +9,14 @@ export function isValidCoord(lat: unknown, lng: unknown): boolean {
   );
 }
 
+/** True for real map pins; treats (0, 0) as missing. */
+export function hasValidCoords(lat: number, lng: number): boolean {
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return false;
+  if (lat === 0 && lng === 0) return false;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return false;
+  return true;
+}
+
 export function toLatLng(lat: unknown, lng: unknown): [number, number] | null {
   const la = Number(lat);
   const ln = Number(lng);

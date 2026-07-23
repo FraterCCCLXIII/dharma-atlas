@@ -25,6 +25,7 @@ import {
   scheduleHoverClose,
 } from "@/lib/map-popup";
 import { isValidCoord, toLatLng } from "@/lib/coords";
+import { placeShowsMapPin } from "@/lib/place-location";
 import { useExploreStore } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
 
@@ -323,7 +324,7 @@ export function PlaceMap({ places }: PlaceMapProps) {
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
 
   const validPlaces = useMemo(
-    () => places.filter((p) => isValidCoord(p.lat, p.lng)),
+    () => places.filter((p) => placeShowsMapPin(p) && isValidCoord(p.lat, p.lng)),
     [places],
   );
 

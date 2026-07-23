@@ -1,3 +1,4 @@
+import { stripMarkdown } from "@/lib/markdown";
 import type { Place } from "@/types/place";
 
 /** Patterns that indicate catalog/directory boilerplate, not real place content. */
@@ -62,18 +63,19 @@ const PRACTICE_HINTS = [
 ];
 
 export function isSubstantiveDescription(text: string | null | undefined): boolean {
-  const trimmed = text?.trim();
-  if (!trimmed || trimmed.length < 50) return false;
+  const plain = stripMarkdown(text ?? "");
+  if (!plain || plain.length < 50) return false;
 
   for (const pattern of JUNK_PATTERNS) {
-    if (pattern.test(trimmed)) return false;
+    if (pattern.test(plain)) return false;
   }
 
-  const lower = trimmed.toLowerCase();
+  const lower = plain.toLowerCase();
   const hintCount = PRACTICE_HINTS.filter((hint) => lower.includes(hint)).length;
   return hintCount >= 1;
 }
 
+/** Markdown source for the About section, or null if not substantive. */
 export function placeDisplayDescription(place: Place): string | null {
   if (!isSubstantiveDescription(place.description)) return null;
   return place.description!.trim();
@@ -81,7 +83,7 @@ export function placeDisplayDescription(place: Place): string | null {
 
 export function placeMetaDescription(place: Place): string {
   const display = placeDisplayDescription(place);
-  if (display) return display.slice(0, 160);
+  if (display) return stripMarkdown(display).slice(0, 160);
 
   const address = place.address?.trim();
   if (address) {

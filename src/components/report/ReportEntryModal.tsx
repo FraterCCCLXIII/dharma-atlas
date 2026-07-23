@@ -2,7 +2,14 @@
 
 import { Flag, ShareNetwork, X } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { fieldClassName, FormField, submitButtonClassName } from "@/components/forms/FormField";
 import {
   locationReportReasons,
@@ -228,6 +235,8 @@ interface DetailPageActionsProps {
   entityName: string;
   entityPath: string;
   claimHref?: string;
+  /** Optional leading action (e.g. place favorite heart). */
+  leadingAction?: ReactNode;
 }
 
 export function DetailPageActions({
@@ -238,6 +247,7 @@ export function DetailPageActions({
   entityName,
   entityPath,
   claimHref,
+  leadingAction,
 }: DetailPageActionsProps) {
   const [reportOpen, setReportOpen] = useState(false);
 
@@ -256,6 +266,7 @@ export function DetailPageActions({
   return (
     <>
       <div className="flex shrink-0 items-center gap-2 self-start">
+        {leadingAction}
         <button
           type="button"
           onClick={handleShare}

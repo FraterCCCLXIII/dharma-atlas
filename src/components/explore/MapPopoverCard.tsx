@@ -1,6 +1,8 @@
 "use client";
 
 import { ArrowRight, MapPin, Sparkle } from "@phosphor-icons/react";
+import { placeProfilePath } from "@/lib/explore-routes";
+import { placeLocationLabel } from "@/lib/place-location";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
 import type { PlaceMarker } from "@/types/place";
@@ -10,10 +12,10 @@ interface MapPopoverCardProps {
 }
 
 export function MapPopoverCard({ place }: MapPopoverCardProps) {
-  const address = place.address?.trim();
+  const locationLabel = placeLocationLabel(place);
   const photos = getPlaceDisplayPhotos(place);
   // Plain anchor: cluster popups mount via createRoot outside the Next.js tree.
-  const href = `/place/${place.id}`;
+  const href = placeProfilePath(place);
 
   return (
     <div className="map-popover-card">
@@ -45,9 +47,7 @@ export function MapPopoverCard({ place }: MapPopoverCardProps) {
           </h3>
           <p className="mt-1 inline-flex items-start gap-1 text-[12px] text-ink-muted">
             <MapPin size={12} weight="bold" className="mt-0.5 shrink-0 text-brand" />
-            <span className="line-clamp-2">
-              {address || place.tradition}
-            </span>
+            <span className="line-clamp-2">{locationLabel}</span>
           </p>
         </div>
 

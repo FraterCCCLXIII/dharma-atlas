@@ -63,6 +63,7 @@ export async function approveClaimAction(formData: FormData) {
 
   revalidatePath("/admin/claims");
   revalidatePath("/manage");
+  revalidatePath(`/place/${claim.placeId}`);
   redirect("/admin/claims");
 }
 

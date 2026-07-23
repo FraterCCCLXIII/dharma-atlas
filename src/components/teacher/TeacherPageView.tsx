@@ -13,7 +13,9 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import { DetailPageActions } from "@/components/report/ReportEntryModal";
+import { MarkdownText } from "@/components/ui/MarkdownText";
 import { personProfilePath } from "@/lib/explore-routes";
+import { stripMarkdown } from "@/lib/markdown";
 import { teacherTraditionGradient } from "@/lib/teachers";
 import {
   formatLifespan,
@@ -127,7 +129,7 @@ export function TeacherPageView({
       (teacher.relations.students?.length ?? 0) > 0);
 
   return (
-    <div className="min-h-dvh bg-surface">
+    <div className="bg-surface">
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-2">
@@ -143,7 +145,7 @@ export function TeacherPageView({
 
           <DetailPageActions
             shareTitle={teacher.name}
-            shareText={teacher.shortBio}
+            shareText={stripMarkdown(teacher.shortBio)}
             entityType="teacher"
             entityId={teacher.slug}
             entityName={teacher.name}
@@ -157,9 +159,9 @@ export function TeacherPageView({
               <h2 className="font-display text-xl font-semibold text-ink">
                 About
               </h2>
-              <p className="max-w-2xl text-base leading-relaxed text-ink-secondary">
+              <MarkdownText className="max-w-2xl text-base text-ink-secondary">
                 {teacher.shortBio}
-              </p>
+              </MarkdownText>
               <div className="flex flex-wrap gap-3 pt-2">
                 <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm">
                   <FlowerLotus
@@ -195,16 +197,9 @@ export function TeacherPageView({
                 <h2 className="font-display text-xl font-semibold text-ink">
                   Biography
                 </h2>
-                <div className="max-w-2xl space-y-4">
-                  {teacher.biography.map((paragraph) => (
-                    <p
-                      key={paragraph.slice(0, 48)}
-                      className="text-base leading-relaxed text-ink-secondary"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
+                <MarkdownText className="max-w-2xl text-base text-ink-secondary">
+                  {teacher.biography.join("\n\n")}
+                </MarkdownText>
               </section>
             )}
 

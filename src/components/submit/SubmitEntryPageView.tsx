@@ -19,7 +19,7 @@ export function SubmitEntryPageView({
   const [submitting, setSubmitting] = useState(false);
   const [locationTradition, setLocationTradition] = useState("");
   const [duplicates, setDuplicates] = useState<
-    { id: string; name: string; address: string; tradition: string }[]
+    { id: string; slug?: string; name: string; address: string; tradition: string }[]
   >([]);
 
   const checkDuplicates = async (name: string, location: string) => {
@@ -30,7 +30,13 @@ export function SubmitEntryPageView({
     const params = new URLSearchParams({ name, location });
     const res = await fetch(`/api/submissions/check-duplicates?${params}`);
     const data = (await res.json()) as {
-      matches: { id: string; name: string; address: string; tradition: string }[];
+      matches: {
+        id: string;
+        slug?: string;
+        name: string;
+        address: string;
+        tradition: string;
+      }[];
     };
     setDuplicates(data.matches ?? []);
   };
@@ -191,7 +197,10 @@ export function SubmitEntryPageView({
                   <ul className="mt-2 space-y-1">
                     {duplicates.map((match) => (
                       <li key={match.id}>
-                        <a href={`/place/${match.id}`} className="text-brand hover:underline">
+                        <a
+                          href={`/place/${match.slug || match.id}`}
+                          className="text-brand hover:underline"
+                        >
                           {match.name}
                         </a>
                         {match.address ? ` · ${match.address}` : ""}

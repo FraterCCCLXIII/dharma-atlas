@@ -127,6 +127,76 @@
       "when": 1784700000000,
       "tag": "0017_places_soft_delete",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1784800000000,
+      "tag": "0018_place_profile_sections",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1784900000000,
+      "tag": "0019_place_offerings",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1785000000000,
+      "tag": "0020_place_teacher_bio",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1785100000000,
+      "tag": "0021_place_event_schedules",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1785200000000,
+      "tag": "0022_place_calendar_import",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1785300000000,
+      "tag": "0023_place_notice",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1785400000000,
+      "tag": "0024_place_socials",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1785500000000,
+      "tag": "0025_place_location_mode",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1785600000000,
+      "tag": "0026_place_favorites",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1785700000000,
+      "tag": "0027_place_slug",
+      "breakpoints": true
     }
   ]
 }

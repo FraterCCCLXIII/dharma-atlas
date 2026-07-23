@@ -10,7 +10,7 @@ export default function PlaceError({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">
+    <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 text-center">
       <h1 className="font-display text-2xl font-semibold">
         Could not load this place
       </h1>

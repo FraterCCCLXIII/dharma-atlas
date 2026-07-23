@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { DraftBadge } from "@/components/admin/DraftStatusField";
+import { placeProfilePath } from "@/lib/explore-routes";
 import type { Place } from "@/types/place";
 
 const QUALITY_FLAGS = [
@@ -160,7 +161,7 @@ export function PlacesAdminSearch({
                 <td className="py-3 text-right whitespace-nowrap">
                   {!p.isDraft && (
                     <Link
-                      href={`/place/${p.id}`}
+                      href={placeProfilePath(p)}
                       className="mr-3 text-xs text-ink-muted hover:text-ink"
                     >
                       View

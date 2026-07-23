@@ -6,6 +6,7 @@ import {
   approveSubmissionAction,
   rejectSubmissionAction,
 } from "@/app/admin/actions/submissions";
+import { ApproveLocationSubmissionForm } from "@/components/admin/ApproveLocationSubmissionForm";
 
 const filters = [
   { value: "all", label: "All" },
@@ -88,16 +89,20 @@ export function SubmissionsAdminList({
             </dl>
 
             {s.status === "pending" && (
-              <div className="mt-4 flex gap-2">
-                <form action={approveSubmissionAction}>
-                  <input type="hidden" name="id" value={s.id} />
-                  <button
-                    type="submit"
-                    className="rounded-full bg-brand px-4 py-2 text-xs font-semibold text-brand-foreground transition hover:bg-brand-hover"
-                  >
-                    Approve & edit
-                  </button>
-                </form>
+              <div className="mt-4 flex flex-wrap items-end gap-3">
+                {s.entryType === "location" ? (
+                  <ApproveLocationSubmissionForm submissionId={s.id} />
+                ) : (
+                  <form action={approveSubmissionAction}>
+                    <input type="hidden" name="id" value={s.id} />
+                    <button
+                      type="submit"
+                      className="rounded-full bg-brand px-4 py-2 text-xs font-semibold text-brand-foreground transition hover:bg-brand-hover"
+                    >
+                      Approve & edit
+                    </button>
+                  </form>
+                )}
                 <form action={rejectSubmissionAction}>
                   <input type="hidden" name="id" value={s.id} />
                   <button
@@ -109,6 +114,7 @@ export function SubmissionsAdminList({
                 </form>
               </div>
             )}
+
           </article>
         ))}
       </div>

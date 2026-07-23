@@ -24,7 +24,7 @@ export default async function ManageLayout({ children }: { children: React.React
 
   return (
     <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
-      <ManageShell userEmail={session.user.email}>{children}</ManageShell>
+      <ManageShell>{children}</ManageShell>
     </OntologyRuntimeProvider>
   );
 }

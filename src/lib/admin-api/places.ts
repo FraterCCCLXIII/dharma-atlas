@@ -1,12 +1,17 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/db/client";
 import { places } from "@/db/schema";
+import {
+  allocateUniquePlaceSlug,
+  assertUniquePlaceSlug,
+} from "@/lib/data/place-slugs";
 import { getPlaceById, getAllPlacesForAdmin } from "@/lib/data/places";
 import { placeInputSchema, type PlaceInput } from "@/lib/validations/place";
 
-function placeRow(input: PlaceInput) {
+function placeRow(input: PlaceInput, slug: string) {
   return {
     id: input.id,
+    slug,
     name: input.name,
     lat: input.lat,
     lng: input.lng,
@@ -19,6 +24,7 @@ function placeRow(input: PlaceInput) {
     website: input.website ?? null,
     description: input.description ?? null,
     descriptionSource: input.descriptionSource ?? null,
+    locationMode: input.locationMode,
     coordPrecision: input.coordPrecision,
     dataSource: input.dataSource ?? null,
     verifiedFields: input.verifiedFields,
@@ -33,9 +39,27 @@ function placeRow(input: PlaceInput) {
     businessStatus: input.businessStatus ?? null,
     googlePrimaryType: input.googlePrimaryType ?? null,
     schools: input.schools,
+    offerings: input.offerings ?? [],
     isDraft: input.isDraft,
     updatedAt: new Date(),
   };
+}
+
+async function resolveAdminPlaceSlug(
+  input: PlaceInput,
+  options?: { excludePlaceId?: string; existingSlug?: string | null },
+) {
+  const raw = input.slug?.trim();
+  if (raw) {
+    return assertUniquePlaceSlug(raw, options?.excludePlaceId);
+  }
+  if (options?.existingSlug) return options.existingSlug;
+  return allocateUniquePlaceSlug({
+    name: input.name,
+    address: input.address,
+    fallbackId: input.id,
+    excludePlaceId: options?.excludePlaceId,
+  });
 }
 
 export async function listAdminPlaces() {
@@ -48,7 +72,8 @@ export async function getAdminPlace(id: string) {
 
 export async function createAdminPlace(input: unknown) {
   const data = placeInputSchema.parse(input);
-  await db.insert(places).values(placeRow(data));
+  const slug = await resolveAdminPlaceSlug(data);
+  await db.insert(places).values(placeRow(data, slug));
   return getPlaceById(data.id, { includeDrafts: true });
 }
 
@@ -59,7 +84,11 @@ export async function updateAdminPlace(originalId: string, input: unknown) {
     throw new Error("Place not found");
   }
 
-  await db.update(places).set(placeRow(data)).where(eq(places.id, originalId));
+  const slug = await resolveAdminPlaceSlug(data, {
+    excludePlaceId: originalId,
+    existingSlug: existing.slug,
+  });
+  await db.update(places).set(placeRow(data, slug)).where(eq(places.id, originalId));
   return getPlaceById(data.id, { includeDrafts: true });
 }
 

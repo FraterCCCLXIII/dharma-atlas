@@ -21,6 +21,8 @@ export default function NewPlacePage() {
         website: null,
         description: null,
         descriptionSource: null,
+        notice: null,
+        locationMode: "venue",
         coordPrecision: "unknown",
         dataSource: null,
         verifiedFields: [],
@@ -28,6 +30,7 @@ export default function NewPlacePage() {
         photo: null,
         photoSource: null,
         schools: [],
+        offerings: [],
         isDraft: false,
       }}
     />

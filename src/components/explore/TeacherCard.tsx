@@ -11,6 +11,7 @@ import {
   cardImagePaddingClassName,
   cardLiftClassName,
 } from "@/lib/card-styles";
+import { stripMarkdown } from "@/lib/markdown";
 import { formatTeacherSchoolLine } from "@/lib/schools";
 import { formatLifespan } from "@/types/teacher";
 import type { Teacher } from "@/types/teacher";
@@ -79,7 +80,7 @@ export function TeacherCard({
           <p className="text-xs text-ink-muted">{subtitle}</p>
           {!compact && (
             <p className="line-clamp-3 text-sm leading-relaxed text-ink-secondary">
-              {teacher.shortBio}
+              {stripMarkdown(teacher.shortBio)}
             </p>
           )}
         </div>

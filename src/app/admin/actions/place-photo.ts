@@ -5,8 +5,9 @@ import { count, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/client";
 import { placePhotos } from "@/db/schema";
-import { revalidateExploreMarkers } from "@/lib/admin-api/revalidate";
+import { revalidatePlacePaths } from "@/lib/admin-api/revalidate";
 import { requireSession } from "@/lib/auth-server";
+import { getPlaceById } from "@/lib/data/places";
 import { getPlacePhotos, syncPlaceCoverPhoto } from "@/lib/data/place-photos";
 import { MAX_PLACE_PHOTOS, type PlacePhoto } from "@/types/place";
 import { canEditPlace } from "@/lib/place-access";
@@ -82,13 +83,9 @@ export async function uploadPlacePhotoAction(placeId: string, formData: FormData
 
   await syncPlaceCoverPhoto(normalizedId);
 
-  revalidatePath(`/place/${normalizedId}`);
-  revalidatePath("/");
-  revalidatePath("/places");
-  revalidatePath("/admin/places");
-  revalidatePath(`/admin/places/${normalizedId}/edit`);
+  const place = await getPlaceById(normalizedId, { includeDrafts: true });
+  revalidatePlacePaths(normalizedId, place?.slug);
   revalidatePath(`/manage/places/${normalizedId}/edit`);
-  revalidateExploreMarkers();
 
   return {
     photo: {
@@ -120,13 +117,9 @@ export async function deletePlacePhotoAction(placeId: string, photoId: number) {
   await db.delete(placePhotos).where(eq(placePhotos.id, photoId));
   await syncPlaceCoverPhoto(placeId);
 
-  revalidatePath(`/place/${placeId}`);
-  revalidatePath("/");
-  revalidatePath("/places");
-  revalidatePath("/admin/places");
-  revalidatePath(`/admin/places/${placeId}/edit`);
+  const place = await getPlaceById(placeId, { includeDrafts: true });
+  revalidatePlacePaths(placeId, place?.slug);
   revalidatePath(`/manage/places/${placeId}/edit`);
-  revalidateExploreMarkers();
 
   return { ok: true };
 }

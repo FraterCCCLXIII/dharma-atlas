@@ -42,6 +42,7 @@ export async function getAllPlaceMarkers(): Promise<PlaceMarker[]> {
   const rows = await db
     .select({
       id: places.id,
+      slug: places.slug,
       name: places.name,
       lat: places.lat,
       lng: places.lng,
@@ -49,6 +50,7 @@ export async function getAllPlaceMarkers(): Promise<PlaceMarker[]> {
       faith: places.faith,
       type: places.type,
       address: places.address,
+      locationMode: places.locationMode,
       photo: places.photo,
       schools: places.schools,
     })
@@ -80,6 +82,24 @@ export async function getAllPlaceIds(): Promise<string[]> {
   return rows.map((r) => r.id);
 }
 
+/** Public sitemap / pretty URLs — prefer slug over id. */
+export async function getAllPlaceSlugs(): Promise<string[]> {
+  const rows = await db
+    .select({ slug: places.slug, id: places.id })
+    .from(places)
+    .where(publishedOnly);
+  return rows.map((r) => r.slug || r.id);
+}
+
+function placeFromRow(
+  row: typeof places.$inferSelect,
+  options?: { includeDrafts?: boolean; includeDeleted?: boolean },
+): Place | null {
+  if (row.deletedAt && !options?.includeDeleted) return null;
+  if (row.isDraft && !options?.includeDrafts) return null;
+  return rowToPlace(row);
+}
+
 // Wrapped in React `cache()` so `generateMetadata` and the page component share
 // a single fetch (and its photo join) within one request instead of running it twice.
 export const getPlaceById = cache(async (
@@ -88,9 +108,18 @@ export const getPlaceById = cache(async (
 ): Promise<Place | null> => {
   const [row] = await db.select().from(places).where(eq(places.id, id)).limit(1);
   if (!row) return null;
-  if (row.deletedAt && !options?.includeDeleted) return null;
-  if (row.isDraft && !options?.includeDrafts) return null;
-  return attachPhotosToPlace(rowToPlace(row));
+  const place = placeFromRow(row, options);
+  return place ? attachPhotosToPlace(place) : null;
+});
+
+export const getPlaceBySlug = cache(async (
+  slug: string,
+  options?: { includeDrafts?: boolean; includeDeleted?: boolean },
+): Promise<Place | null> => {
+  const [row] = await db.select().from(places).where(eq(places.slug, slug)).limit(1);
+  if (!row) return null;
+  const place = placeFromRow(row, options);
+  return place ? attachPhotosToPlace(place) : null;
 });
 
 export async function searchPlaces(options: {

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { and, asc, count, eq, ilike, inArray, or, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
@@ -10,6 +11,8 @@ import {
   teachers,
 } from "@/db/schema";
 import type { Teacher, Book, Retreat, Relation } from "@/types/teacher";
+
+export const EXPLORE_TEACHERS_CACHE_TAG = "explore-teachers";
 
 type TeacherRow = typeof teachers.$inferSelect;
 type BookRow = typeof teacherBooks.$inferSelect;
@@ -165,6 +168,24 @@ export async function getAllTeachers(): Promise<Teacher[]> {
   const rows = await loadAllTeachersRows(false);
   return assembleTeachersFromRows(rows);
 }
+
+/**
+ * Slim teacher rows for explore (cards, filters, carousels).
+ * Skips books/retreats/socials/relations joins that inflate the directory payload.
+ */
+export async function getExploreTeachers(): Promise<Teacher[]> {
+  const rows = await loadAllTeachersRows(false);
+  return rows.map((row) => assembleFromRows(row, [], [], [], []));
+}
+
+export const getCachedExploreTeachers = unstable_cache(
+  async () => getExploreTeachers(),
+  ["explore-teachers"],
+  {
+    tags: [EXPLORE_TEACHERS_CACHE_TAG],
+    revalidate: 3600,
+  },
+);
 
 export async function getAllTeachersForAdmin(): Promise<Teacher[]> {
   const rows = await loadAllTeachersRows(true);

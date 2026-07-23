@@ -2,25 +2,37 @@
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import {
   ArrowSquareOut,
+  Broadcast,
   Compass,
   FlowerLotus,
-  MapPin,
   Sparkle,
 } from "@phosphor-icons/react";
 import { DetailPageActions } from "@/components/report/ReportEntryModal";
 import { placeDisplayDescription } from "@/lib/place-description";
+import { placeProfilePath } from "@/lib/explore-routes";
+import { parseLocationMode, placeShowsMapPin } from "@/lib/place-location";
 import { getPlaceMapsUrls } from "@/lib/place-maps";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
 import { getPlaceDisplayTags } from "@/lib/schools";
 import type { Place } from "@/types/place";
 import { LoadingScreen } from "@/components/layout/LoadingScreen";
+import { PlaceAddressLine } from "@/components/place/PlaceAddressLine";
 import { PlaceContactDetails } from "@/components/place/PlaceContactDetails";
+import { PlaceFavoriteButton } from "@/components/place/PlaceFavoriteButton";
 import { PlaceHours } from "@/components/place/PlaceHours";
 import { SimilarPlaces } from "./SimilarPlaces";
-import { PlaceTeachersSection } from "./PlaceTeachersSection";
+import { PlaceAboutText } from "./PlaceAboutText";
+import { PlaceEventsSection } from "./PlaceEventsSection";
+import { PlaceGuidingTeachersSection } from "./PlaceGuidingTeachersSection";
+import { PlaceNotice } from "./PlaceNotice";
+import { PlaceOfferingsSection } from "./PlaceOfferingsSection";
+import { PlacePhotoGrid } from "./PlacePhotoGrid";
+import { PlacePhotoLightbox } from "./PlacePhotoLightbox";
+import type { PlaceEvent, PlaceSocial, PlaceTeacher } from "@/types/place";
 
 const PlaceSingleMap = dynamic(
   () => import("./PlaceSingleMap").then((m) => m.PlaceSingleMap),
@@ -35,77 +47,54 @@ const PlaceSingleMap = dynamic(
 interface PlacePageViewProps {
   place: Place;
   similar: Place[];
+  guidingTeachers?: PlaceTeacher[];
+  events?: PlaceEvent[];
+  socials?: PlaceSocial[];
   teachers?: import("@/types/teacher").Teacher[];
   /** From the server ontology snapshot — avoids SSR/client mismatch on placeholders. */
   traditionDefaultImages: Record<string, string>;
+  /** False when the place already has a managing user (claimed). */
+  showClaim?: boolean;
 }
 
 export function PlacePageView({
   place,
   similar,
+  guidingTeachers = [],
+  events = [],
+  socials = [],
   teachers = [],
   traditionDefaultImages,
+  showClaim = true,
 }: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
+  const locationMode = parseLocationMode(place.locationMode);
+  const showMap = placeShowsMapPin(place);
   const gradient = traditionGradient(place.tradition);
   const displayTags = getPlaceDisplayTags(place);
   const aboutText = placeDisplayDescription(place);
   const photos = getPlaceDisplayPhotos(place, traditionDefaultImages);
   const showPhotoGrid = photos.length > 1;
+  const [singleLightboxOpen, setSingleLightboxOpen] = useState(false);
 
   return (
-    <div className="min-h-dvh bg-surface">
+    <div className="bg-surface">
       <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <div className="relative mb-10">
           {showPhotoGrid ? (
-            <div className="grid h-[240px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-2xl sm:h-[360px] sm:gap-3 lg:h-[420px]">
-              <div className={`relative col-span-2 row-span-2 bg-gradient-to-br ${gradient}`}>
-                <Image
-                  src={photos[0]}
-                  alt={place.name}
-                  fill
-                  priority
-                  quality={65}
-                  sizes="(min-width: 1152px) 560px, 50vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 rounded-full bg-black/30 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                  {place.tradition}
-                </div>
-              </div>
-              {[1, 2, 3, 4].map((index) =>
-                photos[index] ? (
-                  <div
-                    key={index}
-                    className={`relative bg-gradient-to-br ${gradient}`}
-                  >
-                    <Image
-                      src={photos[index]}
-                      alt={`${place.name} photo ${index + 1}`}
-                      fill
-                      quality={65}
-                      sizes="(min-width: 1152px) 280px, 25vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div
-                    key={index}
-                    className={`bg-gradient-to-br ${gradient} opacity-70`}
-                    aria-hidden
-                  />
-                ),
-              )}
-            </div>
-          ) : (
-            <div
-              className={`relative h-[240px] overflow-hidden rounded-2xl sm:h-[360px] lg:h-[420px] ${
-                photos.length === 1 ? "" : `bg-gradient-to-br ${gradient}`
-              }`}
-            >
-              {photos.length === 1 ? (
+            <PlacePhotoGrid
+              photos={photos}
+              placeName={place.name}
+              gradient={gradient}
+            />
+          ) : photos.length === 1 ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setSingleLightboxOpen(true)}
+                aria-label={`View ${place.name} photo`}
+                className="group relative block h-[240px] w-full cursor-zoom-in overflow-hidden rounded-2xl sm:h-[360px] lg:h-[420px]"
+              >
                 <Image
                   src={photos[0]}
                   alt={place.name}
@@ -113,9 +102,29 @@ export function PlacePageView({
                   priority
                   quality={65}
                   sizes="(min-width: 1152px) 1100px, 100vw"
-                  className="object-cover"
+                  className="object-cover transition duration-200 group-hover:scale-[1.02]"
+                />
+                <span className="pointer-events-none absolute inset-0 bg-black/0 transition duration-200 group-hover:bg-black/35" />
+                <span className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition duration-200 group-hover:opacity-100">
+                  <span className="rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-ink shadow-sm">
+                    View
+                  </span>
+                </span>
+              </button>
+              {singleLightboxOpen ? (
+                <PlacePhotoLightbox
+                  photos={photos}
+                  placeName={place.name}
+                  index={0}
+                  onClose={() => setSingleLightboxOpen(false)}
+                  onIndexChange={() => {}}
                 />
               ) : null}
+            </>
+          ) : (
+            <div
+              className={`relative h-[240px] overflow-hidden rounded-2xl bg-gradient-to-br sm:h-[360px] lg:h-[420px] ${gradient}`}
+            >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 rounded-full bg-black/30 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
@@ -144,12 +153,11 @@ export function PlacePageView({
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {place.name}
           </h1>
-          <p className="inline-flex items-start gap-1.5 text-sm text-ink-secondary">
-            <MapPin size={16} weight="bold" className="mt-0.5 shrink-0 text-brand" />
-            <span>
-              {place.address?.trim() || `${place.lat.toFixed(4)}, ${place.lng.toFixed(4)}`}
-            </span>
-          </p>
+          <PlaceAddressLine
+            place={place}
+            directionsUrl={maps.directions}
+            mapHref={showMap ? "#place-map" : null}
+          />
           </div>
 
           <DetailPageActions
@@ -157,21 +165,22 @@ export function PlacePageView({
             entityType="location"
             entityId={place.id}
             entityName={place.name}
-            entityPath={`/place/${place.id}`}
-            claimHref={`/claim?place=${place.id}`}
+            entityPath={placeProfilePath(place)}
+            claimHref={showClaim ? `/claim?place=${place.id}` : undefined}
+            leadingAction={<PlaceFavoriteButton placeId={place.id} />}
           />
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
           <div className="space-y-10">
+            {place.notice?.trim() ? <PlaceNotice notice={place.notice} /> : null}
+
             <section className="space-y-4 border-b border-border pb-10">
               <h2 className="font-display text-xl font-semibold text-ink">
                 About this place
               </h2>
               {aboutText ? (
-                <p className="max-w-2xl text-base leading-relaxed text-ink-secondary">
-                  {aboutText}
-                </p>
+                <PlaceAboutText text={aboutText} />
               ) : (
                 <p className="max-w-2xl text-sm leading-relaxed text-ink-muted">
                   We don&apos;t have a written description for this location yet. Contact
@@ -190,23 +199,34 @@ export function PlacePageView({
               </div>
             </section>
 
-            <section className="space-y-4">
-              <h2 className="font-display text-xl font-semibold text-ink">
-                Where you&apos;ll find it
-              </h2>
-              <PlaceSingleMap place={place} />
-            </section>
+            <PlaceOfferingsSection offeringIds={place.offerings} />
+
+            <PlaceGuidingTeachersSection
+              guidingTeachers={guidingTeachers}
+              relatedTeachers={teachers}
+            />
+
+            <PlaceEventsSection events={events} />
+
+            {showMap ? (
+              <section
+                id="place-map"
+                className="scroll-mt-[calc(var(--site-header-height,4.5rem)+1rem)] space-y-4"
+              >
+                <h2 className="font-display text-xl font-semibold text-ink">
+                  Where you&apos;ll find it
+                </h2>
+                <PlaceSingleMap place={place} directionsUrl={maps.directions} />
+              </section>
+            ) : null}
           </div>
 
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-[var(--shadow-card)]">
               <div className="space-y-5 p-6">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                    Visit
-                  </p>
-                  <p className="mt-1 font-display text-lg font-semibold text-ink">
-                    Plan your visit
+                  <p className="font-display text-lg font-semibold text-ink">
+                    {locationMode === "online" ? "Connect" : "Plan your visit"}
                   </p>
                 </div>
 
@@ -225,7 +245,13 @@ export function PlacePageView({
                   </div>
                 </dl>
 
-                <PlaceContactDetails place={place} compact />
+                <PlaceContactDetails
+                  place={place}
+                  socials={socials}
+                  compact
+                  directionsUrl={maps.directions}
+                  mapHref={showMap ? "#place-map" : null}
+                />
                 <PlaceHours place={place} />
 
                 {place.googleRating != null && (
@@ -238,32 +264,53 @@ export function PlacePageView({
                   </p>
                 )}
 
-                <div className="space-y-2 pt-2">
-                  <a
-                    href={maps.directions}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover"
-                  >
-                    <Compass size={18} weight="bold" />
-                    Get directions
-                  </a>
-                  <a
-                    href={place.googleMapsUri ?? maps.search}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-semibold text-ink transition hover:bg-surface-muted"
-                  >
-                    <ArrowSquareOut size={18} weight="bold" />
-                    Open in Google Maps
-                  </a>
-                </div>
+                {maps.directions || maps.search || place.website ? (
+                  <div className="space-y-2 pt-2">
+                    {maps.directions ? (
+                      <a
+                        href={maps.directions}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover"
+                      >
+                        <Compass size={18} weight="bold" />
+                        Get directions
+                      </a>
+                    ) : null}
+                    {maps.search || place.googleMapsUri ? (
+                      <a
+                        href={place.googleMapsUri ?? maps.search!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-semibold text-ink transition hover:bg-surface-muted"
+                      >
+                        <ArrowSquareOut size={18} weight="bold" />
+                        {locationMode === "area"
+                          ? "View area on Google Maps"
+                          : "Open in Google Maps"}
+                      </a>
+                    ) : null}
+                    {locationMode === "online" && place.website?.trim() ? (
+                      <a
+                        href={
+                          place.website.startsWith("http")
+                            ? place.website
+                            : `https://${place.website}`
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover"
+                      >
+                        <Broadcast size={18} weight="bold" />
+                        Visit website
+                      </a>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
             </div>
           </aside>
         </div>
-
-        <PlaceTeachersSection teachers={teachers} />
 
         {similar.length > 0 && (
           <section className="mt-16 border-t border-border pt-12">

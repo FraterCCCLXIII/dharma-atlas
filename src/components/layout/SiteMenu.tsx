@@ -81,6 +81,14 @@ export function SiteMenu() {
                 {session?.user.email}
               </p>
               <Link
+                href="/favorites"
+                role="menuitem"
+                onClick={() => setMenuOpen(false)}
+                className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+              >
+                Favorites
+              </Link>
+              <Link
                 href="/manage"
                 role="menuitem"
                 onClick={() => setMenuOpen(false)}

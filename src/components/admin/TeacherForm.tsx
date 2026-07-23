@@ -5,6 +5,7 @@ import { useState, type ReactNode } from "react";
 import { AdminImageField } from "@/components/admin/AdminImageField";
 import { DraftStatusField } from "@/components/admin/DraftStatusField";
 import { fieldClassName, FormField } from "@/components/forms/FormField";
+import { MarkdownRichTextEditor } from "@/components/forms/MarkdownRichTextEditor";
 import type { TeacherInput } from "@/lib/validations/teacher";
 import {
   createTeacherAction,
@@ -199,12 +200,11 @@ export function TeacherForm({ initial, mode }: TeacherFormProps) {
         description="Short summary shown under the name on the public profile."
       >
         <FormField id="shortBio" label="About / short bio">
-          <textarea
+          <MarkdownRichTextEditor
             id="shortBio"
-            rows={3}
             value={teacher.shortBio}
-            onChange={(e) => set("shortBio", e.target.value)}
-            className={`${fieldClassName} resize-y`}
+            onChange={(next) => set("shortBio", next)}
+            rows={4}
             placeholder="One or two sentences introducing this teacher."
           />
         </FormField>
@@ -212,24 +212,15 @@ export function TeacherForm({ initial, mode }: TeacherFormProps) {
 
       <FormSection
         title="Biography"
-        description="Full bio on the profile. Separate paragraphs with a blank line."
+        description="Full bio on the profile. Use headings, lists, and links as needed."
       >
-        <FormField id="biography" label="Biography paragraphs">
-          <textarea
+        <FormField id="biography" label="Biography">
+          <MarkdownRichTextEditor
             id="biography"
-            rows={10}
             value={teacher.biography.join("\n\n")}
-            onChange={(e) =>
-              set(
-                "biography",
-                e.target.value
-                  .split(/\n{2,}/)
-                  .map((s) => s.trim())
-                  .filter(Boolean),
-              )
-            }
-            className={`${fieldClassName} resize-y`}
-            placeholder={"First paragraph…\n\nSecond paragraph…"}
+            onChange={(next) => set("biography", next.trim() ? [next.trim()] : [])}
+            rows={12}
+            placeholder="Tell visitors about this teacher’s background, training, and teaching…"
           />
         </FormField>
       </FormSection>

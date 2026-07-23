@@ -1,9 +1,11 @@
 import type { places } from "@/db/schema";
+import { parseLocationMode } from "@/lib/place-location";
 import type { Place, PlaceMarker, Faith, PlaceType } from "@/types/place";
 
 type PlaceMarkerRow = Pick<
   typeof places.$inferSelect,
   | "id"
+  | "slug"
   | "name"
   | "lat"
   | "lng"
@@ -11,6 +13,7 @@ type PlaceMarkerRow = Pick<
   | "faith"
   | "type"
   | "address"
+  | "locationMode"
   | "photo"
   | "schools"
 >;
@@ -18,6 +21,7 @@ type PlaceMarkerRow = Pick<
 export function rowToPlaceMarker(row: PlaceMarkerRow): PlaceMarker {
   return {
     id: row.id,
+    slug: row.slug || row.id,
     name: row.name,
     lat: row.lat,
     lng: row.lng,
@@ -25,6 +29,7 @@ export function rowToPlaceMarker(row: PlaceMarkerRow): PlaceMarker {
     faith: row.faith as Faith,
     type: row.type as PlaceType,
     address: row.address,
+    locationMode: parseLocationMode(row.locationMode),
     photo: row.photo ?? undefined,
     schools: row.schools.length ? row.schools : undefined,
   };
@@ -33,6 +38,7 @@ export function rowToPlaceMarker(row: PlaceMarkerRow): PlaceMarker {
 export function rowToPlace(row: typeof places.$inferSelect): Place {
   return {
     id: row.id,
+    slug: row.slug || row.id,
     name: row.name,
     lat: row.lat,
     lng: row.lng,
@@ -44,8 +50,11 @@ export function rowToPlace(row: typeof places.$inferSelect): Place {
     phone: row.phone,
     website: row.website,
     schools: row.schools.length ? row.schools : undefined,
+    offerings: row.offerings.length ? row.offerings : undefined,
     description: row.description ?? undefined,
     descriptionSource: row.descriptionSource ?? undefined,
+    notice: row.notice ?? undefined,
+    locationMode: parseLocationMode(row.locationMode),
     coordPrecision: (row.coordPrecision as Place["coordPrecision"]) ?? "unknown",
     dataSource: row.dataSource ?? undefined,
     verifiedAt: row.verifiedAt?.toISOString(),

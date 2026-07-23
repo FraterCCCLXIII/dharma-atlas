@@ -1,15 +1,34 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { EXPLORE_MARKERS_CACHE_TAG } from "@/lib/data/places";
-import { PEOPLE_LIST_PATH, personProfilePath } from "@/lib/explore-routes";
+import { EXPLORE_TEACHERS_CACHE_TAG } from "@/lib/data/teachers";
+import {
+  PEOPLE_LIST_PATH,
+  personProfilePath,
+  placeProfilePath,
+} from "@/lib/explore-routes";
 
 export function revalidateExploreMarkers() {
   revalidateTag(EXPLORE_MARKERS_CACHE_TAG, "max");
 }
 
-export function revalidatePlacePaths(placeId: string) {
+export function revalidateExploreTeachers() {
+  revalidateTag(EXPLORE_TEACHERS_CACHE_TAG, "max");
+}
+
+export function revalidatePlacePaths(
+  placeId: string,
+  slug?: string | null,
+  previousSlug?: string | null,
+) {
   revalidatePath("/");
   revalidatePath("/places");
   revalidatePath(`/place/${placeId}`);
+  if (slug && slug !== placeId) {
+    revalidatePath(placeProfilePath({ id: placeId, slug }));
+  }
+  if (previousSlug && previousSlug !== slug && previousSlug !== placeId) {
+    revalidatePath(placeProfilePath({ id: placeId, slug: previousSlug }));
+  }
   revalidatePath("/admin/places");
   revalidatePath(`/admin/places/${placeId}/edit`);
   revalidatePath(`/manage/places/${placeId}/edit`);
@@ -25,6 +44,7 @@ export function revalidateTeacherPaths(slug: string, previousSlug?: string) {
   }
   revalidatePath("/admin/teachers");
   revalidatePath(`/admin/teachers/${slug}/edit`);
+  revalidateExploreTeachers();
 }
 
 export function revalidateAllContentPaths() {
@@ -34,4 +54,5 @@ export function revalidateAllContentPaths() {
   revalidatePath("/admin/places");
   revalidatePath("/admin/teachers");
   revalidateExploreMarkers();
+  revalidateExploreTeachers();
 }

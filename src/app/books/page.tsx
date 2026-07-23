@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { BooksPageView } from "@/components/books/BooksPageView";
+import { SHOW_BOOKS } from "@/lib/feature-flags";
 
 export const metadata: Metadata = {
   title: "Books (Beta) | Dharma Atlas",
@@ -8,5 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function BooksPage() {
+  if (!SHOW_BOOKS) notFound();
   return <BooksPageView />;
 }

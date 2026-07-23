@@ -1,14 +1,21 @@
 "use client";
 
-import { MapPin, Sparkle } from "@phosphor-icons/react";
+import { Broadcast, MapPin, Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import {
   cardImageFrameClassName,
   cardImagePaddingClassName,
   cardLiftClassName,
 } from "@/lib/card-styles";
+import { PlaceFavoriteButton } from "@/components/place/PlaceFavoriteButton";
 import { getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { isValidCoord } from "@/lib/coords";
+import {
+  parseLocationMode,
+  placeLocationLabel,
+  placeShowsMapPin,
+} from "@/lib/place-location";
+import { placeProfilePath } from "@/lib/explore-routes";
 import { traditionGradient } from "@/lib/places";
 import { getPlaceDisplayTags } from "@/lib/schools";
 import { useExploreStore } from "@/store/explore-store";
@@ -33,9 +40,13 @@ export function PlaceCard({
 
   const displayTags = getPlaceDisplayTags(place).filter((tag) => tag.kind !== "type");
   const photos = getPlaceDisplayPhotos(place);
+  const locationMode = parseLocationMode(place.locationMode);
+  const locationLabel = placeLocationLabel(place);
+  const LocationIcon = locationMode === "online" ? Broadcast : MapPin;
 
   return (
     <motion.article
+      className="relative"
       initial={animateEntrance ? { opacity: 0, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={
@@ -44,7 +55,7 @@ export function PlaceCard({
           : { duration: 0 }
       }
       onMouseEnter={() => {
-        if (isValidCoord(place.lat, place.lng)) {
+        if (placeShowsMapPin(place) && isValidCoord(place.lat, place.lng)) {
           setHoveredId(place.id);
         }
       }}
@@ -52,7 +63,7 @@ export function PlaceCard({
     >
       {/* Full document nav — soft-nav stalls while Leaflet unmounts thousands of markers. */}
       <a
-        href={`/place/${place.id}`}
+        href={placeProfilePath(place)}
         className={`group block rounded-2xl text-left ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
           isHovered ? "bg-surface-muted" : ""
         }`}
@@ -86,10 +97,8 @@ export function PlaceCard({
               {place.name}
             </h3>
             <span className="inline-flex items-center gap-1 text-xs text-ink-muted">
-              <MapPin size={14} weight="bold" className="shrink-0" />
-              <span className="line-clamp-1">
-                {place.address?.trim() || `${place.lat.toFixed(2)}, ${place.lng.toFixed(2)}`}
-              </span>
+              <LocationIcon size={14} weight="bold" className="shrink-0" />
+              <span className="line-clamp-1">{locationLabel}</span>
             </span>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
@@ -104,6 +113,11 @@ export function PlaceCard({
           </div>
         </div>
       </a>
+
+      {/* Sibling overlay so the heart doesn't trigger card navigation. */}
+      <div className="absolute right-5 top-5 z-10">
+        <PlaceFavoriteButton placeId={place.id} variant="overlay" />
+      </div>
     </motion.article>
   );
 }
