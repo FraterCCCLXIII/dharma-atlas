@@ -6,7 +6,9 @@ export type PlaceType =
   | "Meditation Center"
   | "Institute"
   | "Ashram"
-  | "Sangha";
+  | "Sangha"
+  | "Historic Site"
+  | "Sacred Landscape";
 
 /** How a listing’s location is stored and shown publicly. */
 export type LocationMode = "venue" | "area" | "online";
@@ -174,6 +176,10 @@ export interface Place {
   isDraft?: boolean;
   /** Set when a member requests admin publish for a draft listing. */
   publishRequestedAt?: string;
+  /** True when this place is in the pilgrimage catalog / route graph. */
+  isPilgrimageSite?: boolean;
+  /** Stable catalog slug used for seeding and pilgrimage URL redirects. */
+  pilgrimageSlug?: string;
   /** Soft-delete timestamp; present when owner removed the listing. */
   deletedAt?: string;
 }

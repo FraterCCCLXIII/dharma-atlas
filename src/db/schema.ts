@@ -58,6 +58,16 @@ export const places = pgTable(
     googlePrimaryType: text("google_primary_type"),
     isDraft: boolean("is_draft").notNull().default(false),
     publishRequestedAt: timestamp("publish_requested_at", { withTimezone: true }),
+    /**
+     * True when this place is part of the pilgrimage catalog / can appear on routes.
+     * Explore stays open to all places; pilgrimage UIs filter on this flag.
+     */
+    isPilgrimageSite: boolean("is_pilgrimage_site").notNull().default(false),
+    /**
+     * Stable key from the static pilgrimage catalog (`PILGRIMAGE_SITES[].slug`).
+     * Used for idempotent seeding and optional redirects from `/pilgrimage/sites/[slug]`.
+     */
+    pilgrimageSlug: text("pilgrimage_slug"),
     /** Soft-delete timestamp; null means active. */
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -65,8 +75,10 @@ export const places = pgTable(
   },
   (table) => [
     uniqueIndex("places_slug_uidx").on(table.slug),
+    uniqueIndex("places_pilgrimage_slug_uidx").on(table.pilgrimageSlug),
     index("places_draft_name_idx").on(table.isDraft, table.name),
     index("places_deleted_at_idx").on(table.deletedAt),
+    index("places_is_pilgrimage_site_idx").on(table.isPilgrimageSite),
   ],
 );
 
@@ -425,3 +437,50 @@ export const userPilgrimageRoutes = pgTable(
 );
 
 export type UserPilgrimageRouteRow = typeof userPilgrimageRoutes.$inferSelect;
+
+/** Canonical pilgrimage circuits (seeded from the static catalog). */
+export const pilgrimageRoutes = pgTable("pilgrimage_routes", {
+  slug: text("slug").primaryKey(),
+  name: text("name").notNull(),
+  region: text("region").notNull(),
+  tradition: text("tradition").notNull(),
+  summary: text("summary").notNull(),
+  lengthNote: text("length_note").notNull(),
+  significance: text("significance"),
+  /** Named stops that are not yet linked place rows. */
+  extraStops: jsonb("extra_stops").$type<string[]>().notNull().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type PilgrimageRouteRow = typeof pilgrimageRoutes.$inferSelect;
+
+/** Ordered stops on a canonical pilgrimage route. */
+export const pilgrimageRouteStops = pgTable(
+  "pilgrimage_route_stops",
+  {
+    id: serial("id").primaryKey(),
+    routeSlug: text("route_slug")
+      .notNull()
+      .references(() => pilgrimageRoutes.slug, { onDelete: "cascade" }),
+    placeId: text("place_id")
+      .notNull()
+      .references(() => places.id, { onDelete: "cascade" }),
+    position: integer("position").notNull(),
+    /** Official temple number on a numbered circuit (e.g. Shikoku henro). */
+    templeNumber: integer("temple_number"),
+  },
+  (table) => [
+    uniqueIndex("pilgrimage_route_stops_route_place_uidx").on(
+      table.routeSlug,
+      table.placeId,
+    ),
+    uniqueIndex("pilgrimage_route_stops_route_position_uidx").on(
+      table.routeSlug,
+      table.position,
+    ),
+    index("pilgrimage_route_stops_place_idx").on(table.placeId),
+  ],
+);
+
+export type PilgrimageRouteStopRow = typeof pilgrimageRouteStops.$inferSelect;

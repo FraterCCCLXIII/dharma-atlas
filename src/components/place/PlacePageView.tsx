@@ -32,6 +32,8 @@ import { PlaceNotice } from "./PlaceNotice";
 import { PlaceOfferingsSection } from "./PlaceOfferingsSection";
 import { PlacePhotoGrid } from "./PlacePhotoGrid";
 import { PlacePhotoLightbox } from "./PlacePhotoLightbox";
+import { PlacePilgrimageRoutes } from "./PlacePilgrimageRoutes";
+import type { PlacePilgrimageRouteRef } from "@/lib/data/pilgrimage-routes";
 import type { PlaceEvent, PlaceSocial, PlaceTeacher } from "@/types/place";
 
 const PlaceSingleMap = dynamic(
@@ -51,6 +53,8 @@ interface PlacePageViewProps {
   events?: PlaceEvent[];
   socials?: PlaceSocial[];
   teachers?: import("@/types/teacher").Teacher[];
+  /** Canonical pilgrimage routes that include this place. */
+  pilgrimageRoutes?: PlacePilgrimageRouteRef[];
   /** From the server ontology snapshot — avoids SSR/client mismatch on placeholders. */
   traditionDefaultImages: Record<string, string>;
   /** False when the place already has a managing user (claimed). */
@@ -64,6 +68,7 @@ export function PlacePageView({
   events = [],
   socials = [],
   teachers = [],
+  pilgrimageRoutes = [],
   traditionDefaultImages,
   showClaim = true,
 }: PlacePageViewProps) {
@@ -311,6 +316,8 @@ export function PlacePageView({
             </div>
           </aside>
         </div>
+
+        <PlacePilgrimageRoutes routes={pilgrimageRoutes} />
 
         {similar.length > 0 && (
           <section className="mt-16 border-t border-border pt-12">

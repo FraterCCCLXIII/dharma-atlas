@@ -9,6 +9,7 @@ import { placeMetaDescription } from "@/lib/place-description";
 import { getPlaceById, getPlaceBySlug, getSimilarPlaces } from "@/lib/dataset";
 import { placeHasManager } from "@/lib/data/memberships";
 import { getPlaceEvents } from "@/lib/data/place-events";
+import { getPilgrimageRoutesForPlace } from "@/lib/data/pilgrimage-routes";
 import { getPlaceSocials } from "@/lib/data/place-socials";
 import { getPlaceTeachersForDisplay } from "@/lib/data/place-teachers";
 import { getTeachersAtPlace } from "@/lib/data/teachers";
@@ -75,16 +76,25 @@ export default async function PlacePage({ params }: PlacePageProps) {
     permanentRedirect(placeProfilePath(place));
   }
 
-  const [similar, guidingTeachers, events, socials, linkedTeachers, ontology, hasManager] =
-    await Promise.all([
-      getSimilarPlaces(place),
-      getPlaceTeachersForDisplay(place.id),
-      getPlaceEvents(place.id),
-      getPlaceSocials(place.id),
-      getTeachersAtPlace(place.name),
-      getOntologySnapshot(),
-      placeHasManager(place.id),
-    ]);
+  const [
+    similar,
+    guidingTeachers,
+    events,
+    socials,
+    linkedTeachers,
+    ontology,
+    hasManager,
+    pilgrimageRoutes,
+  ] = await Promise.all([
+    getSimilarPlaces(place),
+    getPlaceTeachersForDisplay(place.id),
+    getPlaceEvents(place.id),
+    getPlaceSocials(place.id),
+    getTeachersAtPlace(place.name),
+    getOntologySnapshot(),
+    placeHasManager(place.id),
+    getPilgrimageRoutesForPlace(place.id),
+  ]);
 
   return (
     <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
@@ -95,6 +105,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
         events={events}
         socials={socials}
         teachers={linkedTeachers}
+        pilgrimageRoutes={pilgrimageRoutes}
         traditionDefaultImages={ontology.traditionDefaultImages}
         showClaim={!hasManager}
       />

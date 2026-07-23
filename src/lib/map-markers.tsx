@@ -1,9 +1,11 @@
 import {
   Buildings,
+  Columns,
   FlowerLotus,
   GraduationCap,
   House,
   Mountains,
+  Path,
   TreeEvergreen,
   UsersThree,
 } from "@phosphor-icons/react";
@@ -45,6 +47,8 @@ const TYPE_ICONS: Record<PlaceType, Icon> = {
   Institute: GraduationCap,
   Ashram: TreeEvergreen,
   Sangha: UsersThree,
+  "Historic Site": Columns,
+  "Sacred Landscape": Path,
 };
 
 export function createPlaceMarkerIcon(

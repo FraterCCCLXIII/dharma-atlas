@@ -16,6 +16,8 @@ const PLACE_TYPES = new Set<PlaceType>([
   "Institute",
   "Ashram",
   "Sangha",
+  "Historic Site",
+  "Sacred Landscape",
 ]);
 
 export type PersistedExplorePlaces = {

@@ -71,6 +71,8 @@ export function rowToPlace(row: typeof places.$inferSelect): Place {
     googlePrimaryType: row.googlePrimaryType ?? undefined,
     isDraft: row.isDraft,
     publishRequestedAt: row.publishRequestedAt?.toISOString(),
+    isPilgrimageSite: row.isPilgrimageSite,
+    pilgrimageSlug: row.pilgrimageSlug ?? undefined,
     deletedAt: row.deletedAt?.toISOString(),
   };
 }
