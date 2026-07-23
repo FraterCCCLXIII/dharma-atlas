@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SHOW_BOOKS, SHOW_TRADITIONS } from "@/lib/feature-flags";
 
 /** Better Auth uses `__Secure-` prefix on HTTPS; plain name on HTTP (local). */
 function hasSessionCookie(request: NextRequest): boolean {
@@ -8,8 +9,30 @@ function hasSessionCookie(request: NextRequest): boolean {
   );
 }
 
+function isHiddenPublicSurface(pathname: string): boolean {
+  if (
+    !SHOW_BOOKS &&
+    (pathname === "/books" || pathname.startsWith("/books/"))
+  ) {
+    return true;
+  }
+  if (
+    !SHOW_TRADITIONS &&
+    (pathname === "/traditions" || pathname.startsWith("/traditions/"))
+  ) {
+    return true;
+  }
+  return false;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Unmatched rewrite yields a real HTTP 404 (page-level notFound() can stream 200).
+  if (isHiddenPublicSurface(pathname)) {
+    return NextResponse.rewrite(new URL("/__feature_off", request.url));
+  }
+
   const hasSession = hasSessionCookie(request);
 
   if (pathname.startsWith("/manage")) {
@@ -50,5 +73,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/manage", "/manage/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/manage",
+    "/manage/:path*",
+    "/books",
+    "/books/:path*",
+    "/traditions",
+    "/traditions/:path*",
+  ],
 };
