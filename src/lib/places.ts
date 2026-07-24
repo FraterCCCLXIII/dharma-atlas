@@ -36,12 +36,29 @@ export function filterPlaces<T extends PlaceMarker>(
   });
 }
 
+export const ALL_PLACE_TYPES: PlaceType[] = [
+  "Center",
+  "Temple",
+  "Monastery",
+  "Meditation Center",
+  "Institute",
+  "Ashram",
+  "Sangha",
+  "Historic Site",
+  "Sacred Landscape",
+];
+
 export function getUniqueValues(places: PlaceMarker[]) {
   return {
     traditions: [...new Set(places.map((p) => p.tradition))].sort(),
     types: [...new Set(places.map((p) => p.type))].sort() as PlaceType[],
     faiths: [...new Set(places.map((p) => p.faith))].sort(),
   };
+}
+
+/** Static type facets for the locations filter rail (no full marker dump). */
+export function getExplorePlaceTypeOptions(): PlaceType[] {
+  return ALL_PLACE_TYPES;
 }
 
 export { getSchools, inferSchools, schoolLabel } from "@/lib/schools";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import L from "leaflet";
 import "leaflet.markercluster";
@@ -16,7 +16,6 @@ import {
   cancelHoverClose,
   MAP_HOVER_POPUP_OPTIONS,
   openMarkerPopupNow,
-  openMarkerPopupWhenReady,
   refreshPopupLayout,
   renderPopupRoot,
   scheduleHoverClose,
@@ -25,15 +24,25 @@ import {
 import { sameLngOffsets, worldLngOffsetsForBounds } from "@/lib/coords";
 import { stackSpiderfyPositions } from "@/lib/map-stack-spiderfy";
 import { useExploreStore } from "@/store/explore-store";
-import type { PlaceMarker } from "@/types/place";
+import type { ExploreMapPin, PlaceMarker } from "@/types/place";
+
+type MapPlace = ExploreMapPin | PlaceMarker;
+
+function placesFingerprint(places: MapPlace[]) {
+  if (places.length === 0) return "";
+  return places
+    .map((place) => place.id)
+    .sort()
+    .join(",");
+}
 
 function coordKey(lat: number, lng: number) {
   return `${lat.toFixed(6)}:${lng.toFixed(6)}`;
 }
 
 /** Merge places that share identical coordinates (stacked_coords in the DB). */
-function groupPlacesByCoord(places: PlaceMarker[]) {
-  const groups = new Map<string, PlaceMarker[]>();
+function groupPlacesByCoord(places: MapPlace[]) {
+  const groups = new Map<string, MapPlace[]>();
   for (const place of places) {
     const key = coordKey(place.lat, place.lng);
     const list = groups.get(key) ?? [];
@@ -70,7 +79,7 @@ function closeFloatingPopup(map: L.Map, refs: FloatingPopupRefs) {
 function showFloatingPopup(
   map: L.Map,
   refs: FloatingPopupRefs,
-  place: PlaceMarker,
+  place: MapPlace,
   latLng: L.LatLngExpression,
 ) {
   if (!refs.container) {
@@ -91,13 +100,13 @@ function showFloatingPopup(
 }
 
 type ClusterMarker = L.Marker & {
-  __placeGroup?: PlaceMarker[];
+  __placeGroup?: MapPlace[];
   __lngOffset?: number;
   __popupContainer?: HTMLDivElement;
   __popupRoot?: Root;
 };
 
-function mountPopoverCard(marker: ClusterMarker, place: PlaceMarker) {
+function mountPopoverCard(marker: ClusterMarker, place: MapPlace) {
   if (!marker.__popupContainer) {
     marker.__popupContainer = document.createElement("div");
     marker.__popupRoot = createRoot(marker.__popupContainer);
@@ -111,16 +120,20 @@ function mountPopoverCard(marker: ClusterMarker, place: PlaceMarker) {
   );
 }
 
-export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
+export function PlaceMarkerCluster({ places }: { places: MapPlace[] }) {
   const map = useMap();
   const hoveredId = useExploreStore((s) => s.hoveredId);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
+  // Rebuild only when the id set changes — not on every parent re-render.
+  const placesKey = useMemo(() => placesFingerprint(places), [places]);
+  const placesRef = useRef(places);
+  placesRef.current = places;
 
   const markerByPlaceIdRef = useRef<Map<string, ClusterMarker[]>>(new Map());
   const clusterRef = useRef<MarkerClusterGroup | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cancelOpenRef = useRef<(() => void) | null>(null);
   const openGenRef = useRef(0);
+  const prevHoveredIdRef = useRef<string | null>(null);
   const floatingPopupRef = useRef<FloatingPopupRefs>({
     popup: null,
     container: null,
@@ -128,11 +141,12 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
   });
   const expandedStackRef = useRef<{
     parent: ClusterMarker;
-    group: PlaceMarker[];
+    group: MapPlace[];
     spiders: ClusterMarker[];
   } | null>(null);
 
   useEffect(() => {
+    const places = placesRef.current;
     const registerMarker = (
       markerByPlaceId: Map<string, ClusterMarker[]>,
       placeId: string,
@@ -206,6 +220,9 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       zoomToBoundsOnClick: true,
       spiderfyOnMaxZoom: false,
       showCoverageOnHover: false,
+      // Skip off-screen markers during pan — cheaper than painting every pin.
+      removeOutsideVisibleBounds: true,
+      animate: false,
       maxClusterRadius: 56,
       iconCreateFunction: (cluster: { getChildCount: () => number }) =>
         createMapClusterIcon(cluster.getChildCount()),
@@ -218,7 +235,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
     const markersByOffset = new Map<number, ClusterMarker[]>();
     let activeOffsets: number[] = [];
 
-    const bindMarkerPopup = (marker: ClusterMarker, _place: PlaceMarker) => {
+    const bindMarkerPopup = (marker: ClusterMarker, _place: MapPlace) => {
       if (!marker.getPopup()) {
         marker.bindPopup(document.createElement("div"), {
           ...MAP_HOVER_POPUP_OPTIONS,
@@ -231,10 +248,10 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
 
     const attachHoverPopup = (
       marker: ClusterMarker,
-      group: PlaceMarker[],
-      resolvePlace: () => PlaceMarker,
+      group: MapPlace[],
+      resolvePlace: () => MapPlace,
     ) => {
-      const showPopup = (place: PlaceMarker) => {
+      const showPopup = (place: MapPlace) => {
         cancelHoverClose(hideTimerRef);
         setHoveredId(place.id);
 
@@ -269,7 +286,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       return { showPopup, scheduleHide };
     };
 
-    const expandStack = (parent: ClusterMarker, group: PlaceMarker[]) => {
+    const expandStack = (parent: ClusterMarker, group: MapPlace[]) => {
       collapseExpandedStack();
       parent.closePopup();
 
@@ -420,11 +437,9 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       map.removeLayer(cluster);
       markerByPlaceIdRef.current = new Map();
     };
-  }, [map, places, setHoveredId]);
+  }, [map, placesKey, setHoveredId]);
 
   useEffect(() => {
-    cancelOpenRef.current?.();
-    cancelOpenRef.current = null;
     openGenRef.current += 1;
     const openGen = openGenRef.current;
     const floating = floatingPopupRef.current;
@@ -432,13 +447,37 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
     const markerByPlaceId = markerByPlaceIdRef.current;
     if (markerByPlaceId.size === 0) return;
 
-    const allMarkers = [...markerByPlaceId.values()].flat();
+    const prevHoveredId = prevHoveredIdRef.current;
+    prevHoveredIdRef.current = hoveredId;
+
+    const setMarkerActive = (marker: ClusterMarker, activeId: string | null) => {
+      const group = marker.__placeGroup ?? [];
+      if (group.length === 0) return;
+      const activePlace =
+        (activeId
+          ? group.find((place) => place.id === activeId)
+          : undefined) ?? group[0];
+      const isActive = Boolean(
+        activeId && group.some((place) => place.id === activeId),
+      );
+      marker.setIcon(
+        createPlaceMarkerIcon(activePlace, isActive, {
+          stackCount: group.length > 1 ? group.length : undefined,
+        }),
+      );
+      if (!isActive) marker.closePopup();
+    };
+
+    // Only touch the previous + next hovered markers — full-set setIcon was
+    // O(n) renderToStaticMarkup work on every list/map hover.
+    if (prevHoveredId && prevHoveredId !== hoveredId) {
+      for (const marker of markerByPlaceId.get(prevHoveredId) ?? []) {
+        setMarkerActive(marker, null);
+      }
+    }
 
     if (!hoveredId) {
       closeFloatingPopup(map, floating);
-      for (const marker of new Set(allMarkers)) {
-        marker.closePopup();
-      }
       return;
     }
 
@@ -447,21 +486,8 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       candidates.find((marker) => markerIsVisible(marker)) ?? candidates[0];
     if (!activeMarker) return;
 
-    for (const marker of new Set(allMarkers)) {
-      const group = marker.__placeGroup ?? [];
-      const activePlace =
-        group.find((place) => place.id === hoveredId) ?? group[0];
-      const isActive = group.some((place) => place.id === hoveredId);
-
-      marker.setIcon(
-        createPlaceMarkerIcon(activePlace, isActive, {
-          stackCount: group.length > 1 ? group.length : undefined,
-        }),
-      );
-
-      if (!isActive) {
-        marker.closePopup();
-      }
+    for (const marker of candidates) {
+      setMarkerActive(marker, hoveredId);
     }
 
     const activeGroup = activeMarker.__placeGroup ?? [];
@@ -480,26 +506,19 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
         refreshPopupLayout(activeMarker.getPopup());
         return;
       }
-      cancelOpenRef.current = openMarkerPopupWhenReady(
-        map,
-        activeMarker,
-        mountActiveCard,
-      );
+      // Open immediately — WhenReady waits a frame / moveend and made strip
+      // auto-highlight feel lagged while scrolling the carousel.
+      openMarkerPopupNow(activeMarker, mountActiveCard);
       return;
     }
 
-    for (const marker of new Set(allMarkers)) {
+    for (const marker of candidates) {
       marker.closePopup();
     }
 
     if (openGen !== openGenRef.current) return;
 
     showFloatingPopup(map, floating, activePlace, activeMarker.getLatLng());
-
-    return () => {
-      cancelOpenRef.current?.();
-      cancelOpenRef.current = null;
-    };
   }, [hoveredId, map]);
 
   useEffect(() => () => cancelHoverClose(hideTimerRef), []);

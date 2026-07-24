@@ -2,19 +2,27 @@
 
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ListBullets, MapTrifold } from "@phosphor-icons/react";
 import { buildDirectoryEntries } from "@/lib/directory";
-import { fetchExploreMarkers } from "@/lib/explore-markers-client";
+import { entityFilterFromPath } from "@/lib/explore-routes";
+import {
+  expandMapBounds,
+  mapBoundsArea,
+  mapBoundsContains,
+  type MapBounds,
+} from "@/lib/coords";
+import {
+  fetchExploreMapPins,
+  fetchExploreMarkers,
+} from "@/lib/explore-markers-client";
 import { fetchExploreTeachers } from "@/lib/explore-teachers-client";
-import { placeMatchesLocationFilter } from "@/lib/location-filter";
-import { filterPlaces } from "@/lib/places";
 import {
   readPersistedSearchAsMapMoves,
   useExplorePlacesPersist,
 } from "@/hooks/useExplorePlacesPersist";
 import { useExploreStore, type EntityFilter } from "@/store/explore-store";
-import type { PlaceMarker } from "@/types/place";
+import type { ExploreMapPin, PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 import { LoadingScreen } from "@/components/layout/LoadingScreen";
 import { AllFeaturePage } from "./AllFeaturePage";
@@ -153,7 +161,7 @@ function SearchAsMapMovesControl({
   onChange: (next: boolean) => void;
 }) {
   return (
-    <label className="absolute top-3 left-1/2 z-10 flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-lg border border-border bg-[var(--map-overlay)] px-3 py-2 text-sm text-ink shadow-[var(--shadow-float)] backdrop-blur-sm transition hover:bg-surface-elevated">
+    <label className="absolute top-3 left-1/2 z-[1100] flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-lg border border-border bg-[var(--map-overlay)] px-3 py-2 text-sm text-ink shadow-[var(--shadow-float)] backdrop-blur-sm transition hover:bg-surface-elevated">
       <input
         type="checkbox"
         checked={checked}
@@ -165,6 +173,22 @@ function SearchAsMapMovesControl({
   );
 }
 
+function boundsKey(bounds: MapBounds | null) {
+  if (!bounds) return "";
+  const q = (n: number) => n.toFixed(4);
+  return `${q(bounds.south)}:${q(bounds.north)}:${q(bounds.west)}:${q(bounds.east)}`;
+}
+
+/** Same pin ids → skip Leaflet cluster teardown (main-thread freeze on pan). */
+function mapPinsKey(pins: ExploreMapPin[]) {
+  if (pins.length === 0) return "";
+  return pins
+    .map((pin) => pin.id)
+    .sort()
+    .join(",");
+}
+
+/** Full PlaceMarker dump — home / all-browse featured only. */
 function useExploreMarkers(enabled: boolean) {
   const [markers, setMarkers] = useState<PlaceMarker[]>([]);
   const [loading, setLoading] = useState(enabled);
@@ -199,6 +223,145 @@ function useExploreMarkers(enabled: boolean) {
   }, [enabled]);
 
   return { markers, loading, error };
+}
+
+/** Airbnb-style viewport + filter map pins for /places. */
+function useExploreMapPins(enabled: boolean, syncListToMap: boolean) {
+  const query = useExploreStore((s) => s.query);
+  const traditions = useExploreStore((s) => s.traditions);
+  const schools = useExploreStore((s) => s.schools);
+  const types = useExploreStore((s) => s.types);
+  const faiths = useExploreStore((s) => s.faiths);
+  const mapBounds = useExploreStore((s) => s.mapBounds);
+  const locationFilter = useExploreStore((s) => s.locationFilter);
+
+  const [pins, setPins] = useState<ExploreMapPin[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(enabled);
+  const [error, setError] = useState<string | null>(null);
+  const requestIdRef = useRef(0);
+  const loadedPinsKeyRef = useRef("");
+  const loadedFilterKeyRef = useRef("");
+  const loadedFetchBoundsRef = useRef<MapBounds | null>(null);
+  const hasPinsRef = useRef(false);
+
+  const filterKey = [
+    query,
+    traditions.join(","),
+    schools.join(","),
+    types.join(","),
+    faiths.join(","),
+    locationFilter?.label ?? "",
+    locationFilter ? boundsKey(locationFilter.bounds) : "",
+    syncListToMap ? "sync" : "seed",
+  ].join("|");
+
+  useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
+
+    // Search-as-map-moves needs viewport bounds from the mounted map first.
+    // Near You only seeds the camera — once mapBounds exists, it must win.
+    if (syncListToMap && !mapBounds) {
+      setLoading(true);
+      return;
+    }
+
+    const filtersChanged = loadedFilterKeyRef.current !== filterKey;
+
+    // Skip refetch while the viewport is still inside the padded region we
+    // already loaded — avoids tearing down Leaflet clusters on every pan.
+    if (
+      syncListToMap &&
+      mapBounds &&
+      !filtersChanged &&
+      loadedFetchBoundsRef.current &&
+      mapBoundsContains(loadedFetchBoundsRef.current, mapBounds) &&
+      // If we previously loaded a much larger region (stale continent fetch),
+      // refetch for the tighter viewport instead of keeping oversized clusters.
+      mapBoundsArea(loadedFetchBoundsRef.current) <=
+        mapBoundsArea(mapBounds) * 8
+    ) {
+      return;
+    }
+
+    const fetchBounds =
+      syncListToMap && mapBounds ? expandMapBounds(mapBounds, 0.75) : mapBounds;
+
+    const requestId = ++requestIdRef.current;
+    const controller = new AbortController();
+    setError(null);
+
+    const delayMs = query.trim() ? 200 : syncListToMap && mapBounds ? 280 : 0;
+
+    // Keep prior pins visible while panning; only hard-load on first fetch.
+    if (!hasPinsRef.current) setLoading(true);
+
+    const timer = window.setTimeout(() => {
+      fetchExploreMapPins(
+        {
+          query,
+          traditions,
+          schools,
+          types,
+          faiths,
+          mapBounds: fetchBounds,
+          locationFilter,
+          syncListToMap,
+          // Pin queries always prefer viewport bounds when present so Near You
+          // cannot pin the cluster to the chip while the user pans.
+          scopeToMapBounds: Boolean(fetchBounds && syncListToMap),
+        },
+        { signal: controller.signal },
+      )
+        .then((data) => {
+          if (requestId !== requestIdRef.current) return;
+          const nextKey = mapPinsKey(data.markers);
+          loadedFilterKeyRef.current = filterKey;
+          loadedFetchBoundsRef.current =
+            syncListToMap && fetchBounds ? fetchBounds : null;
+          hasPinsRef.current = data.markers.length > 0;
+          setTotal(data.total);
+          setLoading(false);
+          // Avoid React → cluster rebuild when the id set is unchanged.
+          if (nextKey === loadedPinsKeyRef.current) return;
+          loadedPinsKeyRef.current = nextKey;
+          setPins(data.markers);
+        })
+        .catch((err: unknown) => {
+          if (controller.signal.aborted || requestId !== requestIdRef.current) {
+            return;
+          }
+          setError(err instanceof Error ? err.message : "Failed to load map");
+          loadedPinsKeyRef.current = "";
+          loadedFetchBoundsRef.current = null;
+          hasPinsRef.current = false;
+          setPins([]);
+          setTotal(0);
+          setLoading(false);
+        });
+    }, delayMs);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [
+    enabled,
+    filterKey,
+    mapBounds,
+    locationFilter,
+    syncListToMap,
+    query,
+    traditions,
+    schools,
+    types,
+    faiths,
+  ]);
+
+  return { pins, total, loading, error };
 }
 
 function useExploreTeachers(enabled: boolean) {
@@ -239,7 +402,9 @@ function useExploreTeachers(enabled: boolean) {
 
 export function ExplorePageClient() {
   useResponsiveFiltersOpen();
-  const entityFilter = useExploreStore((s) => s.entityFilter);
+  const pathname = usePathname();
+  // URL is source of truth — store can drift after HMR / aborted sync.
+  const entityFilter = entityFilterFromPath(pathname);
   const query = useExploreStore((s) => s.query);
   const traditions = useExploreStore((s) => s.traditions);
   const schools = useExploreStore((s) => s.schools);
@@ -263,20 +428,21 @@ export function ExplorePageClient() {
   // thousands of markers mid-drag. Cleared when leaving the locations map.
   const [mapWarm, setMapWarm] = useState(false);
 
-  const needsMarkers =
-    entityFilter === "locations" ||
-    entityFilter === "all" ||
-    traditions.length > 0 ||
-    schools.length > 0 ||
-    types.length > 0 ||
-    faiths.length > 0 ||
-    locationFilter != null;
+  // Full marker dump only for home / all-browse. Locations map uses viewport pins.
+  const needsFullMarkers = entityFilter === "all";
+  const needsMapPins = entityFilter === "locations";
 
   // People/home need the teacher directory; locations-only browse does not.
   const needsTeachers = entityFilter === "people" || entityFilter === "all";
 
   const { markers, loading: markersLoading, error: markersError } =
-    useExploreMarkers(needsMarkers);
+    useExploreMarkers(needsFullMarkers);
+  const {
+    pins: mapPins,
+    total: mapPinTotal,
+    loading: mapPinsLoading,
+    error: mapPinsError,
+  } = useExploreMapPins(needsMapPins, syncListToMap);
   const { teachers, loading: teachersLoading, error: teachersError } =
     useExploreTeachers(needsTeachers);
 
@@ -291,21 +457,6 @@ export function ExplorePageClient() {
     () => ({ query: teacherQuery, traditions, schools, lifeEra: peopleLifeEra }),
     [teacherQuery, traditions, schools, peopleLifeEra],
   );
-
-  const filteredPlaces = useMemo(() => {
-    const byFilters = filterPlaces(markers, placeFilters);
-    // Search-as-map-moves uses the viewport for the list; keep map pins free of
-    // the Near You / area lock so panning can reveal places outside that seed.
-    if (!locationFilter || syncListToMap) return byFilters;
-    return byFilters.filter((place) =>
-      placeMatchesLocationFilter(
-        place.lat,
-        place.lng,
-        place.address,
-        locationFilter,
-      ),
-    );
-  }, [markers, placeFilters, locationFilter, syncListToMap]);
 
   const directoryEntries = useMemo(
     () =>
@@ -393,17 +544,17 @@ export function ExplorePageClient() {
           sortOrder={peopleSort}
         />
       )
-    ) : markersError ? (
+    ) : mapPinsError ? (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-center">
         <p className="font-display text-lg font-semibold text-ink">
           Couldn’t load locations
         </p>
-        <p className="mt-2 max-w-sm text-sm text-ink-muted">{markersError}</p>
+        <p className="mt-2 max-w-sm text-sm text-ink-muted">{mapPinsError}</p>
       </div>
     ) : (
       <PlaceList
         syncListToMap={syncListToMap}
-        filteredMarkerCount={filteredPlaces.length}
+        filteredMarkerCount={mapPinTotal}
       />
     );
 
@@ -425,12 +576,14 @@ export function ExplorePageClient() {
             {showAllFeature ? (
               markersLoading || teachersLoading ? (
                 <LoadingScreen />
-              ) : teachersError ? (
+              ) : markersError || teachersError ? (
                 <div className="flex min-h-[40vh] flex-col items-center justify-center px-4 text-center">
                   <p className="font-display text-lg font-semibold text-ink">
                     Couldn’t load directory
                   </p>
-                  <p className="mt-2 max-w-sm text-sm text-ink-muted">{teachersError}</p>
+                  <p className="mt-2 max-w-sm text-sm text-ink-muted">
+                    {markersError ?? teachersError}
+                  </p>
                 </div>
               ) : (
                 <AllFeaturePage places={markers} teachers={teachers} />
@@ -493,17 +646,17 @@ export function ExplorePageClient() {
           >
             <div className="relative min-h-0 flex-1" data-map-shell>
               <div className="map-panel absolute inset-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-                {mapMounted ? (
-                  markersLoading ? (
+                {/* Mount the map immediately so bounds exist for pin fetches. */}
+                {mapMounted ? <PlaceMap places={mapPins} /> : null}
+                {mapMounted && mapPinsLoading && mapPins.length === 0 ? (
+                  <div className="pointer-events-none absolute inset-0 z-20">
                     <LoadingScreen
                       variant="inline"
                       minHeightClassName="min-h-full h-full"
                     />
-                  ) : (
-                    <PlaceMap places={filteredPlaces} />
-                  )
+                  </div>
                 ) : null}
-                {mapMounted && !markersLoading ? (
+                {mapMounted ? (
                   <SearchAsMapMovesControl
                     checked={searchAsMapMoves}
                     onChange={setSearchAsMapMoves}

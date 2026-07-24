@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { primeExplorePlaceCard } from "@/lib/explore-place-card-client";
 import { buildExplorePlacesSearchParams } from "@/lib/explore-places-query";
 import { useExploreStore } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
@@ -22,6 +23,21 @@ function useIsDesktopLayout() {
   }, []);
 
   return isDesktop;
+}
+
+/** True for mouse / trackpad — not primary touch. */
+function useFinePointerHover() {
+  const [finePointer, setFinePointer] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setFinePointer(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return finePointer;
 }
 
 const PAGE_SIZE = 20;
@@ -175,8 +191,41 @@ export function PlaceList({
   const mapBounds = useExploreStore((s) => s.mapBounds);
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const mobileView = useExploreStore((s) => s.mobileView);
+  const setHoveredId = useExploreStore((s) => s.setHoveredId);
   const isDesktop = useIsDesktopLayout();
+  const finePointerHover = useFinePointerHover();
   const mapStrip = !isDesktop && mobileView === "map";
+  const centeredStripIdRef = useRef<string | null>(null);
+  const pointerStripIdRef = useRef<string | null>(null);
+
+  const syncStripMapHighlight = () => {
+    // Mouse hover wins over the centered carousel card when a fine pointer
+    // is available (desktop browser / trackpad on a narrow viewport).
+    const next =
+      finePointerHover && pointerStripIdRef.current
+        ? pointerStripIdRef.current
+        : centeredStripIdRef.current;
+    if (useExploreStore.getState().hoveredId === next) return;
+    setHoveredId(next);
+  };
+
+  useEffect(() => {
+    if (!mapStrip) {
+      centeredStripIdRef.current = null;
+      pointerStripIdRef.current = null;
+      return;
+    }
+    syncStripMapHighlight();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-sync when pointer mode / strip mode flips
+  }, [mapStrip, finePointerHover, setHoveredId]);
+
+  // Strip rows are already full PlaceMarkers — warm popover cache for instant map cards.
+  useEffect(() => {
+    if (!mapStrip) return;
+    for (const place of places) {
+      primeExplorePlaceCard(place);
+    }
+  }, [mapStrip, places]);
 
   // Deliberately excludes map bounds: this key drives the reset-to-page-1 below,
   // and that should follow user intent (search, filters, a chosen location) only.
@@ -190,7 +239,8 @@ export function PlaceList({
     locationFilter ? boundsKey(locationFilter.bounds) : "",
   ].join("|");
 
-  // Viewport sync applies even while Near You / area chips stay selected.
+  // Viewport sync applies even while Near You / area chips stay selected —
+  // the chip only seeds the camera; mapBounds wins whenever sync is on.
   const mapBoundsKey = syncListToMap ? boundsKey(mapBounds) : "";
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -333,6 +383,11 @@ export function PlaceList({
         aria-busy={pageFetching || undefined}
       >
         <MobileMapResultsPanel
+          resetScrollKey={safePage}
+          onCenteredIdChange={(id) => {
+            centeredStripIdRef.current = id;
+            syncStripMapHighlight();
+          }}
           leading={
             <p className="truncate text-xs font-medium tabular-nums text-ink-secondary">
               {total.toLocaleString()} nearby
@@ -353,6 +408,14 @@ export function PlaceList({
               index={index}
               variant="strip"
               animateEntrance={false}
+              onStripPointerHighlight={
+                finePointerHover
+                  ? (id) => {
+                      pointerStripIdRef.current = id;
+                      syncStripMapHighlight();
+                    }
+                  : undefined
+              }
             />
           ))}
         </MobileMapResultsPanel>

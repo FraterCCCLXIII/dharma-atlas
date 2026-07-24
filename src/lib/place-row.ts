@@ -1,6 +1,12 @@
 import type { places } from "@/db/schema";
 import { parseLocationMode } from "@/lib/place-location";
-import type { Place, PlaceMarker, Faith, PlaceType } from "@/types/place";
+import type {
+  ExploreMapPin,
+  Place,
+  PlaceMarker,
+  Faith,
+  PlaceType,
+} from "@/types/place";
 
 type PlaceMarkerRow = Pick<
   typeof places.$inferSelect,
@@ -32,6 +38,19 @@ export function rowToPlaceMarker(row: PlaceMarkerRow): PlaceMarker {
     locationMode: parseLocationMode(row.locationMode),
     photo: row.photo ?? undefined,
     schools: row.schools.length ? row.schools : undefined,
+  };
+}
+
+export function placeMarkerToMapPin(marker: PlaceMarker): ExploreMapPin {
+  return {
+    id: marker.id,
+    slug: marker.slug,
+    lat: marker.lat,
+    lng: marker.lng,
+    tradition: marker.tradition,
+    faith: marker.faith,
+    type: marker.type,
+    locationMode: marker.locationMode,
   };
 }
 

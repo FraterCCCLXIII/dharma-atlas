@@ -248,7 +248,6 @@ export function PublicNav({
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const pilgrimageFiltersOpen = usePilgrimageStore((s) => s.filtersOpen);
   const togglePilgrimageFilters = usePilgrimageStore((s) => s.toggleFilters);
-  const entityFilter = useExploreStore((s) => s.entityFilter);
   const traditions = useExploreStore((s) => s.traditions);
   const schools = useExploreStore((s) => s.schools);
   const types = useExploreStore((s) => s.types);
@@ -272,7 +271,7 @@ export function PublicNav({
   // Coming-soon teaser pages (books / lineages) also hide filters.
   const showHomeFeature =
     !onCatalogSurface &&
-    entityFilter === "all" &&
+    pathFilter === "all" &&
     traditions.length === 0 &&
     schools.length === 0 &&
     types.length === 0 &&

@@ -29,6 +29,11 @@ interface PlaceCardProps {
   animateEntrance?: boolean;
   /** Compact card for the mobile map results strip. */
   variant?: "default" | "strip";
+  /**
+   * Fine-pointer hover on strip cards. Parent merges this over scroll-center
+   * selection so a mouse can override the centered carousel highlight.
+   */
+  onStripPointerHighlight?: (id: string | null) => void;
 }
 
 export function PlaceCard({
@@ -37,6 +42,7 @@ export function PlaceCard({
   showKindBadge,
   animateEntrance = true,
   variant = "default",
+  onStripPointerHighlight,
 }: PlaceCardProps) {
   const isHovered = useExploreStore((s) => s.hoveredId === place.id);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
@@ -51,6 +57,7 @@ export function PlaceCard({
 
   return (
     <motion.article
+      data-map-strip-id={isStrip ? place.id : undefined}
       className={`relative ${isStrip ? "w-[15.5rem] shrink-0" : ""}`}
       initial={animateEntrance && !isStrip ? { opacity: 0, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
@@ -60,11 +67,24 @@ export function PlaceCard({
           : { duration: 0 }
       }
       onMouseEnter={() => {
+        if (isStrip) {
+          if (!placeShowsMapPin(place) || !isValidCoord(place.lat, place.lng)) {
+            return;
+          }
+          onStripPointerHighlight?.(place.id);
+          return;
+        }
         if (placeShowsMapPin(place) && isValidCoord(place.lat, place.lng)) {
           setHoveredId(place.id);
         }
       }}
-      onMouseLeave={() => setHoveredId(null)}
+      onMouseLeave={() => {
+        if (isStrip) {
+          onStripPointerHighlight?.(null);
+          return;
+        }
+        setHoveredId(null);
+      }}
     >
       {/* Full document nav — soft-nav stalls while Leaflet unmounts thousands of markers. */}
       <a

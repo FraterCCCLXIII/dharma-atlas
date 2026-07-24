@@ -115,7 +115,7 @@ export interface PlaceEventOccurrence {
   endsAt?: string;
 }
 
-/** Slim place row for explore map markers and list cards. */
+/** Slim place row for explore list cards and map popovers. */
 export interface PlaceMarker {
   id: string;
   /** Public URL segment; falls back to id when absent. */
@@ -131,6 +131,21 @@ export interface PlaceMarker {
   address: string;
   locationMode?: LocationMode;
   photo?: string;
+}
+
+/**
+ * Map pin only — no name/photo/address so viewport fetches stay small.
+ * Popovers load a PlaceMarker card on demand.
+ */
+export interface ExploreMapPin {
+  id: string;
+  slug?: string;
+  lat: number;
+  lng: number;
+  tradition: string;
+  faith: Faith;
+  type: PlaceType;
+  locationMode?: LocationMode;
 }
 
 export interface Place {

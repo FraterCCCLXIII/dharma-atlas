@@ -42,11 +42,14 @@ export function MobileTabBar() {
                     />
                     {comingSoon ? (
                       <span
-                        className={`absolute -right-1.5 -top-0.5 h-1.5 w-1.5 rounded-full ${
-                          active ? "bg-brand" : "bg-accent"
+                        className={`absolute -right-4 -top-1 rounded-full px-1 py-px text-[7px] font-bold uppercase leading-none tracking-[0.06em] ${
+                          active
+                            ? "bg-brand/15 text-brand"
+                            : "bg-accent-soft text-brand"
                         }`}
-                        aria-hidden
-                      />
+                      >
+                        Soon
+                      </span>
                     ) : null}
                   </span>
                   <span className="max-w-full truncate text-[10px] font-semibold leading-none tracking-tight">

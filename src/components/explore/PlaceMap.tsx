@@ -39,7 +39,9 @@ import {
   storeNearBounds,
 } from "@/lib/user-location";
 import { useExploreStore } from "@/store/explore-store";
-import type { PlaceMarker } from "@/types/place";
+import type { ExploreMapPin, PlaceMarker } from "@/types/place";
+
+type MapPlace = ExploreMapPin | PlaceMarker;
 
 const DEFAULT_CENTER: [number, number] = [39.8283, -98.5795];
 const DEFAULT_ZOOM = 4;
@@ -49,7 +51,7 @@ const MIN_ZOOM = 2.5;
 const WORLD_MAX_LAT = 85.0511287798;
 
 interface PlaceMapProps {
-  places: PlaceMarker[];
+  places: MapPlace[];
 }
 
 /**
@@ -68,6 +70,14 @@ function MapVerticalPanClamp() {
       const height = map.getSize().y;
       const edge = Math.max(0, Math.min(height, northY));
       container.style.setProperty("--map-world-top", `${edge}px`);
+    };
+
+    // CSS fill can update during drag; panBy must NOT — it fights the gesture
+    // and makes the map feel stuck / hard to pan.
+    const syncFill = () => {
+      const lng = map.getCenter().lng;
+      const northY = map.latLngToContainerPoint([WORLD_MAX_LAT, lng]).y;
+      syncWorldTopFill(northY);
     };
 
     const clamp = () => {
@@ -100,13 +110,15 @@ function MapVerticalPanClamp() {
     };
 
     map.whenReady(clamp);
-    map.on("move", clamp);
-    map.on("zoom", clamp);
+    map.on("move", syncFill);
+    map.on("moveend", clamp);
+    map.on("zoomend", clamp);
     map.on("resize", clamp);
 
     return () => {
-      map.off("move", clamp);
-      map.off("zoom", clamp);
+      map.off("move", syncFill);
+      map.off("moveend", clamp);
+      map.off("zoomend", clamp);
       map.off("resize", clamp);
       container.style.removeProperty("--map-world-top");
     };
@@ -115,7 +127,7 @@ function MapVerticalPanClamp() {
   return null;
 }
 
-function MapAutoControl({ places }: { places: PlaceMarker[] }) {
+function MapAutoControl({ places }: { places: MapPlace[] }) {
   const map = useMap();
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const userInteractedRef = useRef(false);
@@ -123,9 +135,14 @@ function MapAutoControl({ places }: { places: PlaceMarker[] }) {
   /** Last Near You / area location we framed — not tied to the pin-set fingerprint. */
   const lastFittedLocationKeyRef = useRef<string | null>(null);
   const fittedLocationWithPointsRef = useRef(false);
-  // After refresh, keep the restored viewport instead of re-fitting near-you / location.
+  // After refresh / near-seeded mount, keep the camera instead of re-fitting.
   const restoredMapView = useRef(useExploreStore.getState().mapView).current;
-  const initialLocalViewAppliedRef = useRef(restoredMapView != null);
+  const seededFromNearYou = useRef(
+    restoredMapView == null && loadStoredNearBounds() != null,
+  ).current;
+  const initialLocalViewAppliedRef = useRef(
+    restoredMapView != null || seededFromNearYou,
+  );
   const suppressRestoredLocationFitRef = useRef(restoredMapView != null);
   const restoredLocationKeyRef = useRef<string | null>(null);
 
@@ -372,7 +389,7 @@ function useWorldLngOffsets() {
 }
 
 /** Clear explore hover when the place leaves the map container while panning. */
-function MapHovercardViewportGuard({ places }: { places: PlaceMarker[] }) {
+function MapHovercardViewportGuard({ places }: { places: MapPlace[] }) {
   const map = useMap();
   const hoveredId = useExploreStore((s) => s.hoveredId);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
@@ -402,19 +419,20 @@ function MapHovercardViewportGuard({ places }: { places: PlaceMarker[] }) {
     };
 
     dismissIfHidden();
-    map.on("move", dismissIfHidden);
-    map.on("zoom", dismissIfHidden);
+    // moveend only — per-frame checks during drag fight pan smoothness.
+    map.on("moveend", dismissIfHidden);
+    map.on("zoomend", dismissIfHidden);
 
     return () => {
-      map.off("move", dismissIfHidden);
-      map.off("zoom", dismissIfHidden);
+      map.off("moveend", dismissIfHidden);
+      map.off("zoomend", dismissIfHidden);
     };
   }, [map, hoveredId, places, setHoveredId]);
 
   return null;
 }
 
-function ExploreMapPins({ places }: { places: PlaceMarker[] }) {
+function ExploreMapPins({ places }: { places: MapPlace[] }) {
   const hoveredId = useExploreStore((s) => s.hoveredId);
   const { offsets: lngOffsets, syncOffset } = useWorldLngOffsets();
 
@@ -422,7 +440,7 @@ function ExploreMapPins({ places }: { places: PlaceMarker[] }) {
     <>
       {places.flatMap((place) =>
         lngOffsets.map((lngOffset) => (
-          <ExploreMapPin
+          <ExploreMapPinMarker
             key={`${place.id}:${lngOffset}`}
             place={place}
             lngOffset={lngOffset}
@@ -524,13 +542,13 @@ function MapBoundsSync() {
   return null;
 }
 
-function ExploreMapPin({
+function ExploreMapPinMarker({
   place,
   isActive,
   lngOffset = 0,
   syncPopup = true,
 }: {
-  place: PlaceMarker;
+  place: MapPlace;
   isActive: boolean;
   lngOffset?: number;
   /** Only one world-copy should follow list hover; others open on direct hover. */
@@ -602,9 +620,33 @@ function ExploreMapPin({
   );
 }
 
+/** Prefer restored view, then stored near-you metro, then US overview. */
+function resolveInitialMapCamera(): {
+  center: [number, number];
+  zoom: number;
+} {
+  const restored = useExploreStore.getState().mapView;
+  if (restored) {
+    return { center: [restored.lat, restored.lng], zoom: restored.zoom };
+  }
+
+  const near = loadStoredNearBounds();
+  if (near) {
+    const latSpan = Math.max(0.01, near.north - near.south);
+    // Rough zoom from span — keeps first bounds report metro-scale.
+    const zoom = latSpan > 4 ? 7 : latSpan > 1.5 ? 9 : 10;
+    return {
+      center: [(near.north + near.south) / 2, (near.east + near.west) / 2],
+      zoom,
+    };
+  }
+
+  return { center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM };
+}
+
 export function PlaceMap({ places }: PlaceMapProps) {
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
-  const initialMapView = useRef(useExploreStore.getState().mapView).current;
+  const initialCamera = useRef(resolveInitialMapCamera()).current;
 
   const validPlaces = useMemo(
     () => places.filter((p) => placeShowsMapPin(p) && isValidCoord(p.lat, p.lng)),
@@ -616,12 +658,8 @@ export function PlaceMap({ places }: PlaceMapProps) {
   return (
     <MapContainer
       key="place-map"
-      center={
-        initialMapView
-          ? [initialMapView.lat, initialMapView.lng]
-          : DEFAULT_CENTER
-      }
-      zoom={initialMapView?.zoom ?? DEFAULT_ZOOM}
+      center={initialCamera.center}
+      zoom={initialCamera.zoom}
       minZoom={MIN_ZOOM}
       className="h-full min-h-[320px] w-full"
       scrollWheelZoom

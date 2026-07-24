@@ -1013,13 +1013,46 @@ function buildLineageSchoolNodes(
   );
 }
 
+/**
+ * Full locations filter tree from ontology — does not require downloading every
+ * place marker just to populate the sidebar.
+ */
+export function getLocationsLineageFilterTree(): LineageFilterTree {
+  const schools = getLineageSchools().map((school) => ({
+    id: school.id,
+    label: school.label,
+    subschools: getSubschoolRules()
+      .filter((rule) => rule.lineageSchool === school.slug)
+      .map((rule) => rule.slug)
+      .sort((a, b) => subschoolLabel(a).localeCompare(subschoolLabel(b))),
+  }));
+
+  return {
+    buddhism: {
+      id: activeSnapshot.buddhistRoot.filterId,
+      label: activeSnapshot.buddhistRoot.label,
+      schools,
+    },
+    otherTraditions: getOtherTraditionDefs()
+      .map((tradition) => ({
+        id: tradition.filterId,
+        label: tradition.label,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label)),
+  };
+}
+
 export function getLineageFilterTree(
   places: Pick<Place, "name" | "tradition" | "schools">[],
   teachers: TeacherSchoolFields[],
   entityFilter: EntityScope,
 ): LineageFilterTree {
-  const includePlaces = entityFilter !== "people";
-  const includeTeachers = entityFilter !== "locations";
+  if (entityFilter === "locations") {
+    return getLocationsLineageFilterTree();
+  }
+
+  const includePlaces = entityFilter === "all";
+  const includeTeachers = true;
 
   const buddhistPlaces = includePlaces
     ? places.filter((place) => isBuddhistPlaceTradition(place.tradition))
@@ -1027,7 +1060,7 @@ export function getLineageFilterTree(
 
   const schools = buildLineageSchoolNodes(
     buddhistPlaces,
-    includeTeachers ? teachers : [],
+    teachers,
     includePlaces,
     includeTeachers,
   );
