@@ -159,6 +159,7 @@ export function PlaceList({
     if (prevFilterKeyRef.current === filterKey) return;
     prevFilterKeyRef.current = filterKey;
     setPage(1);
+    parentRef.current?.scrollTo({ top: 0 });
   }, [filterKey]);
 
   useEffect(() => {
@@ -208,7 +209,8 @@ export function PlaceList({
           setTotal(data.total);
           setLoading(false);
           setPageFetching(false);
-          parentRef.current?.scrollTo({ top: 0 });
+          // Do not scroll here: map-bounds sync also refetches, and resetting
+          // scroll on those responses yanks the list to the top while browsing.
         })
         .catch((err: unknown) => {
           if (controller.signal.aborted || requestId !== requestIdRef.current) {
@@ -243,6 +245,7 @@ export function PlaceList({
   function goToPage(nextPage: number) {
     const clamped = Math.min(Math.max(1, nextPage), totalPages);
     setPage(clamped);
+    parentRef.current?.scrollTo({ top: 0 });
   }
 
   if (mapStrip) {
