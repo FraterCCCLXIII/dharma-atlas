@@ -25,6 +25,10 @@ import { useExploreStore, type EntityFilter } from "@/store/explore-store";
 import type { ExploreMapPin, PlaceMarker } from "@/types/place";
 import type { Teacher } from "@/types/teacher";
 import { LoadingScreen } from "@/components/layout/LoadingScreen";
+import {
+  MAP_SPLIT_PANE_DESKTOP,
+  MAP_SPLIT_PANE_MOBILE,
+} from "@/lib/map-shell-layout";
 import { AllFeaturePage } from "./AllFeaturePage";
 import { DirectoryList } from "./DirectoryList";
 import { FilterBar } from "./FilterBar";
@@ -617,7 +621,11 @@ export function ExplorePageClient() {
 
         <div
           className={`relative flex min-h-0 min-w-0 flex-1 ${
-            showMap && mobileView === "map" ? "flex-col lg:flex-row" : ""
+            showMap && mobileView === "map"
+              ? "flex-col lg:flex-row"
+              : showMap
+                ? "lg:flex-row"
+                : ""
           }`}
         >
           <section
@@ -640,9 +648,8 @@ export function ExplorePageClient() {
               !showMap
                 ? "hidden"
                 : mobileView === "list"
-                  ? // Must be flex on desktop — shell uses flex-1; block collapses it to 0 height.
-                    "hidden lg:flex lg:flex-1 lg:flex-col lg:p-5"
-                  : "order-1 flex min-h-0 flex-1 flex-col p-3 pb-0 sm:p-4 sm:pb-0 lg:order-none lg:p-5"
+                  ? MAP_SPLIT_PANE_DESKTOP
+                  : MAP_SPLIT_PANE_MOBILE
             }`}
           >
             <div className="relative min-h-0 flex-1" data-map-shell>

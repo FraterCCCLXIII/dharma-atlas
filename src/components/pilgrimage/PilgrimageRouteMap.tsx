@@ -88,9 +88,13 @@ export function PilgrimageRouteMap({
       ? `customize:${route.slug}:${stopSlugs.join(",")}`
       : `route-detail:${route.slug}`;
 
+  // Prefer an explicit height from the caller; fall back to a fixed shell so
+  // absolute `.map-panel` children never collapse to 0 when parent height is auto.
+  const shellClassName = className ?? "relative h-[360px] min-h-[360px]";
+
   if (routePoints.length < 2) {
     return (
-      <div className={className ?? "relative h-[360px]"} data-map-shell>
+      <div className={shellClassName} data-map-shell>
         <div
           className={
             frameClassName ??
@@ -106,7 +110,7 @@ export function PilgrimageRouteMap({
   }
 
   return (
-    <div className={className ?? "relative h-[360px]"} data-map-shell>
+    <div className={shellClassName} data-map-shell>
       <div
         className={
           frameClassName ??

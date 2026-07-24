@@ -40,7 +40,9 @@ export type SeedPilgrimageResult = {
   unmatchedStops: number;
 };
 
-type SeedDb = PostgresJsDatabase<Record<string, never>>;
+/** Script or app drizzle client — schema typing varies by caller. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SeedDb = PostgresJsDatabase<any>;
 type OverrideMap = Record<string, string>;
 
 function loadOverrides(): OverrideMap {

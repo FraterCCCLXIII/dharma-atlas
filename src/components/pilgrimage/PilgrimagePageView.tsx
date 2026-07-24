@@ -32,6 +32,10 @@ import {
   usePilgrimageStore,
 } from "@/store/pilgrimage-store";
 import { MobileMapResultsPanel } from "@/components/explore/MobileMapResultsPanel";
+import {
+  MAP_SPLIT_PANE_DESKTOP,
+  MAP_SPLIT_PANE_MOBILE,
+} from "@/lib/map-shell-layout";
 import { PilgrimageFavoriteButton } from "./PilgrimageFavoriteButton";
 import { PilgrimageFilterBar } from "./PilgrimageFilterBar";
 import type { PilgrimageMapMarker } from "./PilgrimageMap";
@@ -500,7 +504,7 @@ export function PilgrimagePageView() {
 
       <div
         className={`relative flex min-h-0 min-w-0 flex-1 ${
-          mapStrip ? "flex-col lg:flex-row" : ""
+          mapStrip ? "flex-col lg:flex-row" : "lg:flex-row"
         }`}
       >
         <section
@@ -613,10 +617,7 @@ export function PilgrimagePageView() {
         <section
           aria-hidden={!mapMounted}
           className={`relative z-0 min-h-0 ${
-            mobileView === "list"
-              ? // Must be flex on desktop — shell uses flex-1; block collapses it to 0 height.
-                "hidden lg:flex lg:flex-1 lg:flex-col lg:p-5"
-              : "order-1 flex min-h-0 flex-1 flex-col p-3 pb-0 sm:p-4 sm:pb-0 lg:order-none lg:p-5"
+            mobileView === "list" ? MAP_SPLIT_PANE_DESKTOP : MAP_SPLIT_PANE_MOBILE
           }`}
         >
           <div className="relative min-h-0 flex-1" data-map-shell>

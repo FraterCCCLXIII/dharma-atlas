@@ -7,10 +7,7 @@ import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
   return withAdminApiAuth(request, async () => {
-    // App db includes the full schema; seed helper only needs a drizzle client.
-    const result = await seedPilgrimagePlaces(
-      db as Parameters<typeof seedPilgrimagePlaces>[0],
-    );
+    const result = await seedPilgrimagePlaces(db);
     revalidateAllContentPaths();
     revalidatePath("/pilgrimage");
     revalidatePath("/pilgrimage", "layout");

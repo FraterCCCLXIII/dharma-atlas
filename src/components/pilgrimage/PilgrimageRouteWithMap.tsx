@@ -11,6 +11,7 @@ import {
   type PilgrimageSite,
 } from "@/data/pilgrimage";
 import { traditionGradient } from "@/lib/places";
+import { MAP_STICKY_ASIDE, MAP_STICKY_SHELL } from "@/lib/map-shell-layout";
 import { PilgrimageLegTravel } from "./PilgrimageLegTravel";
 import { PilgrimageRouteActions } from "./PilgrimageRouteActions";
 import { PilgrimageRouteMap } from "./PilgrimageRouteMap";
@@ -93,11 +94,11 @@ export function PilgrimageRouteWithMap({ route }: { route: PilgrimageRoute }) {
         </div>
       </div>
 
-      <aside className="relative z-0 mt-8 min-h-0 p-3 sm:p-4 lg:sticky lg:top-0 lg:mt-0 lg:h-[calc(100dvh-var(--site-header-height,4.5rem))] lg:w-1/2 lg:shrink-0 lg:self-start lg:p-5">
+      <aside className={MAP_STICKY_ASIDE}>
         <PilgrimageRouteMap
           route={route}
           hoveredSlug={hoveredSlug}
-          className="relative h-[360px] lg:h-full"
+          className={MAP_STICKY_SHELL}
         />
       </aside>
     </div>
