@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { OntologyRuntimeProvider } from "@/components/explore/OntologyRuntimeProvider";
 import { PlacePageView } from "@/components/place/PlacePageView";
-import { getPlaceDisplayPhotos } from "@/lib/place-photo";
+import { applyPhotoCacheKey, getPlaceDisplayPhotos } from "@/lib/place-photo";
+import { localPlacePhotoCacheKey } from "@/lib/place-photo-cache";
 import { getOntologySnapshot } from "@/lib/data/ontology";
 import { serializeOntologySnapshot } from "@/lib/ontology/build-snapshot";
 import { placeMetaDescription } from "@/lib/place-description";
@@ -51,12 +52,14 @@ export async function generateMetadata({ params }: PlacePageProps): Promise<Meta
   const { place } = resolved;
   const { traditionDefaultImages } = await getOntologySnapshot();
   const heroPhotos = getPlaceDisplayPhotos(place, traditionDefaultImages);
+  const photoCacheKey = localPlacePhotoCacheKey(heroPhotos);
+  const ogPhotos = applyPhotoCacheKey(heroPhotos, photoCacheKey);
 
   return {
     title: `${place.name} | Dharma Atlas`,
     description: placeMetaDescription(place),
     openGraph:
-      heroPhotos.length > 0 ? { images: heroPhotos.map((url) => ({ url })) } : undefined,
+      ogPhotos.length > 0 ? { images: ogPhotos.map((url) => ({ url })) } : undefined,
     alternates: {
       canonical: placeProfilePath(place),
     },
@@ -96,6 +99,9 @@ export default async function PlacePage({ params }: PlacePageProps) {
     getPilgrimageRoutesForPlace(place.id),
   ]);
 
+  const displayPhotos = getPlaceDisplayPhotos(place, ontology.traditionDefaultImages);
+  const photoCacheKey = localPlacePhotoCacheKey(displayPhotos);
+
   return (
     <OntologyRuntimeProvider ontology={serializeOntologySnapshot(ontology)}>
       <PlacePageView
@@ -107,6 +113,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
         teachers={linkedTeachers}
         pilgrimageRoutes={pilgrimageRoutes}
         traditionDefaultImages={ontology.traditionDefaultImages}
+        photoCacheKey={photoCacheKey}
         showClaim={!hasManager}
       />
     </OntologyRuntimeProvider>

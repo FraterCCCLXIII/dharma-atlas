@@ -39,6 +39,7 @@ function PhotoCell({
         alt={alt}
         fill
         priority={priority}
+        unoptimized
         quality={65}
         sizes={sizes}
         className="object-cover transition duration-200 group-hover:scale-[1.02]"

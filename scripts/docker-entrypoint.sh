@@ -27,8 +27,10 @@ seed_uploads_if_empty() {
     if [ ! -e "$dest" ]; then
       cp -a "$seed_file" "$dest"
       copied=$((copied + 1))
-    elif [ "$seed_file" -nt "$dest" ]; then
-      # Replace stale volume copies when the image ships a newer seed file.
+    elif [ "$(wc -c < "$seed_file")" != "$(wc -c < "$dest")" ] \
+      || [ "$seed_file" -nt "$dest" ]; then
+      # Replace stale volume copies when the image ships a different/newer seed.
+      # Size check catches same-mtime Docker layer cases where -nt alone misses.
       cp -a "$seed_file" "$dest"
       updated=$((updated + 1))
     fi

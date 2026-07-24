@@ -99,6 +99,7 @@ export function PlacePhotoLightbox({
               alt={`${placeName} photo ${safeIndex + 1}`}
               fill
               priority
+              unoptimized
               quality={85}
               sizes="(min-width: 1152px) 1024px, 100vw"
               className="object-contain"

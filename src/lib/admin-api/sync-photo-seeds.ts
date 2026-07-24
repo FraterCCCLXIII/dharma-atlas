@@ -24,8 +24,11 @@ function mergeSeedDirectory(name: "people" | "places"): SyncResult {
 
     const targetPath = join(target, file);
     if (existsSync(targetPath)) {
-      skipped++;
-      continue;
+      const seedNewer = statSync(seedPath).mtimeMs > statSync(targetPath).mtimeMs;
+      if (!seedNewer) {
+        skipped++;
+        continue;
+      }
     }
 
     copyFileSync(seedPath, targetPath);

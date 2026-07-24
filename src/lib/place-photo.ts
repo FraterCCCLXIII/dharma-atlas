@@ -45,6 +45,24 @@ export function getPlaceDisplayPhotos(
   return [photo];
 }
 
+/** Bust next/image + browser caches when a same-path photo file is replaced. */
+export function withPhotoCacheKey(
+  src: string,
+  version?: string | number | null,
+): string {
+  if (!src || version == null || version === "") return src;
+  const sep = src.includes("?") ? "&" : "?";
+  return `${src}${sep}v=${version}`;
+}
+
+export function applyPhotoCacheKey(
+  photos: string[],
+  version?: string | number | null,
+): string[] {
+  if (version == null || version === "") return photos;
+  return photos.map((src) => withPhotoCacheKey(src, version));
+}
+
 export function hasDisplayablePlacePhoto(
   place: {
     photo?: string | null;

@@ -13,7 +13,7 @@ import { placeDisplayDescription } from "@/lib/place-description";
 import { placeProfilePath } from "@/lib/explore-routes";
 import { parseLocationMode, placeShowsMapPin } from "@/lib/place-location";
 import { getPlaceMapsUrls } from "@/lib/place-maps";
-import { getPlaceDisplayPhotos } from "@/lib/place-photo";
+import { applyPhotoCacheKey, getPlaceDisplayPhotos } from "@/lib/place-photo";
 import { traditionGradient } from "@/lib/places";
 import { getPlaceDisplayTags } from "@/lib/schools";
 import type { Place } from "@/types/place";
@@ -55,6 +55,8 @@ interface PlacePageViewProps {
   pilgrimageRoutes?: PlacePilgrimageRouteRef[];
   /** From the server ontology snapshot — avoids SSR/client mismatch on placeholders. */
   traditionDefaultImages: Record<string, string>;
+  /** File mtime (or similar) so replaced same-path photos bust next/image cache. */
+  photoCacheKey?: string;
   /** False when the place already has a managing user (claimed). */
   showClaim?: boolean;
 }
@@ -68,6 +70,7 @@ export function PlacePageView({
   teachers = [],
   pilgrimageRoutes = [],
   traditionDefaultImages,
+  photoCacheKey,
   showClaim = true,
 }: PlacePageViewProps) {
   const maps = getPlaceMapsUrls(place);
@@ -76,7 +79,10 @@ export function PlacePageView({
   const gradient = traditionGradient(place.tradition);
   const displayTags = getPlaceDisplayTags(place);
   const aboutText = placeDisplayDescription(place);
-  const photos = getPlaceDisplayPhotos(place, traditionDefaultImages);
+  const photos = applyPhotoCacheKey(
+    getPlaceDisplayPhotos(place, traditionDefaultImages),
+    photoCacheKey,
+  );
   const showPhotoGrid = photos.length > 1;
   const [singleLightboxOpen, setSingleLightboxOpen] = useState(false);
 
@@ -103,6 +109,7 @@ export function PlacePageView({
                   alt={place.name}
                   fill
                   priority
+                  unoptimized
                   quality={65}
                   sizes="(min-width: 1152px) 1100px, 100vw"
                   className="object-cover transition duration-200 group-hover:scale-[1.02]"
