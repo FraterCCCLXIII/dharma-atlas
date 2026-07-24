@@ -14,7 +14,11 @@ import {
   type LineageFilterState,
   type LineageSchoolNode,
 } from "@/lib/schools";
-import { getUniqueValues, traditionMarkerColor } from "@/lib/places";
+import {
+  getExplorePlaceTypeOptions,
+  getUniqueValues,
+  traditionMarkerColor,
+} from "@/lib/places";
 import { PEOPLE_SORT_LABELS, type PeopleSortOrder } from "@/lib/teacher-groups";
 import {
   PEOPLE_LIFE_ERA_LABELS,
@@ -267,7 +271,16 @@ export function FilterBar({
     [traditions, schools],
   );
 
-  const placeOptions = useMemo(() => getUniqueValues(places), [places]);
+  const placeOptions = useMemo(() => {
+    if (entityFilter === "locations") {
+      return {
+        traditions: [] as string[],
+        types: getExplorePlaceTypeOptions(),
+        faiths: [] as string[],
+      };
+    }
+    return getUniqueValues(places);
+  }, [entityFilter, places]);
 
   const lineageTree = useMemo(
     () => getLineageFilterTree(places, teachers, entityFilter),

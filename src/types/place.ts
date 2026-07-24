@@ -6,7 +6,9 @@ export type PlaceType =
   | "Meditation Center"
   | "Institute"
   | "Ashram"
-  | "Sangha";
+  | "Sangha"
+  | "Historic Site"
+  | "Sacred Landscape";
 
 /** How a listing’s location is stored and shown publicly. */
 export type LocationMode = "venue" | "area" | "online";
@@ -113,7 +115,7 @@ export interface PlaceEventOccurrence {
   endsAt?: string;
 }
 
-/** Slim place row for explore map markers and list cards. */
+/** Slim place row for explore list cards and map popovers. */
 export interface PlaceMarker {
   id: string;
   /** Public URL segment; falls back to id when absent. */
@@ -129,6 +131,21 @@ export interface PlaceMarker {
   address: string;
   locationMode?: LocationMode;
   photo?: string;
+}
+
+/**
+ * Map pin only — no name/photo/address so viewport fetches stay small.
+ * Popovers load a PlaceMarker card on demand.
+ */
+export interface ExploreMapPin {
+  id: string;
+  slug?: string;
+  lat: number;
+  lng: number;
+  tradition: string;
+  faith: Faith;
+  type: PlaceType;
+  locationMode?: LocationMode;
 }
 
 export interface Place {
@@ -174,6 +191,10 @@ export interface Place {
   isDraft?: boolean;
   /** Set when a member requests admin publish for a draft listing. */
   publishRequestedAt?: string;
+  /** True when this place is in the pilgrimage catalog / route graph. */
+  isPilgrimageSite?: boolean;
+  /** Stable catalog slug used for seeding and pilgrimage URL redirects. */
+  pilgrimageSlug?: string;
   /** Soft-delete timestamp; present when owner removed the listing. */
   deletedAt?: string;
 }

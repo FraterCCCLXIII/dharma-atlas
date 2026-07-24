@@ -7,8 +7,6 @@ import {
   ArrowSquareOut,
   Broadcast,
   Compass,
-  FlowerLotus,
-  Sparkle,
 } from "@phosphor-icons/react";
 import { DetailPageActions } from "@/components/report/ReportEntryModal";
 import { placeDisplayDescription } from "@/lib/place-description";
@@ -32,6 +30,8 @@ import { PlaceNotice } from "./PlaceNotice";
 import { PlaceOfferingsSection } from "./PlaceOfferingsSection";
 import { PlacePhotoGrid } from "./PlacePhotoGrid";
 import { PlacePhotoLightbox } from "./PlacePhotoLightbox";
+import { PlacePilgrimageRoutes } from "./PlacePilgrimageRoutes";
+import type { PlacePilgrimageRouteRef } from "@/lib/data/pilgrimage-routes";
 import type { PlaceEvent, PlaceSocial, PlaceTeacher } from "@/types/place";
 
 const PlaceSingleMap = dynamic(
@@ -51,6 +51,8 @@ interface PlacePageViewProps {
   events?: PlaceEvent[];
   socials?: PlaceSocial[];
   teachers?: import("@/types/teacher").Teacher[];
+  /** Canonical pilgrimage routes that include this place. */
+  pilgrimageRoutes?: PlacePilgrimageRouteRef[];
   /** From the server ontology snapshot — avoids SSR/client mismatch on placeholders. */
   traditionDefaultImages: Record<string, string>;
   /** False when the place already has a managing user (claimed). */
@@ -64,6 +66,7 @@ export function PlacePageView({
   events = [],
   socials = [],
   teachers = [],
+  pilgrimageRoutes = [],
   traditionDefaultImages,
   showClaim = true,
 }: PlacePageViewProps) {
@@ -79,7 +82,7 @@ export function PlacePageView({
 
   return (
     <div className="bg-surface">
-      <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-6xl px-4 pb-6 pt-6 sm:px-6 md:pb-16 lg:px-8">
         <div className="relative mb-10">
           {showPhotoGrid ? (
             <PlacePhotoGrid
@@ -187,16 +190,6 @@ export function PlacePageView({
                   details and the map below are the best starting points for planning a visit.
                 </p>
               )}
-              <div className="flex flex-wrap gap-3 pt-2">
-                <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm">
-                  <FlowerLotus size={20} weight="duotone" className="text-brand" />
-                  <span className="text-ink-secondary">{place.tradition} tradition</span>
-                </div>
-                <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm">
-                  <Sparkle size={20} weight="duotone" className="text-accent" />
-                  <span className="text-ink-secondary">{place.type}</span>
-                </div>
-              </div>
             </section>
 
             <PlaceOfferingsSection offeringIds={place.offerings} />
@@ -311,6 +304,8 @@ export function PlacePageView({
             </div>
           </aside>
         </div>
+
+        <PlacePilgrimageRoutes routes={pilgrimageRoutes} />
 
         {similar.length > 0 && (
           <section className="mt-16 border-t border-border pt-12">

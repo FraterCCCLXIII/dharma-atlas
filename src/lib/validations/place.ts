@@ -8,6 +8,8 @@ const placeTypes = [
   "Institute",
   "Ashram",
   "Sangha",
+  "Historic Site",
+  "Sacred Landscape",
 ] as const;
 
 const faiths = ["Buddhist", "Hindu"] as const;

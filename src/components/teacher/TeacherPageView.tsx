@@ -130,7 +130,7 @@ export function TeacherPageView({
 
   return (
     <div className="bg-surface">
-      <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-6xl px-4 pb-6 pt-6 sm:px-6 md:pb-16 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-2">
             <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">

@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SHOW_BOOKS, SHOW_TRADITIONS } from "@/lib/feature-flags";
+import {
+  SHOW_BOOKS,
+  SHOW_PILGRIMAGE,
+  SHOW_TRADITIONS,
+} from "@/lib/feature-flags";
 
 /** Better Auth uses `__Secure-` prefix on HTTPS; plain name on HTTP (local). */
 function hasSessionCookie(request: NextRequest): boolean {
@@ -27,6 +31,13 @@ function isHiddenPublicSurface(pathname: string): boolean {
   if (
     !SHOW_TRADITIONS &&
     (pathname === "/traditions" || pathname.startsWith("/traditions/")) &&
+    !hasStaticFileExtension(pathname)
+  ) {
+    return true;
+  }
+  if (
+    !SHOW_PILGRIMAGE &&
+    (pathname === "/pilgrimage" || pathname.startsWith("/pilgrimage/")) &&
     !hasStaticFileExtension(pathname)
   ) {
     return true;
@@ -94,5 +105,7 @@ export const config = {
      */
     "/traditions",
     "/traditions/:slug((?!.*\\.).*)",
+    "/pilgrimage",
+    "/pilgrimage/:path*",
   ],
 };

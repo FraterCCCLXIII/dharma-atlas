@@ -27,6 +27,13 @@ interface PlaceCardProps {
   showKindBadge?: boolean;
   /** Off for virtualized lists — remount animations fight absolute row positioning. */
   animateEntrance?: boolean;
+  /** Compact card for the mobile map results strip. */
+  variant?: "default" | "strip";
+  /**
+   * Fine-pointer hover on strip cards. Parent merges this over scroll-center
+   * selection so a mouse can override the centered carousel highlight.
+   */
+  onStripPointerHighlight?: (id: string | null) => void;
 }
 
 export function PlaceCard({
@@ -34,6 +41,8 @@ export function PlaceCard({
   index,
   showKindBadge,
   animateEntrance = true,
+  variant = "default",
+  onStripPointerHighlight,
 }: PlaceCardProps) {
   const isHovered = useExploreStore((s) => s.hoveredId === place.id);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
@@ -44,33 +53,51 @@ export function PlaceCard({
   const locationLabel = placeLocationLabel(place);
   const LocationIcon = locationMode === "online" ? Broadcast : MapPin;
 
+  const isStrip = variant === "strip";
+
   return (
     <motion.article
-      className="relative"
-      initial={animateEntrance ? { opacity: 0, y: 12 } : false}
+      data-map-strip-id={isStrip ? place.id : undefined}
+      className={`relative ${isStrip ? "w-[15.5rem] shrink-0" : ""}`}
+      initial={animateEntrance && !isStrip ? { opacity: 0, y: 12 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={
-        animateEntrance
+        animateEntrance && !isStrip
           ? { duration: 0.25, delay: Math.min(index * 0.02, 0.2) }
           : { duration: 0 }
       }
       onMouseEnter={() => {
+        if (isStrip) {
+          if (!placeShowsMapPin(place) || !isValidCoord(place.lat, place.lng)) {
+            return;
+          }
+          onStripPointerHighlight?.(place.id);
+          return;
+        }
         if (placeShowsMapPin(place) && isValidCoord(place.lat, place.lng)) {
           setHoveredId(place.id);
         }
       }}
-      onMouseLeave={() => setHoveredId(null)}
+      onMouseLeave={() => {
+        if (isStrip) {
+          onStripPointerHighlight?.(null);
+          return;
+        }
+        setHoveredId(null);
+      }}
     >
       {/* Full document nav — soft-nav stalls while Leaflet unmounts thousands of markers. */}
       <a
         href={placeProfilePath(place)}
         className={`group block rounded-2xl text-left ${cardLiftClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 ${
           isHovered ? "bg-surface-muted" : ""
-        }`}
+        } ${isStrip ? "bg-surface-elevated/90" : ""}`}
       >
-        <div className={cardImagePaddingClassName}>
+        <div className={isStrip ? "p-1.5 pb-0" : cardImagePaddingClassName}>
           <div
-            className={`relative flex h-36 items-end bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(place.tradition)}`}
+            className={`relative flex items-end bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(place.tradition)} ${
+              isStrip ? "h-24" : "h-36"
+            }`}
           >
             {photos.length > 0 ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -84,16 +111,22 @@ export function PlaceCard({
             ) : null}
             <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
             <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            <span className="relative m-3 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+            <span className="relative m-2 inline-flex items-center gap-1 rounded-full bg-black/25 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-white backdrop-blur-sm sm:m-3 sm:px-2.5 sm:py-1 sm:text-[12px]">
               <Sparkle size={12} weight="fill" />
               {showKindBadge ? "Location" : place.type}
             </span>
           </div>
         </div>
 
-        <div className="px-4 pb-4 pt-1">
+        <div className={isStrip ? "px-2.5 pb-2.5 pt-1.5" : "px-4 pb-4 pt-1"}>
           <div className="space-y-1">
-            <h3 className="line-clamp-2 font-display text-base font-semibold leading-snug text-ink">
+            <h3
+              className={`font-display font-semibold leading-snug text-ink ${
+                isStrip
+                  ? "line-clamp-1 text-sm"
+                  : "line-clamp-2 text-base"
+              }`}
+            >
               {place.name}
             </h3>
             <span className="inline-flex items-center gap-1 text-xs text-ink-muted">
@@ -101,21 +134,23 @@ export function PlaceCard({
               <span className="line-clamp-1">{locationLabel}</span>
             </span>
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
-            {displayTags.map((tag) => (
-              <span
-                key={tag.key}
-                className="rounded-md bg-surface-muted px-2 py-0.5 font-medium"
-              >
-                {tag.label}
-              </span>
-            ))}
-          </div>
+          {!isStrip ? (
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
+              {displayTags.map((tag) => (
+                <span
+                  key={tag.key}
+                  className="rounded-md bg-surface-muted px-2 py-0.5 font-medium"
+                >
+                  {tag.label}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
       </a>
 
       {/* Sibling overlay so the heart doesn't trigger card navigation. */}
-      <div className="absolute right-5 top-5 z-10">
+      <div className={`absolute z-10 ${isStrip ? "right-3 top-3" : "right-5 top-5"}`}>
         <PlaceFavoriteButton placeId={place.id} variant="overlay" />
       </div>
     </motion.article>

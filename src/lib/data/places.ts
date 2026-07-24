@@ -5,14 +5,21 @@ import { unstable_cache } from "next/cache";
 import { count, desc, eq, ilike, isNotNull, isNull, or, and, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db/client";
 import { placeMemberships, places, user } from "@/db/schema";
-import { isPlaceInMapBounds, type MapBounds } from "@/lib/coords";
+import { isPlaceInMapBounds } from "@/lib/coords";
+import type { ExplorePlaceSearchOptions } from "@/lib/explore-api-params";
 import { getOntologySnapshot } from "@/lib/data/ontology";
 import { attachPhotosToPlace } from "@/lib/data/place-photos";
 import { placeMatchesLocationFilter } from "@/lib/location-filter";
 import { filterPlaces, type PlaceFilters } from "@/lib/places";
-import { rowToPlace, rowToPlaceMarker } from "@/lib/place-row";
+import {
+  placeMarkerToMapPin,
+  rowToPlace,
+  rowToPlaceMarker,
+} from "@/lib/place-row";
 import { setOntologySnapshot } from "@/lib/schools";
-import type { Faith, Place, PlaceMarker, PlaceType } from "@/types/place";
+import type { ExploreMapPin, Place, PlaceMarker } from "@/types/place";
+
+export type { ExplorePlaceSearchOptions } from "@/lib/explore-api-params";
 
 const notDeleted = isNull(places.deletedAt);
 const publishedOnly = and(eq(places.isDraft, false), notDeleted)!;
@@ -174,25 +181,9 @@ export async function searchPlaces(options: {
   };
 }
 
-export type ExplorePlaceSearchOptions = {
-  query?: string;
-  page?: number;
-  pageSize?: number;
-  traditions?: string[];
-  schools?: string[];
-  types?: PlaceType[];
-  faiths?: Faith[];
-  bounds?: MapBounds | null;
-  locationMatchTerms?: string[];
-  locationLat?: number;
-  locationLng?: number;
-  locationBounds?: MapBounds | null;
-};
-
-/** Explore list search over cached slim markers (same filters as the map). */
-export async function searchExplorePlaces(options: ExplorePlaceSearchOptions) {
-  const page = Math.max(1, options.page ?? 1);
-  const pageSize = Math.min(100, Math.max(1, options.pageSize ?? 20));
+async function filterCachedExploreMarkers(
+  options: ExplorePlaceSearchOptions,
+): Promise<PlaceMarker[]> {
   const [markers, ontology] = await Promise.all([
     getCachedPlaceMarkers(),
     getOntologySnapshot(),
@@ -230,6 +221,15 @@ export async function searchExplorePlaces(options: ExplorePlaceSearchOptions) {
     );
   }
 
+  return filtered;
+}
+
+/** Explore list search over cached slim markers (same filters as the map). */
+export async function searchExplorePlaces(options: ExplorePlaceSearchOptions) {
+  const page = Math.max(1, options.page ?? 1);
+  const pageSize = Math.min(100, Math.max(1, options.pageSize ?? 20));
+  const filtered = await filterCachedExploreMarkers(options);
+
   const total = filtered.length;
   const offset = (page - 1) * pageSize;
   const pagePlaces = filtered.slice(offset, offset + pageSize);
@@ -240,6 +240,54 @@ export async function searchExplorePlaces(options: ExplorePlaceSearchOptions) {
     page,
     pageSize,
   };
+}
+
+/** Hard cap so a continent-scale / zoomed-out query cannot ship the full catalog. */
+const MAX_MAP_PINS = 1200;
+
+/**
+ * Viewport / filter-scoped map pins (no name/photo/address).
+ * Same filter semantics as {@link searchExplorePlaces}.
+ */
+export async function searchExploreMapPins(options: ExplorePlaceSearchOptions) {
+  const filtered = await filterCachedExploreMarkers(options);
+  const total = filtered.length;
+
+  let selected = filtered;
+  if (selected.length > MAX_MAP_PINS) {
+    const bounds = options.bounds ?? options.locationBounds;
+    if (bounds) {
+      const cLat = (bounds.north + bounds.south) / 2;
+      const cLng = (bounds.east + bounds.west) / 2;
+      selected = selected
+        .map((place) => ({
+          place,
+          d:
+            (place.lat - cLat) * (place.lat - cLat) +
+            (place.lng - cLng) * (place.lng - cLng),
+        }))
+        .sort((a, b) => a.d - b.d)
+        .slice(0, MAX_MAP_PINS)
+        .map((entry) => entry.place);
+    } else {
+      selected = selected.slice(0, MAX_MAP_PINS);
+    }
+  }
+
+  const pins: ExploreMapPin[] = selected.map(placeMarkerToMapPin);
+  return {
+    markers: pins,
+    total,
+    truncated: total > pins.length,
+  };
+}
+
+/** Single marker card for map popovers (name/photo/address). */
+export async function getExplorePlaceCard(
+  id: string,
+): Promise<PlaceMarker | null> {
+  const markers = await getCachedPlaceMarkers();
+  return markers.find((marker) => marker.id === id) ?? null;
 }
 
 export async function getPublishRequestedCount() {

@@ -1,8 +1,12 @@
 import type { MetadataRoute } from "next";
 import { getAllTraditionArticleSlugs } from "@/content/traditions";
+import {
+  getAllPilgrimageRouteSlugs,
+  getAllPilgrimageSiteSlugs,
+} from "@/data/pilgrimage";
 import { getAllPlaceSlugs } from "@/lib/data/places";
 import { getAllTeacherSlugs } from "@/lib/data/teachers";
-import { SHOW_TRADITIONS } from "@/lib/feature-flags";
+import { SHOW_PILGRIMAGE, SHOW_TRADITIONS } from "@/lib/feature-flags";
 
 const baseUrl = process.env.BETTER_AUTH_URL ?? "https://dharmaatlas.com";
 
@@ -16,6 +20,16 @@ function staticSitemapEntries(): MetadataRoute.Sitemap {
       ]
     : [];
 
+  const pilgrimageRoutes = SHOW_PILGRIMAGE
+    ? [
+        "/pilgrimage",
+        ...getAllPilgrimageSiteSlugs().map((slug) => `/pilgrimage/sites/${slug}`),
+        ...getAllPilgrimageRouteSlugs().map(
+          (slug) => `/pilgrimage/routes/${slug}`,
+        ),
+      ]
+    : [];
+
   return [
     "",
     "/places",
@@ -25,10 +39,16 @@ function staticSitemapEntries(): MetadataRoute.Sitemap {
     "/submit",
     "/claim",
     ...traditionRoutes,
+    ...pilgrimageRoutes,
   ].map((path) => ({
     url: `${baseUrl}${path}`,
     changeFrequency: "weekly" as const,
-    priority: path === "" ? 1 : path.startsWith("/traditions") ? 0.7 : 0.8,
+    priority:
+      path === ""
+        ? 1
+        : path.startsWith("/traditions") || path.startsWith("/pilgrimage")
+          ? 0.7
+          : 0.8,
   }));
 }
 

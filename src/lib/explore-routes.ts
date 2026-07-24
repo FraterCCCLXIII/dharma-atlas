@@ -8,7 +8,9 @@ export function personProfilePath(slug: string): string {
 
 export const PLACES_LIST_PATH = "/places";
 export const BOOKS_LIST_PATH = "/books";
+export const LINEAGES_LIST_PATH = "/lineages";
 export const TRADITIONS_LIST_PATH = "/traditions";
+export const PILGRIMAGE_LIST_PATH = "/pilgrimage";
 
 export function traditionProfilePath(slug: string): string {
   return `/traditions/${slug}`;
@@ -27,6 +29,39 @@ const EXPLORE_PATHS: Record<EntityFilter, string> = {
 
 export function pathFromEntityFilter(filter: EntityFilter): string {
   return EXPLORE_PATHS[filter];
+}
+
+/** Header search scope → destination list path. */
+export function pathFromSearchScope(
+  scope: "locations" | "people" | "pilgrimage",
+): string {
+  switch (scope) {
+    case "people":
+      return PEOPLE_LIST_PATH;
+    case "pilgrimage":
+      return PILGRIMAGE_LIST_PATH;
+    default:
+      return PLACES_LIST_PATH;
+  }
+}
+
+export function searchScopeFromPath(
+  pathname: string,
+): "locations" | "people" | "pilgrimage" {
+  if (
+    pathname === PEOPLE_LIST_PATH ||
+    pathname.startsWith(`${PEOPLE_LIST_PATH}/`) ||
+    pathname.startsWith("/person/")
+  ) {
+    return "people";
+  }
+  if (
+    pathname === PILGRIMAGE_LIST_PATH ||
+    pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`)
+  ) {
+    return "pilgrimage";
+  }
+  return "locations";
 }
 
 export function entityFilterFromPath(pathname: string): EntityFilter {
@@ -50,6 +85,10 @@ export function isExplorePath(pathname: string): boolean {
     pathname === PLACES_LIST_PATH ||
     pathname === PEOPLE_LIST_PATH ||
     pathname === BOOKS_LIST_PATH ||
-    pathname.startsWith(`${BOOKS_LIST_PATH}/`)
+    pathname.startsWith(`${BOOKS_LIST_PATH}/`) ||
+    pathname === LINEAGES_LIST_PATH ||
+    pathname.startsWith(`${LINEAGES_LIST_PATH}/`) ||
+    pathname === PILGRIMAGE_LIST_PATH ||
+    pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`)
   );
 }

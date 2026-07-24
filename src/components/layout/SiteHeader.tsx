@@ -3,27 +3,34 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, Plus, SlidersHorizontal } from "@phosphor-icons/react";
+import {
+  // ArrowLeft,
+  Plus,
+  SlidersHorizontal,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 import { ExploreSearchField } from "@/components/explore/ExploreSearchField";
 import { ExploreNavLinks } from "@/components/explore/EntityToggle";
 import { useActiveFilterCount } from "@/components/explore/FilterBar";
-import { NavBarLogoContext } from "@/components/layout/NavBarLogoContext";
+import {
+  NavBarLogoContext,
+  useNavBarChromeCompact,
+} from "@/components/layout/NavBarLogoContext";
 import { SiteLogo, SiteLogoWordmarkMeasure } from "@/components/layout/SiteLogo";
 import { SiteMenu } from "@/components/layout/SiteMenu";
-import { useNavLogoCompact } from "@/hooks/useNavLogoCompact";
+import { useNavBarLayout } from "@/hooks/useNavLogoCompact";
 import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import {
-  BOOKS_LIST_PATH,
   entityFilterFromPath,
   isExplorePath,
   pathFromEntityFilter,
+  PILGRIMAGE_LIST_PATH,
 } from "@/lib/explore-routes";
-import {
-  useBooksActiveFilterCount,
-  useBooksStore,
-} from "@/store/books-store";
 import { useExploreStore } from "@/store/explore-store";
+import {
+  usePilgrimageActiveFilterCount,
+  usePilgrimageStore,
+} from "@/store/pilgrimage-store";
 
 interface SiteHeaderProps {
   children: ReactNode;
@@ -72,14 +79,15 @@ function NavBarLayout({
   const navRowRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
   const leftClusterRef = useRef<HTMLDivElement>(null);
+  const rightClusterRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
   const wordmarkMeasureRef = useRef<HTMLImageElement>(null);
-  const collision = useNavLogoCompact(
+  const collision = useNavBarLayout(
     navRowRef,
-    logoRef,
+    leftClusterRef,
+    rightClusterRef,
     centerRef,
     wordmarkMeasureRef,
-    leftClusterRef,
   );
 
   return (
@@ -89,39 +97,36 @@ function NavBarLayout({
           ref={navRowRef}
           className="relative flex h-10 w-full min-w-0 items-center gap-2 sm:gap-3"
         >
-          {leading}
-
           <div
             ref={leftClusterRef}
             className="relative z-10 flex min-w-0 shrink-0 items-center gap-1 sm:gap-2"
           >
+            {leading}
             <SiteLogoWordmarkMeasure measureRef={wordmarkMeasureRef} />
             <SiteLogo logoRef={logoRef} />
           </div>
 
           <div
             ref={centerRef}
-            className="pointer-events-none absolute left-1/2 z-0 flex w-[min(100%-8rem,28rem)] -translate-x-1/2 justify-center sm:w-[min(100%-12rem,32rem)]"
+            className="pointer-events-none absolute inset-y-0 left-12 right-[7.5rem] z-0 min-w-0"
           >
-            <div className="pointer-events-auto w-full min-w-0">{center}</div>
+            <div className="pointer-events-auto h-full w-full min-w-0">
+              {center}
+            </div>
           </div>
 
-          <div className="relative z-10 ml-auto flex h-10 shrink-0 items-center gap-2 sm:gap-3">
+          <div
+            ref={rightClusterRef}
+            className="relative z-10 ml-auto flex h-10 shrink-0 items-center gap-1.5 sm:gap-3"
+          >
             {trailing}
-            <Link
-              href="/add"
-              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-sm font-semibold leading-none text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink sm:px-3.5"
-            >
-              <Plus size={16} weight="bold" className="shrink-0" />
-              <span className="hidden sm:inline">Add a place</span>
-              <span className="sm:hidden">Add</span>
-            </Link>
+            <AddPlaceButton />
             <SiteMenu />
           </div>
         </div>
 
         <div
-          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+          className={`hidden transition-[grid-template-rows] duration-300 ease-out md:grid ${
             railVisible ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
           }`}
           aria-hidden={!railVisible}
@@ -142,6 +147,39 @@ function NavBarLayout({
   );
 }
 
+function AddPlaceButton() {
+  const chromeCompact = useNavBarChromeCompact();
+  const showShortLabel = chromeCompact !== false;
+  const showFullLabel = chromeCompact !== true;
+
+  return (
+    <Link
+      href="/add"
+      className="hidden h-10 shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 text-sm font-semibold leading-none text-ink-secondary transition hover:border-border-strong hover:bg-surface-muted hover:text-ink min-[600px]:inline-flex sm:px-3.5"
+    >
+      <Plus size={16} weight="bold" className="shrink-0" />
+      {showFullLabel ? (
+        <span
+          className={
+            chromeCompact === false ? undefined : "hidden min-[1100px]:inline"
+          }
+        >
+          Add a place
+        </span>
+      ) : null}
+      {showShortLabel ? (
+        <span
+          className={
+            chromeCompact === true ? undefined : "min-[1100px]:hidden"
+          }
+        >
+          Add
+        </span>
+      ) : null}
+    </Link>
+  );
+}
+
 function FilterToggleButton({
   filtersOpen,
   activeFilterCount,
@@ -153,6 +191,8 @@ function FilterToggleButton({
   onToggle: () => void;
   controlsId?: string;
 }) {
+  const chromeCompact = useNavBarChromeCompact();
+
   return (
     <button
       type="button"
@@ -160,14 +200,24 @@ function FilterToggleButton({
       aria-expanded={filtersOpen}
       aria-controls={controlsId}
       aria-label={filtersOpen ? "Hide filters" : "Show filters"}
-      className={`relative inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border px-3 text-sm font-medium leading-none transition ${
+      className={`relative inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-sm font-medium leading-none transition sm:px-3 ${
         filtersOpen
           ? "border-accent bg-accent text-brand-foreground"
           : "border-border bg-surface text-ink-secondary hover:border-border-strong hover:bg-surface-muted hover:text-ink"
       }`}
     >
       <SlidersHorizontal size={16} weight="bold" />
-      <span className="hidden sm:inline">Filters</span>
+      {chromeCompact !== true ? (
+        <span
+          className={
+            chromeCompact === false
+              ? undefined
+              : "hidden min-[1100px]:inline"
+          }
+        >
+          Filters
+        </span>
+      ) : null}
       {activeFilterCount > 0 && (
         <span
           className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[12px] font-semibold ${
@@ -196,30 +246,32 @@ export function PublicNav({
   const headerRef = useRef<HTMLElement>(null);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
-  const booksFiltersOpen = useBooksStore((s) => s.filtersOpen);
-  const toggleBooksFilters = useBooksStore((s) => s.toggleFilters);
-  const entityFilter = useExploreStore((s) => s.entityFilter);
+  const pilgrimageFiltersOpen = usePilgrimageStore((s) => s.filtersOpen);
+  const togglePilgrimageFilters = usePilgrimageStore((s) => s.toggleFilters);
   const traditions = useExploreStore((s) => s.traditions);
   const schools = useExploreStore((s) => s.schools);
   const types = useExploreStore((s) => s.types);
   const faiths = useExploreStore((s) => s.faiths);
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const exploreActiveFilterCount = useActiveFilterCount();
-  const booksActiveFilterCount = useBooksActiveFilterCount();
+  const pilgrimageActiveFilterCount = usePilgrimageActiveFilterCount();
 
   const onExplore = isExplorePath(pathname);
-  const onBooks =
-    pathname === BOOKS_LIST_PATH || pathname.startsWith(`${BOOKS_LIST_PATH}/`);
-  const onExploreSurface = onExplore && !onBooks;
-  const showBackToMap = !onExplore && !onBooks;
+  const onPilgrimage =
+    pathname === PILGRIMAGE_LIST_PATH ||
+    pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`);
+  const onCatalogSurface = onPilgrimage;
+  const onExploreSurface = onExplore && !onCatalogSurface;
+  // const showBackToMap = !onExplore && !onCatalogSurface;
   const pathFilter = entityFilterFromPath(pathname);
   const explorePath = pathFromEntityFilter(
     pathFilter === "people" ? "people" : "locations",
   );
   // Home feature view has no filter sidebar — hide the toggle too.
+  // Coming-soon teaser pages (books / lineages) also hide filters.
   const showHomeFeature =
-    !onBooks &&
-    entityFilter === "all" &&
+    !onCatalogSurface &&
+    pathFilter === "all" &&
     traditions.length === 0 &&
     schools.length === 0 &&
     types.length === 0 &&
@@ -227,8 +279,8 @@ export function PublicNav({
     locationFilter == null;
 
   const handleFilterToggle = () => {
-    if (onBooks) {
-      toggleBooksFilters();
+    if (onPilgrimage) {
+      togglePilgrimageFilters();
       return;
     }
 
@@ -240,6 +292,21 @@ export function PublicNav({
     useExploreStore.setState({ filtersOpen: true });
     router.push(explorePath);
   };
+
+  const filterToggleOpen = onPilgrimage ? pilgrimageFiltersOpen : filtersOpen;
+  const filterToggleCount = onPilgrimage
+    ? pilgrimageActiveFilterCount
+    : exploreActiveFilterCount;
+  const filterControlsId = onPilgrimage
+    ? "pilgrimage-filters"
+    : "explore-filters";
+  // Detail pages for pilgrimage don't show the filter sidebar.
+  // Books / lineages are coming-soon teasers — no filter chrome.
+  const showFilterToggle =
+    !showHomeFeature &&
+    !pathname.startsWith("/books") &&
+    !pathname.startsWith("/lineages") &&
+    !(onPilgrimage && pathname !== PILGRIMAGE_LIST_PATH);
 
   // Keep layout offsets in sync as the rail expands/collapses.
   useEffect(() => {
@@ -271,28 +338,28 @@ export function PublicNav({
       <NavBarLayout
         railVisible={railVisible}
         leading={
-          showBackToMap ? (
-            <Link
-              href={explorePath}
-              className="relative z-10 mr-1 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
-              aria-label="Back to map"
-            >
-              <ArrowLeft size={16} weight="bold" />
-            </Link>
-          ) : undefined
+          // Temporarily hide mobile "Back to map" — restore when ready.
+          // showBackToMap ? (
+          //   <Link
+          //     href={explorePath}
+          //     className="relative z-10 mr-1 inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-2 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted md:hidden"
+          //     aria-label="Back to map"
+          //   >
+          //     <ArrowLeft size={16} weight="bold" />
+          //   </Link>
+          // ) : undefined
+          undefined
         }
         center={<ExploreSearchField />}
         trailing={
-          showHomeFeature ? undefined : (
+          showFilterToggle ? (
             <FilterToggleButton
-              filtersOpen={onBooks ? booksFiltersOpen : filtersOpen}
-              activeFilterCount={
-                onBooks ? booksActiveFilterCount : exploreActiveFilterCount
-              }
+              filtersOpen={filterToggleOpen}
+              activeFilterCount={filterToggleCount}
               onToggle={handleFilterToggle}
-              controlsId={onBooks ? "books-filters" : "explore-filters"}
+              controlsId={filterControlsId}
             />
-          )
+          ) : undefined
         }
       />
     </SiteHeader>

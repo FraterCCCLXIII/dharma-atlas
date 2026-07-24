@@ -1,10 +1,44 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { primeExplorePlaceCard } from "@/lib/explore-place-card-client";
 import { buildExplorePlacesSearchParams } from "@/lib/explore-places-query";
 import { useExploreStore } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
+import {
+  MobileMapPagination,
+  MobileMapResultsPanel,
+} from "./MobileMapResultsPanel";
 import { PlaceCard } from "./PlaceCard";
+
+function useIsDesktopLayout() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
+
+/** True for mouse / trackpad — not primary touch. */
+function useFinePointerHover() {
+  const [finePointer, setFinePointer] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setFinePointer(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return finePointer;
+}
 
 const PAGE_SIZE = 20;
 
@@ -73,7 +107,7 @@ function PlaceListPagination({
   return (
     <nav
       aria-label="Locations pagination"
-      className="flex shrink-0 items-center justify-between gap-2 border-t border-border px-4 py-3 sm:px-6"
+      className="mt-4 flex items-center justify-between gap-2"
     >
       <button
         type="button"
@@ -83,7 +117,7 @@ function PlaceListPagination({
       >
         Previous
       </button>
-      <ol className="flex min-w-0 items-center justify-center gap-1 overflow-x-auto">
+      <ol className="flex min-w-0 flex-wrap items-center justify-center gap-1">
         {rail.map((item, index) =>
           item === "ellipsis" ? (
             <li
@@ -156,6 +190,42 @@ export function PlaceList({
   const faiths = useExploreStore((s) => s.faiths);
   const mapBounds = useExploreStore((s) => s.mapBounds);
   const locationFilter = useExploreStore((s) => s.locationFilter);
+  const mobileView = useExploreStore((s) => s.mobileView);
+  const setHoveredId = useExploreStore((s) => s.setHoveredId);
+  const isDesktop = useIsDesktopLayout();
+  const finePointerHover = useFinePointerHover();
+  const mapStrip = !isDesktop && mobileView === "map";
+  const centeredStripIdRef = useRef<string | null>(null);
+  const pointerStripIdRef = useRef<string | null>(null);
+
+  const syncStripMapHighlight = () => {
+    // Mouse hover wins over the centered carousel card when a fine pointer
+    // is available (desktop browser / trackpad on a narrow viewport).
+    const next =
+      finePointerHover && pointerStripIdRef.current
+        ? pointerStripIdRef.current
+        : centeredStripIdRef.current;
+    if (useExploreStore.getState().hoveredId === next) return;
+    setHoveredId(next);
+  };
+
+  useEffect(() => {
+    if (!mapStrip) {
+      centeredStripIdRef.current = null;
+      pointerStripIdRef.current = null;
+      return;
+    }
+    syncStripMapHighlight();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-sync when pointer mode / strip mode flips
+  }, [mapStrip, finePointerHover, setHoveredId]);
+
+  // Strip rows are already full PlaceMarkers — warm popover cache for instant map cards.
+  useEffect(() => {
+    if (!mapStrip) return;
+    for (const place of places) {
+      primeExplorePlaceCard(place);
+    }
+  }, [mapStrip, places]);
 
   // Deliberately excludes map bounds: this key drives the reset-to-page-1 below,
   // and that should follow user intent (search, filters, a chosen location) only.
@@ -169,8 +239,9 @@ export function PlaceList({
     locationFilter ? boundsKey(locationFilter.bounds) : "",
   ].join("|");
 
-  const mapBoundsKey =
-    syncListToMap && !locationFilter ? boundsKey(mapBounds) : "";
+  // Viewport sync applies even while Near You / area chips stay selected —
+  // the chip only seeds the camera; mapBounds wins whenever sync is on.
+  const mapBoundsKey = syncListToMap ? boundsKey(mapBounds) : "";
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   // Panning the map can shrink the result set past the current page. Derive the
@@ -273,6 +344,85 @@ export function PlaceList({
     setPage(clamped);
   }
 
+  if (mapStrip) {
+    if (loading && places.length === 0) {
+      return <MobileMapResultsPanel empty="Loading locations…" />;
+    }
+
+    if (error) {
+      return <MobileMapResultsPanel empty={error} />;
+    }
+
+    if (total === 0) {
+      const reason =
+        emptyReason === "map" ||
+        (filteredMarkerCount > 0 && syncListToMap)
+          ? "map"
+          : "filters";
+      return (
+        <MobileMapResultsPanel
+          trailing={
+            <MobileMapPagination
+              page={1}
+              totalPages={1}
+              onPageChange={goToPage}
+            />
+          }
+          empty={
+            reason === "map"
+              ? "No places in this map area — pan the map or clear filters."
+              : "No places found — try a different search or clear filters."
+          }
+        />
+      );
+    }
+
+    return (
+      <div
+        className={pageFetching ? "opacity-60 transition-opacity" : undefined}
+        aria-busy={pageFetching || undefined}
+      >
+        <MobileMapResultsPanel
+          resetScrollKey={safePage}
+          onCenteredIdChange={(id) => {
+            centeredStripIdRef.current = id;
+            syncStripMapHighlight();
+          }}
+          leading={
+            <p className="truncate text-xs font-medium tabular-nums text-ink-secondary">
+              {total.toLocaleString()} nearby
+            </p>
+          }
+          trailing={
+            <MobileMapPagination
+              page={safePage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
+          }
+        >
+          {places.map((place, index) => (
+            <PlaceCard
+              key={place.id}
+              place={place}
+              index={index}
+              variant="strip"
+              animateEntrance={false}
+              onStripPointerHighlight={
+                finePointerHover
+                  ? (id) => {
+                      pointerStripIdRef.current = id;
+                      syncStripMapHighlight();
+                    }
+                  : undefined
+              }
+            />
+          ))}
+        </MobileMapResultsPanel>
+      </div>
+    );
+  }
+
   if (loading && places.length === 0) {
     return (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-sm text-ink-muted">
@@ -295,7 +445,7 @@ export function PlaceList({
   if (total === 0) {
     const reason =
       emptyReason === "map" ||
-      (filteredMarkerCount > 0 && syncListToMap && !locationFilter)
+      (filteredMarkerCount > 0 && syncListToMap)
         ? "map"
         : "filters";
     return (
@@ -318,22 +468,18 @@ export function PlaceList({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <div className="shrink-0 px-4 pt-4 sm:px-6 sm:pt-6">
-        <PlaceListHeader count={total} />
-      </div>
-      <div
-        ref={parentRef}
-        className={`min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6 ${
-          pageFetching ? "opacity-60" : ""
-        }`}
-        aria-busy={pageFetching || undefined}
-      >
-        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-          {places.map((place, index) => (
-            <PlaceCard key={place.id} place={place} index={index} />
-          ))}
-        </div>
+    <div
+      ref={parentRef}
+      className={`min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4 sm:px-6 sm:pt-6 sm:pb-6 ${
+        pageFetching ? "opacity-60" : ""
+      }`}
+      aria-busy={pageFetching || undefined}
+    >
+      <PlaceListHeader count={total} />
+      <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+        {places.map((place, index) => (
+          <PlaceCard key={place.id} place={place} index={index} />
+        ))}
       </div>
       <PlaceListPagination
         page={safePage}

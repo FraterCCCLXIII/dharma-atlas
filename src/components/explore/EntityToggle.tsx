@@ -12,47 +12,27 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   CaretDown,
   MapPin,
+  MapTrifold,
   UsersThree,
   type Icon,
 } from "@phosphor-icons/react";
+import { useNavBarChromeCompact } from "@/components/layout/NavBarLogoContext";
 import {
-  entityFilterFromPath,
-  pathFromEntityFilter,
+  pathFromSearchScope,
+  searchScopeFromPath,
 } from "@/lib/explore-routes";
-import type { EntityFilter } from "@/store/explore-store";
+import { EXPLORE_NAV_LINKS } from "@/lib/explore-nav";
+import { SHOW_PILGRIMAGE } from "@/lib/feature-flags";
 
-export type ExploreEntity = "locations" | "people";
+export type ExploreEntity = "locations" | "people" | "pilgrimage";
 
 const SEARCH_OPTIONS: { value: ExploreEntity; label: string; icon: Icon }[] = [
   { value: "people", label: "People", icon: UsersThree },
   { value: "locations", label: "Places", icon: MapPin },
+  ...(SHOW_PILGRIMAGE
+    ? [{ value: "pilgrimage" as const, label: "Pilgrimage", icon: MapTrifold }]
+    : []),
 ];
-
-const NAV_LINKS: {
-  href: string;
-  label: string;
-  icon: Icon;
-  isActive: (pathname: string) => boolean;
-}[] = [
-  {
-    href: "/places",
-    label: "Places",
-    icon: MapPin,
-    isActive: (pathname) =>
-      pathname === "/places" || pathname.startsWith("/place/"),
-  },
-  {
-    href: "/people",
-    label: "People",
-    icon: UsersThree,
-    isActive: (pathname) =>
-      pathname === "/people" || pathname.startsWith("/person/"),
-  },
-];
-
-function exploreEntityFromFilter(filter: EntityFilter): ExploreEntity {
-  return filter === "people" ? "people" : "locations";
-}
 
 export function ExploreNavLinks() {
   const pathname = usePathname();
@@ -60,26 +40,56 @@ export function ExploreNavLinks() {
   return (
     <nav
       aria-label="Explore"
-      className="flex shrink-0 items-center justify-center gap-1"
+      className="hidden shrink-0 items-center justify-center gap-0.5 md:flex lg:gap-1"
     >
-      {NAV_LINKS.map(({ href, label, icon: IconComponent, isActive }) => {
-        const active = isActive(pathname);
-        return (
-          <Link
-            key={href}
-            href={href}
-            aria-current={active ? "page" : undefined}
-            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-sm font-semibold transition ${
-              active
-                ? "bg-brand text-brand-foreground shadow-[0_1px_2px_rgba(58,52,43,0.12)]"
-                : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
-            }`}
-          >
-            <IconComponent size={15} weight="bold" className="shrink-0" />
-            {label}
-          </Link>
-        );
-      })}
+      {EXPLORE_NAV_LINKS.map(
+        ({
+          href,
+          label,
+          shortLabel,
+          icon: IconComponent,
+          isActive,
+          comingSoon,
+        }) => {
+          const active = isActive(pathname);
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              title={comingSoon ? `${label} — coming soon` : label}
+              className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-sm font-semibold transition lg:gap-1.5 lg:px-3 ${
+                active
+                  ? "bg-brand text-brand-foreground shadow-[0_1px_2px_rgba(58,52,43,0.12)]"
+                  : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
+              }`}
+            >
+              <IconComponent size={15} weight="bold" className="shrink-0" />
+              <span className="lg:hidden">{shortLabel ?? label}</span>
+              <span className="hidden lg:inline">{label}</span>
+              {comingSoon ? (
+                <>
+                  <span
+                    className={`h-1.5 w-1.5 shrink-0 rounded-full lg:hidden ${
+                      active ? "bg-brand-foreground/80" : "bg-accent"
+                    }`}
+                    aria-hidden
+                  />
+                  <span
+                    className={`hidden rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] lg:inline ${
+                      active
+                        ? "bg-brand-foreground/18 text-brand-foreground"
+                        : "bg-accent-soft text-brand"
+                    }`}
+                  >
+                    Soon
+                  </span>
+                </>
+              ) : null}
+            </Link>
+          );
+        },
+      )}
     </nav>
   );
 }
@@ -91,6 +101,7 @@ export function SearchScopeDropdown({
   value: ExploreEntity;
   onChange: (value: ExploreEntity) => void;
 }) {
+  const chromeCompact = useNavBarChromeCompact();
   const selected =
     SEARCH_OPTIONS.find((option) => option.value === value) ?? SEARCH_OPTIONS[1];
   const selectedLabel = selected?.label ?? "Places";
@@ -198,14 +209,25 @@ export function SearchScopeDropdown({
         aria-expanded={menuOpen}
         aria-haspopup="menu"
         aria-label={`Search in: ${selectedLabel}`}
-        className="inline-flex h-full shrink-0 items-center gap-1.5 rounded-l-full px-3.5 pr-2 text-sm font-semibold leading-none text-ink transition hover:bg-surface-muted"
+        title={`Search in: ${selectedLabel}`}
+        className="inline-flex h-full shrink-0 items-center justify-center gap-0.5 rounded-l-full px-2.5 text-sm font-semibold leading-none text-ink transition hover:bg-surface-muted sm:gap-1.5 sm:px-3.5 sm:pr-2"
       >
-        <SelectedIcon size={15} weight="bold" className="shrink-0" />
-        <span className="whitespace-nowrap">{selectedLabel}</span>
+        <SelectedIcon size={16} weight="bold" className="shrink-0" />
+        {chromeCompact !== true ? (
+          <span
+            className={
+              chromeCompact === false
+                ? "whitespace-nowrap"
+                : "hidden whitespace-nowrap min-[1100px]:inline"
+            }
+          >
+            {selectedLabel}
+          </span>
+        ) : null}
         <CaretDown
           size={14}
           weight="bold"
-          className={`text-ink-muted transition ${menuOpen ? "rotate-180" : ""}`}
+          className={`shrink-0 text-ink-muted transition ${menuOpen ? "rotate-180" : ""}`}
         />
       </button>
       {dropdown}
@@ -219,11 +241,11 @@ export function useSearchScope(): {
 } {
   const pathname = usePathname();
   const router = useRouter();
-  const scope = exploreEntityFromFilter(entityFilterFromPath(pathname));
+  const scope = searchScopeFromPath(pathname);
 
   const setScope = useCallback(
     (next: ExploreEntity) => {
-      const href = pathFromEntityFilter(next);
+      const href = pathFromSearchScope(next);
       if (href !== pathname) {
         router.push(href);
       }
@@ -234,10 +256,12 @@ export function useSearchScope(): {
   return { scope, setScope };
 }
 
-export function getSearchPlaceholder(entityFilter: EntityFilter): string {
-  switch (exploreEntityFromFilter(entityFilter)) {
+export function getSearchPlaceholder(scope: ExploreEntity): string {
+  switch (scope) {
     case "people":
       return "Search people";
+    case "pilgrimage":
+      return "Search sites or routes";
     default:
       return "Search locations";
   }

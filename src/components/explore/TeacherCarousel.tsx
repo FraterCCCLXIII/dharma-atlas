@@ -128,14 +128,14 @@ export function TeacherCarousel({
             hoverRef.current = false;
             scheduleScrollbarHide();
           }}
-          className={`carousel-track min-w-0 flex-1 flex gap-4 overflow-x-auto scroll-smooth pb-2 snap-x snap-mandatory ${
+          className={`carousel-track min-w-0 flex-1 flex gap-4 overflow-x-auto scroll-smooth pb-2 ${
             scrollbarVisible ? "is-scrollbar-visible" : ""
           }`}
         >
           {teachers.map((teacher, index) => (
             <div
               key={teacher.slug}
-              className="w-[9.5rem] shrink-0 snap-start sm:w-[10.75rem] lg:w-[11.5rem]"
+              className="w-[9.5rem] shrink-0 sm:w-[10.75rem] lg:w-[11.5rem]"
             >
               <TeacherCard teacher={teacher} index={index} compact />
             </div>

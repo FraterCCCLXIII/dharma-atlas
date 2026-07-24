@@ -12,6 +12,12 @@ import type { PlaceType } from "@/types/place";
 export type MobileView = "list" | "map";
 export type EntityFilter = "all" | "locations" | "people";
 
+export type ExploreMapView = {
+  lat: number;
+  lng: number;
+  zoom: number;
+};
+
 export type LocationFilter = {
   label: string;
   lat: number;
@@ -34,6 +40,8 @@ interface ExploreState {
   peopleLifeEra: PeopleLifeEra;
   filtersOpen: boolean;
   mapBounds: MapBounds | null;
+  /** Leaflet center/zoom — used to restore viewport across refresh. */
+  mapView: ExploreMapView | null;
   locationFilter: LocationFilter | null;
   setHoveredId: (id: string | null) => void;
   setPinnedPopupId: (id: string | null) => void;
@@ -54,6 +62,7 @@ interface ExploreState {
   setPeopleLifeEra: (era: PeopleLifeEra) => void;
   toggleFilters: () => void;
   setMapBounds: (bounds: MapBounds | null) => void;
+  setMapView: (view: ExploreMapView | null) => void;
   setLocationFilter: (filter: LocationFilter | null) => void;
 }
 
@@ -73,6 +82,7 @@ export const useExploreStore = create<ExploreState>((set) => ({
   // Desktop explore opens filters on route entry (see ExplorePageClient).
   filtersOpen: false,
   mapBounds: null,
+  mapView: null,
   locationFilter: null,
   setHoveredId: (id) => set({ hoveredId: id }),
   setPinnedPopupId: (id) =>
@@ -150,6 +160,7 @@ export const useExploreStore = create<ExploreState>((set) => ({
   setPeopleLifeEra: (peopleLifeEra) => set({ peopleLifeEra }),
   toggleFilters: () => set((s) => ({ filtersOpen: !s.filtersOpen })),
   setMapBounds: (mapBounds) => set({ mapBounds }),
+  setMapView: (mapView) => set({ mapView }),
   setLocationFilter: (locationFilter) =>
     set(
       locationFilter
