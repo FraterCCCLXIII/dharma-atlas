@@ -1,3 +1,9 @@
+/**
+ * Better Auth server config for email/password sessions and admin roles.
+ *
+ * Trusted origins include both the apex and www sibling of BETTER_AUTH_URL so
+ * sign-in/sign-up work when Coolify serves the same app on either host.
+ */
 import "server-only";
 
 import { betterAuth } from "better-auth";
@@ -5,6 +11,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin } from "better-auth/plugins";
 import { db } from "@/db/client";
 import * as schema from "@/db/schema";
+import { buildTrustedOrigins } from "@/lib/auth-trusted-origins";
 import { ac, roles } from "@/lib/permissions";
 import { sendEmail } from "@/lib/email";
 
@@ -14,11 +21,7 @@ const requireEmailVerification =
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET,
-  trustedOrigins: [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    ...(process.env.BETTER_AUTH_URL ? [process.env.BETTER_AUTH_URL] : []),
-  ],
+  trustedOrigins: buildTrustedOrigins(process.env.BETTER_AUTH_URL),
   database: drizzleAdapter(db, { provider: "pg", schema }),
   emailAndPassword: {
     enabled: true,
