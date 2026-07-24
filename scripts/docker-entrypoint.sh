@@ -37,6 +37,7 @@ seed_uploads_if_empty() {
 echo "Preparing upload directories…"
 seed_uploads_if_empty "places"
 seed_uploads_if_empty "people"
+seed_uploads_if_empty "pilgrimage"
 
 echo "Running migrations…"
 node /app/scripts/db-migrate-prod.mjs

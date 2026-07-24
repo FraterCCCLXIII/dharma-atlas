@@ -45,10 +45,11 @@ COPY --from=builder /app/src/data ./src/data
 RUN mkdir -p /app/.photo-seed \
   && cp -a /app/public/places /app/.photo-seed/places \
   && cp -a /app/public/people /app/.photo-seed/people \
+  && ( [ -d /app/public/pilgrimage ] && cp -a /app/public/pilgrimage /app/.photo-seed/pilgrimage || true ) \
   && chown -R nextjs:nodejs /app/.photo-seed
 
 RUN chmod +x /app/scripts/docker-entrypoint.sh \
-  && mkdir -p /app/public/places /app/public/people \
+  && mkdir -p /app/public/places /app/public/people /app/public/pilgrimage \
   && chown -R nextjs:nodejs /app/public
 
 # next/image writes optimized images to .next/cache at runtime. Create it owned

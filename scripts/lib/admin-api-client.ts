@@ -112,6 +112,18 @@ export class AdminApiClient {
     );
   }
 
+  seedPilgrimage() {
+    return this.request<{
+      ok: boolean;
+      linked: number;
+      created: number;
+      updated: number;
+      routes: number;
+      stops: number;
+      unmatchedStops: number;
+    }>("/api/admin/seed-pilgrimage", { method: "POST" });
+  }
+
   revalidate(paths?: string[], all = false) {
     return this.request<{ ok: boolean }>("/api/admin/revalidate", {
       method: "POST",

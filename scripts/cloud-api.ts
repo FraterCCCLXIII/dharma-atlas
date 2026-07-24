@@ -4,6 +4,7 @@
  *
  * Usage:
  *   npm run cloud -- seed --from-files
+ *   npm run cloud -- seed-pilgrimage
  *   npm run cloud -- upload-place-photo <placeId> <filePath>
  *   npm run cloud -- update-place <placeId> <jsonPath>
  *   npm run cloud -- delete-place <placeId>
@@ -18,6 +19,7 @@ const [, , command, ...args] = process.argv;
 function usage() {
   console.log(`Usage:
   npm run cloud -- seed [--from-files] [--places=path.json] [--teachers=path.json]
+  npm run cloud -- seed-pilgrimage
   npm run cloud -- upload-place-photo <placeId> <filePath>
   npm run cloud -- delete-place-photo <placeId> <photoId>
   npm run cloud -- update-place <placeId> <jsonPath>
@@ -67,6 +69,12 @@ async function main() {
       }
 
       const result = await client.seed(payload);
+      console.log(JSON.stringify(result, null, 2));
+      break;
+    }
+
+    case "seed-pilgrimage": {
+      const result = await client.seedPilgrimage();
       console.log(JSON.stringify(result, null, 2));
       break;
     }
