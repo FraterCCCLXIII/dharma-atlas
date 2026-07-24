@@ -640,7 +640,8 @@ export function ExplorePageClient() {
               !showMap
                 ? "hidden"
                 : mobileView === "list"
-                  ? "hidden lg:block lg:flex-1 lg:p-5"
+                  ? // Must be flex on desktop — shell uses flex-1; block collapses it to 0 height.
+                    "hidden lg:flex lg:flex-1 lg:flex-col lg:p-5"
                   : "order-1 flex min-h-0 flex-1 flex-col p-3 pb-0 sm:p-4 sm:pb-0 lg:order-none lg:p-5"
             }`}
           >
