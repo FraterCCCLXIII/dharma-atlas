@@ -152019,13 +152019,13 @@
       "descriptionSource": "curated_import",
       "isDraft": false,
       "qualityFlags": [
+        "missing_hours",
         "missing_phone",
         "missing_website",
-        "unverified_description",
-        "missing_hours"
+        "unverified_description"
       ],
       "photo": "/places/932fe250e3bc.jpg",
-      "photoSource": "wikimedia"
+      "photoSource": "user"
     },
     {
       "id": "532fd2644f9e",
