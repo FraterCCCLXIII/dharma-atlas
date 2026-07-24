@@ -16,7 +16,7 @@ type PersistExtras = {
 
 let didHydrateExplorePlaces = false;
 
-/** Apply sessionStorage once, synchronously, before the first /places paint. */
+/** Apply sessionStorage once on the client — never during React render. */
 export function hydrateExplorePlacesOnce(): void {
   if (didHydrateExplorePlaces || typeof window === "undefined") return;
   didHydrateExplorePlaces = true;
@@ -36,6 +36,11 @@ export function hydrateExplorePlacesOnce(): void {
   });
 }
 
+// Hydrate as soon as this module loads in the browser, before React commits.
+if (typeof window !== "undefined") {
+  hydrateExplorePlacesOnce();
+}
+
 /**
  * Restore /places filters + map viewport from sessionStorage on first paint,
  * then keep them in sync so a refresh does not reset the user’s session.
@@ -44,9 +49,9 @@ export function useExplorePlacesPersist(extras: PersistExtras) {
   const searchAsMapMovesRef = useRef(extras.searchAsMapMoves);
   searchAsMapMovesRef.current = extras.searchAsMapMoves;
 
-  hydrateExplorePlacesOnce();
-
   useEffect(() => {
+    hydrateExplorePlacesOnce();
+
     let timer: ReturnType<typeof setTimeout> | null = null;
 
     const persist = () => {
@@ -85,6 +90,6 @@ export function useExplorePlacesPersist(extras: PersistExtras) {
 
 /** Read restored “Search as map moves” once for initial React state. */
 export function readPersistedSearchAsMapMoves(): boolean {
-  hydrateExplorePlacesOnce();
+  if (typeof window === "undefined") return true;
   return loadPersistedExplorePlaces()?.searchAsMapMoves ?? true;
 }

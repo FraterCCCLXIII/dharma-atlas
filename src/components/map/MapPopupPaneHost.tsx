@@ -41,7 +41,8 @@ export function MapPopupPaneHost() {
 
     pane.classList.add("map-hover-popup-pane");
     // Match `.leaflet-pane` — position from origin, size from content/transform.
-    pane.style.zIndex = "650";
+    // Above `.map-panel` (z-0 stacking context) so cards clear zoom + map chrome.
+    pane.style.zIndex = "20";
     pane.style.position = "absolute";
     pane.style.left = "0";
     pane.style.top = "0";

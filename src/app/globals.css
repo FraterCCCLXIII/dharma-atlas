@@ -31,6 +31,8 @@
 
   /* Public header height — JS updates this as the entity rail collapses. */
   --site-header-height: 4.75rem;
+  /* Mobile bottom tabs (hidden from md up). */
+  --mobile-tab-bar-height: 3.5rem;
 }
 
 @theme inline {
@@ -129,6 +131,11 @@ body {
   );
 }
 
+.map-panel {
+  /* Trap Leaflet controls / overlay UI so hovercards on [data-map-shell] can sit above. */
+  z-index: 0;
+}
+
 .map-panel .leaflet-container {
   height: 100%;
   width: 100%;
@@ -215,6 +222,10 @@ body {
 }
 
 /* Hovercard pane lives on [data-map-shell], outside overflow-clipped map chrome. */
+.map-hover-popup-pane {
+  z-index: 20 !important;
+}
+
 .map-hover-popup-pane .leaflet-popup {
   pointer-events: auto;
 }

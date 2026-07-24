@@ -10,7 +10,10 @@ export type ExplorePlacesQueryInput = {
   faiths: string[];
   page: number;
   pageSize: number;
-  /** Map-bounds sync for the list (ignored when locationFilter is set). */
+  /**
+   * Map-bounds sync for the list. When on, viewport bounds win even if a
+   * Near You / area locationFilter is still active (that filter only seeds the map).
+   */
   mapBounds: MapBounds | null;
   locationFilter: LocationFilter | null;
   syncListToMap: boolean;
@@ -31,7 +34,13 @@ export function buildExplorePlacesSearchParams(
   if (input.types.length) params.set("types", input.types.join(","));
   if (input.faiths.length) params.set("faiths", input.faiths.join(","));
 
-  if (input.locationFilter) {
+  if (input.syncListToMap && input.mapBounds) {
+    const { south, north, west, east } = input.mapBounds;
+    params.set("south", String(south));
+    params.set("north", String(north));
+    params.set("west", String(west));
+    params.set("east", String(east));
+  } else if (input.locationFilter) {
     const { bounds, lat, lng, matchTerms } = input.locationFilter;
     params.set("locSouth", String(bounds.south));
     params.set("locNorth", String(bounds.north));
@@ -40,12 +49,6 @@ export function buildExplorePlacesSearchParams(
     params.set("locLat", String(lat));
     params.set("locLng", String(lng));
     if (matchTerms?.length) params.set("locTerms", matchTerms.join(","));
-  } else if (input.syncListToMap && input.mapBounds) {
-    const { south, north, west, east } = input.mapBounds;
-    params.set("south", String(south));
-    params.set("north", String(north));
-    params.set("west", String(west));
-    params.set("east", String(east));
   }
 
   return params;

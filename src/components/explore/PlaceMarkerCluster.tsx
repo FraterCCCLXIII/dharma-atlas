@@ -22,7 +22,7 @@ import {
   scheduleHoverClose,
   unmountPopupRoot,
 } from "@/lib/map-popup";
-import { WORLD_LNG_OFFSETS } from "@/lib/coords";
+import { sameLngOffsets, worldLngOffsetsForBounds } from "@/lib/coords";
 import { stackSpiderfyPositions } from "@/lib/map-stack-spiderfy";
 import { useExploreStore } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
@@ -45,6 +45,7 @@ function groupPlacesByCoord(places: PlaceMarker[]) {
 
 type MarkerClusterGroup = L.LayerGroup & {
   addLayer: (layer: L.Layer) => MarkerClusterGroup;
+  removeLayer: (layer: L.Layer) => MarkerClusterGroup;
 };
 
 function markerIsVisible(marker: L.Marker): boolean {
@@ -70,6 +71,7 @@ function showFloatingPopup(
   map: L.Map,
   refs: FloatingPopupRefs,
   place: PlaceMarker,
+  latLng: L.LatLngExpression,
 ) {
   if (!refs.container) {
     refs.container = document.createElement("div");
@@ -85,14 +87,12 @@ function showFloatingPopup(
     () => refreshPopupLayout(refs.popup ?? undefined),
   );
 
-  refs.popup
-    .setLatLng([place.lat, place.lng])
-    .setContent(refs.container)
-    .openOn(map);
+  refs.popup.setLatLng(latLng).setContent(refs.container).openOn(map);
 }
 
 type ClusterMarker = L.Marker & {
   __placeGroup?: PlaceMarker[];
+  __lngOffset?: number;
   __popupContainer?: HTMLDivElement;
   __popupRoot?: Root;
 };
@@ -141,6 +141,18 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       const list = markerByPlaceId.get(placeId) ?? [];
       list.push(marker);
       markerByPlaceId.set(placeId, list);
+    };
+
+    const unregisterMarker = (
+      markerByPlaceId: Map<string, ClusterMarker[]>,
+      placeId: string,
+      marker: ClusterMarker,
+    ) => {
+      const list = markerByPlaceId.get(placeId);
+      if (!list) return;
+      const next = list.filter((entry) => entry !== marker);
+      if (next.length === 0) markerByPlaceId.delete(placeId);
+      else markerByPlaceId.set(placeId, next);
     };
 
     const replaceMarker = (
@@ -203,6 +215,8 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
 
     const groups = groupPlacesByCoord(places);
     const markerByPlaceId = new Map<string, ClusterMarker[]>();
+    const markersByOffset = new Map<number, ClusterMarker[]>();
+    let activeOffsets: number[] = [];
 
     const bindMarkerPopup = (marker: ClusterMarker, _place: PlaceMarker) => {
       if (!marker.getPopup()) {
@@ -271,6 +285,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
         }) as ClusterMarker;
 
         spider.__placeGroup = [place];
+        spider.__lngOffset = parent.__lngOffset;
         bindMarkerPopup(spider, place);
         replaceMarker(markerByPlaceId, place.id, parent, spider);
 
@@ -289,10 +304,13 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
       markerByPlaceIdRef.current = markerByPlaceId;
     };
 
-    for (const [, group] of groups) {
-      const representative = group[0];
+    const addOffset = (lngOffset: number) => {
+      if (markersByOffset.has(lngOffset)) return;
 
-      for (const lngOffset of WORLD_LNG_OFFSETS) {
+      const created: ClusterMarker[] = [];
+
+      for (const [, group] of groups) {
+        const representative = group[0];
         const marker = L.marker(
           [representative.lat, representative.lng + lngOffset],
           {
@@ -303,6 +321,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
         ) as ClusterMarker;
 
         marker.__placeGroup = group;
+        marker.__lngOffset = lngOffset;
 
         bindMarkerPopup(marker, representative);
 
@@ -331,11 +350,54 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
         });
 
         cluster.addLayer(marker);
+        created.push(marker);
       }
-    }
 
-    markerByPlaceIdRef.current = markerByPlaceId;
+      markersByOffset.set(lngOffset, created);
+      markerByPlaceIdRef.current = markerByPlaceId;
+    };
+
+    const removeOffset = (lngOffset: number) => {
+      const markers = markersByOffset.get(lngOffset);
+      if (!markers) return;
+
+      const expanded = expandedStackRef.current;
+      if (expanded && expanded.parent.__lngOffset === lngOffset) {
+        collapseExpandedStack();
+      }
+
+      for (const marker of markers) {
+        marker.closePopup();
+        unmountPopupRoot(marker.__popupRoot);
+        marker.__popupRoot = undefined;
+        marker.__popupContainer = undefined;
+        for (const place of marker.__placeGroup ?? []) {
+          unregisterMarker(markerByPlaceId, place.id, marker);
+        }
+        cluster.removeLayer(marker);
+      }
+
+      markersByOffset.delete(lngOffset);
+      markerByPlaceIdRef.current = markerByPlaceId;
+    };
+
+    const syncOffsets = () => {
+      const bounds = map.getBounds();
+      const next = worldLngOffsetsForBounds(bounds.getWest(), bounds.getEast());
+      if (sameLngOffsets(activeOffsets, next)) return;
+
+      const nextSet = new Set(next);
+      for (const offset of next) addOffset(offset);
+      for (const offset of markersByOffset.keys()) {
+        if (!nextSet.has(offset)) removeOffset(offset);
+      }
+      activeOffsets = next;
+    };
+
     map.addLayer(cluster);
+    map.whenReady(syncOffsets);
+    map.on("moveend", syncOffsets);
+    map.on("zoomend", syncOffsets);
 
     const onMapBackgroundClick = () => collapseExpandedStack();
     map.on("click", onMapBackgroundClick);
@@ -344,6 +406,8 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
     return () => {
       map.off("click", onMapBackgroundClick);
       map.off("zoomstart", collapseExpandedStack);
+      map.off("moveend", syncOffsets);
+      map.off("zoomend", syncOffsets);
       collapseExpandedStack();
       cancelHoverClose(hideTimerRef);
       clusterRef.current = null;
@@ -430,7 +494,7 @@ export function PlaceMarkerCluster({ places }: { places: PlaceMarker[] }) {
 
     if (openGen !== openGenRef.current) return;
 
-    showFloatingPopup(map, floating, activePlace);
+    showFloatingPopup(map, floating, activePlace, activeMarker.getLatLng());
 
     return () => {
       cancelOpenRef.current?.();

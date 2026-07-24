@@ -19,6 +19,7 @@ import {
   useSearchScope,
   type ExploreEntity,
 } from "@/components/explore/EntityToggle";
+import { useNavBarChromeCompact } from "@/components/layout/NavBarLogoContext";
 import {
   pilgrimageRoutePath,
   pilgrimageSitePath,
@@ -93,6 +94,7 @@ export function ExploreSearchField() {
   const router = useRouter();
   const pathname = usePathname();
   const listId = useId();
+  const chromeCompact = useNavBarChromeCompact();
   const query = useExploreStore((s) => s.query);
   const setQuery = useExploreStore((s) => s.setQuery);
   const locationFilter = useExploreStore((s) => s.locationFilter);
@@ -731,7 +733,9 @@ export function ExploreSearchField() {
             }}
             onKeyDown={handleKeyDown}
             placeholder={getSearchPlaceholder(scope)}
-            className="h-full w-full bg-transparent py-0 pl-10 pr-9 text-sm leading-none text-ink outline-none placeholder:text-ink-muted [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+            className={`h-full w-full bg-transparent py-0 pl-10 text-sm leading-none text-ink outline-none placeholder:text-ink-muted [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden ${
+              draft ? "pr-9" : "pr-0"
+            }`}
           />
           {draft && (
             <button
@@ -756,7 +760,7 @@ export function ExploreSearchField() {
                 nearYouActive ? "Clear near you filter" : "Show places near you"
               }
               title={nearYouActive ? "Clear near you" : "Near You"}
-              className={`inline-flex h-full shrink-0 items-center gap-1.5 rounded-r-full px-3 text-xs font-semibold leading-none transition sm:px-3.5 sm:text-sm ${
+              className={`inline-flex h-full shrink-0 items-center gap-1.5 rounded-r-full px-2.5 text-xs font-semibold leading-none transition sm:px-3.5 sm:text-sm ${
                 nearYouActive
                   ? "bg-brand/10 text-brand"
                   : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
@@ -767,7 +771,17 @@ export function ExploreSearchField() {
               ) : (
                 <Crosshair size={16} weight="bold" className="text-brand" />
               )}
-              <span className="whitespace-nowrap">Near You</span>
+              {chromeCompact !== true ? (
+                <span
+                  className={
+                    chromeCompact === false
+                      ? "whitespace-nowrap"
+                      : "hidden whitespace-nowrap min-[1100px]:inline"
+                  }
+                >
+                  Near You
+                </span>
+              ) : null}
             </button>
           </>
         ) : null}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import L from "leaflet";
 import {
   MapContainer,
@@ -26,7 +26,12 @@ import {
   openMarkerPopupWhenReady,
   scheduleHoverClose,
 } from "@/lib/map-popup";
-import { isValidCoord, toLatLng, WORLD_LNG_OFFSETS } from "@/lib/coords";
+import {
+  isValidCoord,
+  sameLngOffsets,
+  toLatLng,
+  worldLngOffsetsForBounds,
+} from "@/lib/coords";
 import { placeShowsMapPin } from "@/lib/place-location";
 import {
   loadStoredNearBounds,
@@ -115,7 +120,9 @@ function MapAutoControl({ places }: { places: PlaceMarker[] }) {
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const userInteractedRef = useRef(false);
   const programmaticRef = useRef(false);
-  const lastLocationKeyRef = useRef<string | null>(null);
+  /** Last Near You / area location we framed — not tied to the pin-set fingerprint. */
+  const lastFittedLocationKeyRef = useRef<string | null>(null);
+  const fittedLocationWithPointsRef = useRef(false);
   // After refresh, keep the restored viewport instead of re-fitting near-you / location.
   const restoredMapView = useRef(useExploreStore.getState().mapView).current;
   const initialLocalViewAppliedRef = useRef(restoredMapView != null);
@@ -217,31 +224,45 @@ function MapAutoControl({ places }: { places: PlaceMarker[] }) {
 
   useEffect(() => {
     if (!locationKey || !locationFilter) {
-      lastLocationKeyRef.current = null;
+      lastFittedLocationKeyRef.current = null;
+      fittedLocationWithPointsRef.current = false;
       return;
     }
-
-    // Refit when the location changes or when matches for that location arrive.
-    const fitKey = `${locationKey}:${placesKey}`;
-    if (lastLocationKeyRef.current === fitKey) return;
 
     if (
       suppressRestoredLocationFitRef.current &&
       locationKey === restoredLocationKeyRef.current
     ) {
-      lastLocationKeyRef.current = fitKey;
+      lastFittedLocationKeyRef.current = locationKey;
       return;
     }
     suppressRestoredLocationFitRef.current = false;
 
-    lastLocationKeyRef.current = fitKey;
-
-    userInteractedRef.current = false;
-    let cancelled = false;
-    const { bounds } = locationFilter;
     const points = places
       .map((p) => toLatLng(p.lat, p.lng))
       .filter((point): point is [number, number] => point !== null);
+    const locationChanged = lastFittedLocationKeyRef.current !== locationKey;
+
+    // Same Near You / area: pin-set growth (search-as-map-moves) must not yank
+    // the camera back after the user pans.
+    if (!locationChanged) {
+      if (
+        fittedLocationWithPointsRef.current ||
+        userInteractedRef.current ||
+        points.length === 0
+      ) {
+        return;
+      }
+    } else {
+      userInteractedRef.current = false;
+      fittedLocationWithPointsRef.current = false;
+    }
+
+    lastFittedLocationKeyRef.current = locationKey;
+    if (points.length > 0) fittedLocationWithPointsRef.current = true;
+
+    let cancelled = false;
+    const { bounds } = locationFilter;
 
     map.whenReady(() => {
       if (cancelled) return;
@@ -314,6 +335,42 @@ function MapClickDismiss({ onDismiss }: { onDismiss: () => void }) {
   return null;
 }
 
+/** Active world copies for the current viewport (lazy ±360° clones). */
+function useWorldLngOffsets() {
+  const map = useMap();
+  const [state, setState] = useState({ offsets: [0], syncOffset: 0 });
+
+  useEffect(() => {
+    const sync = () => {
+      const bounds = map.getBounds();
+      const next = worldLngOffsetsForBounds(bounds.getWest(), bounds.getEast());
+      const centerLng = map.getCenter().lng;
+      const syncOffset = next.reduce((best, offset) =>
+        Math.abs(centerLng - offset) < Math.abs(centerLng - best)
+          ? offset
+          : best,
+      next[0] ?? 0);
+
+      setState((prev) =>
+        sameLngOffsets(prev.offsets, next) && prev.syncOffset === syncOffset
+          ? prev
+          : { offsets: next, syncOffset },
+      );
+    };
+
+    map.whenReady(sync);
+    map.on("moveend", sync);
+    map.on("zoomend", sync);
+
+    return () => {
+      map.off("moveend", sync);
+      map.off("zoomend", sync);
+    };
+  }, [map]);
+
+  return state;
+}
+
 /** Clear explore hover when the place leaves the map container while panning. */
 function MapHovercardViewportGuard({ places }: { places: PlaceMarker[] }) {
   const map = useMap();
@@ -329,10 +386,16 @@ function MapHovercardViewportGuard({ places }: { places: PlaceMarker[] }) {
       return;
     }
 
-    const placeStillVisible = () =>
-      WORLD_LNG_OFFSETS.some((offset) =>
+    const placeStillVisible = () => {
+      const bounds = map.getBounds();
+      const offsets = worldLngOffsetsForBounds(
+        bounds.getWest(),
+        bounds.getEast(),
+      );
+      return offsets.some((offset) =>
         isLatLngInMapContainer(map, [place.lat, place.lng + offset]),
       );
+    };
 
     const dismissIfHidden = () => {
       if (!placeStillVisible()) setHoveredId(null);
@@ -351,13 +414,68 @@ function MapHovercardViewportGuard({ places }: { places: PlaceMarker[] }) {
   return null;
 }
 
+function ExploreMapPins({ places }: { places: PlaceMarker[] }) {
+  const hoveredId = useExploreStore((s) => s.hoveredId);
+  const { offsets: lngOffsets, syncOffset } = useWorldLngOffsets();
+
+  return (
+    <>
+      {places.flatMap((place) =>
+        lngOffsets.map((lngOffset) => (
+          <ExploreMapPin
+            key={`${place.id}:${lngOffset}`}
+            place={place}
+            lngOffset={lngOffset}
+            syncPopup={lngOffset === syncOffset}
+            isActive={hoveredId === place.id}
+          />
+        )),
+      )}
+    </>
+  );
+}
+
+/** Settle window / container resizes before invalidateSize — per-frame work freezes Places. */
+const MAP_RESIZE_SETTLE_MS = 160;
+
+function MapResizeSettle() {
+  const map = useMap();
+
+  useEffect(() => {
+    let timer = 0;
+    const settle = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        map.invalidateSize({ debounceMoveend: true, animate: false });
+      }, MAP_RESIZE_SETTLE_MS);
+    };
+
+    // trackResize is off on MapContainer; we own size sync with a settle delay.
+    window.addEventListener("resize", settle);
+    const observer = new ResizeObserver(settle);
+    observer.observe(map.getContainer());
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", settle);
+      observer.disconnect();
+    };
+  }, [map]);
+
+  return null;
+}
+
 function MapBoundsSync() {
   const map = useMap();
   const setMapBounds = useExploreStore((s) => s.setMapBounds);
   const setMapView = useExploreStore((s) => s.setMapView);
   const lastKeyRef = useRef<string | null>(null);
+  const resizingRef = useRef(false);
+  const resizeTimerRef = useRef(0);
 
   const reportBounds = useCallback(() => {
+    if (resizingRef.current) return;
+
     const bounds = map.getBounds();
     const center = map.getCenter();
     const next = {
@@ -379,13 +497,25 @@ function MapBoundsSync() {
   }, [map, setMapBounds, setMapView]);
 
   useEffect(() => {
+    const onWindowResize = () => {
+      resizingRef.current = true;
+      window.clearTimeout(resizeTimerRef.current);
+      resizeTimerRef.current = window.setTimeout(() => {
+        resizingRef.current = false;
+        reportBounds();
+      }, MAP_RESIZE_SETTLE_MS);
+    };
+
     map.whenReady(reportBounds);
     map.on("moveend", reportBounds);
     map.on("zoomend", reportBounds);
+    window.addEventListener("resize", onWindowResize);
 
     return () => {
       map.off("moveend", reportBounds);
       map.off("zoomend", reportBounds);
+      window.removeEventListener("resize", onWindowResize);
+      window.clearTimeout(resizeTimerRef.current);
       lastKeyRef.current = null;
       setMapBounds(null);
     };
@@ -473,7 +603,6 @@ function ExploreMapPin({
 }
 
 export function PlaceMap({ places }: PlaceMapProps) {
-  const hoveredId = useExploreStore((s) => s.hoveredId);
   const setHoveredId = useExploreStore((s) => s.setHoveredId);
   const initialMapView = useRef(useExploreStore.getState().mapView).current;
 
@@ -497,6 +626,9 @@ export function PlaceMap({ places }: PlaceMapProps) {
       className="h-full min-h-[320px] w-full"
       scrollWheelZoom
       closePopupOnClick={false}
+      // Per-frame invalidateSize during window drag locks the main thread with
+      // thousands of clustered markers. We settle-resize in MapResizeSettle.
+      trackResize={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -504,6 +636,7 @@ export function PlaceMap({ places }: PlaceMapProps) {
       />
       <MapPopupPaneHost />
       <MapMarkerScale />
+      <MapResizeSettle />
       <MapBoundsSync />
       <MapVerticalPanClamp />
       <MapAutoControl places={validPlaces} />
@@ -512,17 +645,7 @@ export function PlaceMap({ places }: PlaceMapProps) {
       {useCluster ? (
         <PlaceMarkerCluster places={validPlaces} />
       ) : (
-        validPlaces.flatMap((place) =>
-          WORLD_LNG_OFFSETS.map((lngOffset) => (
-            <ExploreMapPin
-              key={`${place.id}:${lngOffset}`}
-              place={place}
-              lngOffset={lngOffset}
-              syncPopup={lngOffset === 0}
-              isActive={hoveredId === place.id}
-            />
-          )),
-        )
+        <ExploreMapPins places={validPlaces} />
       )}
     </MapContainer>
   );

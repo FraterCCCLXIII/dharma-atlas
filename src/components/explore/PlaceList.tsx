@@ -4,7 +4,25 @@ import { useEffect, useRef, useState } from "react";
 import { buildExplorePlacesSearchParams } from "@/lib/explore-places-query";
 import { useExploreStore } from "@/store/explore-store";
 import type { PlaceMarker } from "@/types/place";
+import {
+  MobileMapPagination,
+  MobileMapResultsPanel,
+} from "./MobileMapResultsPanel";
 import { PlaceCard } from "./PlaceCard";
+
+function useIsDesktopLayout() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
 
 const PAGE_SIZE = 20;
 
@@ -156,6 +174,9 @@ export function PlaceList({
   const faiths = useExploreStore((s) => s.faiths);
   const mapBounds = useExploreStore((s) => s.mapBounds);
   const locationFilter = useExploreStore((s) => s.locationFilter);
+  const mobileView = useExploreStore((s) => s.mobileView);
+  const isDesktop = useIsDesktopLayout();
+  const mapStrip = !isDesktop && mobileView === "map";
 
   // Deliberately excludes map bounds: this key drives the reset-to-page-1 below,
   // and that should follow user intent (search, filters, a chosen location) only.
@@ -169,8 +190,8 @@ export function PlaceList({
     locationFilter ? boundsKey(locationFilter.bounds) : "",
   ].join("|");
 
-  const mapBoundsKey =
-    syncListToMap && !locationFilter ? boundsKey(mapBounds) : "";
+  // Viewport sync applies even while Near You / area chips stay selected.
+  const mapBoundsKey = syncListToMap ? boundsKey(mapBounds) : "";
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   // Panning the map can shrink the result set past the current page. Derive the
@@ -273,6 +294,72 @@ export function PlaceList({
     setPage(clamped);
   }
 
+  if (mapStrip) {
+    if (loading && places.length === 0) {
+      return <MobileMapResultsPanel empty="Loading locations…" />;
+    }
+
+    if (error) {
+      return <MobileMapResultsPanel empty={error} />;
+    }
+
+    if (total === 0) {
+      const reason =
+        emptyReason === "map" ||
+        (filteredMarkerCount > 0 && syncListToMap)
+          ? "map"
+          : "filters";
+      return (
+        <MobileMapResultsPanel
+          trailing={
+            <MobileMapPagination
+              page={1}
+              totalPages={1}
+              onPageChange={goToPage}
+            />
+          }
+          empty={
+            reason === "map"
+              ? "No places in this map area — pan the map or clear filters."
+              : "No places found — try a different search or clear filters."
+          }
+        />
+      );
+    }
+
+    return (
+      <div
+        className={pageFetching ? "opacity-60 transition-opacity" : undefined}
+        aria-busy={pageFetching || undefined}
+      >
+        <MobileMapResultsPanel
+          leading={
+            <p className="truncate text-xs font-medium tabular-nums text-ink-secondary">
+              {total.toLocaleString()} nearby
+            </p>
+          }
+          trailing={
+            <MobileMapPagination
+              page={safePage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
+          }
+        >
+          {places.map((place, index) => (
+            <PlaceCard
+              key={place.id}
+              place={place}
+              index={index}
+              variant="strip"
+              animateEntrance={false}
+            />
+          ))}
+        </MobileMapResultsPanel>
+      </div>
+    );
+  }
+
   if (loading && places.length === 0) {
     return (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4 text-sm text-ink-muted">
@@ -295,7 +382,7 @@ export function PlaceList({
   if (total === 0) {
     const reason =
       emptyReason === "map" ||
-      (filteredMarkerCount > 0 && syncListToMap && !locationFilter)
+      (filteredMarkerCount > 0 && syncListToMap)
         ? "map"
         : "filters";
     return (

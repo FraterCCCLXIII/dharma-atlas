@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { authClient } from "@/lib/auth-client";
-import { SHOW_PILGRIMAGE } from "@/lib/feature-flags";
 import { isAdminRole } from "@/lib/permissions";
 
 export function SiteMenu() {
@@ -132,38 +131,6 @@ export function SiteMenu() {
             className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
           >
             Claim location
-          </Link>
-          {SHOW_PILGRIMAGE ? (
-            <Link
-              href="/pilgrimage"
-              role="menuitem"
-              onClick={() => setMenuOpen(false)}
-              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-            >
-              Pilgrimage
-            </Link>
-          ) : null}
-          <Link
-            href="/lineages"
-            role="menuitem"
-            onClick={() => setMenuOpen(false)}
-            className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-          >
-            Lineages
-            <span className="rounded-full bg-accent-soft px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-brand">
-              Soon
-            </span>
-          </Link>
-          <Link
-            href="/books"
-            role="menuitem"
-            onClick={() => setMenuOpen(false)}
-            className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
-          >
-            Books
-            <span className="rounded-full bg-accent-soft px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-brand">
-              Soon
-            </span>
           </Link>
           <Link
             href="/about"

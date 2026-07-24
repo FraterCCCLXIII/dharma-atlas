@@ -31,6 +31,7 @@ import {
   usePilgrimageActiveFilterCount,
   usePilgrimageStore,
 } from "@/store/pilgrimage-store";
+import { MobileMapResultsPanel } from "@/components/explore/MobileMapResultsPanel";
 import { PilgrimageFavoriteButton } from "./PilgrimageFavoriteButton";
 import { PilgrimageFilterBar } from "./PilgrimageFilterBar";
 import type { PilgrimageMapMarker } from "./PilgrimageMap";
@@ -435,6 +436,61 @@ export function PilgrimagePageView() {
     if (!isDesktop) setMobileView("map");
   };
 
+  const mapStrip = !isDesktop && mobileView === "map";
+
+  const kindToggle = (
+    <div
+      role="tablist"
+      aria-label="Pilgrimage view"
+      className={`inline-flex rounded-full border border-border bg-surface-muted p-0.5 ${
+        mapStrip ? "max-w-full" : "mt-8 p-1"
+      }`}
+    >
+      <button
+        type="button"
+        role="tab"
+        aria-selected={view === "site"}
+        onClick={() => setView("site")}
+        className={`inline-flex items-center gap-1 rounded-full font-semibold transition ${
+          mapStrip
+            ? "gap-1 px-2.5 py-1.5 text-xs"
+            : "gap-1.5 px-4 py-2 text-sm"
+        } ${
+          view === "site"
+            ? "bg-brand text-brand-foreground shadow-sm"
+            : "text-ink-secondary hover:text-ink"
+        }`}
+      >
+        <Signpost size={mapStrip ? 13 : 15} weight="bold" />
+        {mapStrip ? "Sites" : "Locations"}
+        <span className="text-[11px] font-medium opacity-80">
+          {sites.length}
+        </span>
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={view === "route"}
+        onClick={() => setView("route")}
+        className={`inline-flex items-center gap-1 rounded-full font-semibold transition ${
+          mapStrip
+            ? "gap-1 px-2.5 py-1.5 text-xs"
+            : "gap-1.5 px-4 py-2 text-sm"
+        } ${
+          view === "route"
+            ? "bg-brand text-brand-foreground shadow-sm"
+            : "text-ink-secondary hover:text-ink"
+        }`}
+      >
+        <Path size={mapStrip ? 13 : 15} weight="bold" />
+        Routes
+        <span className="text-[11px] font-medium opacity-80">
+          {routes.length}
+        </span>
+      </button>
+    </div>
+  );
+
   return (
     <div className="relative flex h-full min-h-0 flex-1 overflow-hidden bg-surface">
       <PilgrimageFilterSidebar
@@ -442,143 +498,151 @@ export function PilgrimagePageView() {
         onClose={() => setFiltersOpen(false)}
       />
 
-      <div className="relative flex min-h-0 min-w-0 flex-1">
+      <div
+        className={`relative flex min-h-0 min-w-0 flex-1 ${
+          mapStrip ? "flex-col lg:flex-row" : ""
+        }`}
+      >
         <section
-          className={`flex min-h-0 w-full flex-col lg:w-[52%] xl:w-[48%] ${
-            mobileView === "map" ? "hidden lg:flex" : "flex"
+          className={`min-h-0 w-full flex-col lg:relative lg:order-none lg:flex lg:w-[52%] xl:w-[48%] ${
+            mapStrip
+              ? "order-2 flex shrink-0 px-3 sm:px-4 lg:order-none lg:min-h-0 lg:flex-1 lg:px-0"
+              : "flex"
           }`}
         >
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="px-4 pb-20 pt-8 sm:px-6 lg:px-8">
-              <div className="max-w-2xl">
-                <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
-                  <MapTrifold size={14} weight="bold" />
-                  Sacred geography
+          {mapStrip ? (
+            <MobileMapResultsPanel
+              leading={kindToggle}
+              empty={
+                entries.length === 0
+                  ? `No ${view === "site" ? "sites" : "routes"} match these filters.`
+                  : undefined
+              }
+            >
+              {entries.length === 0
+                ? null
+                : view === "site"
+                  ? sites.map((site) => (
+                      <PilgrimageStripCard
+                        key={site.slug}
+                        title={site.name}
+                        subtitle={`${site.country} · ${site.region}`}
+                        image={getPilgrimageImage(site.slug)}
+                        tradition={site.tradition}
+                        selected={selectedSiteSlug === site.slug}
+                        onSelect={() => handleSelectSite(site.slug)}
+                        href={pilgrimageSitePath(site.slug)}
+                      />
+                    ))
+                  : routes.map((route) => (
+                      <PilgrimageStripCard
+                        key={route.slug}
+                        title={route.name}
+                        subtitle={`${getRouteStopSites(route).length} stops · ${route.lengthNote}`}
+                        image={getPilgrimageImage(route.slug)}
+                        tradition={route.tradition}
+                        selected={selectedRouteSlug === route.slug}
+                        onSelect={() => handleSelectRoute(route.slug)}
+                        href={pilgrimageRoutePath(route.slug)}
+                      />
+                    ))}
+            </MobileMapResultsPanel>
+          ) : (
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <div className="px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+                <div className="max-w-2xl">
+                  <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
+                    <MapTrifold size={14} weight="bold" />
+                    Sacred geography
+                  </p>
+                  <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+                    Pilgrimage
+                  </h1>
+                  <p className="mt-3 text-base leading-relaxed text-ink-secondary">
+                    Sacred sites and walking routes across Buddhist and related
+                    contemplative traditions — select a route to trace it on the
+                    map.
+                  </p>
+                </div>
+
+                {kindToggle}
+
+                <p className="mt-4 text-sm text-ink-muted">
+                  Showing {entries.length} of {total}
+                  {activeFilterCount > 0
+                    ? " matching filters"
+                    : view === "site"
+                      ? " locations"
+                      : " routes"}
+                  {selectedRoute ? ` · ${selectedRoute.name} on map` : ""}
                 </p>
-                <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-                  Pilgrimage
-                </h1>
-                <p className="mt-3 text-base leading-relaxed text-ink-secondary">
-                  Sacred sites and walking routes across Buddhist and related
-                  contemplative traditions — select a route to trace it on the
-                  map.
-                </p>
+
+                {entries.length === 0 ? (
+                  <p className="mt-12 text-sm text-ink-secondary">
+                    No {view === "site" ? "locations" : "routes"} match these
+                    filters. Try clearing a region or tradition.
+                  </p>
+                ) : view === "site" ? (
+                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                    {sites.map((site) => (
+                      <SiteCard
+                        key={site.slug}
+                        site={site}
+                        selected={selectedSiteSlug === site.slug}
+                        onSelect={() => handleSelectSite(site.slug)}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                    {routes.map((route) => (
+                      <RouteCard
+                        key={route.slug}
+                        route={route}
+                        selected={selectedRouteSlug === route.slug}
+                        onSelect={() => handleSelectRoute(route.slug)}
+                      />
+                    ))}
+                  </ul>
+                )}
               </div>
-
-              <div
-                role="tablist"
-                aria-label="Pilgrimage view"
-                className="mt-8 inline-flex rounded-full border border-border bg-surface-muted p-1"
-              >
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={view === "site"}
-                  onClick={() => setView("site")}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                    view === "site"
-                      ? "bg-brand text-brand-foreground shadow-sm"
-                      : "text-ink-secondary hover:text-ink"
-                  }`}
-                >
-                  <Signpost size={15} weight="bold" />
-                  Locations
-                  <span className="text-[11px] font-medium opacity-80">
-                    {sites.length}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={view === "route"}
-                  onClick={() => setView("route")}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                    view === "route"
-                      ? "bg-brand text-brand-foreground shadow-sm"
-                      : "text-ink-secondary hover:text-ink"
-                  }`}
-                >
-                  <Path size={15} weight="bold" />
-                  Routes
-                  <span className="text-[11px] font-medium opacity-80">
-                    {routes.length}
-                  </span>
-                </button>
-              </div>
-
-              <p className="mt-4 text-sm text-ink-muted">
-                Showing {entries.length} of {total}
-                {activeFilterCount > 0
-                  ? " matching filters"
-                  : view === "site"
-                    ? " locations"
-                    : " routes"}
-                {selectedRoute ? ` · ${selectedRoute.name} on map` : ""}
-              </p>
-
-              {entries.length === 0 ? (
-                <p className="mt-12 text-sm text-ink-secondary">
-                  No {view === "site" ? "locations" : "routes"} match these
-                  filters. Try clearing a region or tradition.
-                </p>
-              ) : view === "site" ? (
-                <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                  {sites.map((site) => (
-                    <SiteCard
-                      key={site.slug}
-                      site={site}
-                      selected={selectedSiteSlug === site.slug}
-                      onSelect={() => handleSelectSite(site.slug)}
-                    />
-                  ))}
-                </ul>
-              ) : (
-                <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                  {routes.map((route) => (
-                    <RouteCard
-                      key={route.slug}
-                      route={route}
-                      selected={selectedRouteSlug === route.slug}
-                      onSelect={() => handleSelectRoute(route.slug)}
-                    />
-                  ))}
-                </ul>
-              )}
             </div>
-          </div>
+          )}
         </section>
 
         <section
           aria-hidden={!mapMounted}
-          className={`relative z-0 min-h-0 flex-1 p-3 sm:p-4 lg:p-5 ${
-            mobileView === "list" ? "hidden lg:block" : "block"
+          className={`relative z-0 min-h-0 ${
+            mobileView === "list"
+              ? "hidden lg:block lg:flex-1 lg:p-5"
+              : "order-1 flex min-h-0 flex-1 flex-col p-3 pb-0 sm:p-4 sm:pb-0 lg:order-none lg:p-5"
           }`}
         >
-          <div className="relative h-full" data-map-shell>
+          <div className="relative min-h-0 flex-1" data-map-shell>
             <div className="map-panel absolute inset-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-            {mapMounted ? (
-              <PilgrimageMap
-                markers={mapMarkers}
-                routePoints={
-                  routePoints && routePoints.length >= 2
-                    ? routePoints
-                    : undefined
-                }
-                focusPoints={focusPoints}
-                activeSlug={selectedSiteSlug}
-                focusKey={mapFocusKey}
-                onSelectSite={handleSelectSite}
-              />
-            ) : null}
-            {selectedRoute && mapMounted ? (
-              <div className="absolute bottom-3 left-3 right-3 z-[1000] rounded-xl border border-border bg-[var(--map-overlay)] px-3.5 py-2.5 text-sm shadow-[var(--shadow-float)] backdrop-blur-sm sm:right-auto sm:max-w-sm">
-                <p className="font-semibold text-ink">{selectedRoute.name}</p>
-                <p className="mt-0.5 text-xs text-ink-muted">
-                  {getRouteStopSites(selectedRoute).length} mapped stops ·{" "}
-                  {selectedRoute.lengthNote}
-                </p>
-              </div>
-            ) : null}
+              {mapMounted ? (
+                <PilgrimageMap
+                  markers={mapMarkers}
+                  routePoints={
+                    routePoints && routePoints.length >= 2
+                      ? routePoints
+                      : undefined
+                  }
+                  focusPoints={focusPoints}
+                  activeSlug={selectedSiteSlug}
+                  focusKey={mapFocusKey}
+                  onSelectSite={handleSelectSite}
+                />
+              ) : null}
+              {selectedRoute && mapMounted ? (
+                <div className="absolute bottom-3 left-3 right-3 z-[1000] rounded-xl border border-border bg-[var(--map-overlay)] px-3.5 py-2.5 text-sm shadow-[var(--shadow-float)] backdrop-blur-sm sm:right-auto sm:max-w-sm">
+                  <p className="font-semibold text-ink">{selectedRoute.name}</p>
+                  <p className="mt-0.5 text-xs text-ink-muted">
+                    {getRouteStopSites(selectedRoute).length} mapped stops ·{" "}
+                    {selectedRoute.lengthNote}
+                  </p>
+                </div>
+              ) : null}
             </div>
           </div>
         </section>
@@ -586,5 +650,67 @@ export function PilgrimagePageView() {
         <MobileMapToggle />
       </div>
     </div>
+  );
+}
+
+function PilgrimageStripCard({
+  title,
+  subtitle,
+  image,
+  tradition,
+  selected,
+  onSelect,
+  href,
+}: {
+  title: string;
+  subtitle: string;
+  image: string | undefined;
+  tradition: string;
+  selected: boolean;
+  onSelect: () => void;
+  href: string;
+}) {
+  return (
+    <article
+      className={`w-[15.5rem] shrink-0 overflow-hidden rounded-2xl border bg-surface-elevated/90 ${
+        selected ? "border-brand ring-2 ring-brand/25" : "border-border"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={onSelect}
+        className="block w-full text-left"
+      >
+        <div
+          className={`relative h-24 bg-gradient-to-br ${traditionGradient(tradition)}`}
+        >
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={image}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+        </div>
+        <div className="px-2.5 py-2">
+          <h3 className="line-clamp-1 font-display text-sm font-semibold text-ink">
+            {title}
+          </h3>
+          <p className="mt-0.5 line-clamp-1 text-xs text-ink-muted">{subtitle}</p>
+        </div>
+      </button>
+      <div className="border-t border-border px-2.5 py-1.5">
+        <Link
+          href={href}
+          className="text-[11px] font-semibold text-brand hover:underline"
+        >
+          Open →
+        </Link>
+      </div>
+    </article>
   );
 }

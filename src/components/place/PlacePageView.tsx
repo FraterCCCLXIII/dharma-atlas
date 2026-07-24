@@ -7,8 +7,6 @@ import {
   ArrowSquareOut,
   Broadcast,
   Compass,
-  FlowerLotus,
-  Sparkle,
 } from "@phosphor-icons/react";
 import { DetailPageActions } from "@/components/report/ReportEntryModal";
 import { placeDisplayDescription } from "@/lib/place-description";
@@ -84,7 +82,7 @@ export function PlacePageView({
 
   return (
     <div className="bg-surface">
-      <main className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-6xl px-4 pb-6 pt-6 sm:px-6 md:pb-16 lg:px-8">
         <div className="relative mb-10">
           {showPhotoGrid ? (
             <PlacePhotoGrid
@@ -192,16 +190,6 @@ export function PlacePageView({
                   details and the map below are the best starting points for planning a visit.
                 </p>
               )}
-              <div className="flex flex-wrap gap-3 pt-2">
-                <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm">
-                  <FlowerLotus size={20} weight="duotone" className="text-brand" />
-                  <span className="text-ink-secondary">{place.tradition} tradition</span>
-                </div>
-                <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm">
-                  <Sparkle size={20} weight="duotone" className="text-accent" />
-                  <span className="text-ink-secondary">{place.type}</span>
-                </div>
-              </div>
             </section>
 
             <PlaceOfferingsSection offeringIds={place.offerings} />

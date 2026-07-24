@@ -100,6 +100,27 @@ function useDesktopLayout() {
   return isDesktop;
 }
 
+/** True while the window is actively being resized (settles after quiet period). */
+function useWindowResizing(settleMs = 160) {
+  const [resizing, setResizing] = useState(false);
+
+  useEffect(() => {
+    let timer = 0;
+    const onResize = () => {
+      setResizing(true);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setResizing(false), settleMs);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.clearTimeout(timer);
+    };
+  }, [settleMs]);
+
+  return resizing;
+}
+
 function MobileMapToggle() {
   const mobileView = useExploreStore((s) => s.mobileView);
   const setMobileView = useExploreStore((s) => s.setMobileView);
@@ -132,7 +153,7 @@ function SearchAsMapMovesControl({
   onChange: (next: boolean) => void;
 }) {
   return (
-    <label className="absolute top-3 left-1/2 z-[1100] flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-lg border border-border bg-[var(--map-overlay)] px-3 py-2 text-sm text-ink shadow-[var(--shadow-float)] backdrop-blur-sm transition hover:bg-surface-elevated">
+    <label className="absolute top-3 left-1/2 z-10 flex -translate-x-1/2 cursor-pointer items-center gap-2 rounded-lg border border-border bg-[var(--map-overlay)] px-3 py-2 text-sm text-ink shadow-[var(--shadow-float)] backdrop-blur-sm transition hover:bg-surface-elevated">
       <input
         type="checkbox"
         checked={checked}
@@ -231,12 +252,16 @@ export function ExplorePageClient() {
   const peopleLifeEra = useExploreStore((s) => s.peopleLifeEra);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
   const isDesktop = useDesktopLayout();
+  const windowResizing = useWindowResizing();
   const [searchAsMapMoves, setSearchAsMapMoves] = useState(
     readPersistedSearchAsMapMoves,
   );
   // When on, the place list filters to the current map viewport (once bounds exist).
   const syncListToMap = searchAsMapMoves;
   useExplorePlacesPersist({ searchAsMapMoves });
+  // Keep Leaflet mounted across the lg breakpoint so resize does not rebuild
+  // thousands of markers mid-drag. Cleared when leaving the locations map.
+  const [mapWarm, setMapWarm] = useState(false);
 
   const needsMarkers =
     entityFilter === "locations" ||
@@ -269,7 +294,9 @@ export function ExplorePageClient() {
 
   const filteredPlaces = useMemo(() => {
     const byFilters = filterPlaces(markers, placeFilters);
-    if (!locationFilter) return byFilters;
+    // Search-as-map-moves uses the viewport for the list; keep map pins free of
+    // the Near You / area lock so panning can reveal places outside that seed.
+    if (!locationFilter || syncListToMap) return byFilters;
     return byFilters.filter((place) =>
       placeMatchesLocationFilter(
         place.lat,
@@ -278,7 +305,7 @@ export function ExplorePageClient() {
         locationFilter,
       ),
     );
-  }, [markers, placeFilters, locationFilter]);
+  }, [markers, placeFilters, locationFilter, syncListToMap]);
 
   const directoryEntries = useMemo(
     () =>
@@ -299,9 +326,22 @@ export function ExplorePageClient() {
   );
 
   const showMap = entityFilter === "locations";
+  // Visible map pane: desktop split, or mobile map mode.
+  const mapPaneActive = showMap && (isDesktop || mobileView === "map");
   // Avoid mounting Leaflet while the map pane is hidden (mobile list). Unmounting
   // thousands of markers on soft-nav to a place page freezes the main thread.
-  const mapMounted = showMap && (isDesktop || mobileView === "map");
+  // Also defer first mount until the window resize gesture settles — crossing
+  // 1024px mid-drag otherwise mounts the full marker set and stalls layout.
+  useEffect(() => {
+    if (!showMap) {
+      setMapWarm(false);
+      return;
+    }
+    if (mapPaneActive && !windowResizing) {
+      setMapWarm(true);
+    }
+  }, [showMap, mapPaneActive, windowResizing]);
+  const mapMounted = showMap && mapWarm;
   const isPeopleBrowse = entityFilter === "people";
   const isAllBrowse = entityFilter === "all";
   const hasActiveBrowse =
@@ -422,12 +462,20 @@ export function ExplorePageClient() {
           teachers={teachers}
         />
 
-        <div className="relative flex min-h-0 min-w-0 flex-1">
+        <div
+          className={`relative flex min-h-0 min-w-0 flex-1 ${
+            showMap && mobileView === "map" ? "flex-col lg:flex-row" : ""
+          }`}
+        >
           <section
-            className={`flex min-h-0 w-full flex-col ${
-              showMap ? "lg:w-[52%] xl:w-[48%]" : ""
+            className={`min-h-0 w-full flex-col ${
+              showMap
+                ? "lg:relative lg:order-none lg:flex lg:w-[52%] xl:w-[48%]"
+                : "flex"
             } ${
-              showMap && mobileView === "map" ? "hidden lg:flex" : "flex"
+              showMap && mobileView === "map"
+                ? "order-2 flex shrink-0 px-3 sm:px-4 lg:order-none lg:min-h-0 lg:flex-1 lg:px-0"
+                : "flex"
             }`}
           >
             {listContent}
@@ -435,15 +483,15 @@ export function ExplorePageClient() {
 
           <section
             aria-hidden={!showMap || !mapMounted}
-            className={`relative z-0 min-h-0 flex-1 p-3 sm:p-4 lg:p-5 ${
+            className={`relative z-0 min-h-0 ${
               !showMap
                 ? "hidden"
                 : mobileView === "list"
-                  ? "hidden lg:block"
-                  : "block"
+                  ? "hidden lg:block lg:flex-1 lg:p-5"
+                  : "order-1 flex min-h-0 flex-1 flex-col p-3 pb-0 sm:p-4 sm:pb-0 lg:order-none lg:p-5"
             }`}
           >
-            <div className="relative h-full" data-map-shell>
+            <div className="relative min-h-0 flex-1" data-map-shell>
               <div className="map-panel absolute inset-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
                 {mapMounted ? (
                   markersLoading ? (

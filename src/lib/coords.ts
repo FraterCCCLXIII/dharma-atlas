@@ -24,16 +24,66 @@ export function toLatLng(lat: unknown, lng: unknown): [number, number] | null {
 }
 
 /**
- * How many world copies to paint on each side of the primary (−180…180) map.
+ * Max world copies on each side of the viewport center.
  * Leaflet tiles wrap indefinitely; markers do not, so we clone at ±360° steps.
  */
 export const WORLD_WRAP_SIDE_COUNT = 3;
 
-/** Longitude offsets: …, -720, -360, 0, 360, 720, … */
+/**
+ * Static full set around the primary meridian (legacy / max span).
+ * Prefer {@link worldLngOffsetsForBounds} so maps only clone worlds in view.
+ */
 export const WORLD_LNG_OFFSETS: readonly number[] = Array.from(
   { length: WORLD_WRAP_SIDE_COUNT * 2 + 1 },
   (_, i) => (i - WORLD_WRAP_SIDE_COUNT) * 360,
 );
+
+/**
+ * Longitude offsets whose world copies overlap the current viewport.
+ *
+ * Place lngs live in −180…180; a copy at `lng + k·360` covers
+ * `[k·360 − 180, k·360 + 180]`. We only return the `k·360` values that
+ * intersect the padded bounds so markers are not cloned until the user
+ * pans toward (or into) that world.
+ */
+export function worldLngOffsetsForBounds(
+  west: number,
+  east: number,
+  options?: { padDeg?: number; maxSideCount?: number },
+): number[] {
+  if (!Number.isFinite(west) || !Number.isFinite(east) || east < west) {
+    return [0];
+  }
+
+  const padDeg = options?.padDeg ?? 45;
+  const maxSide = options?.maxSideCount ?? WORLD_WRAP_SIDE_COUNT;
+  const lo = west - padDeg;
+  const hi = east + padDeg;
+
+  // World k overlaps [lo, hi] iff k·360 − 180 < hi and k·360 + 180 > lo.
+  let kStart = Math.ceil((lo - 180) / 360 - 1e-9);
+  let kEnd = Math.floor((hi + 180) / 360 + 1e-9);
+
+  const centerK = Math.round((west + east) / 2 / 360);
+  kStart = Math.max(kStart, centerK - maxSide);
+  kEnd = Math.min(kEnd, centerK + maxSide);
+
+  if (kEnd < kStart) return [centerK * 360];
+
+  const offsets: number[] = [];
+  for (let k = kStart; k <= kEnd; k++) {
+    offsets.push(k * 360);
+  }
+  return offsets;
+}
+
+export function sameLngOffsets(
+  a: readonly number[],
+  b: readonly number[],
+): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((value, index) => value === b[index]);
+}
 
 export type MapBounds = {
   north: number;
