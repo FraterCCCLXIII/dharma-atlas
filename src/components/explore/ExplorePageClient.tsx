@@ -28,6 +28,7 @@ import { LoadingScreen } from "@/components/layout/LoadingScreen";
 import {
   MAP_SPLIT_PANE_DESKTOP,
   MAP_SPLIT_PANE_MOBILE,
+  MAP_SPLIT_SHELL,
 } from "@/lib/map-shell-layout";
 import { AllFeaturePage } from "./AllFeaturePage";
 import { DirectoryList } from "./DirectoryList";
@@ -629,13 +630,13 @@ export function ExplorePageClient() {
           }`}
         >
           <section
-            className={`min-h-0 w-full flex-col ${
+            className={`min-h-0 min-w-0 w-full flex-col ${
               showMap
-                ? "lg:relative lg:order-none lg:flex lg:w-[52%] xl:w-[48%]"
+                ? "lg:relative lg:order-none lg:flex lg:w-[52%] lg:max-w-[52%] lg:shrink-0 xl:w-[48%] xl:max-w-[48%]"
                 : "flex"
             } ${
               showMap && mobileView === "map"
-                ? "order-2 flex shrink-0 px-3 sm:px-4 lg:order-none lg:min-h-0 lg:flex-1 lg:px-0"
+                ? "order-2 flex shrink-0 px-3 sm:px-4 lg:order-none lg:min-h-0 lg:max-w-none lg:flex-1 lg:px-0"
                 : "flex"
             }`}
           >
@@ -644,15 +645,15 @@ export function ExplorePageClient() {
 
           <section
             aria-hidden={!showMap || !mapMounted}
-            className={`relative z-0 min-h-0 ${
+            className={
               !showMap
                 ? "hidden"
                 : mobileView === "list"
                   ? MAP_SPLIT_PANE_DESKTOP
                   : MAP_SPLIT_PANE_MOBILE
-            }`}
+            }
           >
-            <div className="relative min-h-0 flex-1" data-map-shell>
+            <div className={MAP_SPLIT_SHELL} data-map-shell>
               <div className="map-panel absolute inset-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
                 {/* Mount the map immediately so bounds exist for pin fetches. */}
                 {mapMounted ? <PlaceMap places={mapPins} /> : null}

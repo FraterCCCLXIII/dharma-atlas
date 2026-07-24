@@ -6502,8 +6502,13 @@ export function getPilgrimageRoute(slug: string): PilgrimageRoute | undefined {
   return PILGRIMAGE_ROUTES.find((route) => route.slug === slug);
 }
 
+/**
+ * Public URL for a pilgrimage location. Seeded sites share this slug with the
+ * directory place row, so we link straight to `/place/[slug]`. Legacy
+ * `/pilgrimage/sites/[slug]` URLs still redirect when a place exists.
+ */
 export function pilgrimageSitePath(slug: string): string {
-  return `/pilgrimage/sites/${slug}`;
+  return `/place/${slug}`;
 }
 
 export function pilgrimageRoutePath(slug: string): string {

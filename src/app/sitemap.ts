@@ -1,9 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllTraditionArticleSlugs } from "@/content/traditions";
-import {
-  getAllPilgrimageRouteSlugs,
-  getAllPilgrimageSiteSlugs,
-} from "@/data/pilgrimage";
+import { getAllPilgrimageRouteSlugs } from "@/data/pilgrimage";
 import { getAllPlaceSlugs } from "@/lib/data/places";
 import { getAllTeacherSlugs } from "@/lib/data/teachers";
 import { SHOW_PILGRIMAGE, SHOW_TRADITIONS } from "@/lib/feature-flags";
@@ -20,10 +17,10 @@ function staticSitemapEntries(): MetadataRoute.Sitemap {
       ]
     : [];
 
+  // Locations are directory places (`/place/[slug]`); only list routes here.
   const pilgrimageRoutes = SHOW_PILGRIMAGE
     ? [
         "/pilgrimage",
-        ...getAllPilgrimageSiteSlugs().map((slug) => `/pilgrimage/sites/${slug}`),
         ...getAllPilgrimageRouteSlugs().map(
           (slug) => `/pilgrimage/routes/${slug}`,
         ),

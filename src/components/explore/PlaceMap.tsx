@@ -19,6 +19,10 @@ import {
 } from "@/lib/map-markers";
 import { MapPopupPaneHost } from "@/components/map/MapPopupPaneHost";
 import {
+  MAP_RESIZE_SETTLE_MS,
+  MapResizeSettle,
+} from "@/components/map/MapResizeSettle";
+import {
   cancelHoverClose,
   isLatLngInMapContainer,
   MAP_HOVER_POPUP_OPTIONS,
@@ -451,36 +455,6 @@ function ExploreMapPins({ places }: { places: MapPlace[] }) {
       )}
     </>
   );
-}
-
-/** Settle window / container resizes before invalidateSize — per-frame work freezes Places. */
-const MAP_RESIZE_SETTLE_MS = 160;
-
-function MapResizeSettle() {
-  const map = useMap();
-
-  useEffect(() => {
-    let timer = 0;
-    const settle = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        map.invalidateSize({ debounceMoveend: true, animate: false });
-      }, MAP_RESIZE_SETTLE_MS);
-    };
-
-    // trackResize is off on MapContainer; we own size sync with a settle delay.
-    window.addEventListener("resize", settle);
-    const observer = new ResizeObserver(settle);
-    observer.observe(map.getContainer());
-
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("resize", settle);
-      observer.disconnect();
-    };
-  }, [map]);
-
-  return null;
 }
 
 function MapBoundsSync() {

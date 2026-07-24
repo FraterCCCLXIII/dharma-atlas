@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { PilgrimageSiteView } from "@/components/pilgrimage/PilgrimageSiteView";
-import {
-  getAllPilgrimageSiteSlugs,
-  getPilgrimageSite,
-} from "@/data/pilgrimage";
+import { getPilgrimageSite } from "@/data/pilgrimage";
 import { getPlaceByPilgrimageSlug } from "@/lib/data/pilgrimage-routes";
 import { placeProfilePath } from "@/lib/explore-routes";
 import { SHOW_PILGRIMAGE } from "@/lib/feature-flags";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  if (!SHOW_PILGRIMAGE) return [];
-  return getAllPilgrimageSiteSlugs().map((slug) => ({ slug }));
-}
+/** Must run per-request — build-time static HTML baked redirects before places were seeded. */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!SHOW_PILGRIMAGE) return {};

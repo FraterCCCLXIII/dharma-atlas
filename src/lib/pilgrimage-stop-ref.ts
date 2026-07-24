@@ -67,7 +67,7 @@ export function routeStopFromSite(site: PilgrimageSite): RouteStopPoint {
     lng: site.lng,
     detail: site.country,
     image: getPilgrimageImage(site.slug),
-    href: `/pilgrimage/sites/${site.slug}`,
+    href: `/place/${site.slug}`,
   };
 }
 

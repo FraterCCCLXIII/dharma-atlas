@@ -16,6 +16,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import type { PilgrimageSite } from "@/data/pilgrimage";
 import { hasValidCoords } from "@/lib/coords";
 import { MapPopupPaneHost } from "@/components/map/MapPopupPaneHost";
+import { MapResizeSettle } from "@/components/map/MapResizeSettle";
 import {
   cancelHoverClose,
   MAP_HOVER_POPUP_OPTIONS,
@@ -251,12 +252,14 @@ export function PilgrimageMap({
       className="h-full min-h-[320px] w-full"
       scrollWheelZoom
       closePopupOnClick={false}
+      trackResize={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapPopupPaneHost />
+      <MapResizeSettle />
       <FitToPoints points={fitPoints} focusKey={focusKey} />
       {routePoints && routePoints.length >= 2 ? (
         <Polyline
