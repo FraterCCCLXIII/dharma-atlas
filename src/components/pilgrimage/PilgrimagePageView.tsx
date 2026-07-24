@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ListBullets,
@@ -31,7 +31,11 @@ import {
   usePilgrimageActiveFilterCount,
   usePilgrimageStore,
 } from "@/store/pilgrimage-store";
-import { MobileMapResultsPanel } from "@/components/explore/MobileMapResultsPanel";
+import { ListPagination } from "@/components/explore/ListPagination";
+import {
+  MobileMapPagination,
+  MobileMapResultsPanel,
+} from "@/components/explore/MobileMapResultsPanel";
 import {
   MAP_SPLIT_PANE_DESKTOP,
   MAP_SPLIT_PANE_MOBILE,
@@ -45,6 +49,8 @@ const PilgrimageMap = dynamic(
   () => import("./PilgrimageMap").then((m) => m.PilgrimageMap),
   { ssr: false },
 );
+
+const PAGE_SIZE = 20;
 
 function useDesktopLayout() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -324,6 +330,8 @@ function MobileMapToggle() {
 
 export function PilgrimagePageView() {
   const isDesktop = useDesktopLayout();
+  const listScrollRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(1);
   const filtersOpen = usePilgrimageStore((s) => s.filtersOpen);
   const setFiltersOpen = usePilgrimageStore((s) => s.setFiltersOpen);
   const view = usePilgrimageStore((s) => s.view);
@@ -360,6 +368,11 @@ export function PilgrimagePageView() {
       ),
     [regions, traditions, normalizedQuery],
   );
+
+  // Reset list page when the result set identity changes.
+  useEffect(() => {
+    setPage(1);
+  }, [view, regions, traditions, normalizedQuery]);
 
   const selectedRoute = useMemo(
     () => routes.find((route) => route.slug === selectedRouteSlug) ?? null,
@@ -427,9 +440,22 @@ export function PilgrimagePageView() {
   }, [selectedRoute, selectedSiteSlug, sites]);
 
   const entries = view === "site" ? sites : routes;
-  const total =
+  const filteredTotal = entries.length;
+  const catalogTotal =
     view === "site" ? PILGRIMAGE_SITES.length : PILGRIMAGE_ROUTES.length;
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const pageStart = (safePage - 1) * PAGE_SIZE;
+  const pageEnd = Math.min(pageStart + PAGE_SIZE, filteredTotal);
+  const pagedSites = sites.slice(pageStart, pageStart + PAGE_SIZE);
+  const pagedRoutes = routes.slice(pageStart, pageStart + PAGE_SIZE);
   const mapMounted = isDesktop || mobileView === "map";
+
+  const goToPage = (nextPage: number) => {
+    const clamped = Math.min(Math.max(1, nextPage), totalPages);
+    setPage(clamped);
+    listScrollRef.current?.scrollTo({ top: 0 });
+  };
 
   const handleSelectSite = (slug: string) => {
     selectSite(slug);
@@ -518,16 +544,24 @@ export function PilgrimagePageView() {
           {mapStrip ? (
             <MobileMapResultsPanel
               leading={kindToggle}
+              trailing={
+                <MobileMapPagination
+                  page={safePage}
+                  totalPages={totalPages}
+                  onPageChange={goToPage}
+                />
+              }
+              resetScrollKey={`${view}:${safePage}`}
               empty={
-                entries.length === 0
+                filteredTotal === 0
                   ? `No ${view === "site" ? "sites" : "routes"} match these filters.`
                   : undefined
               }
             >
-              {entries.length === 0
+              {filteredTotal === 0
                 ? null
                 : view === "site"
-                  ? sites.map((site) => (
+                  ? pagedSites.map((site) => (
                       <PilgrimageStripCard
                         key={site.slug}
                         title={site.name}
@@ -539,7 +573,7 @@ export function PilgrimagePageView() {
                         href={pilgrimageSitePath(site.slug)}
                       />
                     ))
-                  : routes.map((route) => (
+                  : pagedRoutes.map((route) => (
                       <PilgrimageStripCard
                         key={route.slug}
                         title={route.name}
@@ -553,7 +587,7 @@ export function PilgrimagePageView() {
                     ))}
             </MobileMapResultsPanel>
           ) : (
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div ref={listScrollRef} className="min-h-0 flex-1 overflow-y-auto">
               <div className="px-4 pb-20 pt-8 sm:px-6 lg:px-8">
                 <div className="max-w-2xl">
                   <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
@@ -573,7 +607,9 @@ export function PilgrimagePageView() {
                 {kindToggle}
 
                 <p className="mt-4 text-sm text-ink-muted">
-                  Showing {entries.length} of {total}
+                  {filteredTotal === 0
+                    ? `Showing 0 of ${catalogTotal}`
+                    : `Showing ${pageStart + 1}–${pageEnd} of ${filteredTotal}`}
                   {activeFilterCount > 0
                     ? " matching filters"
                     : view === "site"
@@ -582,33 +618,49 @@ export function PilgrimagePageView() {
                   {selectedRoute ? ` · ${selectedRoute.name} on map` : ""}
                 </p>
 
-                {entries.length === 0 ? (
+                {filteredTotal === 0 ? (
                   <p className="mt-12 text-sm text-ink-secondary">
                     No {view === "site" ? "locations" : "routes"} match these
                     filters. Try clearing a region or tradition.
                   </p>
                 ) : view === "site" ? (
-                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                    {sites.map((site) => (
-                      <SiteCard
-                        key={site.slug}
-                        site={site}
-                        selected={selectedSiteSlug === site.slug}
-                        onSelect={() => handleSelectSite(site.slug)}
-                      />
-                    ))}
-                  </ul>
+                  <>
+                    <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                      {pagedSites.map((site) => (
+                        <SiteCard
+                          key={site.slug}
+                          site={site}
+                          selected={selectedSiteSlug === site.slug}
+                          onSelect={() => handleSelectSite(site.slug)}
+                        />
+                      ))}
+                    </ul>
+                    <ListPagination
+                      page={safePage}
+                      totalPages={totalPages}
+                      onPageChange={goToPage}
+                      label="Locations pagination"
+                    />
+                  </>
                 ) : (
-                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                    {routes.map((route) => (
-                      <RouteCard
-                        key={route.slug}
-                        route={route}
-                        selected={selectedRouteSlug === route.slug}
-                        onSelect={() => handleSelectRoute(route.slug)}
-                      />
-                    ))}
-                  </ul>
+                  <>
+                    <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                      {pagedRoutes.map((route) => (
+                        <RouteCard
+                          key={route.slug}
+                          route={route}
+                          selected={selectedRouteSlug === route.slug}
+                          onSelect={() => handleSelectRoute(route.slug)}
+                        />
+                      ))}
+                    </ul>
+                    <ListPagination
+                      page={safePage}
+                      totalPages={totalPages}
+                      onPageChange={goToPage}
+                      label="Routes pagination"
+                    />
+                  </>
                 )}
               </div>
             </div>
