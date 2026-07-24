@@ -77,6 +77,7 @@ export function PlaceList({
   const requestIdRef = useRef(0);
   const prevFilterKeyRef = useRef<string | null>(null);
   const prevMapBoundsKeyRef = useRef<string | null>(null);
+  const prevIntentKeyRef = useRef<string | null>(null);
   const [page, setPage] = useState(1);
   const [places, setPlaces] = useState<PlaceMarker[]>([]);
   const [total, setTotal] = useState(0);
@@ -180,13 +181,20 @@ export function PlaceList({
 
     // Initial state is loading; later refetches keep prior cards visible.
     setError(null);
-    setPageFetching(true);
 
     // Debounce map-pan / search typing only. Page changes must fetch immediately —
     // otherwise the rail shows the new page while stale cards linger, and a
     // completed older response can win the race and look like pagination failed.
+    const intentKey = `${filterKey}|${safePage}`;
+    const intentChanged = prevIntentKeyRef.current !== intentKey;
     const boundsChanged = prevMapBoundsKeyRef.current !== mapBoundsKey;
+    prevIntentKeyRef.current = intentKey;
     prevMapBoundsKeyRef.current = mapBoundsKey;
+    // Dim only for page/filter changes — map-bounds sync (nav height, pan) must
+    // not flash the list transparent.
+    if (intentChanged) {
+      setPageFetching(true);
+    }
     const delayMs = query.trim() ? 200 : boundsChanged && mapBoundsKey ? 150 : 0;
 
     const timer = window.setTimeout(() => {

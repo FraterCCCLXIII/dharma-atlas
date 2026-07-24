@@ -489,7 +489,10 @@ function MapBoundsSync() {
   }, [map, setMapBounds, setMapView]);
 
   useEffect(() => {
-    const onWindowResize = () => {
+    // Window resize and shell layout (header height via --site-header-height)
+    // both change the map pane without a user pan. Suppress moveend churn
+    // until the size settles, then report once.
+    const onLayoutResize = () => {
       resizingRef.current = true;
       window.clearTimeout(resizeTimerRef.current);
       resizeTimerRef.current = window.setTimeout(() => {
@@ -501,12 +504,15 @@ function MapBoundsSync() {
     map.whenReady(reportBounds);
     map.on("moveend", reportBounds);
     map.on("zoomend", reportBounds);
-    window.addEventListener("resize", onWindowResize);
+    window.addEventListener("resize", onLayoutResize);
+    const observer = new ResizeObserver(onLayoutResize);
+    observer.observe(map.getContainer());
 
     return () => {
       map.off("moveend", reportBounds);
       map.off("zoomend", reportBounds);
-      window.removeEventListener("resize", onWindowResize);
+      window.removeEventListener("resize", onLayoutResize);
+      observer.disconnect();
       window.clearTimeout(resizeTimerRef.current);
       lastKeyRef.current = null;
       setMapBounds(null);

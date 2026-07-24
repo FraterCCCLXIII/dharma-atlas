@@ -13077,5 +13077,385 @@
     "lat": null,
     "lng": null,
     "failed": true
+  },
+  "4144 campus ave, san diego, ca 92103, usa": {
+    "lat": 32.753306,
+    "lng": -117.148918,
+    "display": "4144, Campus Avenue, University Heights, Hillcrest, San Diego, San Diego County, California, 92103, United States"
+  },
+  "4536 park blvd, san diego, ca 92116, usa": {
+    "lat": 32.759816,
+    "lng": -117.146356,
+    "display": "4536, Park Boulevard, University Heights, Mission Valley, San Diego, San Diego County, California, 92116, United States"
+  },
+  "2929 market st, san diego, ca 92102, usa": {
+    "lat": 32.711266,
+    "lng": -117.131589,
+    "display": "2929, Market Street, Stockton, Golden Hill, San Diego, San Diego County, California, 92102, United States"
+  },
+  "2727 highland ave, national city, ca 91950, usa": {
+    "lat": 32.661205,
+    "lng": -117.092022,
+    "display": "2727, Highland Avenue, National City, San Diego County, California, 91950, United States"
+  },
+  "3072 first ave, san diego, ca 92103, usa": {
+    "lat": 32.71093,
+    "lng": -117.163773,
+    "display": "1st Avenue, Banker's Hill, San Diego, San Diego County, California, 92101, United States"
+  },
+  "5059 newport ave ste 303, san diego, ca 92107, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "dharma center of trikaya buddhism, 5059 newport ave ste 303, san diego, ca 92107": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "3502 adams ave, san diego, ca 92116, usa": {
+    "lat": 32.763402,
+    "lng": -117.117102,
+    "display": "3502, Adams Avenue, Normal Heights, North Park, San Diego, San Diego County, California, 92116, United States"
+  },
+  "3340-3342 central ave, san diego, ca 92105, usa": {
+    "lat": 32.73773,
+    "lng": -117.108312,
+    "display": "Central Avenue, Castle, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "6691 manning st, san diego, ca 92111, usa": {
+    "lat": 32.788026,
+    "lng": -117.175215,
+    "display": "6691, Manning Street, Linda Vista, San Diego, San Diego County, California, 92111, United States"
+  },
+  "2499 melru ln, escondido, ca 92026, usa": {
+    "lat": 33.186835,
+    "lng": -117.073679,
+    "display": "Deer Park Monastery, 2499, Melru Lane, Escondido, San Diego County, California, 92026, United States"
+  },
+  "13560 muutama ln, valley center, ca 92082, usa": {
+    "lat": 33.326218,
+    "lng": -117.035326,
+    "display": "Wat Metta Wan, 13560, Muutama Lane, Valley Center, San Diego County, California, 92082, United States"
+  },
+  "4333 30th st, san diego, ca 92104, usa": {
+    "lat": 32.756143,
+    "lng": -117.129862,
+    "display": "Ch\u00f9a Ph\u1eadt \u0110\u00e0, 4333, 30th Street, North Park, San Diego, San Diego County, California, 92104, United States"
+  },
+  "726 44th st, san diego, ca 92102, usa": {
+    "lat": 32.713147,
+    "lng": -117.100388,
+    "display": "Wat Lao Buddharam, 726, 44th Street, Mount Hope, San Diego, San Diego County, California, 92102, United States"
+  },
+  "5174 rex ave, san diego, ca 92105, usa": {
+    "lat": 32.748323,
+    "lng": -117.084192,
+    "display": "5174, Rex Avenue, Little Mogadishu, Colina Park, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "205 s 65th st, san diego, ca 92114, usa": {
+    "lat": 32.703091,
+    "lng": -117.057387,
+    "display": "205, South 65th Street, Alta Vista, O'Farrell, Encanto, San Diego, San Diego County, California, 92114, United States"
+  },
+  "2508-2518 adams ave, san diego, ca 92116, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "sri chinmoy peace garden, 2508-2518 adams ave, san diego, ca 92116": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "4411 30th st #103, san diego, ca 92116, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "san diego meditation, 4411 30th st #103, san diego, ca 92116": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "215 w k st, encinitas, ca 92024, usa": {
+    "lat": 33.036368,
+    "lng": -117.293578,
+    "display": "215, West K Street, Cardiff-by-the-Sea, Encinitas, San Diego County, California, 92024, United States"
+  },
+  "7969 engineer rd #204, san diego, ca 92111, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "buddhist meditation center, 7969 engineer rd #204, san diego, ca 92111": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "3606 47th st, san diego, ca 92105, usa": {
+    "lat": 32.744172,
+    "lng": -117.094387,
+    "display": "3606, 47th Street, Islenair, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "3394 linda vista dr, san marcos, ca 92078, usa": {
+    "lat": 33.140959,
+    "lng": -117.215978,
+    "display": "3394, Linda Vista Drive, Rancho Vallecitos Estates, San Marcos, San Diego County, California, 92078, United States"
+  },
+  "11828 johnson lake rd, lakeside, ca 92040, usa": {
+    "lat": 32.897292,
+    "lng": -116.937221,
+    "display": "11828, Johnson Lake Road, Lakeside, San Diego County, California, 92040, United States"
+  },
+  "4538 university ave, san diego, ca 92105, usa": {
+    "lat": 32.749827,
+    "lng": -117.096748,
+    "display": "4538, University Avenue, Teralta East, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "2047 felspar st, san diego, ca 92109, usa": {
+    "lat": 32.802447,
+    "lng": -117.232908,
+    "display": "2047, Felspar Street, Pacific Beach, San Diego, San Diego County, California, 92109, United States"
+  },
+  "1531 tyler ave, san diego, ca 92103, usa": {
+    "lat": 32.753394,
+    "lng": -117.148987,
+    "display": "1531, Tyler Avenue, University Heights, Hillcrest, San Diego, San Diego County, California, 92103, United States"
+  },
+  "4710 ruffner st suite c, san diego, ca 92111, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "the meditation nook, 4710 ruffner st suite c, san diego, ca 92111": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "466 e st, chula vista, ca 91910, usa": {
+    "lat": 32.642594,
+    "lng": -117.087897,
+    "display": "466, E Street, Chula Vista, San Diego County, California, 91910, United States"
+  },
+  "1440 upas st, san diego, ca 92103, usa": {
+    "lat": 32.741378,
+    "lng": -117.150344,
+    "display": "1440, Upas Street, Hillcrest, San Diego, San Diego County, California, 92103, United States"
+  },
+  "4190 front st, san diego, ca 92103, usa": {
+    "lat": 32.753466,
+    "lng": -117.166309,
+    "display": "First Unitarian Universalist Church of San Diego, 4190, Front Street, Uptown Medical Complex, Hillcrest, San Diego, San Diego County, California, 92103, United States"
+  },
+  "715 vista ave, escondido, ca 92026, usa": {
+    "lat": 33.153173,
+    "lng": -117.083627,
+    "display": "Tu Vi\u1ec7n Ph\u00e1p V\u01b0\u01a1ng, 715, Vista Avenue, Escondido, San Diego County, California, 92026, United States"
+  },
+  "8617 fanita dr, santee, ca 92071, usa": {
+    "lat": 32.831605,
+    "lng": -117.000164,
+    "display": "8617, Fanita Drive, Santee, San Diego County, California, 92071, United States"
+  },
+  "6326 camino del rey, bonsall, ca 92003, usa": {
+    "lat": 33.284249,
+    "lng": -117.196382,
+    "display": "6326, Camino del Rey, Bonsall, San Diego County, California, 92003, United States"
+  },
+  "3636 fourth ave #310, san diego, ca 92103, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "transcendental meditation, 3636 fourth ave #310, san diego, ca 92103": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "3876 50th st, san diego, ca 92105, usa": {
+    "lat": 32.748903,
+    "lng": -117.087329,
+    "display": "Chinese Friendship Association;\u83ef\u4eba\u806f\u8abc\u6703, 3876, 50th Street, Little Mogadishu, Fox Canyon, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "5754 pacific center blvd #202, san diego, ca 92121, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "buddhist tzu chi foundation, 5754 pacific center blvd #202, san diego, ca 92121": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "3910 el cajon blvd, san diego, ca 92105, usa": {
+    "lat": 32.755265,
+    "lng": -117.110123,
+    "display": "3910, El Cajon Boulevard, Normal Heights, Teralta West, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "escondido, ca 92026, usa": {
+    "lat": 33.121675,
+    "lng": -117.081485,
+    "display": "Escondido, San Diego County, California, United States"
+  },
+  "9560 w lilac rd, escondido, ca 92026, usa": {
+    "lat": 33.296,
+    "lng": -117.124278,
+    "display": "9560, West Lilac Road, Escondido, San Diego County, California, 92026, United States"
+  },
+  "3681 roselawn ave, san diego, ca 92105, usa": {
+    "lat": 32.745527,
+    "lng": -117.092917,
+    "display": "3681, Roselawn Avenue, Fox Canyon, City Heights, San Diego, San Diego County, California, 92105, United States"
+  },
+  "2504 comstock st, san diego, ca 92111, usa": {
+    "lat": 32.78846,
+    "lng": -117.175002,
+    "display": "2504, Comstock Street, Linda Vista, San Diego, San Diego County, California, 92111, United States"
+  },
+  "939 2nd st, encinitas, ca 92024, usa": {
+    "lat": 33.049754,
+    "lng": -117.295327,
+    "display": "2nd Street, Encinitas, San Diego County, California, 92924, United States"
+  },
+  "9252 miramar rd #6, san diego, ca 92126, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "shirdi sai baba spiritual center, 9252 miramar rd #6, san diego, ca 92126": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "31130 chihuahua valley rd, warner springs, ca 92086, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "lieu quan meditation center, 31130 chihuahua valley rd, warner springs, ca 92086": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "16315 pomerado rd suite b, poway, ca 92064, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "vedic cultural and spiritual center of san diego, 16315 pomerado rd suite b, poway, ca 92064": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "9863 pacific heights blvd, san diego, ca 92121, usa": {
+    "lat": 32.89948,
+    "lng": -117.188909,
+    "display": "9863, Pacific Heights Boulevard, Sorrento Mesa, San Diego, San Diego County, California, 92121, United States"
+  },
+  "2626 sarver ln, san marcos, ca 92069, usa": {
+    "lat": 33.19754,
+    "lng": -117.151033,
+    "display": "2626, Sarver Lane, Twin Oaks, San Marcos, San Diego County, California, 92069, United States"
+  },
+  "150 cedar rd # b, vista, ca 92083, usa": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "vista buddhist temple, 150 cedar rd # b, vista, ca 92083": {
+    "lat": null,
+    "lng": null,
+    "failed": true
+  },
+  "1600 sheridan pl, escondido, ca 92027, usa": {
+    "lat": 33.155738,
+    "lng": -117.070513,
+    "display": "1600, Sheridan Place, Escondido, San Diego County, California, 92027, United States"
+  },
+  "5590 rainbow creek rd, fallbrook, ca 92028, usa": {
+    "lat": 33.42169,
+    "lng": -117.140233,
+    "display": "5590, Rainbow Creek Road, Fallbrook, San Diego County, California, 92028, United States"
+  },
+  "1036 grand ave, san diego, ca 92109, usa": {
+    "lat": 32.795892,
+    "lng": -117.250455,
+    "display": "1036, Grand Avenue, Pacific Beach, San Diego, San Diego County, California, 92109, United States"
+  },
+  "2115 montiel rd, san marcos, ca 92069, usa": {
+    "lat": 33.132252,
+    "lng": -117.11772,
+    "display": "2115, Montiel Road, San Marcos, San Diego County, California, 92069, United States"
+  },
+  "1030 grand ave, san diego, ca 92109, usa": {
+    "lat": 32.795963,
+    "lng": -117.25068,
+    "display": "1030, Grand Avenue, Pacific Beach, San Diego, San Diego County, California, 92109, United States"
+  },
+  "6000 university ave, san diego, ca 92115, usa": {
+    "lat": 32.751723,
+    "lng": -117.066601,
+    "display": "6000, University Avenue, Darnall, Mid-City, San Diego, San Diego County, California, 92115, United States"
+  },
+  "4710 ruffner street, san diego, ca 92111": {
+    "lat": 32.827755,
+    "lng": -117.158525,
+    "display": "4710, Ruffner Street, Convoy District, Kearny Mesa, San Diego, San Diego County, California, 92111, United States"
+  },
+  "7969 engineer road, san diego, ca 92111": {
+    "lat": 32.825568,
+    "lng": -117.152267,
+    "display": "7969, Engineer Road, Convoy District, Kearny Mesa, San Diego, San Diego County, California, 92111, United States"
+  },
+  "9252 miramar road, san diego, ca 92126": {
+    "lat": 32.894519,
+    "lng": -117.128763,
+    "display": "Rasraj, 9252, Miramar Road, Little India, San Diego, San Diego County, California, 92126, United States"
+  },
+  "3636 4th avenue, san diego, ca 92103": {
+    "lat": 32.743966,
+    "lng": -117.161897,
+    "display": "3636, 4th Avenue, Uptown Medical Complex, Hillcrest, San Diego, San Diego County, California, 92103, United States"
+  },
+  "939 2nd street, encinitas, ca 92024": {
+    "lat": 33.049754,
+    "lng": -117.295327,
+    "display": "2nd Street, Encinitas, San Diego County, California, 92924, United States"
+  },
+  "16315 pomerado road, poway, ca 92064": {
+    "lat": 32.949966,
+    "lng": -117.062548,
+    "display": "Pomerado Road, Poway, San Diego County, California, 92064, United States"
+  },
+  "2508 adams ave, san diego, ca 92116": {
+    "lat": 32.762946,
+    "lng": -117.137374,
+    "display": "2508, Adams Avenue, University Heights, North Park, San Diego, San Diego County, California, 92116, United States"
+  },
+  "150 cedar road, vista, ca 92083": {
+    "lat": 33.187646,
+    "lng": -117.284502,
+    "display": "J.A.C.C. Vista Japanese School, 150, Cedar Road, Vista, San Diego County, California, 92083, United States"
+  },
+  "31130 chihuahua valley road, warner springs, ca 92086": {
+    "lat": 33.376415,
+    "lng": -116.650327,
+    "display": "Horse Camp of Chihuahua Valley"
+  },
+  "4411 30th street, san diego, ca 92116": {
+    "lat": 32.757513,
+    "lng": -117.12988,
+    "display": "4411, 30th Street, North Park, San Diego, San Diego County, California, 92116, United States"
+  },
+  "5754 pacific center boulevard, san diego, ca 92121": {
+    "lat": 32.904513,
+    "lng": -117.19892,
+    "display": "5754, Pacific Center Boulevard, Sorrento Mesa, Sorrento Valley, San Diego, San Diego County, California, 92121, United States"
+  },
+  "5059 newport ave, san diego, ca 92107": {
+    "lat": 32.747355,
+    "lng": -117.252155,
+    "display": "BK Printing, 5059, Newport Avenue, Ocean Beach, San Diego, San Diego County, California, 92017, United States"
   }
 }

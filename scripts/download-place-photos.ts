@@ -31,6 +31,8 @@ const DRY_RUN = args.includes("--dry-run");
 const FORCE = args.includes("--force");
 const limitArg = args.find((a) => a.startsWith("--limit="));
 const LIMIT = limitArg ? Number(limitArg.split("=")[1]) : 0;
+const idsFileArg = args.find((a) => a.startsWith("--ids-file="));
+const IDS_FILE = idsFileArg ? idsFileArg.slice("--ids-file=".length) : "";
 
 const EXT_BY_TYPE: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -101,9 +103,18 @@ async function main() {
   }
 
   const dataset = JSON.parse(readFileSync(PLACES_JSON, "utf8")) as PlacesDataset;
+  const idFilter = IDS_FILE
+    ? new Set(
+        readFileSync(IDS_FILE, "utf8")
+          .split(/\r?\n/)
+          .map((line) => line.trim())
+          .filter(Boolean),
+      )
+    : null;
   let targets = dataset.places.filter(
     (p) => needsPlacePhotoReplacement(p.photo) || isGeneratedPlacePhoto(p.photo, p.photoSource) || FORCE,
   );
+  if (idFilter) targets = targets.filter((p) => idFilter.has(p.id));
   if (LIMIT > 0) targets = targets.slice(0, LIMIT);
 
   console.log(
