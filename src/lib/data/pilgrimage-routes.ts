@@ -5,6 +5,8 @@ import {
   pilgrimageRoutes,
   places,
 } from "@/db/schema";
+import { getPilgrimageImage } from "@/data/pilgrimage";
+import { firstDescriptionLine } from "@/lib/text-preview";
 import { rowToPlace } from "@/lib/place-row";
 import type { Place } from "@/types/place";
 
@@ -13,6 +15,10 @@ export type PlacePilgrimageRouteRef = {
   name: string;
   region: string;
   tradition: string;
+  summary: string;
+  /** One-line preview from summary/description. */
+  blurb: string;
+  image?: string;
 };
 
 function isMissingPilgrimageSchema(error: unknown): boolean {
@@ -29,12 +35,13 @@ export async function getPilgrimageRoutesForPlace(
   placeId: string,
 ): Promise<PlacePilgrimageRouteRef[]> {
   try {
-    return await db
+    const rows = await db
       .select({
         slug: pilgrimageRoutes.slug,
         name: pilgrimageRoutes.name,
         region: pilgrimageRoutes.region,
         tradition: pilgrimageRoutes.tradition,
+        summary: pilgrimageRoutes.summary,
       })
       .from(pilgrimageRouteStops)
       .innerJoin(
@@ -43,6 +50,12 @@ export async function getPilgrimageRoutesForPlace(
       )
       .where(eq(pilgrimageRouteStops.placeId, placeId))
       .orderBy(asc(pilgrimageRoutes.name));
+
+    return rows.map((row) => ({
+      ...row,
+      blurb: firstDescriptionLine(row.summary),
+      image: getPilgrimageImage(row.slug),
+    }));
   } catch (error) {
     if (isMissingPilgrimageSchema(error)) return [];
     throw error;

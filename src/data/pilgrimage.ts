@@ -373,20 +373,6 @@ export const PILGRIMAGE_SITES: PilgrimageSite[] = [
       "Sea pilgrimage site where Chinese Pure Land and Guanyin devotion converge.",
   },
   {
-    slug: "plum-village",
-    name: "Plum Village",
-    kind: "site",
-    region: "West",
-    tradition: "Zen",
-    country: "France",
-    lat: 44.7356,
-    lng: 0.3456,
-    summary:
-      "Practice community founded by Thich Nhat Hanh — a contemporary Western pilgrimage of mindfulness.",
-    significance:
-      "Not an ancient relic site, but a living destination for Engaged Buddhism and retreat pilgrimage.",
-  },
-  {
     slug: "ryozen-ji",
     name: "Ryōzen-ji",
     kind: "site",

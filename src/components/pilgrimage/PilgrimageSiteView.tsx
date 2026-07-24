@@ -1,18 +1,26 @@
-import Link from "next/link";
 import { MapPin, Signpost } from "@phosphor-icons/react/dist/ssr";
 import {
   getPilgrimageImage,
   PILGRIMAGE_ROUTES,
-  pilgrimageRoutePath,
   type PilgrimageSite,
 } from "@/data/pilgrimage";
+import { PlacePilgrimageRoutes } from "@/components/place/PlacePilgrimageRoutes";
+import { firstDescriptionLine } from "@/lib/text-preview";
 import { traditionGradient } from "@/lib/places";
 import { PilgrimageSiteActions } from "./PilgrimageSiteActions";
 
 export function PilgrimageSiteView({ site }: { site: PilgrimageSite }) {
   const routes = PILGRIMAGE_ROUTES.filter((route) =>
     route.stopSlugs.includes(site.slug),
-  );
+  ).map((route) => ({
+    slug: route.slug,
+    name: route.name,
+    region: route.region,
+    tradition: route.tradition,
+    summary: route.summary,
+    blurb: firstDescriptionLine(route.summary),
+    image: getPilgrimageImage(route.slug),
+  }));
   const image = getPilgrimageImage(site.slug);
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${site.lat},${site.lng}`;
@@ -81,25 +89,7 @@ export function PilgrimageSiteView({ site }: { site: PilgrimageSite }) {
         </a>
       </section>
 
-      {routes.length > 0 ? (
-        <section className="mt-12">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-ink">
-            On these routes
-          </h2>
-          <ul className="mt-4 space-y-2">
-            {routes.map((route) => (
-              <li key={route.slug}>
-                <Link
-                  href={pilgrimageRoutePath(route.slug)}
-                  className="block rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm font-medium text-ink transition hover:bg-surface-muted"
-                >
-                  {route.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+      <PlacePilgrimageRoutes routes={routes} />
     </div>
   );
 }

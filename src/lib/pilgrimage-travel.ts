@@ -1,12 +1,9 @@
-import type { PilgrimageSite } from "@/data/pilgrimage";
+export type TravelPoint = { name: string; lat: number; lng: number };
 
 export type TravelMode = "all" | "flight" | "train" | "bus" | "drive" | "walk";
 
 /** Rome2Rio door-to-door search between two lat/lng points. */
-export function rome2RioUrl(
-  from: Pick<PilgrimageSite, "lat" | "lng" | "name">,
-  to: Pick<PilgrimageSite, "lat" | "lng" | "name">,
-): string {
+export function rome2RioUrl(from: TravelPoint, to: TravelPoint): string {
   const o = `${from.lat},${from.lng}`;
   const d = `${to.lat},${to.lng}`;
   return `https://www.rome2rio.com/map/${encodeURIComponent(o)}/${encodeURIComponent(d)}`;
@@ -14,8 +11,8 @@ export function rome2RioUrl(
 
 /** Google Maps directions; optional travelmode. */
 export function googleMapsDirectionsUrl(
-  from: Pick<PilgrimageSite, "lat" | "lng">,
-  to: Pick<PilgrimageSite, "lat" | "lng">,
+  from: Pick<TravelPoint, "lat" | "lng">,
+  to: Pick<TravelPoint, "lat" | "lng">,
   mode: "drive" | "walk" = "drive",
 ): string {
   const travelmode = mode === "walk" ? "walking" : "driving";
@@ -34,8 +31,8 @@ export type LegTravelLinks = {
 };
 
 export function getLegTravelLinks(
-  from: PilgrimageSite,
-  to: PilgrimageSite,
+  from: TravelPoint,
+  to: TravelPoint,
 ): LegTravelLinks {
   return {
     rome2Rio: rome2RioUrl(from, to),
@@ -46,8 +43,8 @@ export function getLegTravelLinks(
 
 /** Haversine distance in km — for UI hints, not navigation. */
 export function haversineKm(
-  a: Pick<PilgrimageSite, "lat" | "lng">,
-  b: Pick<PilgrimageSite, "lat" | "lng">,
+  a: Pick<TravelPoint, "lat" | "lng">,
+  b: Pick<TravelPoint, "lat" | "lng">,
 ): number {
   const toRad = (deg: number) => (deg * Math.PI) / 180;
   const r = 6371;
@@ -62,7 +59,12 @@ export function haversineKm(
 }
 
 export function formatDistanceKm(km: number): string {
-  if (km < 1) return `${Math.round(km * 1000)} m`;
-  if (km < 100) return `${km.toFixed(0)} km`;
-  return `${Math.round(km)} km`;
+  const mi = km * 0.621371;
+  if (km < 1) {
+    return `${Math.round(km * 1000)} m / ${mi.toFixed(1)} mi`;
+  }
+  if (km < 100) {
+    return `${km.toFixed(0)} km / ${mi.toFixed(0)} mi`;
+  }
+  return `${Math.round(km)} km / ${Math.round(mi)} mi`;
 }

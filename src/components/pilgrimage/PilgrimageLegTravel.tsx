@@ -6,51 +6,64 @@ import {
   Footprints,
   Path,
 } from "@phosphor-icons/react/dist/ssr";
-import type { PilgrimageSite } from "@/data/pilgrimage";
 import {
   formatDistanceKm,
   getLegTravelLinks,
   haversineKm,
 } from "@/lib/pilgrimage-travel";
 
+type LegPoint = { name: string; lat: number; lng: number };
+
 export function PilgrimageLegTravel({
   from,
   to,
 }: {
-  from: PilgrimageSite;
-  to: PilgrimageSite;
+  from: LegPoint;
+  to: LegPoint;
 }) {
   const links = getLegTravelLinks(from, to);
   const km = haversineKm(from, to);
   const distance = formatDistanceKm(km);
 
   return (
-    <div className="rounded-xl border border-dashed border-border bg-surface px-3 py-2.5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs font-medium text-ink-muted">
+    <div className="px-1 py-1">
+      <div className="flex items-center justify-between gap-3">
+        <p className="min-w-0 truncate text-xs font-medium text-ink-muted">
           <span className="text-ink-secondary">{from.name}</span>
           {" → "}
           <span className="text-ink-secondary">{to.name}</span>
           <span className="ml-1.5 text-ink-muted">· ~{distance}</span>
         </p>
-      </div>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        <TravelChip href={links.rome2Rio} label="All modes" icon={<Path size={12} weight="bold" />} />
-        <TravelChip href={links.googleMapsDrive} label="Drive" icon={<Car size={12} weight="bold" />} />
-        <TravelChip href={links.googleMapsWalk} label="Walk" icon={<Footprints size={12} weight="bold" />} />
-        {km > 80 ? (
+        <div className="flex shrink-0 flex-nowrap gap-1.5">
           <TravelChip
             href={links.rome2Rio}
-            label="Flights"
-            icon={<AirplaneTilt size={12} weight="bold" />}
+            label="All modes"
+            icon={<Path size={12} weight="bold" />}
           />
-        ) : (
           <TravelChip
-            href={links.rome2Rio}
-            label="Bus / train"
-            icon={<Bus size={12} weight="bold" />}
+            href={links.googleMapsDrive}
+            label="Drive"
+            icon={<Car size={12} weight="bold" />}
           />
-        )}
+          <TravelChip
+            href={links.googleMapsWalk}
+            label="Walk"
+            icon={<Footprints size={12} weight="bold" />}
+          />
+          {km > 80 ? (
+            <TravelChip
+              href={links.rome2Rio}
+              label="Flights"
+              icon={<AirplaneTilt size={12} weight="bold" />}
+            />
+          ) : (
+            <TravelChip
+              href={links.rome2Rio}
+              label="Bus / train"
+              icon={<Bus size={12} weight="bold" />}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

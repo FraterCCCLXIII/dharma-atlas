@@ -39,3 +39,52 @@ export function pilgrimagePlaceDescription(site: PilgrimageSite): string {
   const parts = [site.summary.trim(), site.significance.trim()].filter(Boolean);
   return parts.join("\n\n");
 }
+
+/** Public address line — place name + country (catalog has no street data). */
+export function pilgrimagePlaceAddress(site: PilgrimageSite): string {
+  const name = site.name.trim();
+  const country = site.country.trim();
+  if (!name) return country;
+  if (!country) return name;
+  if (name.toLowerCase() === country.toLowerCase()) return name;
+  // Avoid "Lumbini, Lumbini" style duplication if name already ends with country.
+  if (name.toLowerCase().endsWith(`, ${country.toLowerCase()}`)) return name;
+  return `${name}, ${country}`;
+}
+
+/** True when the stored address is still the weak country-only seed form. */
+export function isWeakPilgrimageAddress(
+  address: string | null | undefined,
+  site: PilgrimageSite,
+): boolean {
+  const value = (address ?? "").trim();
+  if (!value) return true;
+  const normalized = value.toLowerCase();
+  const country = site.country.trim().toLowerCase();
+  const name = site.name.trim().toLowerCase();
+  return normalized === country || normalized === name;
+}
+
+/**
+ * True when address is missing locality detail (country-only or "Name, Country").
+ * Used to decide when reverse-geocode enrichment should rewrite the field.
+ */
+export function isThinPilgrimageAddress(
+  address: string | null | undefined,
+  site: PilgrimageSite,
+): boolean {
+  if (isWeakPilgrimageAddress(address, site)) return true;
+  const value = (address ?? "").trim();
+  if (value.toLowerCase() === pilgrimagePlaceAddress(site).toLowerCase()) {
+    return true;
+  }
+  const parts = value
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (parts.length <= 2) {
+    const last = parts[parts.length - 1]?.toLowerCase();
+    if (last === site.country.trim().toLowerCase()) return true;
+  }
+  return false;
+}

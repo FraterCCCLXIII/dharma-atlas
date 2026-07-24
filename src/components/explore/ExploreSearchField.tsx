@@ -4,7 +4,15 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
-import { CircleNotch, Crosshair, MagnifyingGlass, MapPin, X } from "@phosphor-icons/react";
+import {
+  CircleNotch,
+  Crosshair,
+  MagnifyingGlass,
+  MapPin,
+  MapTrifold,
+  Path,
+  X,
+} from "@phosphor-icons/react";
 import {
   SearchScopeDropdown,
   getSearchPlaceholder,
@@ -12,7 +20,11 @@ import {
   type ExploreEntity,
 } from "@/components/explore/EntityToggle";
 import {
-  pathFromEntityFilter,
+  pilgrimageRoutePath,
+  pilgrimageSitePath,
+} from "@/data/pilgrimage";
+import {
+  pathFromSearchScope,
   personProfilePath,
   placeProfilePath,
 } from "@/lib/explore-routes";
@@ -23,6 +35,10 @@ import {
   queryMatchesLocationLabel,
 } from "@/lib/location-filter";
 import {
+  searchPilgrimageCatalog,
+  type PilgrimageSearchHit,
+} from "@/lib/pilgrimage-search";
+import {
   isLocationNearYou,
   loadStoredNearBounds,
   NEAR_YOU_LABEL,
@@ -31,6 +47,7 @@ import {
   storeNearBounds,
 } from "@/lib/user-location";
 import { useExploreStore, type LocationFilter } from "@/store/explore-store";
+import { usePilgrimageStore } from "@/store/pilgrimage-store";
 
 type PlaceSuggestion = {
   id: string;
@@ -60,7 +77,8 @@ type LocationSuggestion = {
 type Suggestion =
   | { kind: "place"; place: PlaceSuggestion }
   | { kind: "person"; person: PersonSuggestion }
-  | { kind: "location"; location: LocationSuggestion };
+  | { kind: "location"; location: LocationSuggestion }
+  | { kind: "pilgrimage"; entry: PilgrimageSearchHit };
 
 function useDebouncedValue<T>(value: T, delayMs: number): T {
   const [debounced, setDebounced] = useState(value);
@@ -80,6 +98,8 @@ export function ExploreSearchField() {
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const setLocationFilter = useExploreStore((s) => s.setLocationFilter);
   const setMobileView = useExploreStore((s) => s.setMobileView);
+  const pilgrimageQuery = usePilgrimageStore((s) => s.query);
+  const setPilgrimageQuery = usePilgrimageStore((s) => s.setQuery);
   const { scope, setScope } = useSearchScope();
 
   const [draft, setDraft] = useState(query);
@@ -99,6 +119,9 @@ export function ExploreSearchField() {
   const [locationSuggestions, setLocationSuggestions] = useState<
     LocationSuggestion[]
   >([]);
+  const [pilgrimageSuggestions, setPilgrimageSuggestions] = useState<
+    PilgrimageSearchHit[]
+  >([]);
   const [menuPosition, setMenuPosition] = useState({
     top: 0,
     left: 0,
@@ -110,8 +133,8 @@ export function ExploreSearchField() {
   const debouncedDraft = useDebouncedValue(draft.trim(), 300);
 
   useEffect(() => {
-    setDraft(query);
-  }, [query]);
+    setDraft(scope === "pilgrimage" ? pilgrimageQuery : query);
+  }, [scope, query, pilgrimageQuery]);
 
   const rememberNearBounds = useCallback((bounds: MapBounds) => {
     setNearYouBounds(bounds);
@@ -206,6 +229,15 @@ export function ExploreSearchField() {
       setPlaceSuggestions([]);
       setPersonSuggestions([]);
       setLocationSuggestions([]);
+      setPilgrimageSuggestions([]);
+      return;
+    }
+
+    if (scope === "pilgrimage") {
+      setPilgrimageSuggestions(searchPilgrimageCatalog(debouncedDraft, 8));
+      setPlaceSuggestions([]);
+      setPersonSuggestions([]);
+      setLocationSuggestions([]);
       return;
     }
 
@@ -270,6 +302,8 @@ export function ExploreSearchField() {
           }
         }
 
+        setPilgrimageSuggestions([]);
+
         if (geoRes?.ok) {
           const data = (await geoRes.json()) as {
             locations?: LocationSuggestion[];
@@ -287,41 +321,56 @@ export function ExploreSearchField() {
     return () => controller.abort();
   }, [debouncedDraft, scope, nearYouBounds]);
 
-  const matchingLocation = locationSuggestions.find((location) =>
-    queryMatchesLocationLabel(draft, location.label),
-  );
+  const matchingLocation =
+    scope === "pilgrimage"
+      ? undefined
+      : locationSuggestions.find((location) =>
+          queryMatchesLocationLabel(draft, location.label),
+        );
   // When the query is clearly a place name ("California"), lead with Near
   // so Enter doesn't land on a partial place-name text match.
-  const suggestions: Suggestion[] = matchingLocation
-    ? [
-        ...locationSuggestions.map((location) => ({
-          kind: "location" as const,
-          location,
-        })),
-        ...placeSuggestions.map((place) => ({ kind: "place" as const, place })),
-        ...personSuggestions.map((person) => ({
-          kind: "person" as const,
-          person,
-        })),
-      ]
-    : [
-        ...placeSuggestions.map((place) => ({ kind: "place" as const, place })),
-        ...personSuggestions.map((person) => ({
-          kind: "person" as const,
-          person,
-        })),
-        ...locationSuggestions.map((location) => ({
-          kind: "location" as const,
-          location,
-        })),
-      ];
+  const suggestions: Suggestion[] =
+    scope === "pilgrimage"
+      ? pilgrimageSuggestions.map((entry) => ({
+          kind: "pilgrimage" as const,
+          entry,
+        }))
+      : matchingLocation
+        ? [
+            ...locationSuggestions.map((location) => ({
+              kind: "location" as const,
+              location,
+            })),
+            ...placeSuggestions.map((place) => ({
+              kind: "place" as const,
+              place,
+            })),
+            ...personSuggestions.map((person) => ({
+              kind: "person" as const,
+              person,
+            })),
+          ]
+        : [
+            ...placeSuggestions.map((place) => ({
+              kind: "place" as const,
+              place,
+            })),
+            ...personSuggestions.map((person) => ({
+              kind: "person" as const,
+              person,
+            })),
+            ...locationSuggestions.map((location) => ({
+              kind: "location" as const,
+              location,
+            })),
+          ];
 
   useEffect(() => {
     setHighlight(0);
   }, [debouncedDraft, scope, suggestions.length]);
 
   const navigateToScope = (nextScope: ExploreEntity = scope) => {
-    const href = pathFromEntityFilter(nextScope);
+    const href = pathFromSearchScope(nextScope);
     if (href !== pathname) {
       router.push(href);
     }
@@ -371,6 +420,17 @@ export function ExploreSearchField() {
     router.push(personProfilePath(slug));
   };
 
+  const openPilgrimageResult = (entry: PilgrimageSearchHit) => {
+    clearNearYouIfActive();
+    setMenuOpen(false);
+    setPilgrimageQuery("");
+    const href =
+      entry.kind === "route"
+        ? pilgrimageRoutePath(entry.slug)
+        : pilgrimageSitePath(entry.slug);
+    router.push(href);
+  };
+
   const applyNearYou = async () => {
     if (nearYouLoading) return;
 
@@ -409,6 +469,18 @@ export function ExploreSearchField() {
   const submitSearch = () => {
     const selected = menuOpen ? suggestions[highlight] : undefined;
 
+    if (scope === "pilgrimage") {
+      if (selected?.kind === "pilgrimage") {
+        openPilgrimageResult(selected.entry);
+        return;
+      }
+      clearNearYouIfActive();
+      setPilgrimageQuery(draft);
+      navigateToScope("pilgrimage");
+      setMenuOpen(false);
+      return;
+    }
+
     // Prefer geo for locality queries ("California"), unless the user has
     // explicitly moved the highlight onto a place/person row.
     if (
@@ -430,8 +502,14 @@ export function ExploreSearchField() {
         openPlaceResult(selected.place);
         return;
       }
-      openPersonResult(selected.person.slug);
-      return;
+      if (selected.kind === "person") {
+        openPersonResult(selected.person.slug);
+        return;
+      }
+      if (selected.kind === "pilgrimage") {
+        openPilgrimageResult(selected.entry);
+        return;
+      }
     }
 
     if (matchingLocation) {
@@ -447,7 +525,11 @@ export function ExploreSearchField() {
 
   const clearSearch = () => {
     setDraft("");
-    setQuery("");
+    if (scope === "pilgrimage") {
+      setPilgrimageQuery("");
+    } else {
+      setQuery("");
+    }
     setMenuOpen(false);
   };
 
@@ -499,8 +581,12 @@ export function ExploreSearchField() {
         ensureGroup("Areas").items.push({ suggestion, index });
       } else if (suggestion.kind === "place") {
         ensureGroup("Places").items.push({ suggestion, index });
-      } else {
+      } else if (suggestion.kind === "person") {
         ensureGroup("People").items.push({ suggestion, index });
+      } else if (suggestion.entry.kind === "route") {
+        ensureGroup("Routes").items.push({ suggestion, index });
+      } else {
+        ensureGroup("Sites").items.push({ suggestion, index });
       }
     });
 
@@ -561,17 +647,39 @@ export function ExploreSearchField() {
                   />
                 );
               }
-              const { person } = suggestion;
+              if (suggestion.kind === "person") {
+                const { person } = suggestion;
+                return (
+                  <SuggestionButton
+                    key={person.slug}
+                    active={highlight === index}
+                    label={person.name}
+                    detail={[person.tradition, person.location]
+                      .filter(Boolean)
+                      .join(" · ")}
+                    onMouseEnter={() => setHighlight(index)}
+                    onClick={() => openPersonResult(person.slug)}
+                  />
+                );
+              }
+              const { entry } = suggestion;
               return (
                 <SuggestionButton
-                  key={person.slug}
+                  key={`${entry.kind}-${entry.slug}`}
                   active={highlight === index}
-                  label={person.name}
-                  detail={[person.tradition, person.location]
+                  label={entry.name}
+                  detail={[entry.tradition, entry.region]
                     .filter(Boolean)
                     .join(" · ")}
+                  icon={
+                    entry.kind === "route" ? (
+                      <Path size={16} weight="bold" />
+                    ) : (
+                      <MapTrifold size={16} weight="bold" />
+                    )
+                  }
                   onMouseEnter={() => setHighlight(index)}
-                  onClick={() => openPersonResult(person.slug)}
+                  onClick={() => openPilgrimageResult(entry)}
                 />
               );
             })}
@@ -583,7 +691,7 @@ export function ExploreSearchField() {
 
   return (
     <div ref={rootRef} className="w-full min-w-0">
-      <div className="flex h-10 w-full min-w-0 items-stretch rounded-full border border-border bg-surface transition focus-within:border-brand focus-within:shadow-[0_0_0_3px_rgba(209,127,40,0.15)]">
+      <div className="flex h-10 w-full min-w-0 items-stretch overflow-hidden rounded-full border border-border bg-surface transition focus-within:border-brand focus-within:shadow-[0_0_0_3px_rgba(209,127,40,0.15)]">
         <SearchScopeDropdown value={scope} onChange={setScope} />
         <span className="my-2 w-px shrink-0 bg-border" aria-hidden />
         <label className="group relative block min-w-0 flex-1">
@@ -601,7 +709,11 @@ export function ExploreSearchField() {
             aria-autocomplete="list"
             value={draft}
             onChange={(e) => {
-              setDraft(e.target.value);
+              const next = e.target.value;
+              setDraft(next);
+              if (scope === "pilgrimage") {
+                setPilgrimageQuery(next);
+              }
               setMenuOpen(true);
               updateMenuPosition();
             }}
@@ -632,27 +744,33 @@ export function ExploreSearchField() {
             </button>
           )}
         </label>
-        <span className="my-2 w-px shrink-0 bg-border" aria-hidden />
-        <button
-          type="button"
-          onClick={() => void applyNearYou()}
-          disabled={nearYouLoading}
-          aria-pressed={nearYouActive}
-          aria-label={nearYouActive ? "Clear near you filter" : "Show places near you"}
-          title={nearYouActive ? "Clear near you" : "Near You"}
-          className={`inline-flex h-full shrink-0 items-center gap-1.5 rounded-r-full px-3 text-xs font-semibold leading-none transition sm:px-3.5 sm:text-sm ${
-            nearYouActive
-              ? "bg-brand/10 text-brand"
-              : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
-          } disabled:cursor-wait disabled:opacity-70`}
-        >
-          {nearYouLoading ? (
-            <CircleNotch size={16} weight="bold" className="animate-spin" />
-          ) : (
-            <Crosshair size={16} weight="bold" className="text-brand" />
-          )}
-          <span className="whitespace-nowrap">Near You</span>
-        </button>
+        {scope !== "pilgrimage" ? (
+          <>
+            <span className="my-2 w-px shrink-0 bg-border" aria-hidden />
+            <button
+              type="button"
+              onClick={() => void applyNearYou()}
+              disabled={nearYouLoading}
+              aria-pressed={nearYouActive}
+              aria-label={
+                nearYouActive ? "Clear near you filter" : "Show places near you"
+              }
+              title={nearYouActive ? "Clear near you" : "Near You"}
+              className={`inline-flex h-full shrink-0 items-center gap-1.5 rounded-r-full px-3 text-xs font-semibold leading-none transition sm:px-3.5 sm:text-sm ${
+                nearYouActive
+                  ? "bg-brand/10 text-brand"
+                  : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
+              } disabled:cursor-wait disabled:opacity-70`}
+            >
+              {nearYouLoading ? (
+                <CircleNotch size={16} weight="bold" className="animate-spin" />
+              ) : (
+                <Crosshair size={16} weight="bold" className="text-brand" />
+              )}
+              <span className="whitespace-nowrap">Near You</span>
+            </button>
+          </>
+        ) : null}
       </div>
 
       {nearYouError ? (

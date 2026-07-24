@@ -31,6 +31,9 @@ export async function GET(request: Request) {
       type: place.type,
       lat: place.lat,
       lng: place.lng,
+      slug: place.slug,
+      photo: place.photo,
+      pilgrimageSlug: place.pilgrimageSlug,
     })),
     total: result.total,
   });

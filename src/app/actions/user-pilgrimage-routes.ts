@@ -1,6 +1,9 @@
 "use server";
 
+import { inArray } from "drizzle-orm";
 import { requireSession } from "@/lib/auth-server";
+import { db } from "@/db/client";
+import { places } from "@/db/schema";
 import { getPilgrimageSite } from "@/data/pilgrimage";
 import {
   createUserPilgrimageRoute,
@@ -8,22 +11,45 @@ import {
   getUserPilgrimageRoute,
   updateUserPilgrimageRoute,
 } from "@/lib/data/user-pilgrimage-routes";
+import {
+  isPlaceStopRef,
+  placeIdFromStopRef,
+} from "@/lib/pilgrimage-stop-ref";
 
-function sanitizeStopSlugs(stopSlugs: string[]): string[] | null {
+async function sanitizeStopSlugs(stopSlugs: string[]): Promise<string[] | null> {
   if (!Array.isArray(stopSlugs) || stopSlugs.length === 0) return null;
-  const cleaned = stopSlugs
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0 && Boolean(getPilgrimageSite(s)));
+
+  const cleaned = stopSlugs.map((s) => s.trim()).filter((s) => s.length > 0);
   if (cleaned.length === 0) return null;
-  // Preserve order; drop duplicates.
+
+  const placeIds = cleaned
+    .map((ref) => placeIdFromStopRef(ref))
+    .filter((id): id is string => Boolean(id));
+
+  const validPlaceIds = new Set<string>();
+  if (placeIds.length > 0) {
+    const rows = await db
+      .select({ id: places.id })
+      .from(places)
+      .where(inArray(places.id, placeIds));
+    for (const row of rows) validPlaceIds.add(row.id);
+  }
+
   const seen = new Set<string>();
   const unique: string[] = [];
-  for (const slug of cleaned) {
-    if (seen.has(slug)) continue;
-    seen.add(slug);
-    unique.push(slug);
+  for (const ref of cleaned) {
+    if (seen.has(ref)) continue;
+    if (isPlaceStopRef(ref)) {
+      const id = placeIdFromStopRef(ref);
+      if (!id || !validPlaceIds.has(id)) continue;
+    } else if (!getPilgrimageSite(ref)) {
+      continue;
+    }
+    seen.add(ref);
+    unique.push(ref);
   }
-  return unique;
+
+  return unique.length > 0 ? unique : null;
 }
 
 export async function saveUserPilgrimageRoute(input: {
@@ -41,7 +67,7 @@ export async function saveUserPilgrimageRoute(input: {
     const title = input.title.trim();
     if (!title) return { ok: false, error: "Title is required" };
 
-    const stopSlugs = sanitizeStopSlugs(input.stopSlugs);
+    const stopSlugs = await sanitizeStopSlugs(input.stopSlugs);
     if (!stopSlugs) {
       return { ok: false, error: "Add at least one known stop" };
     }

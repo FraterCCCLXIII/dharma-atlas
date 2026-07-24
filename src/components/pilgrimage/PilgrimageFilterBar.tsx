@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import { X } from "@phosphor-icons/react";
 import {
   PILGRIMAGE_REGIONS,
   PILGRIMAGE_TRADITIONS,
@@ -56,12 +56,10 @@ function FilterSection({
 export function PilgrimageFilterBar({ onClose }: { onClose?: () => void }) {
   const regions = usePilgrimageStore((s) => s.regions);
   const traditions = usePilgrimageStore((s) => s.traditions);
-  const query = usePilgrimageStore((s) => s.query);
   const toggleRegion = usePilgrimageStore((s) => s.toggleRegion);
   const toggleTradition = usePilgrimageStore((s) => s.toggleTradition);
   const clearRegions = usePilgrimageStore((s) => s.clearRegions);
   const clearTraditions = usePilgrimageStore((s) => s.clearTraditions);
-  const setQuery = usePilgrimageStore((s) => s.setQuery);
   const clearFilters = usePilgrimageStore((s) => s.clearFilters);
   const activeFilterCount = usePilgrimageActiveFilterCount();
 
@@ -97,26 +95,6 @@ export function PilgrimageFilterBar({ onClose }: { onClose?: () => void }) {
       </div>
 
       <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-4 py-4">
-        <label className="block space-y-2">
-          <span className="text-[12px] font-semibold uppercase tracking-wide text-ink-muted">
-            Search
-          </span>
-          <span className="relative flex items-center">
-            <MagnifyingGlass
-              size={16}
-              weight="bold"
-              className="pointer-events-none absolute left-3 text-ink-muted"
-            />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Site or route name"
-              className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-ink placeholder:text-ink-muted focus:border-border-strong focus:outline-none focus:ring-2 focus:ring-brand/20"
-            />
-          </span>
-        </label>
-
         <FilterSection title="Region">
           <FilterChip
             label="All"

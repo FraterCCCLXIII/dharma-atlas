@@ -7,12 +7,33 @@ import {
   getRouteLatLngs,
   getRouteStopSites,
   type PilgrimageRoute,
+  type PilgrimageSite,
 } from "@/data/pilgrimage";
+import type { RouteStopPoint } from "@/lib/pilgrimage-stop-ref";
 
 const PilgrimageMap = dynamic(
   () => import("./PilgrimageMap").then((m) => m.PilgrimageMap),
   { ssr: false },
 );
+
+function markerFromResolvedStop(
+  stop: RouteStopPoint,
+  index: number,
+): PilgrimageSite & { stopNumber: number } {
+  return {
+    slug: stop.key,
+    name: stop.name,
+    kind: "site",
+    region: "West",
+    tradition: "Buddhist",
+    country: stop.detail,
+    lat: stop.lat,
+    lng: stop.lng,
+    summary: stop.detail,
+    significance: "",
+    stopNumber: index + 1,
+  };
+}
 
 export function PilgrimageRouteMap({
   route,
@@ -21,6 +42,8 @@ export function PilgrimageRouteMap({
   hoveredSlug,
   /** When set, draws this stop order instead of the canonical route. */
   stopSlugs,
+  /** Fully resolved stops (catalog + directory places). Takes precedence. */
+  resolvedStops,
 }: {
   route: PilgrimageRoute;
   /** Height / shell classes; defaults to a compact embedded map. */
@@ -30,39 +53,44 @@ export function PilgrimageRouteMap({
   /** Stop hovered in the list — shows that marker’s hovercard. */
   hoveredSlug?: string | null;
   stopSlugs?: string[];
+  resolvedStops?: RouteStopPoint[];
 }) {
-  const effectiveRoute = useMemo((): PilgrimageRoute => {
-    if (!stopSlugs) return route;
-    return { ...route, stopSlugs };
-  }, [route, stopSlugs]);
+  const markers = useMemo(() => {
+    if (resolvedStops) {
+      return resolvedStops.map((stop, index) =>
+        markerFromResolvedStop(stop, index),
+      );
+    }
+    const sites = stopSlugs
+      ? stopSlugs
+          .map((slug) => getPilgrimageSite(slug))
+          .filter((site): site is NonNullable<typeof site> => site != null)
+      : getRouteStopSites(route);
+    return sites.map((site, index) => ({
+      ...site,
+      stopNumber: index + 1,
+    }));
+  }, [resolvedStops, route, stopSlugs]);
 
-  const markers = useMemo(
-    () =>
-      (stopSlugs
-        ? stopSlugs
-            .map((slug) => getPilgrimageSite(slug))
-            .filter((site): site is NonNullable<typeof site> => site != null)
-        : getRouteStopSites(route)
-      ).map((site, index) => ({
-        ...site,
-        stopNumber: index + 1,
-      })),
-    [route, stopSlugs],
-  );
-  const routePoints = useMemo(
-    () => getRouteLatLngs(effectiveRoute),
-    [effectiveRoute],
-  );
-  const focusKey = stopSlugs
-    ? `customize:${route.slug}:${stopSlugs.join(",")}`
-    : `route-detail:${route.slug}`;
+  const routePoints = useMemo((): [number, number][] => {
+    if (resolvedStops) {
+      return resolvedStops.map((stop) => [stop.lat, stop.lng]);
+    }
+    if (stopSlugs) {
+      return getRouteLatLngs({ ...route, stopSlugs });
+    }
+    return getRouteLatLngs(route);
+  }, [resolvedStops, route, stopSlugs]);
+
+  const focusKey = resolvedStops
+    ? `customize:${route.slug}:${resolvedStops.map((s) => s.key).join(",")}`
+    : stopSlugs
+      ? `customize:${route.slug}:${stopSlugs.join(",")}`
+      : `route-detail:${route.slug}`;
 
   if (routePoints.length < 2) {
     return (
-      <div
-        className={className ?? "relative h-[360px]"}
-        data-map-shell
-      >
+      <div className={className ?? "relative h-[360px]"} data-map-shell>
         <div
           className={
             frameClassName ??
@@ -78,10 +106,7 @@ export function PilgrimageRouteMap({
   }
 
   return (
-    <div
-      className={className ?? "relative h-[360px]"}
-      data-map-shell
-    >
+    <div className={className ?? "relative h-[360px]"} data-map-shell>
       <div
         className={
           frameClassName ??

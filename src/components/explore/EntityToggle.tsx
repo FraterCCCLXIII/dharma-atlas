@@ -20,29 +20,28 @@ import {
 } from "@phosphor-icons/react";
 import {
   BOOKS_LIST_PATH,
-  entityFilterFromPath,
-  pathFromEntityFilter,
+  LINEAGES_LIST_PATH,
+  pathFromSearchScope,
   PILGRIMAGE_LIST_PATH,
-  TRADITIONS_LIST_PATH,
+  searchScopeFromPath,
 } from "@/lib/explore-routes";
-import {
-  SHOW_BOOKS,
-  SHOW_PILGRIMAGE,
-  SHOW_TRADITIONS,
-} from "@/lib/feature-flags";
-import type { EntityFilter } from "@/store/explore-store";
+import { SHOW_PILGRIMAGE } from "@/lib/feature-flags";
 
-export type ExploreEntity = "locations" | "people";
+export type ExploreEntity = "locations" | "people" | "pilgrimage";
 
 const SEARCH_OPTIONS: { value: ExploreEntity; label: string; icon: Icon }[] = [
   { value: "people", label: "People", icon: UsersThree },
   { value: "locations", label: "Places", icon: MapPin },
+  ...(SHOW_PILGRIMAGE
+    ? [{ value: "pilgrimage" as const, label: "Pilgrimage", icon: MapTrifold }]
+    : []),
 ];
 
 const NAV_LINKS: {
   href: string;
   label: string;
   icon: Icon;
+  comingSoon?: boolean;
   isActive: (pathname: string) => boolean;
 }[] = [
   {
@@ -59,30 +58,6 @@ const NAV_LINKS: {
     isActive: (pathname) =>
       pathname === "/people" || pathname.startsWith("/person/"),
   },
-  ...(SHOW_TRADITIONS
-    ? [
-        {
-          href: TRADITIONS_LIST_PATH,
-          label: "Traditions",
-          icon: CirclesThree,
-          isActive: (pathname: string) =>
-            pathname === TRADITIONS_LIST_PATH ||
-            pathname.startsWith(`${TRADITIONS_LIST_PATH}/`),
-        },
-      ]
-    : []),
-  ...(SHOW_BOOKS
-    ? [
-        {
-          href: BOOKS_LIST_PATH,
-          label: "Books",
-          icon: BookOpen,
-          isActive: (pathname: string) =>
-            pathname === BOOKS_LIST_PATH ||
-            pathname.startsWith(`${BOOKS_LIST_PATH}/`),
-        },
-      ]
-    : []),
   ...(SHOW_PILGRIMAGE
     ? [
         {
@@ -95,11 +70,25 @@ const NAV_LINKS: {
         },
       ]
     : []),
+  {
+    href: LINEAGES_LIST_PATH,
+    label: "Lineages",
+    icon: CirclesThree,
+    comingSoon: true,
+    isActive: (pathname) =>
+      pathname === LINEAGES_LIST_PATH ||
+      pathname.startsWith(`${LINEAGES_LIST_PATH}/`),
+  },
+  {
+    href: BOOKS_LIST_PATH,
+    label: "Books",
+    icon: BookOpen,
+    comingSoon: true,
+    isActive: (pathname) =>
+      pathname === BOOKS_LIST_PATH ||
+      pathname.startsWith(`${BOOKS_LIST_PATH}/`),
+  },
 ];
-
-function exploreEntityFromFilter(filter: EntityFilter): ExploreEntity {
-  return filter === "people" ? "people" : "locations";
-}
 
 export function ExploreNavLinks() {
   const pathname = usePathname();
@@ -109,24 +98,37 @@ export function ExploreNavLinks() {
       aria-label="Explore"
       className="flex shrink-0 items-center justify-center gap-1"
     >
-      {NAV_LINKS.map(({ href, label, icon: IconComponent, isActive }) => {
-        const active = isActive(pathname);
-        return (
-          <Link
-            key={href}
-            href={href}
-            aria-current={active ? "page" : undefined}
-            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-sm font-semibold transition ${
-              active
-                ? "bg-brand text-brand-foreground shadow-[0_1px_2px_rgba(58,52,43,0.12)]"
-                : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
-            }`}
-          >
-            <IconComponent size={15} weight="bold" className="shrink-0" />
-            {label}
-          </Link>
-        );
-      })}
+      {NAV_LINKS.map(
+        ({ href, label, icon: IconComponent, isActive, comingSoon }) => {
+          const active = isActive(pathname);
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-sm font-semibold transition ${
+                active
+                  ? "bg-brand text-brand-foreground shadow-[0_1px_2px_rgba(58,52,43,0.12)]"
+                  : "text-ink-secondary hover:bg-surface-muted hover:text-ink"
+              }`}
+            >
+              <IconComponent size={15} weight="bold" className="shrink-0" />
+              {label}
+              {comingSoon ? (
+                <span
+                  className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] ${
+                    active
+                      ? "bg-brand-foreground/18 text-brand-foreground"
+                      : "bg-accent-soft text-brand"
+                  }`}
+                >
+                  Soon
+                </span>
+              ) : null}
+            </Link>
+          );
+        },
+      )}
     </nav>
   );
 }
@@ -266,11 +268,11 @@ export function useSearchScope(): {
 } {
   const pathname = usePathname();
   const router = useRouter();
-  const scope = exploreEntityFromFilter(entityFilterFromPath(pathname));
+  const scope = searchScopeFromPath(pathname);
 
   const setScope = useCallback(
     (next: ExploreEntity) => {
-      const href = pathFromEntityFilter(next);
+      const href = pathFromSearchScope(next);
       if (href !== pathname) {
         router.push(href);
       }
@@ -281,10 +283,12 @@ export function useSearchScope(): {
   return { scope, setScope };
 }
 
-export function getSearchPlaceholder(entityFilter: EntityFilter): string {
-  switch (exploreEntityFromFilter(entityFilter)) {
+export function getSearchPlaceholder(scope: ExploreEntity): string {
+  switch (scope) {
     case "people":
       return "Search people";
+    case "pilgrimage":
+      return "Search sites or routes";
     default:
       return "Search locations";
   }

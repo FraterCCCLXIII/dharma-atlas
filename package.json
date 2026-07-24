@@ -35,6 +35,7 @@
     "db:backfill-place-slugs": "tsx scripts/backfill-place-slugs.ts",
     "db:seed": "tsx scripts/seed-from-json.ts",
     "db:seed-pilgrimage": "bash -c 'set -a; [ -f .env.local ] && source .env.local; set +a; tsx scripts/seed-pilgrimage-places.ts'",
+    "db:enrich-pilgrimage-addresses": "bash -c 'set -a; [ -f .env.local ] && source .env.local; set +a; tsx scripts/enrich-pilgrimage-addresses.ts \"$@\"' --",
     "db:studio": "drizzle-kit studio",
     "auth:create-owner": "tsx scripts/create-owner.ts",
     "auth:promote": "tsx scripts/promote-user.ts",

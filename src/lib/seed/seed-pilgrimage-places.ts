@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { randomBytes } from "node:crypto";
-import { and, eq, isNull, sql } from "drizzle-orm";
-import { db } from "@/db/client";
+import { and, eq, isNull, or, sql } from "drizzle-orm";
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import {
   pilgrimageRouteStops,
   pilgrimageRoutes,
@@ -14,14 +14,20 @@ import {
   PILGRIMAGE_SITES,
   type PilgrimageSite,
 } from "@/data/pilgrimage";
-import { allocateUniquePlaceSlug } from "@/lib/data/place-slugs";
 import {
   inferPilgrimagePlaceType,
+  isWeakPilgrimageAddress,
   pilgrimageFaith,
+  pilgrimagePlaceAddress,
   pilgrimagePlaceDescription,
   pilgrimagePlaceTradition,
 } from "@/lib/seed/pilgrimage-place-type";
-import { slugifyPlacePart } from "@/lib/place-slug";
+import {
+  buildPlaceSlugCandidates,
+  isValidPlaceSlug,
+  normalizePlaceSlug,
+  slugifyPlacePart,
+} from "@/lib/place-slug";
 
 const MATCH_RADIUS_M = 300;
 
@@ -34,6 +40,7 @@ export type SeedPilgrimageResult = {
   unmatchedStops: number;
 };
 
+type SeedDb = PostgresJsDatabase<Record<string, never>>;
 type OverrideMap = Record<string, string>;
 
 function loadOverrides(): OverrideMap {
@@ -89,7 +96,37 @@ function newPlaceId(): string {
   return randomBytes(6).toString("hex");
 }
 
-async function findExistingByPilgrimageSlug(slug: string) {
+async function allocateSlug(
+  db: SeedDb,
+  input: {
+    name: string;
+    city?: string | null;
+    address?: string | null;
+    fallbackId?: string;
+    preferred?: string | null;
+  },
+): Promise<string> {
+  const preferred = input.preferred ? normalizePlaceSlug(input.preferred) : "";
+  const candidates = [
+    ...(preferred && isValidPlaceSlug(preferred) ? [preferred] : []),
+    ...buildPlaceSlugCandidates(input),
+  ];
+
+  for (const candidate of candidates) {
+    if (!isValidPlaceSlug(candidate)) continue;
+    const [taken] = await db
+      .select({ id: places.id })
+      .from(places)
+      .where(or(eq(places.slug, candidate), eq(places.id, candidate)))
+      .limit(1);
+    if (!taken) return candidate;
+  }
+
+  const stamp = Date.now().toString(36);
+  return normalizePlaceSlug(`${candidates[0] ?? "place"}-${stamp}`);
+}
+
+async function findExistingByPilgrimageSlug(db: SeedDb, slug: string) {
   const [row] = await db
     .select({ id: places.id })
     .from(places)
@@ -98,8 +135,10 @@ async function findExistingByPilgrimageSlug(slug: string) {
   return row?.id ?? null;
 }
 
-async function findNearbyNameMatch(site: PilgrimageSite): Promise<string | null> {
-  // Bounding-box prefilter (~350m) then precise haversine + name check.
+async function findNearbyNameMatch(
+  db: SeedDb,
+  site: PilgrimageSite,
+): Promise<string | null> {
   const latDelta = MATCH_RADIUS_M / 111_320;
   const lngDelta =
     MATCH_RADIUS_M / (111_320 * Math.max(0.2, Math.cos((site.lat * Math.PI) / 180)));
@@ -142,6 +181,7 @@ async function findNearbyNameMatch(site: PilgrimageSite): Promise<string | null>
 }
 
 async function upsertPilgrimagePlace(
+  db: SeedDb,
   site: PilgrimageSite,
   overrides: OverrideMap,
 ): Promise<{ placeId: string; created: boolean; linked: boolean }> {
@@ -156,15 +196,15 @@ async function upsertPilgrimagePlace(
             .limit(1)
         )[0]?.id
       : null) ??
-    (await findExistingByPilgrimageSlug(site.slug)) ??
-    (await findNearbyNameMatch(site));
+    (await findExistingByPilgrimageSlug(db, site.slug)) ??
+    (await findNearbyNameMatch(db, site));
 
   const photo = getPilgrimageImage(site.slug) ?? null;
   const description = pilgrimagePlaceDescription(site);
   const type = inferPilgrimagePlaceType(site);
   const faith = pilgrimageFaith(site.tradition);
   const tradition = pilgrimagePlaceTradition(site.tradition);
-  const address = [site.country].filter(Boolean).join(", ");
+  const address = pilgrimagePlaceAddress(site);
 
   if (placeId) {
     const [existing] = await db
@@ -173,11 +213,13 @@ async function upsertPilgrimagePlace(
       .where(eq(places.id, placeId))
       .limit(1);
     if (existing) {
+      const refreshAddress = isWeakPilgrimageAddress(existing.address, site);
       await db
         .update(places)
         .set({
           isPilgrimageSite: true,
           pilgrimageSlug: site.slug,
+          address: refreshAddress ? address : existing.address,
           description: existing.description?.trim()
             ? existing.description
             : description,
@@ -201,25 +243,13 @@ async function upsertPilgrimagePlace(
   }
 
   const id = newPlaceId();
-  const preferredSlug = slugifyPlacePart(site.slug) || slugifyPlacePart(site.name);
-  const slugTaken = preferredSlug
-    ? (
-        await db
-          .select({ id: places.id })
-          .from(places)
-          .where(eq(places.slug, preferredSlug))
-          .limit(1)
-      )[0]
-    : null;
-  const slug =
-    preferredSlug && !slugTaken
-      ? preferredSlug
-      : await allocateUniquePlaceSlug({
-          name: site.name,
-          city: site.country,
-          address,
-          fallbackId: id,
-        });
+  const slug = await allocateSlug(db, {
+    name: site.name,
+    city: site.country,
+    address,
+    fallbackId: id,
+    preferred: slugifyPlacePart(site.slug) || null,
+  });
 
   await db.insert(places).values({
     id,
@@ -251,7 +281,10 @@ async function upsertPilgrimagePlace(
   return { placeId: id, created: true, linked: false };
 }
 
-export async function seedPilgrimagePlaces(): Promise<SeedPilgrimageResult> {
+/** Idempotent seed — pass a script-owned drizzle client (not `@/db/client`). */
+export async function seedPilgrimagePlaces(
+  db: SeedDb,
+): Promise<SeedPilgrimageResult> {
   const overrides = loadOverrides();
   const slugToPlaceId = new Map<string, string>();
   let created = 0;
@@ -259,7 +292,7 @@ export async function seedPilgrimagePlaces(): Promise<SeedPilgrimageResult> {
   let updated = 0;
 
   for (const site of PILGRIMAGE_SITES) {
-    const result = await upsertPilgrimagePlace(site, overrides);
+    const result = await upsertPilgrimagePlace(db, site, overrides);
     slugToPlaceId.set(site.slug, result.placeId);
     if (result.created) created += 1;
     else if (result.linked) linked += 1;

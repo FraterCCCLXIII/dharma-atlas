@@ -14,16 +14,11 @@ import { SiteMenu } from "@/components/layout/SiteMenu";
 import { useNavLogoCompact } from "@/hooks/useNavLogoCompact";
 import { useExploreRouteSync } from "@/hooks/useExploreRouteSync";
 import {
-  BOOKS_LIST_PATH,
   entityFilterFromPath,
   isExplorePath,
   pathFromEntityFilter,
   PILGRIMAGE_LIST_PATH,
 } from "@/lib/explore-routes";
-import {
-  useBooksActiveFilterCount,
-  useBooksStore,
-} from "@/store/books-store";
 import { useExploreStore } from "@/store/explore-store";
 import {
   usePilgrimageActiveFilterCount,
@@ -201,8 +196,6 @@ export function PublicNav({
   const headerRef = useRef<HTMLElement>(null);
   const filtersOpen = useExploreStore((s) => s.filtersOpen);
   const toggleFilters = useExploreStore((s) => s.toggleFilters);
-  const booksFiltersOpen = useBooksStore((s) => s.filtersOpen);
-  const toggleBooksFilters = useBooksStore((s) => s.toggleFilters);
   const pilgrimageFiltersOpen = usePilgrimageStore((s) => s.filtersOpen);
   const togglePilgrimageFilters = usePilgrimageStore((s) => s.toggleFilters);
   const entityFilter = useExploreStore((s) => s.entityFilter);
@@ -212,16 +205,13 @@ export function PublicNav({
   const faiths = useExploreStore((s) => s.faiths);
   const locationFilter = useExploreStore((s) => s.locationFilter);
   const exploreActiveFilterCount = useActiveFilterCount();
-  const booksActiveFilterCount = useBooksActiveFilterCount();
   const pilgrimageActiveFilterCount = usePilgrimageActiveFilterCount();
 
   const onExplore = isExplorePath(pathname);
-  const onBooks =
-    pathname === BOOKS_LIST_PATH || pathname.startsWith(`${BOOKS_LIST_PATH}/`);
   const onPilgrimage =
     pathname === PILGRIMAGE_LIST_PATH ||
     pathname.startsWith(`${PILGRIMAGE_LIST_PATH}/`);
-  const onCatalogSurface = onBooks || onPilgrimage;
+  const onCatalogSurface = onPilgrimage;
   const onExploreSurface = onExplore && !onCatalogSurface;
   const showBackToMap = !onExplore && !onCatalogSurface;
   const pathFilter = entityFilterFromPath(pathname);
@@ -229,6 +219,7 @@ export function PublicNav({
     pathFilter === "people" ? "people" : "locations",
   );
   // Home feature view has no filter sidebar — hide the toggle too.
+  // Coming-soon teaser pages (books / lineages) also hide filters.
   const showHomeFeature =
     !onCatalogSurface &&
     entityFilter === "all" &&
@@ -239,11 +230,6 @@ export function PublicNav({
     locationFilter == null;
 
   const handleFilterToggle = () => {
-    if (onBooks) {
-      toggleBooksFilters();
-      return;
-    }
-
     if (onPilgrimage) {
       togglePilgrimageFilters();
       return;
@@ -258,24 +244,20 @@ export function PublicNav({
     router.push(explorePath);
   };
 
-  const filterToggleOpen = onBooks
-    ? booksFiltersOpen
-    : onPilgrimage
-      ? pilgrimageFiltersOpen
-      : filtersOpen;
-  const filterToggleCount = onBooks
-    ? booksActiveFilterCount
-    : onPilgrimage
-      ? pilgrimageActiveFilterCount
-      : exploreActiveFilterCount;
-  const filterControlsId = onBooks
-    ? "books-filters"
-    : onPilgrimage
-      ? "pilgrimage-filters"
-      : "explore-filters";
+  const filterToggleOpen = onPilgrimage ? pilgrimageFiltersOpen : filtersOpen;
+  const filterToggleCount = onPilgrimage
+    ? pilgrimageActiveFilterCount
+    : exploreActiveFilterCount;
+  const filterControlsId = onPilgrimage
+    ? "pilgrimage-filters"
+    : "explore-filters";
   // Detail pages for pilgrimage don't show the filter sidebar.
+  // Books / lineages are coming-soon teasers — no filter chrome.
   const showFilterToggle =
-    !showHomeFeature && !(onPilgrimage && pathname !== PILGRIMAGE_LIST_PATH);
+    !showHomeFeature &&
+    !pathname.startsWith("/books") &&
+    !pathname.startsWith("/lineages") &&
+    !(onPilgrimage && pathname !== PILGRIMAGE_LIST_PATH);
 
   // Keep layout offsets in sync as the rail expands/collapses.
   useEffect(() => {

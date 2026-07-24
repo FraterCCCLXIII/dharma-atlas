@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-import { PilgrimageCustomizeEditor } from "@/components/pilgrimage/PilgrimageCustomizeEditor";
 import { getPilgrimageRoute } from "@/data/pilgrimage";
 import { getSession } from "@/lib/auth-server";
+import { createUserPilgrimageRoute } from "@/lib/data/user-pilgrimage-routes";
 import { SHOW_PILGRIMAGE } from "@/lib/feature-flags";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/** Fork a canonical route into the user's saved itineraries, then open the editor. */
 export default async function CustomizePilgrimageRoutePage({ params }: Props) {
   if (!SHOW_PILGRIMAGE) notFound();
   const { slug } = await params;
@@ -31,5 +33,12 @@ export default async function CustomizePilgrimageRoutePage({ params }: Props) {
     );
   }
 
-  return <PilgrimageCustomizeEditor route={route} />;
+  const saved = await createUserPilgrimageRoute(session.user.id, {
+    title: `My ${route.name}`,
+    stopSlugs: [...route.stopSlugs],
+    baseRouteSlug: route.slug,
+  });
+
+  revalidatePath("/favorites");
+  redirect(`/pilgrimage/my/${saved.id}/edit`);
 }

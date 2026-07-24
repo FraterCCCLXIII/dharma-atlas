@@ -2,9 +2,13 @@ import { describe, expect, it } from "vitest";
 import type { PilgrimageSite } from "@/data/pilgrimage";
 import {
   inferPilgrimagePlaceType,
+  isThinPilgrimageAddress,
+  isWeakPilgrimageAddress,
   pilgrimageFaith,
+  pilgrimagePlaceAddress,
   pilgrimagePlaceTradition,
 } from "@/lib/seed/pilgrimage-place-type";
+import { formatLocalityAddress } from "@/lib/seed/reverse-geocode-address";
 
 function site(partial: Partial<PilgrimageSite> & Pick<PilgrimageSite, "name">): PilgrimageSite {
   return {
@@ -51,5 +55,47 @@ describe("pilgrimageFaith / tradition", () => {
     expect(pilgrimageFaith("Zen")).toBe("Buddhist");
     expect(pilgrimagePlaceTradition("Interfaith")).toBe("Buddhist");
     expect(pilgrimagePlaceTradition("Tibetan")).toBe("Tibetan");
+  });
+});
+
+describe("pilgrimagePlaceAddress", () => {
+  it("formats name and country", () => {
+    expect(
+      pilgrimagePlaceAddress(site({ name: "Lumbini", country: "Nepal" })),
+    ).toBe("Lumbini, Nepal");
+  });
+
+  it("treats country-only addresses as weak", () => {
+    expect(isWeakPilgrimageAddress("Nepal", site({ name: "Lumbini", country: "Nepal" }))).toBe(
+      true,
+    );
+    expect(
+      isWeakPilgrimageAddress("Lumbini, Nepal", site({ name: "Lumbini", country: "Nepal" })),
+    ).toBe(false);
+  });
+
+  it("treats name+country as thin (needs locality enrich)", () => {
+    expect(
+      isThinPilgrimageAddress("Lumbini, Nepal", site({ name: "Lumbini", country: "Nepal" })),
+    ).toBe(true);
+    expect(
+      isThinPilgrimageAddress(
+        "Lumbini, Rupandehi, Lumbini Province, Nepal",
+        site({ name: "Lumbini", country: "Nepal" }),
+      ),
+    ).toBe(false);
+  });
+});
+
+describe("formatLocalityAddress", () => {
+  it("builds Lumbini locality line", () => {
+    expect(
+      formatLocalityAddress("Lumbini", "Nepal", {
+        municipality: "Lumbini Sanskritik",
+        county: "Rupandehi",
+        state: "Lumbini Province",
+        country: "Nepal",
+      }),
+    ).toBe("Lumbini, Rupandehi, Lumbini Province, Nepal");
   });
 });

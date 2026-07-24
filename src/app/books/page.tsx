@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { BooksPageView } from "@/components/books/BooksPageView";
-import { SHOW_BOOKS } from "@/lib/feature-flags";
+import { ComingSoonPage } from "@/components/coming-soon/ComingSoonPage";
 
 export const metadata: Metadata = {
-  title: "Books (Beta) | Dharma Atlas",
+  title: "Books — Coming soon | Dharma Atlas",
   description:
-    "Popular and foundational books on Buddhism, Hinduism, mindfulness, and contemplative practice — with covers and links on Amazon.",
+    "A curated contemplative library is on the way — books across Buddhist, Hindu, and mindfulness traditions.",
+  robots: { index: false, follow: true },
 };
 
 export default function BooksPage() {
-  if (!SHOW_BOOKS) notFound();
-  return <BooksPageView />;
+  return <ComingSoonPage variant="books" />;
 }

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ListBullets,
+  MapPin,
   MapTrifold,
   Path,
   Signpost,
@@ -20,7 +21,11 @@ import {
   type PilgrimageRoute,
   type PilgrimageSite,
 } from "@/data/pilgrimage";
-import { cardLiftClassName } from "@/lib/card-styles";
+import {
+  cardImageFrameClassName,
+  cardImagePaddingClassName,
+  cardLiftClassName,
+} from "@/lib/card-styles";
 import { traditionGradient } from "@/lib/places";
 import {
   usePilgrimageActiveFilterCount,
@@ -81,62 +86,67 @@ function SiteCard({
 
   return (
     <li>
-      <div
-        className={`relative flex h-full flex-col overflow-hidden rounded-2xl border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName} ${
-          selected
-            ? "border-accent ring-2 ring-brand/25"
-            : "border-border"
+      <article
+        className={`relative rounded-2xl ${cardLiftClassName} ${
+          selected ? "bg-surface-muted ring-2 ring-brand/25" : ""
         }`}
       >
         <button
           type="button"
           onClick={onSelect}
-          className="flex flex-1 flex-col text-left"
+          className="group block w-full rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
         >
-          <div
-            className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${traditionGradient(site.tradition)}`}
-          >
-            {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={image}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-              />
-            ) : null}
-          </div>
-          <div className="flex flex-1 flex-col gap-2 px-4 py-4">
-            <div className="flex items-start justify-between gap-2">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-brand">
-                {site.tradition}
-              </p>
-              <Signpost
-                size={16}
-                weight="bold"
-                className="shrink-0 text-ink-muted"
-              />
+          <div className={cardImagePaddingClassName}>
+            <div
+              className={`relative flex h-36 items-end bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(site.tradition)}`}
+            >
+              {image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full rounded-xl object-cover"
+                />
+              ) : null}
+              <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <span className="relative m-3 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+                <Signpost size={12} weight="bold" />
+                Site
+              </span>
             </div>
-            <h2 className="font-display text-lg font-semibold tracking-tight text-ink">
-              {site.name}
-            </h2>
-            <p className="text-xs font-medium text-ink-muted">
-              {site.country} · {site.region}
-            </p>
-            <p className="mt-1 line-clamp-3 text-sm leading-relaxed text-ink-secondary">
+          </div>
+
+          <div className="px-4 pt-1">
+            <div className="space-y-1">
+              <h2 className="line-clamp-2 font-display text-base font-semibold leading-snug text-ink">
+                {site.name}
+              </h2>
+              <span className="inline-flex items-center gap-1 text-xs text-ink-muted">
+                <MapPin size={14} weight="bold" className="shrink-0" />
+                <span className="line-clamp-1">
+                  {site.country} · {site.region}
+                </span>
+              </span>
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
+              <span className="rounded-md bg-surface-muted px-2 py-0.5 font-medium">
+                {site.tradition}
+              </span>
+              {site.templeNumber != null ? (
+                <span className="rounded-md bg-surface-muted px-2 py-0.5 font-medium">
+                  Temple {site.templeNumber}
+                </span>
+              ) : null}
+            </div>
+            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-secondary">
               {site.summary}
             </p>
           </div>
         </button>
-        <div className="absolute right-3 top-3 z-10">
-          <PilgrimageFavoriteButton
-            kind="site"
-            slug={site.slug}
-            variant="overlay"
-          />
-        </div>
-        <div className="border-t border-border px-4 py-2.5">
+        <div className="px-4 pb-4 pt-2">
           <Link
             href={pilgrimageSitePath(site.slug)}
             className="text-xs font-semibold text-brand hover:underline"
@@ -144,7 +154,14 @@ function SiteCard({
             View location →
           </Link>
         </div>
-      </div>
+        <div className="absolute right-5 top-5 z-10">
+          <PilgrimageFavoriteButton
+            kind="site"
+            slug={site.slug}
+            variant="overlay"
+          />
+        </div>
+      </article>
     </li>
   );
 }
@@ -163,65 +180,67 @@ function RouteCard({
 
   return (
     <li>
-      <div
-        className={`relative flex h-full flex-col overflow-hidden rounded-2xl border bg-surface-elevated shadow-[var(--shadow-card)] ${cardLiftClassName} ${
-          selected
-            ? "border-accent ring-2 ring-brand/25"
-            : "border-border"
+      <article
+        className={`relative rounded-2xl ${cardLiftClassName} ${
+          selected ? "bg-surface-muted ring-2 ring-brand/25" : ""
         }`}
       >
         <button
           type="button"
           onClick={onSelect}
-          className="flex flex-1 flex-col text-left"
+          className="group block w-full rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40"
         >
-          <div
-            className={`relative aspect-[16/10] overflow-hidden bg-gradient-to-br ${traditionGradient(route.tradition)}`}
-          >
-            {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={image}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover"
-              />
-            ) : null}
-          </div>
-          <div className="flex flex-1 flex-col gap-2 px-4 py-4">
-            <div className="flex items-start justify-between gap-2">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-brand">
-                {route.tradition}
-              </p>
-              <Path
-                size={16}
-                weight="bold"
-                className="shrink-0 text-ink-muted"
-              />
+          <div className={cardImagePaddingClassName}>
+            <div
+              className={`relative flex h-36 items-end bg-gradient-to-br ${cardImageFrameClassName} ${traditionGradient(route.tradition)}`}
+            >
+              {image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full rounded-xl object-cover"
+                />
+              ) : null}
+              <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_55%)]" />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <span className="relative m-3 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-1 text-[12px] font-medium uppercase tracking-wide text-white backdrop-blur-sm">
+                <Path size={12} weight="bold" />
+                Route
+              </span>
             </div>
-            <h2 className="font-display text-lg font-semibold tracking-tight text-ink">
-              {route.name}
-            </h2>
-            <p className="text-xs font-medium text-ink-muted">
-              {route.region} · {stopCount} stops
-            </p>
-            <p className="mt-1 line-clamp-3 text-sm leading-relaxed text-ink-secondary">
+          </div>
+
+          <div className="px-4 pt-1">
+            <div className="space-y-1">
+              <h2 className="line-clamp-2 font-display text-base font-semibold leading-snug text-ink">
+                {route.name}
+              </h2>
+              <span className="inline-flex items-center gap-1 text-xs text-ink-muted">
+                <Path size={14} weight="bold" className="shrink-0" />
+                <span className="line-clamp-1">
+                  {route.region} · {stopCount} stops
+                </span>
+              </span>
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-secondary">
+              <span className="rounded-md bg-surface-muted px-2 py-0.5 font-medium">
+                {route.tradition}
+              </span>
+              {route.lengthNote ? (
+                <span className="rounded-md bg-surface-muted px-2 py-0.5 font-medium">
+                  {route.lengthNote}
+                </span>
+              ) : null}
+            </div>
+            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-secondary">
               {route.summary}
-            </p>
-            <p className="mt-auto pt-2 text-xs text-ink-muted">
-              {route.lengthNote}
             </p>
           </div>
         </button>
-        <div className="absolute right-3 top-3 z-10">
-          <PilgrimageFavoriteButton
-            kind="route"
-            slug={route.slug}
-            variant="overlay"
-          />
-        </div>
-        <div className="border-t border-border px-4 py-2.5">
+        <div className="px-4 pb-4 pt-2">
           <Link
             href={pilgrimageRoutePath(route.slug)}
             className="text-xs font-semibold text-brand hover:underline"
@@ -229,7 +248,14 @@ function RouteCard({
             View route →
           </Link>
         </div>
-      </div>
+        <div className="absolute right-5 top-5 z-10">
+          <PilgrimageFavoriteButton
+            kind="route"
+            slug={route.slug}
+            variant="overlay"
+          />
+        </div>
+      </article>
     </li>
   );
 }
