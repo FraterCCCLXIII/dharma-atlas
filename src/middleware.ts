@@ -53,8 +53,20 @@ function isHiddenPublicSurface(pathname: string): boolean {
   return false;
 }
 
+const PLACE_PHOTO_PATH =
+  /^\/places\/([^/]+\.(?:jpg|jpeg|png|webp|gif|avif))$/i;
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Serve /places/* images from disk (Coolify volume + admin uploads).
+  const placePhoto = PLACE_PHOTO_PATH.exec(pathname);
+  if (placePhoto) {
+    const filename = placePhoto[1];
+    return NextResponse.rewrite(
+      new URL(`/api/runtime-media/places/${filename}`, request.url),
+    );
+  }
 
   // Unmatched rewrite yields a real HTTP 404 (page-level notFound() can stream 200).
   if (isHiddenPublicSurface(pathname)) {
@@ -115,5 +127,7 @@ export const config = {
     "/traditions/:slug((?!.*\\.).*)",
     "/pilgrimage",
     "/pilgrimage/:path*",
+    // Place photo files (not the /places explore page).
+    "/places/:file(.*\\.(?:jpg|jpeg|png|webp|gif|avif))",
   ],
 };

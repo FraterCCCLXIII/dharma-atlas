@@ -46,6 +46,9 @@ export function saveLocalPlacePhoto(
   const ext = extFromContentType(contentType);
   const filename = `${placeId}-${fileKey}${ext}`;
   writeFileSync(join(PLACES_DIR, filename), buffer);
+  // Keep a stable cover path for seed/JSON (`/places/<id>.jpg`) in sync with
+  // the latest upload so Coolify volumes and git-seeded files share one URL.
+  writeFileSync(join(PLACES_DIR, `${placeId}${ext}`), buffer);
   return `/places/${filename}`;
 }
 

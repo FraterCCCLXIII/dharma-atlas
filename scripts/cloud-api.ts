@@ -27,6 +27,7 @@ function usage() {
   npm run cloud -- delete-place <placeId>
   npm run cloud -- upload-teacher-photo <slug> <filePath> [--hero]
   npm run cloud -- sync-people-photos
+  npm run cloud -- sync-place-photos
   npm run cloud -- revalidate [--all] [path...]
 
 Env (in .env.local):
@@ -131,6 +132,12 @@ async function main() {
 
     case "sync-people-photos": {
       const result = await client.syncPeoplePhotos();
+      console.log(JSON.stringify(result, null, 2));
+      break;
+    }
+
+    case "sync-place-photos": {
+      const result = await client.syncPlacePhotos();
       console.log(JSON.stringify(result, null, 2));
       break;
     }

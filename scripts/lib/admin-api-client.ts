@@ -139,6 +139,13 @@ export class AdminApiClient {
     );
   }
 
+  syncPlacePhotos() {
+    return this.request<{ ok: boolean; copied: string[]; skipped: number; count: number }>(
+      "/api/admin/sync-place-photos",
+      { method: "POST" },
+    );
+  }
+
   createTeacher(body: unknown) {
     return this.request<{ teacher: unknown }>("/api/admin/teachers", {
       method: "POST",
