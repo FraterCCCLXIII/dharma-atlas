@@ -19,6 +19,7 @@ seed_uploads_if_empty() {
   fi
 
   copied=0
+  updated=0
   for seed_file in "$seed"/*; do
     [ -f "$seed_file" ] || continue
     base="$(basename "$seed_file")"
@@ -26,11 +27,15 @@ seed_uploads_if_empty() {
     if [ ! -e "$dest" ]; then
       cp -a "$seed_file" "$dest"
       copied=$((copied + 1))
+    elif [ "$seed_file" -nt "$dest" ]; then
+      # Replace stale volume copies when the image ships a newer seed file.
+      cp -a "$seed_file" "$dest"
+      updated=$((updated + 1))
     fi
   done
 
-  if [ "$copied" -gt 0 ]; then
-    echo "Merged $copied new file(s) into public/$name"
+  if [ "$copied" -gt 0 ] || [ "$updated" -gt 0 ]; then
+    echo "Merged public/$name: $copied new, $updated updated"
   fi
 }
 
