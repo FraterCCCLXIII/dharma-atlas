@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { SiteLogo } from "@/components/layout/SiteLogo";
 
@@ -35,11 +34,6 @@ export default async function LoginPage({
           alternateHref={`/signup${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
           alternateLabel="Create an account"
         />
-        <p className="mt-6 text-center text-xs text-ink-muted">
-          <Link href="/" className="hover:text-ink">
-            Back to explore
-          </Link>
-        </p>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { authClient } from "@/lib/auth-client";
+import { SHOW_BLOG } from "@/lib/feature-flags";
 import { isAdminRole } from "@/lib/permissions";
 
 export function SiteMenu() {
@@ -132,6 +133,16 @@ export function SiteMenu() {
           >
             Claim location
           </Link>
+          {SHOW_BLOG ? (
+            <Link
+              href="/blog"
+              role="menuitem"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full px-4 py-2.5 text-left text-sm font-medium text-ink transition hover:bg-surface-muted"
+            >
+              Blog
+            </Link>
+          ) : null}
           <Link
             href="/about"
             role="menuitem"
@@ -157,14 +168,24 @@ export function SiteMenu() {
               Sign out
             </button>
           ) : (
-            <Link
-              href="/login"
-              role="menuitem"
-              onClick={() => setMenuOpen(false)}
-              className="block w-full rounded-lg bg-brand px-4 py-2.5 text-center text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover"
-            >
-              Sign in
-            </Link>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/signup"
+                role="menuitem"
+                onClick={() => setMenuOpen(false)}
+                className="block w-full rounded-lg bg-brand px-4 py-2.5 text-center text-sm font-semibold text-brand-foreground transition hover:bg-brand-hover"
+              >
+                Create account
+              </Link>
+              <Link
+                href="/login"
+                role="menuitem"
+                onClick={() => setMenuOpen(false)}
+                className="block w-full px-4 py-1 text-center text-sm font-medium text-ink-secondary transition hover:text-ink"
+              >
+                Sign in
+              </Link>
+            </div>
           )}
         </div>
       </div>,

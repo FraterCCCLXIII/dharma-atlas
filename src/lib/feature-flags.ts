@@ -5,3 +5,4 @@
 export const SHOW_BOOKS = true;
 export const SHOW_TRADITIONS = true;
 export const SHOW_PILGRIMAGE = true;
+export const SHOW_BLOG = true;

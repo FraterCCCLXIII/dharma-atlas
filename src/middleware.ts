@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
+  SHOW_BLOG,
   SHOW_BOOKS,
   SHOW_PILGRIMAGE,
   SHOW_TRADITIONS,
@@ -38,6 +39,13 @@ function isHiddenPublicSurface(pathname: string): boolean {
   if (
     !SHOW_PILGRIMAGE &&
     (pathname === "/pilgrimage" || pathname.startsWith("/pilgrimage/")) &&
+    !hasStaticFileExtension(pathname)
+  ) {
+    return true;
+  }
+  if (
+    !SHOW_BLOG &&
+    (pathname === "/blog" || pathname.startsWith("/blog/")) &&
     !hasStaticFileExtension(pathname)
   ) {
     return true;

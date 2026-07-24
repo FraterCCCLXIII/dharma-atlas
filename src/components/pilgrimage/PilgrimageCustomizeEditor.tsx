@@ -387,8 +387,8 @@ export function PilgrimageCustomizeEditor({
         open={authOpen}
         onClose={() => setAuthOpen(false)}
         redirectTo={`/pilgrimage/my/${savedRoute.id}/edit`}
-        title="Sign in to save"
-        description="Sign in to update this customized pilgrimage."
+        title="Save your pilgrimage"
+        description="Create an account or sign in to update this customized pilgrimage."
         initialMode="signup"
         onSuccess={handleAuthSuccess}
       />
