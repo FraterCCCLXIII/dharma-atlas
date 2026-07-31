@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import { getPilgrimageRoute } from "@/data/pilgrimage";
 import { getSession } from "@/lib/auth-server";
@@ -39,6 +38,8 @@ export default async function CustomizePilgrimageRoutePage({ params }: Props) {
     baseRouteSlug: route.slug,
   });
 
-  revalidatePath("/favorites");
+  // Note: revalidatePath cannot be called during render (only in Server
+  // Actions / Route Handlers). /favorites is session-gated and rendered
+  // dynamically, so no cache invalidation is needed here.
   redirect(`/pilgrimage/my/${saved.id}/edit`);
 }
