@@ -2,7 +2,8 @@
 
 Research notes on how major contemplative / Buddhist publishers structure bookstore filtering. Useful reference while designing Dharma Atlas Books filters.
 
-**Last updated:** 2026-07-23
+**Last updated:** 2026-07-24  
+**Related:** [`ontology.md`](./ontology.md) (site-wide tradition tree), [`books-taxonomy.md`](./books-taxonomy.md)
 
 ---
 

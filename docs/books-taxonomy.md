@@ -3,7 +3,8 @@
 A filter / tagging model for Dharma Atlas Books that separates **lineage** from **theme**, reuses the site ontology, and stays practical for a small-but-growing catalog (~47 titles today).
 
 **Status:** proposal (not implemented)  
-**Related:** [`publisher-filter-navs.md`](./publisher-filter-navs.md), ontology in `src/lib/ontology/defaults.ts`
+**Related:** [`ontology.md`](./ontology.md) (canonical tradition tree), [`publisher-filter-navs.md`](./publisher-filter-navs.md), seed in `src/lib/ontology/defaults.ts`  
+**Last updated:** 2026-07-24 — tradition slugs aligned with ontology redesign
 
 ---
 
@@ -36,7 +37,9 @@ A reader filtering “Mindfulness” should still find Pema’s *How to Meditate
 
 ### 1. Tradition (primary, multi-select)
 
-Ontology **lineage / other-tradition slugs**. Shown as checkboxes with counts (Wisdom-style).
+Ontology **root / lineage slugs** from [`ontology.md`](./ontology.md). Shown as checkboxes with counts (Wisdom-style). Prefer the deepest honest tag; roots are fine for broad intros.
+
+**Ship-first chips** (current catalog density):
 
 | Slug | Label in UI | Use for |
 | --- | --- | --- |
@@ -45,18 +48,21 @@ Ontology **lineage / other-tradition slugs**. Shown as checkboxes with counts (W
 | `zen` | Zen | Zen / Chan / Sŏn / Thiền |
 | `theravada` | Theravada | Pali / early Buddhism / Thai Forest / etc. |
 | `mahayana` | Mahayana | Classical Mahayana not better filed under Zen/Tibetan |
-| `hindu` | Hindu | Yoga / bhakti / Gita / Yogananda, etc. |
-| `advaita-vedanta` | Advaita Vedanta | Explicit Advaita |
-| `non-dualism` | Nonduality | Contemporary nondual when not Advaita-specific |
-| `contemplative-christian` | Contemplative Christian | When we add those titles |
-| `sufi` | Sufi | When we add those titles |
+| `hindu` | Hinduism | Yoga / bhakti / Gita / Yogananda when not school-specific |
+| `advaita-vedanta` | Advaita Vedanta | Explicit Advaita (nested under Hinduism in ontology; pin in UI) |
+| `non-dualism` | Nonduality | Contemporary nondual when not Advaita-specific (under Contemporary) |
+| `contemplative-christian` | Contemplative Christianity | When we add those titles |
+| `sufi` | Sufism | When we add those titles |
+
+**Add when catalog / ontology ships them:** `judaism`, `jain`, `daoist`, `sikh`, `kashmir-shaivism`, `nichiren`, `bon`, `contemporary` / `mindfulness` (or rely on theme `mindfulness` for MBSR titles).
 
 **Rules**
 
-- Prefer the **most specific tradition** that still feels honest (Suzuki → `zen`, not only `buddhist`).
+- Prefer the **most specific tradition** that still feels honest (Suzuki → `zen`, not only `buddhist`; Nisargadatta → `advaita-vedanta`, not only `hindu`).
 - Add `buddhist` only when the book is deliberately pan-Buddhist / introductory.
 - A book may have **0–2 traditions** (e.g. Thich Nhat Hanh: `zen` + `buddhist`, or just `zen` / Engaged — see Themes).
-- Do **not** invent book-only tradition strings.
+- Do **not** invent book-only tradition strings — reuse ontology slugs only.
+- Multi-tradition anthologies → theme `engaged` / `contemporary-spirituality`; optional tradition `contemporary` when that root exists.
 
 ### 2. School (secondary, optional, gated)
 
@@ -75,6 +81,8 @@ Priority schools for the current catalog:
 | `nyingma` | tibetan | Explicitly Nyingma / Dzogchen |
 | `soto` | zen | Suzuki / SFZC / Soto |
 | `rinzai` | zen | Explicitly Rinzai |
+| `advaita-vedanta` | hindu → vedanta | When treated as school under Hinduism rather than tradition chip |
+| `kashmir-shaivism` | hindu → shaivism | Explicit Trika / Kashmir Shaivism titles (when ontology ships) |
 
 **Rules**
 
@@ -126,17 +134,27 @@ Unchanged. Multi-select dropdown. Featured presses first (Shambhala, Wisdom, Par
 Replace flat `topic: string` with:
 
 ```ts
+/** Prefer ontology slugs from docs/ontology.md — extend as roots/lineages ship. */
 export type BookTraditionSlug =
   | "buddhist"
   | "tibetan"
   | "zen"
   | "theravada"
   | "mahayana"
+  | "nichiren"
+  | "bon"
   | "hindu"
   | "advaita-vedanta"
-  | "non-dualism"
+  | "kashmir-shaivism"
+  | "judaism"
+  | "jain"
+  | "sikh"
+  | "daoist"
   | "contemplative-christian"
-  | "sufi";
+  | "sufi"
+  | "contemporary"
+  | "non-dualism"
+  | "multi-tradition";
 
 export type BookThemeId =
   | "introductory"
@@ -184,10 +202,11 @@ Match logic (AND across facets, OR within a facet):
 | Insight | `theravada` | `insight` | `meditation-instruction`, sometimes `compassion` | |
 | Mahayana | `mahayana` | — | `philosophy-texts` or `compassion` | Shantideva → philosophy; Pema commentary → compassion |
 | Mindfulness | *(best tradition if clear)* | — | `mindfulness` (+ `meditation-instruction`) | Kabat-Zinn may be tradition-empty or `buddhist`; Pema *How to Meditate* → `tibetan` + themes |
-| Contemplative | `non-dualism` when honest, else `[]` | — | `contemporary-spirituality` | Don’t force Hindu/Buddhist |
-| Hindu | `hindu` | — | `philosophy-texts` or `introductory` | |
-| Advaita | `advaita-vedanta` | — | `philosophy-texts` / `contemporary-spirituality` | |
+| Contemplative | `non-dualism` when honest, else `[]` | — | `contemporary-spirituality` | Don’t force Hindu/Buddhist; Nonduality lives under Contemporary in ontology |
+| Hindu | `hindu` | — | `philosophy-texts` or `introductory` | Prefer school (e.g. `advaita-vedanta`) when clear |
+| Advaita | `advaita-vedanta` | — | `philosophy-texts` / `contemporary-spirituality` | Nested under Hinduism in ontology; may also soft-tag `hindu` |
 | Buddhism | `buddhist` | — | `introductory` | Retag to a lineage when obvious (e.g. TNH → consider `zen`) |
+| Mindfulness (secular) | `[]` or `contemporary` | — | `mindfulness` | Prefer theme; don’t force Theravāda |
 
 ### Example retags
 
@@ -244,5 +263,6 @@ Order mirrors how practitioners browse: **where in the Dharma?** → **which str
 
 1. Should Pema / Trungpa default school be `shambhala`, or leave school empty for popular titles?
 2. Is `buddhist` shown as its own filter chip, or only used as a tag for pan-Buddhist intros?
-3. For Kabat-Zinn / Tara Brach, prefer tradition `[]` + theme `mindfulness`, or soft-tag `buddhist` / `theravada`?
+3. For Kabat-Zinn / Tara Brach, prefer tradition `[]` + theme `mindfulness`, or soft-tag `contemporary` once that root ships?
 4. Do we want tradition article pages to auto-list catalog books by slug match?
+5. When Advaita is both a pinned tradition chip and a Hindu school, do books store one slug (`advaita-vedanta`) or also parent `hindu`?
